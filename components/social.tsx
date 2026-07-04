@@ -64,7 +64,7 @@ export function Social() {
               className="group flex items-center justify-between gap-4 rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:border-foreground hover:bg-muted"
             >
               <div className="flex items-center gap-4">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-colors duration-200 group-hover:bg-foreground/85">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand text-brand-foreground transition-colors duration-200 group-hover:bg-brand/85">
                   <Icon className="h-7 w-7" />
                 </span>
                 <div>

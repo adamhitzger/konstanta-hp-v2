@@ -36,12 +36,12 @@ function ReviewCard({ r, uid }: { r: (typeof reviews)[0]; uid: string }) {
           sizes="288px"
           className="object-cover"
         />
-        <span className="absolute left-3 top-3 rounded-full bg-background/85 px-3 py-1 text-[11px] font-semibold text-foreground">
+        <span className="absolute left-3 top-3 rounded-full bg-brand px-3 py-1 text-[11px] font-semibold text-brand-foreground">
           {r.project}
         </span>
       </div>
       <blockquote className="flex flex-col gap-4 p-6">
-        <div className="text-base text-foreground/40">★★★★★</div>
+        <div className="text-base text-brand">★★★★★</div>
         <p className="text-base leading-relaxed text-pretty text-foreground/65">„{r.text}"</p>
         <figcaption>
           <p className="font-heading font-bold">{r.name}</p>

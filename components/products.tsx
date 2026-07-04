@@ -45,7 +45,7 @@ export function Products() {
           text="Kompletní hliníkové oplocení na míru"
           className="font-heading text-3xl font-extrabold tracking-tight text-balance sm:text-4xl max-w-2xl"
         />
-        <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground sm:text-right sm:shrink-0">
+        <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-brand sm:text-right sm:shrink-0">
           4 produktové řady
         </p>
       </div>
@@ -62,7 +62,7 @@ export function Products() {
             className={`group aspect-[4/3] sm:aspect-auto sm:min-h-80 ${colSpans[i]}`}
           >
             {/* Double-bezel: outer shell */}
-            <div className="h-full rounded-2xl border border-border bg-muted p-[5px] transition-colors duration-300 group-hover:border-foreground">
+            <div className="h-full rounded-2xl border border-brand/40 bg-muted p-[5px] transition-colors duration-300 group-hover:border-brand">
               {/* Inner core */}
               <div className="relative h-full overflow-hidden rounded-xl">
                 <Image
@@ -79,7 +79,7 @@ export function Products() {
                     {p.tags.map((t) => (
                       <span
                         key={t}
-                        className="rounded-full border border-background/40 bg-background/15 px-2.5 py-1 text-[11px] font-medium text-background/95"
+                        className="rounded-full bg-brand px-2.5 py-1 text-[11px] font-medium text-brand-foreground"
                       >
                         {t}
                       </span>
@@ -87,9 +87,9 @@ export function Products() {
                   </div>
                   <a
                     href="#kontakt"
-                    className="mt-4 inline-flex items-center gap-2 font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-background/70 transition-all duration-300 group-hover:gap-3 group-hover:text-background"
+                    className="mt-4 inline-flex items-center gap-2 font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-background/70 transition-all duration-300 group-hover:gap-3 group-hover:text-brand"
                   >
-                    Poptat <ArrowRight className="h-3 w-3" />
+                    Poptat <ArrowRight className="h-3 w-3 text-brand" />
                   </a>
                 </div>
               </div>

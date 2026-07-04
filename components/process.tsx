@@ -152,7 +152,7 @@ export function Process() {
 
           {/* Progress bar */}
           <div className="mt-10 h-1 w-full overflow-hidden rounded-full bg-background/15">
-            <div data-progress className="h-full w-full origin-left rounded-full bg-accent" />
+            <div data-progress className="h-full w-full origin-left rounded-full bg-brand" />
           </div>
         </div>
       </div>

@@ -1,0 +1,25 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - img [ref=e6]
+        - generic [ref=e8]: Houfek
+      - generic [ref=e9]:
+        - heading "Správa CNC nástrojů na jednom místě" [level=1] [ref=e10]
+        - paragraph [ref=e11]: Sledujte využití nástrojů, historii obrábění a optimalizujte výrobu s přehledným dashboardem.
+      - paragraph [ref=e12]: © 2026 Houfek Tool Management
+    - generic [ref=e14]:
+      - generic [ref=e15]:
+        - heading "Přihlášení" [level=2] [ref=e16]
+        - paragraph [ref=e17]: Zadejte svůj e-mail pro přihlášení
+      - generic [ref=e18]:
+        - generic [ref=e19]: E-mail*
+        - textbox "E-mail*" [ref=e20]:
+          - /placeholder: Zadejte e-mailovou adresu
+        - button "Přihlásit se" [ref=e21]
+        - generic [ref=e22]:
+          - text: Pokud účet nemáte,
+          - link "zaregistrujte se" [ref=e23] [cursor=pointer]:
+            - /url: /auth/sign-up
+  - region "Notifications alt+T"
+  - alert [ref=e24]

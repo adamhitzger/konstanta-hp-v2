@@ -1,0 +1,361 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "Konstanta HP" [ref=e5] [cursor=pointer]:
+          - /url: "#uvod"
+          - img "Konstanta HP" [ref=e6]
+        - navigation [ref=e7]:
+          - link "Úvod" [ref=e8] [cursor=pointer]:
+            - /url: "#uvod"
+          - link "O nás" [ref=e9] [cursor=pointer]:
+            - /url: "#o-nas"
+          - link "Produkty" [ref=e10] [cursor=pointer]:
+            - /url: "#produkty"
+          - link "Realizace" [ref=e11] [cursor=pointer]:
+            - /url: "#realizace"
+          - link "Proč my" [ref=e12] [cursor=pointer]:
+            - /url: "#proc-my"
+          - link "Kontakt" [ref=e13] [cursor=pointer]:
+            - /url: "#kontakt"
+        - generic [ref=e14]:
+          - generic [ref=e15]:
+            - link "+420 770 169 411" [ref=e16] [cursor=pointer]:
+              - /url: tel:+420770169411
+              - img [ref=e17]
+              - text: +420 770 169 411
+            - link "obchod@konstantahp.cz" [ref=e19] [cursor=pointer]:
+              - /url: mailto:obchod@konstantahp.cz
+              - img [ref=e20]
+              - text: obchod@konstantahp.cz
+          - link "Kalkulace zdarma" [ref=e23] [cursor=pointer]:
+            - /url: "#kontakt"
+    - main [ref=e24]:
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - heading "CANADA" [level=2] [ref=e30]
+          - heading "SCOTLAND" [level=2] [ref=e32]
+          - heading "NORWAY" [level=2] [ref=e34]
+          - heading "ICELAND" [level=2] [ref=e36]
+          - heading "SWITZERLAND" [level=2] [ref=e38]
+        - heading "YOUR NEXT VACATION IN" [level=3]
+        - link "Book an Adventure" [ref=e39] [cursor=pointer]:
+          - /url: "#"
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - heading "Ploty, které vydrží." [level=1] [ref=e43]:
+            - text: Ploty,
+            - text: které
+            - text: vydrží.
+          - list [ref=e45]
+          - generic [ref=e46]:
+            - link "Kalkulace zdarma" [ref=e47] [cursor=pointer]:
+              - /url: "#kontakt"
+              - text: Kalkulace zdarma
+              - img [ref=e49]
+            - link "Prohlédnout produkty" [ref=e51] [cursor=pointer]:
+              - /url: "#produkty"
+        - generic [ref=e52]:
+          - button "Přejít na fotku 1" [ref=e53]
+          - button "Přejít na fotku 2" [ref=e54]
+          - button "Přejít na fotku 3" [ref=e55]
+      - generic [ref=e59]:
+        - generic [ref=e60]:
+          - heading [level=2] [ref=e61]
+          - paragraph [ref=e67]: 4 produktové řady
+        - generic [ref=e68]:
+          - link "Poptat" [ref=e69] [cursor=pointer]:
+            - /url: "#kontakt"
+            - text: Poptat
+            - img [ref=e70]
+          - link "Poptat" [ref=e73] [cursor=pointer]:
+            - /url: "#kontakt"
+            - text: Poptat
+            - img [ref=e74]
+          - link "Poptat" [ref=e77] [cursor=pointer]:
+            - /url: "#kontakt"
+            - text: Poptat
+            - img [ref=e78]
+          - link "Poptat" [ref=e81] [cursor=pointer]:
+            - /url: "#kontakt"
+            - text: Poptat
+            - img [ref=e82]
+      - generic [ref=e88]:
+        - heading "Průběh realizace krok za krokem" [level=2] [ref=e90]
+        - generic [ref=e93]:
+          - generic [ref=e94]:
+            - generic [ref=e95]: "01"
+            - heading "Zaměření a kalkulace" [level=3] [ref=e96]
+            - paragraph [ref=e97]: První schůzku, zaměření i kalkulaci máte zcela zdarma. Projdeme si vaše představy, doporučíme vhodné řešení a navrhneme přesný rozpočet.
+          - img "Zaměření a kalkulace" [ref=e100]
+      - generic [ref=e106]:
+        - heading [level=2] [ref=e107]
+        - button "Nezávazná kalkulace" [ref=e115] [cursor=pointer]
+      - button "Všechny realizace" [ref=e118] [cursor=pointer]:
+        - text: Všechny realizace
+        - img
+      - generic [ref=e123]:
+        - heading [level=2] [ref=e125]
+        - generic [ref=e131]:
+          - generic [ref=e132]:
+            - figure [ref=e133]:
+              - generic [ref=e134]:
+                - img "Hliníkový plot" [ref=e135]
+                - generic [ref=e136]: Hliníkový plot
+              - blockquote [ref=e137]:
+                - generic [ref=e138]: ★★★★★
+                - paragraph [ref=e139]: „Naprostá spokojenost. Plot i brána vypadají skvěle a montáž proběhla rychle a čistě. Doporučuji."
+                - generic [ref=e140]:
+                  - paragraph [ref=e141]: Petr Novák
+                  - paragraph [ref=e142]: Brno
+            - figure [ref=e143]:
+              - generic [ref=e144]:
+                - img "Plot s posuvnou bránou" [ref=e145]
+                - generic [ref=e146]: Plot s posuvnou bránou
+              - blockquote [ref=e147]:
+                - generic [ref=e148]: ★★★★★
+                - paragraph [ref=e149]: „Profesionální přístup od zaměření až po montáž. Konečně plot, o který se nemusíme starat."
+                - generic [ref=e150]:
+                  - paragraph [ref=e151]: Jana Dvořáková
+                  - paragraph [ref=e152]: Praha
+            - figure [ref=e153]:
+              - generic [ref=e154]:
+                - img "Bioklimatická pergola" [ref=e155]
+                - generic [ref=e156]: Bioklimatická pergola
+              - blockquote [ref=e157]:
+                - generic [ref=e158]: ★★★★★
+                - paragraph [ref=e159]: „Skvělá komunikace a férová cena. Pergola s lamelami předčila naše očekávání."
+                - generic [ref=e160]:
+                  - paragraph [ref=e161]: Martin Svoboda
+                  - paragraph [ref=e162]: Olomouc
+            - figure [ref=e163]:
+              - generic [ref=e164]:
+                - img "Hliníkový plot" [ref=e165]
+                - generic [ref=e166]: Hliníkový plot
+              - blockquote [ref=e167]:
+                - generic [ref=e168]: ★★★★★
+                - paragraph [ref=e169]: „Naprostá spokojenost. Plot i brána vypadají skvěle a montáž proběhla rychle a čistě. Doporučuji."
+                - generic [ref=e170]:
+                  - paragraph [ref=e171]: Petr Novák
+                  - paragraph [ref=e172]: Brno
+            - figure [ref=e173]:
+              - generic [ref=e174]:
+                - img "Plot s posuvnou bránou" [ref=e175]
+                - generic [ref=e176]: Plot s posuvnou bránou
+              - blockquote [ref=e177]:
+                - generic [ref=e178]: ★★★★★
+                - paragraph [ref=e179]: „Profesionální přístup od zaměření až po montáž. Konečně plot, o který se nemusíme starat."
+                - generic [ref=e180]:
+                  - paragraph [ref=e181]: Jana Dvořáková
+                  - paragraph [ref=e182]: Praha
+            - figure [ref=e183]:
+              - generic [ref=e184]:
+                - img "Bioklimatická pergola" [ref=e185]
+                - generic [ref=e186]: Bioklimatická pergola
+              - blockquote [ref=e187]:
+                - generic [ref=e188]: ★★★★★
+                - paragraph [ref=e189]: „Skvělá komunikace a férová cena. Pergola s lamelami předčila naše očekávání."
+                - generic [ref=e190]:
+                  - paragraph [ref=e191]: Martin Svoboda
+                  - paragraph [ref=e192]: Olomouc
+          - generic [ref=e193]:
+            - figure [ref=e194]:
+              - generic [ref=e195]:
+                - img [ref=e196]
+                - generic [ref=e197]: Hliníkový plot
+              - blockquote [ref=e198]:
+                - generic [ref=e199]: ★★★★★
+                - paragraph [ref=e200]: „Naprostá spokojenost. Plot i brána vypadají skvěle a montáž proběhla rychle a čistě. Doporučuji."
+                - generic [ref=e201]:
+                  - paragraph [ref=e202]: Petr Novák
+                  - paragraph [ref=e203]: Brno
+            - figure [ref=e204]:
+              - generic [ref=e205]:
+                - img [ref=e206]
+                - generic [ref=e207]: Plot s posuvnou bránou
+              - blockquote [ref=e208]:
+                - generic [ref=e209]: ★★★★★
+                - paragraph [ref=e210]: „Profesionální přístup od zaměření až po montáž. Konečně plot, o který se nemusíme starat."
+                - generic [ref=e211]:
+                  - paragraph [ref=e212]: Jana Dvořáková
+                  - paragraph [ref=e213]: Praha
+            - figure [ref=e214]:
+              - generic [ref=e215]:
+                - img [ref=e216]
+                - generic [ref=e217]: Bioklimatická pergola
+              - blockquote [ref=e218]:
+                - generic [ref=e219]: ★★★★★
+                - paragraph [ref=e220]: „Skvělá komunikace a férová cena. Pergola s lamelami předčila naše očekávání."
+                - generic [ref=e221]:
+                  - paragraph [ref=e222]: Martin Svoboda
+                  - paragraph [ref=e223]: Olomouc
+            - figure [ref=e224]:
+              - generic [ref=e225]:
+                - img [ref=e226]
+                - generic [ref=e227]: Hliníkový plot
+              - blockquote [ref=e228]:
+                - generic [ref=e229]: ★★★★★
+                - paragraph [ref=e230]: „Naprostá spokojenost. Plot i brána vypadají skvěle a montáž proběhla rychle a čistě. Doporučuji."
+                - generic [ref=e231]:
+                  - paragraph [ref=e232]: Petr Novák
+                  - paragraph [ref=e233]: Brno
+            - figure [ref=e234]:
+              - generic [ref=e235]:
+                - img [ref=e236]
+                - generic [ref=e237]: Plot s posuvnou bránou
+              - blockquote [ref=e238]:
+                - generic [ref=e239]: ★★★★★
+                - paragraph [ref=e240]: „Profesionální přístup od zaměření až po montáž. Konečně plot, o který se nemusíme starat."
+                - generic [ref=e241]:
+                  - paragraph [ref=e242]: Jana Dvořáková
+                  - paragraph [ref=e243]: Praha
+            - figure [ref=e244]:
+              - generic [ref=e245]:
+                - img [ref=e246]
+                - generic [ref=e247]: Bioklimatická pergola
+              - blockquote [ref=e248]:
+                - generic [ref=e249]: ★★★★★
+                - paragraph [ref=e250]: „Skvělá komunikace a férová cena. Pergola s lamelami předčila naše očekávání."
+                - generic [ref=e251]:
+                  - paragraph [ref=e252]: Martin Svoboda
+                  - paragraph [ref=e253]: Olomouc
+      - generic [ref=e255]:
+        - heading [level=2] [ref=e257]
+        - generic [ref=e263]:
+          - link "Instagram @konstantaploty" [ref=e264] [cursor=pointer]:
+            - /url: https://www.instagram.com/konstantaploty/
+            - generic [ref=e265]:
+              - img [ref=e267]
+              - generic [ref=e270]:
+                - paragraph [ref=e271]: Instagram
+                - paragraph [ref=e272]: "@konstantaploty"
+            - img [ref=e273]
+          - link "Facebook Konstanta HP" [ref=e276] [cursor=pointer]:
+            - /url: https://www.facebook.com/Konstantahp.cz
+            - generic [ref=e277]:
+              - img [ref=e279]
+              - generic [ref=e281]:
+                - paragraph [ref=e282]: Facebook
+                - paragraph [ref=e283]: Konstanta HP
+            - img [ref=e284]
+          - link "YouTube @KONSTANTAHP" [ref=e287] [cursor=pointer]:
+            - /url: https://www.youtube.com/@KONSTANTAHP
+            - generic [ref=e288]:
+              - img [ref=e290]
+              - generic [ref=e293]:
+                - paragraph [ref=e294]: YouTube
+                - paragraph [ref=e295]: "@KONSTANTAHP"
+            - img [ref=e296]
+          - link "E-mail info@konstantahp.cz" [ref=e299] [cursor=pointer]:
+            - /url: mailto:info@konstantahp.cz
+            - generic [ref=e300]:
+              - img [ref=e302]
+              - generic [ref=e305]:
+                - paragraph [ref=e306]: E-mail
+                - paragraph [ref=e307]: info@konstantahp.cz
+            - img [ref=e308]
+        - generic [ref=e311]:
+          - img [ref=e313] [cursor=pointer]
+          - img [ref=e317] [cursor=pointer]
+          - img [ref=e321] [cursor=pointer]
+          - img [ref=e325] [cursor=pointer]
+          - img [ref=e329] [cursor=pointer]
+          - img [ref=e333] [cursor=pointer]
+          - img [ref=e337] [cursor=pointer]
+          - img [ref=e341] [cursor=pointer]
+          - img [ref=e345] [cursor=pointer]
+    - contentinfo [ref=e356]:
+      - generic [ref=e357]:
+        - generic [ref=e358]:
+          - link "Konstanta HP" [ref=e359] [cursor=pointer]:
+            - /url: "#uvod"
+            - img "Konstanta HP" [ref=e360]
+          - paragraph [ref=e361]: Výroba a montáž moderních hliníkových plotů, bran, branek a pergol na míru po celé České republice.
+          - generic [ref=e362]:
+            - link "Instagram" [ref=e363] [cursor=pointer]:
+              - /url: https://www.instagram.com/konstantaploty/
+              - img [ref=e364]
+            - link "Facebook" [ref=e367] [cursor=pointer]:
+              - /url: https://www.facebook.com/Konstantahp.cz
+              - img [ref=e368]
+            - link "YouTube" [ref=e370] [cursor=pointer]:
+              - /url: https://www.youtube.com/@KONSTANTAHP
+              - img [ref=e371]
+        - generic [ref=e374]:
+          - heading "Produkty" [level=3] [ref=e375]
+          - list [ref=e376]:
+            - listitem [ref=e377]:
+              - link "Hliníkové ploty" [ref=e378] [cursor=pointer]:
+                - /url: "#produkty"
+            - listitem [ref=e379]:
+              - link "Brány" [ref=e380] [cursor=pointer]:
+                - /url: "#produkty"
+            - listitem [ref=e381]:
+              - link "Branky" [ref=e382] [cursor=pointer]:
+                - /url: "#produkty"
+            - listitem [ref=e383]:
+              - link "Pergoly" [ref=e384] [cursor=pointer]:
+                - /url: "#produkty"
+        - generic [ref=e385]:
+          - heading "Pro zákazníky" [level=3] [ref=e386]
+          - list [ref=e387]:
+            - listitem [ref=e388]:
+              - link "Pro zákazníky" [ref=e389] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e390]:
+              - link "Pro partnery" [ref=e391] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e392]:
+              - link "Recenze" [ref=e393] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e394]:
+              - link "Blog" [ref=e395] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e396]:
+              - link "Realizace" [ref=e397] [cursor=pointer]:
+                - /url: "#realizace"
+            - listitem [ref=e398]:
+              - link "Kontakt" [ref=e399] [cursor=pointer]:
+                - /url: "#kontakt"
+        - generic [ref=e400]:
+          - heading "Kontakt" [level=3] [ref=e401]
+          - list [ref=e402]:
+            - listitem [ref=e403]:
+              - paragraph [ref=e404]: Zaměření a obchod
+              - link "+420 770 169 411" [ref=e405] [cursor=pointer]:
+                - /url: tel:+420770169411
+                - img [ref=e406]
+                - text: +420 770 169 411
+              - link "info@konstantahp.cz" [ref=e408] [cursor=pointer]:
+                - /url: mailto:info@konstantahp.cz
+                - img [ref=e409]
+                - text: info@konstantahp.cz
+            - listitem [ref=e412]:
+              - paragraph [ref=e413]: Fakturace, kalkulace, nabídky
+              - link "+420 722 015 842" [ref=e414] [cursor=pointer]:
+                - /url: tel:+420722015842
+                - img [ref=e415]
+                - text: +420 722 015 842
+              - link "nabidky@konstantahp.cz" [ref=e417] [cursor=pointer]:
+                - /url: mailto:nabidky@konstantahp.cz
+                - img [ref=e418]
+                - text: nabidky@konstantahp.cz
+            - listitem [ref=e421]:
+              - paragraph [ref=e422]: Výroba a technické řešení
+              - link "+420 728 711 590" [ref=e423] [cursor=pointer]:
+                - /url: tel:+420728711590
+                - img [ref=e424]
+                - text: +420 728 711 590
+        - generic [ref=e426]:
+          - heading "Fakturační údaje" [level=3] [ref=e427]
+          - generic [ref=e428]:
+            - paragraph [ref=e429]: KONSTANTA - hliníkové ploty s.r.o.
+            - paragraph [ref=e430]: "IČO: 21827150"
+            - paragraph [ref=e431]: "DIČ: CZ21827150"
+            - paragraph [ref=e432]: "Sídlo: Maleč 36, 582 76, Česká republika"
+      - generic [ref=e434]:
+        - paragraph [ref=e435]: © 2026 Konstanta HP. Všechna práva vyhrazena.
+        - paragraph [ref=e436]: Hliníkové ploty na míru
+  - button "Open Next.js Dev Tools" [ref=e442] [cursor=pointer]:
+    - img [ref=e443]
+  - alert [ref=e446]

@@ -18,7 +18,7 @@ export function Realizace() {
             title="Naše realizace"
             className="max-w-2xl"
           />
-          <Button render={<a href="#realizace" />} nativeButton={false} size="lg" variant="outline" className="w-fit font-semibold">
+          <Button render={<a href="#realizace" />} nativeButton={false} size="lg" variant="outline" className="w-fit font-semibold hover:border-brand hover:bg-brand hover:text-brand-foreground">
             Všechny realizace
             <ArrowRight className="ml-1 h-4 w-4" />
           </Button>
@@ -40,7 +40,7 @@ export function Realizace() {
 
               {/* Motif badge */}
               <div className="absolute left-4 top-4">
-                <span className="rounded-full bg-background/85 px-3 py-1 text-[11px] font-semibold text-foreground">
+                <span className="rounded-full bg-brand px-3 py-1 text-[11px] font-semibold text-brand-foreground">
                   {it.motif}
                 </span>
               </div>

@@ -1,0 +1,66 @@
+[     303ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3001/_next/static/chunks/0zc5_next_dist_0k0x-rg._.js:2477
+[     348ms] [LOG] [HMR] connected @ http://localhost:3001/_next/static/chunks/0zc5_next_dist_0k0x-rg._.js:2477
+[   62824ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3001/_next/static/chunks/0zc5_next_dist_0k0x-rg._.js:2477
+[   62846ms] [LOG] [HMR] connected @ http://localhost:3001/_next/static/chunks/0zc5_next_dist_0k0x-rg._.js:2477
+[  166693ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0zc5_next_dist_0k0x-rg._.js:2477
+[  166730ms] ReferenceError: useLayoutEffect is not defined
+    at HorizontalGallery (http://localhost:3001/_next/static/chunks/NEXTJS_new-konstanta_04axypq._.js?id=%255Bproject%255D%252FNEXTJS%252Fnew-konstanta%252Fcomponents%252FHorizontalGallery.tsx+%255Bapp-client%255D+%2528ecmascript%2529:54:5)
+    at Object.react_stack_bottom_frame (http://localhost:3001/_next/static/chunks/0zc5_next_dist_compiled_react-dom_031ra_k._.js:15037:24)
+    at renderWithHooks (http://localhost:3001/_next/static/chunks/0zc5_next_dist_compiled_react-dom_031ra_k._.js:4620:24)
+    at updateFunctionComponent (http://localhost:3001/_next/static/chunks/0zc5_next_dist_compiled_react-dom_031ra_k._.js:6081:21)
+    at beginWork (http://localhost:3001/_next/static/chunks/0zc5_next_dist_compiled_react-dom_031ra_k._.js:6691:24)
+    at runWithFiberInDEV (http://localhost:3001/_next/static/chunks/0zc5_next_dist_compiled_react-dom_031ra_k._.js:965:74)
+    at performUnitOfWork (http://localhost:3001/_next/static/chunks/0zc5_next_dist_compiled_react-dom_031ra_k._.js:9555:97)
+    at workLoopSync (http://localhost:3001/_next/static/chunks/0zc5_next_dist_compiled_react-dom_031ra_k._.js:9449:40)
+    at renderRootSync (http://localhost:3001/_next/static/chunks/0zc5_next_dist_compiled_react-dom_031ra_k._.js:9433:13)
+    at performWorkOnRoot (http://localhost:3001/_next/static/chunks/0zc5_next_dist_compiled_react-dom_031ra_k._.js:9098:47)
+    at performSyncWorkOnRoot (http://localhost:3001/_next/static/chunks/0zc5_next_dist_compiled_react-dom_031ra_k._.js:10263:9)
+    at flushSyncWorkAcrossRoots_impl (http://localhost:3001/_next/static/chunks/0zc5_next_dist_compiled_react-dom_031ra_k._.js:10179:316)
+    at flushSyncWork$1 (http://localhost:3001/_next/static/chunks/0zc5_next_dist_compiled_react-dom_031ra_k._.js:9230:86)
+    at Object.scheduleRefresh (http://localhost:3001/_next/static/chunks/0zc5_next_dist_compiled_react-dom_031ra_k._.js:299:13)
+    at http://localhost:3001/_next/static/chunks/0zc5_next_dist_compiled_06hzk2t._.js:391:33
+    at Set.forEach (<anonymous>)
+    at Object.performReactRefresh (http://localhost:3001/_next/static/chunks/0zc5_next_dist_compiled_06hzk2t._.js:384:38)
+    at applyUpdate (http://localhost:3001/_next/static/chunks/0zc5_next_dist_compiled_06hzk2t._.js:878:31)
+    at http://localhost:3001/_next/static/chunks/0zc5_next_dist_compiled_06hzk2t._.js:886:13
+[  166740ms] [LOG] [Fast Refresh] done in 51ms @ http://localhost:3001/_next/static/chunks/0zc5_next_dist_0k0x-rg._.js:2477
+[  171757ms] [ERROR] ./NEXTJS/new-konstanta/components/HorizontalGallery.tsx:84:4
+Expression expected
+  82 |
+  83 |     return () => ctx.revert();
+> 84 |   }, []);
+     |    ^
+  85 |
+  86 |   return (
+  87 |     <div ref={root} className="relative">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./NEXTJS/new-konstanta/components/HorizontalGallery.tsx
+    ./NEXTJS/new-konstanta/app/page.tsx @ http://localhost:3001/_next/static/chunks/0zc5_next_dist_0k0x-rg._.js:3318
+[  171812ms] [ERROR] ./NEXTJS/new-konstanta/components/HorizontalGallery.tsx:84:4
+Expression expected
+  82 |
+  83 |     return () => ctx.revert();
+> 84 |   }, []);
+     |    ^
+  85 |
+  86 |   return (
+  87 |     <div ref={root} className="relative">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./NEXTJS/new-konstanta/components/HorizontalGallery.tsx
+    ./NEXTJS/new-konstanta/app/page.tsx @ http://localhost:3001/_next/static/chunks/0zc5_next_dist_0k0x-rg._.js:3318
+[  171865ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0zc5_next_dist_0k0x-rg._.js:2477
+[  181255ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0zc5_next_dist_0k0x-rg._.js:2477
+[  181259ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3001/_next/static/chunks/0zc5_next_dist_0k0x-rg._.js:2477
+[  181354ms] [LOG] [Fast Refresh] done in 21ms @ http://localhost:3001/_next/static/chunks/0zc5_next_dist_0k0x-rg._.js:2477
+[  181516ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3001/_next/static/chunks/0zc5_next_dist_0k0x-rg._.js:2477
+[  181536ms] [LOG] [HMR] connected @ http://localhost:3001/_next/static/chunks/0zc5_next_dist_0k0x-rg._.js:2477
+[  214692ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3001/_next/static/chunks/0zc5_next_dist_0k0x-rg._.js:2477
+[  214710ms] [LOG] [HMR] connected @ http://localhost:3001/_next/static/chunks/0zc5_next_dist_0k0x-rg._.js:2477

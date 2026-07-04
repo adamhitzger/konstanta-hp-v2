@@ -27,6 +27,8 @@
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand: var(--brand);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -64,6 +66,9 @@
   --muted-foreground: oklch(0.490 0.000 0);
   --accent: oklch(0.950 0.000 0);
   --accent-foreground: oklch(0.100 0.000 0);
+  /* 3. doplňková barva – oranžová (odkazy, badge, drobné akcenty) */
+  --brand: oklch(0.646 0.222 41);
+  --brand-foreground: oklch(0.985 0.000 0);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.880 0.000 0);
   --input: oklch(0.880 0.000 0);
@@ -99,6 +104,9 @@
   --muted-foreground: oklch(0.650 0.000 0);
   --accent: oklch(0.280 0.000 0);
   --accent-foreground: oklch(0.960 0.000 0);
+  /* v tmavém režimu o něco jasnější oranžová pro čitelnost */
+  --brand: oklch(0.705 0.191 47);
+  --brand-foreground: oklch(0.985 0.000 0);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);

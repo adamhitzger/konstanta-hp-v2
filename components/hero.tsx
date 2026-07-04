@@ -109,7 +109,7 @@ export function Hero() {
           <ul className="flex flex-col gap-2">
             {highlights.map((h) => (
               <li key={h} data-h-icon className="flex items-center gap-3">
-                <span className="h-[1px] w-5 shrink-0 bg-background/25" />
+                <span className="h-[1px] w-5 shrink-0 bg-brand" />
                 <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-background/50">{h}</span>
               </li>
             ))}

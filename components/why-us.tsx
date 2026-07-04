@@ -38,7 +38,7 @@ export function WhyUs() {
             <ul data-anim className="flex flex-col gap-3">
               {reasons.map((r) => (
                 <li key={r} className="flex items-start gap-3">
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-brand text-brand-foreground">
                     <Check className="h-4 w-4" />
                   </span>
                   <span className="text-lg font-medium">{r}</span>

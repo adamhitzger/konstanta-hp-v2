@@ -25,10 +25,10 @@ export function Stats() {
               className="group flex flex-col gap-4 bg-background p-6 transition-colors duration-200 hover:bg-muted lg:p-8"
             >
               <div className="flex items-center justify-between">
-                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand">
                   {s.code}
                 </span>
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-colors duration-200 group-hover:bg-foreground/80">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand text-brand-foreground transition-colors duration-200 group-hover:bg-brand/85">
                   <s.icon className="h-5 w-5" />
                 </span>
               </div>

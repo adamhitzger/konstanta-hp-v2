@@ -35,7 +35,7 @@ export function SiteFooter() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-foreground/60 transition-colors hover:border-foreground hover:text-foreground"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-brand text-brand-foreground transition-colors hover:bg-brand/85"
             >
               <InstagramIcon className="h-4 w-4" />
             </a>
@@ -44,7 +44,7 @@ export function SiteFooter() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-foreground/60 transition-colors hover:border-foreground hover:text-foreground"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-brand text-brand-foreground transition-colors hover:bg-brand/85"
             >
               <FacebookIcon className="h-4 w-4" />
             </a>
@@ -53,7 +53,7 @@ export function SiteFooter() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="YouTube"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-foreground/60 transition-colors hover:border-foreground hover:text-foreground"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-brand text-brand-foreground transition-colors hover:bg-brand/85"
             >
               <YoutubeIcon className="h-4 w-4" />
             </a>
@@ -61,7 +61,7 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <h3 className="mb-4 font-heading font-bold">Produkty</h3>
+          <h3 className="mb-4 inline-block border-b-2 border-brand pb-1 font-heading font-bold">Produkty</h3>
           <ul className="flex flex-col gap-2 text-base text-muted-foreground">
             {productLinks.map((l) => (
               <li key={l.label}>
@@ -72,7 +72,7 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <h3 className="mb-4 font-heading font-bold">Pro zákazníky</h3>
+          <h3 className="mb-4 inline-block border-b-2 border-brand pb-1 font-heading font-bold">Pro zákazníky</h3>
           <ul className="flex flex-col gap-2 text-base text-muted-foreground">
             {customerLinks.map((l) => (
               <li key={l.label}>
@@ -83,7 +83,7 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <h3 className="mb-4 font-heading font-bold">Kontakt</h3>
+          <h3 className="mb-4 inline-block border-b-2 border-brand pb-1 font-heading font-bold">Kontakt</h3>
           <ul className="flex flex-col gap-4 text-sm text-muted-foreground">
             <li>
               <p className="mb-1 font-semibold text-foreground">Zaměření a obchod</p>
@@ -113,7 +113,7 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <h3 className="mb-4 font-heading font-bold">Fakturační údaje</h3>
+          <h3 className="mb-4 inline-block border-b-2 border-brand pb-1 font-heading font-bold">Fakturační údaje</h3>
           <div className="flex flex-col gap-1.5 text-sm text-muted-foreground">
             <p className="font-semibold text-foreground">KONSTANTA - hliníkové ploty s.r.o.</p>
             <p>IČO: 21827150</p>

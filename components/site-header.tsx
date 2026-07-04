@@ -17,7 +17,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b-2 border-foreground bg-background">
+    <header className="sticky top-0 z-50 w-full border-b-2 border-brand bg-background">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <a href="#uvod" className="flex shrink-0 items-center" aria-label="Konstanta HP">
@@ -37,7 +37,7 @@ export function SiteHeader() {
             <a
               key={item.href}
               href={item.href}
-              className="font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-foreground/45 transition-colors duration-200 hover:text-foreground"
+              className="font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-foreground/45 transition-colors duration-200 hover:text-brand"
             >
               {item.label}
             </a>
@@ -106,7 +106,7 @@ export function SiteHeader() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="border-b border-border py-3.5 font-mono text-[11px] uppercase tracking-[0.12em] text-foreground/55 transition-colors hover:text-foreground"
+                className="border-b border-border py-3.5 font-mono text-[11px] uppercase tracking-[0.12em] text-foreground/55 transition-colors hover:text-brand"
               >
                 {item.label}
               </a>

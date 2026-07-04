@@ -10,6 +10,7 @@ import { Testimonials } from "@/components/testimonials"
 import { Social } from "@/components/social"
 import { Contact } from "@/components/contact"
 import { SiteFooter } from "@/components/site-footer"
+import HorizontalGallery from "@/components/HorizontalGallery"
 
 export default function Page() {
   return (
@@ -17,7 +18,8 @@ export default function Page() {
       <div className="flex min-h-screen flex-col">
         <SiteHeader />
         <main className="flex-1">
-          <Hero />
+          <HorizontalGallery/>
+          
           <Stats />
           <Products />
           <Process />
