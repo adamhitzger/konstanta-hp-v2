@@ -1,0 +1,419 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "Konstanta HP" [ref=e5] [cursor=pointer]:
+          - /url: "#uvod"
+          - img "Konstanta HP" [ref=e6]
+        - navigation [ref=e7]:
+          - link "Úvod" [ref=e8] [cursor=pointer]:
+            - /url: "#uvod"
+          - link "O nás" [ref=e9] [cursor=pointer]:
+            - /url: "#o-nas"
+          - link "Produkty" [ref=e10] [cursor=pointer]:
+            - /url: "#produkty"
+          - link "Realizace" [ref=e11] [cursor=pointer]:
+            - /url: "#realizace"
+          - link "Proč my" [ref=e12] [cursor=pointer]:
+            - /url: "#proc-my"
+          - link "Kontakt" [ref=e13] [cursor=pointer]:
+            - /url: "#kontakt"
+        - generic [ref=e14]:
+          - generic [ref=e15]:
+            - link "+420 770 169 411" [ref=e16] [cursor=pointer]:
+              - /url: tel:+420770169411
+              - img [ref=e17]
+              - text: +420 770 169 411
+            - link "obchod@konstantahp.cz" [ref=e19] [cursor=pointer]:
+              - /url: mailto:obchod@konstantahp.cz
+              - img [ref=e20]
+              - text: obchod@konstantahp.cz
+          - link "Kalkulace zdarma" [ref=e23] [cursor=pointer]:
+            - /url: "#kontakt"
+    - main [ref=e24]:
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - paragraph [ref=e28]: O nás
+          - heading "Jsme Konstanta." [level=1] [ref=e30]:
+            - text: Jsme
+            - text: Konstanta.
+          - paragraph [ref=e31]: Váš parťák pro precizní ploty, brány a pergoly. Sázíme na kvalitu, která přežije generace.
+          - generic [ref=e32]:
+            - generic [ref=e33]:
+              - term [ref=e34]: od 0
+              - definition [ref=e35]: rok vzniku
+            - generic [ref=e36]:
+              - term [ref=e37]: 0 h
+              - definition [ref=e38]: montáž do
+            - generic [ref=e39]:
+              - term [ref=e40]: 0×
+              - definition [ref=e41]: patentovaný systém
+          - link "Poptat řešení" [ref=e43] [cursor=pointer]:
+            - /url: /#kontakt
+            - text: Poptat řešení
+            - img [ref=e44]
+        - generic [ref=e46]:
+          - generic [ref=e47]: Patentovaný komorový profil
+          - img [ref=e71]
+          - generic [ref=e92]: 6 komor · hliník EN-AW
+      - navigation [ref=e94]:
+        - list [ref=e96]:
+          - listitem [ref=e97]:
+            - link "01 Jsme Konstanta" [ref=e98] [cursor=pointer]:
+              - /url: "#jsme-konstanta"
+              - generic [ref=e99]: "01"
+              - text: Jsme Konstanta
+          - listitem [ref=e100]:
+            - link "02 Síla Konstanty" [ref=e101] [cursor=pointer]:
+              - /url: "#sila-konstanty"
+              - generic [ref=e102]: "02"
+              - text: Síla Konstanty
+          - listitem [ref=e103]:
+            - link "03 Co oceníte" [ref=e104] [cursor=pointer]:
+              - /url: "#co-ocenite"
+              - generic [ref=e105]: "03"
+              - text: Co oceníte
+          - listitem [ref=e106]:
+            - link "04 Jak to probíhá" [ref=e107] [cursor=pointer]:
+              - /url: "#jak-to-probiha"
+              - generic [ref=e108]: "04"
+              - text: Jak to probíhá
+          - listitem [ref=e109]:
+            - link "05 Certifikáty" [ref=e110] [cursor=pointer]:
+              - /url: "#certifikaty"
+              - generic [ref=e111]: "05"
+              - text: Certifikáty
+          - listitem [ref=e112]:
+            - link "06 FAQ" [ref=e113] [cursor=pointer]:
+              - /url: "#faq"
+              - generic [ref=e114]: "06"
+              - text: FAQ
+      - generic [ref=e116]:
+        - generic [ref=e117]:
+          - paragraph [ref=e118]: Náš příběh
+          - heading "Konstanta = stabilita a spolehlivost" [level=2] [ref=e120]:
+            - generic [ref=e122]: Konstanta
+            - generic [ref=e124]: =
+            - generic [ref=e126]: stabilita
+            - generic [ref=e128]: a
+            - generic [ref=e130]: spolehlivost
+          - generic [ref=e131]:
+            - paragraph [ref=e132]: KONSTANTA – rodinná firma, kterou jsme založili v roce 2022. Začínali jsme v celkem divoké době, ale poctivé řemeslo si cestu vždycky najde. Měli jsme jasný plán a chuť dělat věci pořádně a jinak. Dnes máme za sebou přes stovky hotových projektů, a hlavně čisté svědomí, že za námi zůstává dobrá práce, která přežije generace.
+            - paragraph [ref=e133]: Název KONSTANTA nevznikl náhodou. Je to symbol stability a spolehlivosti. A přesně tím chceme být pro naše zákazníky. Naše věci navrhujeme a montujeme tak, aby vydržely – bez kompromisů. Nehoníme se za rekordy v počtu zakázek, svou práci děláme precizně a kvalita je u nás vždy na prvním místě.
+            - paragraph [ref=e134]: A přesně takové jsou naše ploty, brány a pergoly – prostě drží, nesesypou se po první zimě a budou vám dělat radost spoustu let.
+            - paragraph [ref=e135]: Pokud chcete parťáky, kteří se s vámi lidsky domluví, drží slovo a udělají precizní práci, jsme tu pro vás.
+        - generic [ref=e136]:
+          - img "Tým Konstanta HP" [ref=e139]
+          - generic [ref=e143]:
+            - paragraph [ref=e144]: "2022"
+            - paragraph [ref=e145]: rodinná firma
+      - generic [ref=e147]:
+        - generic [ref=e148]:
+          - paragraph [ref=e149]: Proč my
+          - heading "Síla Konstanty" [level=2] [ref=e151]:
+            - text: Síla
+            - text: Konstanty
+          - generic [ref=e152]:
+            - generic [ref=e153]: "01"
+            - generic [ref=e154]: / 10
+        - list [ref=e157]:
+          - listitem [ref=e158]:
+            - generic [ref=e159]: "01"
+            - generic [ref=e160]:
+              - heading "Komplexní řešení bez starostí" [level=3] [ref=e161]
+              - paragraph [ref=e162]: Zajistíme celý proces od návrhu až po montáž. Nemusíte řešit žádné koordinace mezi firmami.
+          - listitem [ref=e163]:
+            - generic [ref=e164]: "02"
+            - generic [ref=e165]:
+              - heading "Vždy myslíme dopředu" [level=3] [ref=e166]
+              - paragraph [ref=e167]: Už při návrhu počítáme s budoucím využitím a návazností na další prvky jako pergoly, garáže, brány nebo technologie.
+          - listitem [ref=e168]:
+            - generic [ref=e169]: "03"
+            - generic [ref=e170]:
+              - heading "Promyšlená atypická řešení" [level=3] [ref=e171]
+              - paragraph [ref=e172]: Umíme pracovat se svažitým terénem, omezeným prostorem i nestandardními požadavky. Každý projekt hledá vlastní řešení.
+          - listitem [ref=e173]:
+            - generic [ref=e174]: "04"
+            - generic [ref=e175]:
+              - heading "Vlastní patentovaný systém" [level=3] [ref=e176]
+              - paragraph [ref=e177]: Používáme vlastní konstrukční systém založený na komorových profilech, který zvyšuje pevnost a stabilitu.
+          - listitem [ref=e178]:
+            - generic [ref=e179]: "05"
+            - generic [ref=e180]:
+              - heading "Bezkonkurenčně kvalitní materiály" [level=3] [ref=e181]
+              - paragraph [ref=e182]: Pracujeme s hliníkovými systémy od ověřeného španělského dodavatele. Levné kompromisy nepoužíváme.
+          - listitem [ref=e183]:
+            - generic [ref=e184]: "06"
+            - generic [ref=e185]:
+              - heading "Mimořádný důraz na detail" [level=3] [ref=e186]
+              - paragraph [ref=e187]: Čisté spoje, nerezové prvky a lakování v barvě konstrukce. Věci, které nejsou na první pohled vidět, rozhodují nejvíc.
+          - listitem [ref=e188]:
+            - generic [ref=e189]: "07"
+            - generic [ref=e190]:
+              - heading "Důsledná kontrola kvality" [level=3] [ref=e191]
+              - paragraph [ref=e192]: Každý díl prochází kontrolou ještě před montáží. Co nesplní nároky, se dál nepouští.
+          - listitem [ref=e193]:
+            - generic [ref=e194]: "08"
+            - generic [ref=e195]:
+              - heading "Montáž v rekordním čase do 24 hodin" [level=3] [ref=e196]
+              - paragraph [ref=e197]: Díky přípravě a sehranému týmu zvládáme většinu zakázek dokončit během jednoho dne.
+          - listitem [ref=e198]:
+            - generic [ref=e199]: "09"
+            - generic [ref=e200]:
+              - heading "Snadný servis i po letech" [level=3] [ref=e201]
+              - paragraph [ref=e202]: Konstrukce jsou navržené tak, aby šly snadno rozebrat a opravit po částech.
+          - listitem [ref=e203]:
+            - generic [ref=e204]: "10"
+            - generic [ref=e205]:
+              - heading "Normální lidský přístup" [level=3] [ref=e206]
+              - paragraph [ref=e207]: Zakládáme si na dlouhodobé spolupráci a odpovědnosti za odvedenou práci.
+      - generic [ref=e209]:
+        - generic [ref=e210]:
+          - paragraph [ref=e211]: Co oceníte
+          - heading "Nejdůležitější v kostce" [level=2] [ref=e213]
+        - generic [ref=e214]:
+          - generic [ref=e217]:
+            - img [ref=e219]
+            - paragraph [ref=e222]: "01"
+            - heading "Montáž do 24 h" [level=3] [ref=e223]
+            - paragraph [ref=e224]: Většinu zakázek dokončíme během jednoho dne.
+          - generic [ref=e227]:
+            - img [ref=e229]
+            - paragraph [ref=e234]: "02"
+            - heading "Patentovaný komorový systém" [level=3] [ref=e235]
+            - paragraph [ref=e236]: Vlastní konstrukce pro vyšší pevnost a stabilitu.
+          - generic [ref=e239]:
+            - img [ref=e241]
+            - paragraph [ref=e244]: "03"
+            - heading "Španělský hliník bez kompromisů" [level=3] [ref=e245]
+            - paragraph [ref=e246]: Ověřený dodavatel, žádné levné náhražky.
+          - generic [ref=e249]:
+            - img [ref=e251]
+            - paragraph [ref=e258]: "04"
+            - heading "Servis i po letech" [level=3] [ref=e259]
+            - paragraph [ref=e260]: Rozebíratelné konstrukce, opravitelné po částech.
+      - generic [ref=e262]:
+        - generic [ref=e263]:
+          - paragraph [ref=e264]: Postup
+          - heading "Jak to u nás probíhá" [level=2] [ref=e266]
+        - list [ref=e270]:
+          - listitem [ref=e271]:
+            - img [ref=e273]
+            - generic [ref=e279]:
+              - paragraph [ref=e280]: Krok 01
+              - heading "Komunikace + zaměření" [level=3] [ref=e281]
+              - paragraph [ref=e282]: Sejdeme se, projdeme vaše představy a přesně zaměříme pozemek.
+          - listitem [ref=e283]:
+            - img [ref=e285]
+            - generic [ref=e292]:
+              - paragraph [ref=e293]: Krok 02
+              - heading "Návrh a poptávka řešení" [level=3] [ref=e294]
+              - paragraph [ref=e295]: Navrhneme řešení na míru a připravíme jasnou nabídku bez skrytých položek.
+          - listitem [ref=e296]:
+            - img [ref=e298]
+            - generic [ref=e302]:
+              - paragraph [ref=e303]: Krok 03
+              - heading "Příprava základů" [level=3] [ref=e304]
+              - paragraph [ref=e305]: Připravíme pevné a rovné základy pro dlouhou životnost konstrukce.
+          - listitem [ref=e306]:
+            - img [ref=e308]
+            - generic [ref=e310]:
+              - paragraph [ref=e311]: Krok 04
+              - heading "Výroba a kontrola kvality" [level=3] [ref=e312]
+              - paragraph [ref=e313]: Díly vyrobíme z komorových profilů a každý zkontrolujeme ještě před montáží.
+          - listitem [ref=e314]:
+            - img [ref=e316]
+            - generic [ref=e318]:
+              - paragraph [ref=e319]: Krok 05
+              - heading "Montáž do 24 hodin" [level=3] [ref=e320]
+              - paragraph [ref=e321]: Sehraný tým osadí většinu zakázek během jednoho dne, čistě a přesně.
+          - listitem [ref=e322]:
+            - img [ref=e324]
+            - generic [ref=e327]:
+              - paragraph [ref=e328]: Krok 06
+              - heading "Hotovo a servis" [level=3] [ref=e329]
+              - paragraph [ref=e330]: Předáme hotové dílo a zůstáváme k dispozici i po letech.
+      - generic [ref=e332]:
+        - generic [ref=e333]:
+          - paragraph [ref=e334]: Certifikáty a patenty
+          - heading "Za kvalitou stojíme papírově" [level=2] [ref=e336]
+        - generic [ref=e337]:
+          - generic [ref=e338]:
+            - img [ref=e340]
+            - generic [ref=e343]:
+              - heading "Patentovaný komorový systém" [level=3] [ref=e344]
+              - paragraph [ref=e345]: Vlastní chráněná konstrukce
+          - generic [ref=e346]:
+            - img [ref=e348]
+            - generic [ref=e351]:
+              - heading "Certifikovaný hliník EN-AW" [level=3] [ref=e352]
+              - paragraph [ref=e353]: Ověřený španělský dodavatel
+          - generic [ref=e354]:
+            - img [ref=e356]
+            - generic [ref=e362]:
+              - heading "Firma roku" [level=3] [ref=e363]
+              - paragraph [ref=e364]: Ocenění za odvedenou práci
+          - generic [ref=e365]:
+            - img [ref=e367]
+            - generic [ref=e371]:
+              - heading "Záruka a doklady" [level=3] [ref=e372]
+              - paragraph [ref=e373]: Vše písemně a bez hvězdiček
+      - generic [ref=e375]:
+        - generic [ref=e376]:
+          - paragraph [ref=e377]: FAQ
+          - heading "Časté dotazy" [level=2] [ref=e379]
+          - paragraph [ref=e380]: Nenašli jste odpověď? Napište nebo zavolejte, rádi to probereme lidsky.
+        - list [ref=e381]:
+          - listitem [ref=e382]:
+            - button "01 Jakou dáváte záruku?" [expanded] [ref=e383]:
+              - generic [ref=e384]:
+                - generic [ref=e385]: "01"
+                - generic [ref=e386]: Jakou dáváte záruku?
+              - img [ref=e388]
+            - paragraph [ref=e393]: Na konstrukci i montáž dáváme písemnou záruku a stojíme si za ní. A když se něco přihodí i po jejím vypršení, ozvěte se – k odvedené práci se hlásíme.
+          - listitem [ref=e394]:
+            - button "02 Za jak dlouho zvládnete montáž?" [ref=e395]:
+              - generic [ref=e396]:
+                - generic [ref=e397]: "02"
+                - generic [ref=e398]: Za jak dlouho zvládnete montáž?
+              - img [ref=e400]
+            - paragraph [ref=e401]: Většinu zakázek osadíme během jednoho dne, tedy do 24 hodin. Přesný termín potvrdíme podle přípravy základů a rozsahu projektu.
+          - listitem [ref=e402]:
+            - button "03 Zvládnete i atypický nebo svažitý terén?" [ref=e403]:
+              - generic [ref=e404]:
+                - generic [ref=e405]: "03"
+                - generic [ref=e406]: Zvládnete i atypický nebo svažitý terén?
+              - img [ref=e408]
+            - paragraph [ref=e409]: Ano. Svažitý terén, omezený prostor i nestandardní požadavky jsou pro nás běžná práce – každý projekt řešíme individuálně a hledáme pro něj vlastní řešení.
+          - listitem [ref=e410]:
+            - button "04 Poradíte si se servisem po letech?" [ref=e411]:
+              - generic [ref=e412]:
+                - generic [ref=e413]: "04"
+                - generic [ref=e414]: Poradíte si se servisem po letech?
+              - img [ref=e416]
+            - paragraph [ref=e417]: Konstrukce navrhujeme jako rozebíratelné, takže je jde snadno opravit po částech. Nemusíte kvůli jednomu detailu měnit celý plot.
+          - listitem [ref=e418]:
+            - button "05 Z jakého materiálu ploty vyrábíte?" [ref=e419]:
+              - generic [ref=e420]:
+                - generic [ref=e421]: "05"
+                - generic [ref=e422]: Z jakého materiálu ploty vyrábíte?
+              - img [ref=e424]
+            - paragraph [ref=e425]: Pracujeme s hliníkovými systémy od ověřeného španělského dodavatele a s vlastním patentovaným komorovým profilem. Levné kompromisy nepoužíváme.
+          - listitem [ref=e426]:
+            - button "06 Kde působíte?" [ref=e427]:
+              - generic [ref=e428]:
+                - generic [ref=e429]: "06"
+                - generic [ref=e430]: Kde působíte?
+              - img [ref=e432]
+            - paragraph [ref=e433]: Realizujeme zakázky po celé České republice. Napište nám lokalitu a domluvíme se na termínu zaměření.
+      - generic [ref=e435]:
+        - heading "Uděláme to pořádně. Ozvěte se." [level=2] [ref=e436]:
+          - generic [ref=e438]: Uděláme
+          - generic [ref=e440]: to
+          - generic [ref=e442]: pořádně.
+          - generic [ref=e444]: Ozvěte
+          - generic [ref=e446]: se.
+        - paragraph [ref=e447]: Parťáci, kteří se s vámi lidsky domluví, drží slovo a udělají precizní práci.
+        - generic [ref=e448]:
+          - link "Poptat řešení" [ref=e449] [cursor=pointer]:
+            - /url: /#kontakt
+            - text: Poptat řešení
+            - img [ref=e450]
+          - link "Zavolat" [ref=e452] [cursor=pointer]:
+            - /url: tel:+420770169411
+            - img [ref=e453]
+            - text: Zavolat
+    - contentinfo [ref=e455]:
+      - generic [ref=e456]:
+        - generic [ref=e457]:
+          - link "Konstanta HP" [ref=e458] [cursor=pointer]:
+            - /url: "#uvod"
+            - img "Konstanta HP" [ref=e459]
+          - paragraph [ref=e460]: Výroba a montáž moderních hliníkových plotů, bran, branek a pergol na míru po celé České republice.
+          - generic [ref=e461]:
+            - link "Instagram" [ref=e462] [cursor=pointer]:
+              - /url: https://www.instagram.com/konstantaploty/
+              - img [ref=e463]
+            - link "Facebook" [ref=e466] [cursor=pointer]:
+              - /url: https://www.facebook.com/Konstantahp.cz
+              - img [ref=e467]
+            - link "YouTube" [ref=e469] [cursor=pointer]:
+              - /url: https://www.youtube.com/@KONSTANTAHP
+              - img [ref=e470]
+        - generic [ref=e473]:
+          - heading "Produkty" [level=3] [ref=e474]
+          - list [ref=e475]:
+            - listitem [ref=e476]:
+              - link "Hliníkové ploty" [ref=e477] [cursor=pointer]:
+                - /url: "#produkty"
+            - listitem [ref=e478]:
+              - link "Brány" [ref=e479] [cursor=pointer]:
+                - /url: "#produkty"
+            - listitem [ref=e480]:
+              - link "Branky" [ref=e481] [cursor=pointer]:
+                - /url: "#produkty"
+            - listitem [ref=e482]:
+              - link "Pergoly" [ref=e483] [cursor=pointer]:
+                - /url: "#produkty"
+        - generic [ref=e484]:
+          - heading "Pro zákazníky" [level=3] [ref=e485]
+          - list [ref=e486]:
+            - listitem [ref=e487]:
+              - link "Pro zákazníky" [ref=e488] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e489]:
+              - link "Pro partnery" [ref=e490] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e491]:
+              - link "Recenze" [ref=e492] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e493]:
+              - link "Blog" [ref=e494] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e495]:
+              - link "Realizace" [ref=e496] [cursor=pointer]:
+                - /url: "#realizace"
+            - listitem [ref=e497]:
+              - link "Kontakt" [ref=e498] [cursor=pointer]:
+                - /url: "#kontakt"
+        - generic [ref=e499]:
+          - heading "Kontakt" [level=3] [ref=e500]
+          - list [ref=e501]:
+            - listitem [ref=e502]:
+              - paragraph [ref=e503]: Zaměření a obchod
+              - link "+420 770 169 411" [ref=e504] [cursor=pointer]:
+                - /url: tel:+420770169411
+                - img [ref=e505]
+                - text: +420 770 169 411
+              - link "info@konstantahp.cz" [ref=e507] [cursor=pointer]:
+                - /url: mailto:info@konstantahp.cz
+                - img [ref=e508]
+                - text: info@konstantahp.cz
+            - listitem [ref=e511]:
+              - paragraph [ref=e512]: Fakturace, kalkulace, nabídky
+              - link "+420 722 015 842" [ref=e513] [cursor=pointer]:
+                - /url: tel:+420722015842
+                - img [ref=e514]
+                - text: +420 722 015 842
+              - link "nabidky@konstantahp.cz" [ref=e516] [cursor=pointer]:
+                - /url: mailto:nabidky@konstantahp.cz
+                - img [ref=e517]
+                - text: nabidky@konstantahp.cz
+            - listitem [ref=e520]:
+              - paragraph [ref=e521]: Výroba a technické řešení
+              - link "+420 728 711 590" [ref=e522] [cursor=pointer]:
+                - /url: tel:+420728711590
+                - img [ref=e523]
+                - text: +420 728 711 590
+        - generic [ref=e525]:
+          - heading "Fakturační údaje" [level=3] [ref=e526]
+          - generic [ref=e527]:
+            - paragraph [ref=e528]: KONSTANTA - hliníkové ploty s.r.o.
+            - paragraph [ref=e529]: "IČO: 21827150"
+            - paragraph [ref=e530]: "DIČ: CZ21827150"
+            - paragraph [ref=e531]: "Sídlo: Maleč 36, 582 76, Česká republika"
+      - generic [ref=e533]:
+        - paragraph [ref=e534]: © 2026 Konstanta HP. Všechna práva vyhrazena.
+        - paragraph [ref=e535]: Hliníkové ploty na míru
+  - button "Open Next.js Dev Tools" [ref=e541] [cursor=pointer]:
+    - img [ref=e542]

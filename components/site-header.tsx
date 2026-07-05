@@ -3,10 +3,11 @@
 import { useState } from "react"
 import Image from "next/image"
 import { Phone, Mail } from "lucide-react"
+import Link from "next/link"
 
 const navItems = [
   { label: "Úvod", href: "#uvod" },
-  { label: "O nás", href: "#o-nas" },
+  { label: "O nás", href: "/o-nas" },
   { label: "Produkty", href: "#produkty" },
   { label: "Realizace", href: "#realizace" },
   { label: "Proč my", href: "#proc-my" },
@@ -20,7 +21,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 w-full border-b-2 border-brand bg-background">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <a href="#uvod" className="flex shrink-0 items-center" aria-label="Konstanta HP">
+        <Link href="/" className="flex shrink-0 items-center" aria-label="Konstanta HP">
           <Image
             src="/logo-konstanta.svg"
             alt="Konstanta HP"
@@ -29,7 +30,7 @@ export function SiteHeader() {
             priority
             className="h-10 w-auto"
           />
-        </a>
+        </Link>
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-7 lg:flex">

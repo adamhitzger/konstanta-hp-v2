@@ -98,8 +98,8 @@ export default function HorizontalGallery() {
         }));
 
       const onMove = (e: MouseEvent) => {
-        const nx = (e.clientX / window.innerWidth - 0.5) * 2; // -1..1
-        const ny = (e.clientY / window.innerHeight - 0.5) * 2; // -1..1
+        const nx = (e.clientX / window.innerWidth - 0.5) * 5; // -1..1
+        const ny = (e.clientY / window.innerHeight - 0.5) * 5; // -1..1
         targets.forEach(({ speed, xTo, yTo }) => {
           xTo(nx * speed * PARALLAX_BASE);
           yTo(ny * speed * PARALLAX_BASE);
@@ -136,18 +136,21 @@ export default function HorizontalGallery() {
               key={s.title}
               className="slide relative flex h-full w-screen shrink-0 items-center justify-center overflow-hidden"
             >
-              {/* Pozadí – na mobilu na výšku, na desktopu na šířku */}
+              {/* Pozadí – na mobilu na výšku, na desktopu na šířku.
+                  110 % / přesah 5 % = rezerva pro mouse-parallax bez odhalení krajů. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
+                data-parallax="0.2"
                 src={s.imgMobile}
                 alt={s.label}
-                className="absolute inset-0 h-full w-full object-cover md:hidden"
+                className="absolute -inset-[5%] h-[110%] w-[110%] max-w-none object-cover md:hidden"
               />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
+                data-parallax="0.2"
                 src={s.imgDesktop}
                 alt={s.label}
-                className="absolute inset-0 hidden h-full w-full object-cover md:block"
+                className="absolute -inset-[5%] hidden h-[110%] w-[110%] max-w-none object-cover md:block"
               />
               {/* gradient pro čitelnost textu (tmavý nahoře i dole) */}
               <div
@@ -160,7 +163,6 @@ export default function HorizontalGallery() {
 
               {/* Velký název řady – zůstává za postavou (jako „popisek scény") */}
               <h2
-                data-parallax="0.15"
                 className="relative z-[1] select-none text-center font-heading font-extrabold uppercase leading-none text-white"
                 style={{
                   marginTop: '-14vh',
@@ -176,7 +178,6 @@ export default function HorizontalGallery() {
               <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex items-end justify-center">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  data-parallax="0.4"
                   src={s.person}
                   alt=""
                   className="h-[60vh] w-auto max-w-none select-none object-contain object-bottom drop-shadow-[0_18px_30px_rgba(0,0,0,0.35)] sm:h-[62vh]"
@@ -200,7 +201,6 @@ export default function HorizontalGallery() {
 
         {/* ---- Kicker nad názvem (pod headerem) – konstantní přes všechny slidy ---- */}
         <span
-          data-parallax="0.25"
           className="pointer-events-none absolute inset-x-0 z-20 select-none text-center font-mono text-[11px] font-medium uppercase tracking-[0.4em] text-white/85 sm:text-xs"
           style={{ top: 'calc(5rem + 3rem)' }}
         >

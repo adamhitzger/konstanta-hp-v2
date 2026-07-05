@@ -10,7 +10,7 @@ const productLinks = [
 ]
 
 const customerLinks = [
-  { label: "Pro zákazníky", href: "#" },
+  { label: "O nás", href: "/o-nas" },
   { label: "Pro partnery", href: "#" },
   { label: "Recenze", href: "#" },
   { label: "Blog", href: "#" },

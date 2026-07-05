@@ -1,7 +1,8 @@
 import Image from "next/image"
-import { Check } from "lucide-react"
+import { ArrowRight, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Reveal, AnimatedText, Parallax } from "@/components/reveal"
+import Link from "next/link"
 
 const reasons = [
   "Vyrábíme i montujeme vše ve vlastní režii",
@@ -46,9 +47,18 @@ export function WhyUs() {
               ))}
             </ul>
 
-            <Button render={<a href="#kontakt" />} nativeButton={false} size="lg" className="mt-2 w-fit font-semibold" data-anim>
-              Nezávazná kalkulace
-            </Button>
+          <div className="flex flex-row space-x-4">
+
+                      <Button render={<a href="/o-nas" />} nativeButton={false} size="lg" variant="outline" className="w-fit font-semibold hover:border-brand hover:bg-brand hover:text-brand-foreground">
+                      O Konstantě
+                      <ArrowRight className="ml-1 h-4 w-4" />
+                    </Button>
+                
+                      <Button render={<Link href="#kontakt" />} nativeButton={false} size="lg" className=" w-fit font-semibold" data-anim>
+                        Nezávazná kalkulace
+                      </Button>
+          </div>
+            
           </div>
         </Reveal>
       </div>
