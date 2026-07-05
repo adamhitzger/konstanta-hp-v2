@@ -31,6 +31,16 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     gsap.ticker.add(raf)
     gsap.ticker.lagSmoothing(0)
 
+    // Expose the instance so the nav can smooth-scroll to anchors with a
+    // header offset (and stop/start scroll while the mobile drawer is open).
+    ;(window as Window & { __lenis?: Lenis }).__lenis = lenis
+
+    // Cross-page anchor: if we land with a #hash, scroll to it (with offset).
+    if (window.location.hash) {
+      const el = document.querySelector(window.location.hash)
+      if (el) requestAnimationFrame(() => lenis.scrollTo(el as HTMLElement, { offset: -80 }))
+    }
+
     // Smooth-scroll for in-page anchor links
     const onClick = (e: MouseEvent) => {
       const target = (e.target as HTMLElement).closest('a[href^="#"]') as HTMLAnchorElement | null
@@ -54,6 +64,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       document.removeEventListener("click", onClick)
       gsap.ticker.remove(raf)
       lenis.destroy()
+      delete (window as Window & { __lenis?: Lenis }).__lenis
     }
   }, [])
 
