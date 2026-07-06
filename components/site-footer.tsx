@@ -2,20 +2,26 @@
 import { Phone, Mail } from "lucide-react"
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from "@/components/social-icons"
 
+// Odkazy zrcadlí hlavní menu v hlavičce (components/nav/nav-data.ts).
 const productLinks = [
-  { label: "Hliníkové ploty", href: "#produkty" },
-  { label: "Brány", href: "#produkty" },
-  { label: "Branky", href: "#produkty" },
-  { label: "Pergoly", href: "#produkty" },
+  { label: "Ploty", href: "/#produkty" },
+  { label: "Brány a branky", href: "/#produkty" },
+  { label: "Pergoly", href: "/#produkty" },
+  { label: "Přípravné práce", href: "/#produkty" },
+  { label: "Chytrá řešení", href: "/#produkty" },
+  { label: "Subdodávky", href: "/#produkty" },
 ]
 
-const customerLinks = [
-  { label: "O nás", href: "/o-nas" },
-  { label: "Pro partnery", href: "#" },
-  { label: "Recenze", href: "#" },
-  { label: "Blog", href: "#" },
-  { label: "Realizace", href: "#realizace" },
-  { label: "Kontakt", href: "#kontakt" },
+const companyLinks = [
+  { label: "Jsme Konstanta", href: "/o-nas#jsme-konstanta" },
+  { label: "Síla Konstanty", href: "/o-nas#sila-konstanty" },
+  { label: "Co oceníte", href: "/o-nas#co-ocenite" },
+  { label: "Jak to u nás probíhá", href: "/o-nas#jak-to-probiha" },
+  { label: "Certifikáty a patenty", href: "/o-nas#certifikaty" },
+  { label: "FAQ", href: "/o-nas#faq" },
+  { label: "Realizace", href: "/#realizace" },
+  { label: "Pro firmy", href: "/#kontakt" },
+  { label: "Kontakty", href: "/#kontakt" },
 ]
 
 export function SiteFooter() {
@@ -61,7 +67,7 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <h3 className="mb-4 inline-block border-b-2 border-brand pb-1 font-heading font-bold">Produkty</h3>
+          <h3 className="mb-4 inline-block border-b-2 border-brand pb-1 font-heading font-bold">Co nabízíme</h3>
           <ul className="flex flex-col gap-2 text-base text-muted-foreground">
             {productLinks.map((l) => (
               <li key={l.label}>
@@ -72,9 +78,9 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <h3 className="mb-4 inline-block border-b-2 border-brand pb-1 font-heading font-bold">Pro zákazníky</h3>
+          <h3 className="mb-4 inline-block border-b-2 border-brand pb-1 font-heading font-bold">Jsme Konstanta</h3>
           <ul className="flex flex-col gap-2 text-base text-muted-foreground">
-            {customerLinks.map((l) => (
+            {companyLinks.map((l) => (
               <li key={l.label}>
                 <a href={l.href} className="hover:text-foreground">{l.label}</a>
               </li>

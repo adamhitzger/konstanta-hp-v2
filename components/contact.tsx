@@ -1,14 +1,17 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useActionState, useEffect, useState } from "react"
 import { Phone, Mail, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Reveal, AnimatedText } from "@/components/reveal"
-
+import { ActionResponse, Contact as ContactType } from "@/types"
+import toast from 'react-hot-toast';
+import { sendGTMEvent } from "@next/third-parties/google";
+import { sendContact } from "@/lib/actions"
 const contactGroups = [
   {
     title: "Zaměření a obchod",
@@ -27,13 +30,28 @@ const contactGroups = [
   },
 ]
 
-export function Contact() {
-  const [sent, setSent] = useState(false)
+const actionState: ActionResponse<ContactType> = {
+    success: false,
+    message: ""
+}
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setSent(true)
-  }
+export function Contact() {
+  
+
+  const [state, action, isPending] = useActionState(sendContact, actionState)
+    
+    useEffect(() => {
+        if (!state.success && state.message) {
+            toast.error(state.message);
+        }else if(state.success && state.message){
+            toast.success(state.message);
+            sendGTMEvent({
+  event: 'generate_lead',
+  form_type: 'kontakt',       // nebo "kontakt" / "poptávka"
+  inquired_product: 'oplocení',  // nebo "oplocení"
+})
+        }
+    }, [state.success, state.message]);
 
   return (
     <section id="kontakt" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
@@ -82,32 +100,38 @@ export function Contact() {
           </div>
 
           <div className="flex flex-col gap-8 p-8 lg:p-12">
-            {sent ? (
+            {state.success ? (
               <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
                 <CheckCircle2 className="h-14 w-14 text-primary" />
                 <h3 className="font-heading text-2xl font-bold">Děkujeme!</h3>
                 <p className="text-muted-foreground">Vaši poptávku jsme přijali. Brzy se vám ozveme.</p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              <form action={action} className="flex flex-col gap-5">
                 <Reveal variant="right" childSelector="[data-f]" stagger={0.1} className="flex flex-col gap-5">
                   <div data-f className="grid gap-5 sm:grid-cols-2">
                     <div className="flex flex-col gap-2">
                       <Label htmlFor="name">Jméno a příjmení</Label>
-                      <Input id="name" required placeholder="Jan Novák" />
+                      <Input id="name" name="name" required placeholder="Jan Novák" />
                     </div>
                     <div className="flex flex-col gap-2">
                       <Label htmlFor="phone">Telefon</Label>
-                      <Input id="phone" type="tel" required placeholder="+420 000 000 000" />
+                      <Input id="phone" name="tel" type="tel" required placeholder="+420 000 000 000" />
                     </div>
                   </div>
+                   <div data-f className="grid gap-5 sm:grid-cols-2">
                   <div data-f className="flex flex-col gap-2">
                     <Label htmlFor="email">E-mail</Label>
-                    <Input id="email" type="email" required placeholder="jan@email.cz" />
+                    <Input id="email" name="email" type="email" required placeholder="jan@email.cz" />
+                  </div>
+                  <div data-f className="flex flex-col gap-2">
+                    <Label htmlFor="company">Firma</Label>
+                    <Input id="company" name="company" type="company" required placeholder="Konstanta HP s.r.o" />
+                  </div>
                   </div>
                   <div data-f className="flex flex-col gap-2">
                     <Label htmlFor="message">Co potřebujete?</Label>
-                    <Textarea id="message" rows={4} placeholder="Mám zájem o plot a posuvnou bránu..." />
+                    <Textarea id="message" rows={4} name="msg" placeholder="Mám zájem o plot a posuvnou bránu..." />
                   </div>
                   <Button data-f type="submit" size="lg" className="font-semibold transition-transform hover:scale-[1.02]">
                     Odeslat poptávku

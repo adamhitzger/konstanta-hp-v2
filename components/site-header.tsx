@@ -1,6 +1,6 @@
 "use client"
 
-import { Fragment, useEffect, useRef, useState, type ReactNode } from "react"
+import { useEffect, useRef, useState, type ReactNode } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Phone, Mail, ChevronDown, X } from "lucide-react"
@@ -13,13 +13,6 @@ type LenisLike = {
 }
 const getLenis = () => (window as unknown as { __lenis?: LenisLike }).__lenis
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches
-
-/** Split into columns of at most `size` items (max 2 pod sebou). */
-function chunk<T>(arr: T[], size: number): T[][] {
-  const out: T[][] = []
-  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size))
-  return out
-}
 
 /** Smooth-scroll to a #hash with the sticky-header offset (Lenis if available). */
 function smoothToHash(hash: string) {
@@ -70,14 +63,14 @@ function NavLeafLink({
     )
   }
   return (
-    <a
+    <Link
       href={leaf.href}
       className={className}
       tabIndex={tabIndex}
       onClick={(e) => handleAnchorClick(e, leaf.href, onNavigate)}
     >
       {children ?? leaf.label}
-    </a>
+    </Link>
   )
 }
 
@@ -246,39 +239,31 @@ export function SiteHeader() {
 
                   {/* pt-3 keeps the button→panel gap hoverable */}
                   <div className={`absolute left-0 top-full pt-3 ${openIdx === i ? "" : "pointer-events-none"}`}>
+                    {/* Grid: max 2 items stacked per column (grid-rows-2), further items flow into
+                        new columns side-by-side. gap-px over a brand bg draws the dividing lines. */}
                     <ul
                       id={`nav-panel-${i}`}
                       aria-label={item.label}
                       onKeyDown={(e) => onPanelKey(e, i)}
-                      className={`flex gap-3 rounded-2xl border border-border bg-background p-3 shadow-xl transition duration-150 ease-out motion-reduce:transition-none ${
+                      className={`grid grid-flow-col grid-rows-2 gap-px overflow-hidden rounded-2xl border border-border bg-brand/40 shadow-xl transition duration-150 ease-out motion-reduce:transition-none ${
                         openIdx === i ? "visible translate-y-0 opacity-100" : "invisible -translate-y-1 opacity-0"
                       }`}
                     >
-                      {/* max 2 pod sebou → rozlije se do sloupců po dvou */}
-                      {chunk(item.children, 2).map((col, ci) => (
-                        <li key={ci}>
-                          <ul className="flex w-[230px] flex-col">
-                            {col.map((leaf, li) => (
-                              <li key={leaf.label}>
-                                {li > 0 && (
-                                  <span aria-hidden className="mx-4 my-1 block h-px bg-brand/45" />
-                                )}
-                                <NavLeafLink
-                                  leaf={leaf}
-                                  onNavigate={() => setOpenIdx(null)}
-                                  tabIndex={openIdx === i ? 0 : -1}
-                                  className="group/leaf block rounded-xl px-4 py-3 transition-colors duration-150 hover:bg-muted focus-visible:bg-muted focus-visible:outline-none"
-                                >
-                                  <span className="block font-mono text-[13px] font-medium uppercase tracking-[0.1em] text-foreground transition-colors duration-150 group-hover/leaf:text-brand">
-                                    {leaf.label}
-                                  </span>
-                                  <span className="mt-1 block text-[13px] leading-snug text-muted-foreground">
-                                    {leaf.desc}
-                                  </span>
-                                </NavLeafLink>
-                              </li>
-                            ))}
-                          </ul>
+                      {item.children.map((leaf) => (
+                        <li key={leaf.label} className="bg-background">
+                          <NavLeafLink
+                            leaf={leaf}
+                            onNavigate={() => setOpenIdx(null)}
+                            tabIndex={openIdx === i ? 0 : -1}
+                            className="group/leaf flex h-full w-[220px] flex-col justify-center px-4 py-3 transition-colors duration-150 hover:bg-muted focus-visible:bg-muted focus-visible:outline-none"
+                          >
+                            <span className="block font-mono text-[13px] font-medium uppercase tracking-[0.1em] text-foreground transition-colors duration-150 group-hover/leaf:text-brand">
+                              {leaf.label}
+                            </span>
+                            <span className="mt-1 block text-[13px] leading-snug text-muted-foreground">
+                              {leaf.desc}
+                            </span>
+                          </NavLeafLink>
                         </li>
                       ))}
                     </ul>
