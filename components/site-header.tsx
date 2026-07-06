@@ -210,7 +210,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex shrink-0 items-center" aria-label="Konstanta HP">
-          <Image src="/logo-konstanta.svg" alt="Konstanta HP" width={300} height={104} priority className="h-24 w-auto" />
+          <Image src="/logo-konstanta.svg" alt="Konstanta HP" width={300} height={104} priority className="h-12 md:h-24 w-auto" />
         </Link>
 
         {/* ---- Desktop nav ---- */}

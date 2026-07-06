@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useActionState, useEffect, useState } from "react"
-import { Phone, Mail, CheckCircle2 } from "lucide-react"
+import { Phone, Mail, CheckCircle2, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -46,11 +46,11 @@ export function Contact() {
         }else if(state.success && state.message){
             toast.success(state.message);
             sendGTMEvent({
-  event: 'generate_lead',
-  form_type: 'kontakt',       // nebo "kontakt" / "poptávka"
-  inquired_product: 'oplocení',  // nebo "oplocení"
-})
-        }
+              event: 'generate_lead',
+              form_type: 'kontakt',       // nebo "kontakt" / "poptávka"
+              inquired_product: 'oplocení',  // nebo "oplocení"
+            })
+          }
     }, [state.success, state.message]);
 
   return (
@@ -134,7 +134,7 @@ export function Contact() {
                     <Textarea id="message" rows={4} name="msg" placeholder="Mám zájem o plot a posuvnou bránu..." />
                   </div>
                   <Button data-f type="submit" size="lg" className="font-semibold transition-transform hover:scale-[1.02]">
-                    Odeslat poptávku
+                    {!isPending ? <>Odeslat poptávku</> : <Loader2 className="animate-spin"/>}
                   </Button>
                   <p data-f className="text-xs text-muted-foreground">
                     Odesláním souhlasíte se zpracováním osobních údajů za účelem vyřízení poptávky.
