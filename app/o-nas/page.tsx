@@ -29,7 +29,7 @@ export default async function ONasPage({
   const lang = getLang(langParam)
 
   return (
-    <SmoothScroll>
+    <SmoothScroll lang={lang}>
       <div className="flex min-h-screen flex-col">
         <SiteHeader lang={lang} />
         <main className="flex-1">

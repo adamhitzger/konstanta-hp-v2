@@ -2,7 +2,7 @@ import Image from "next/image"
 import { Phone, Mail } from "lucide-react"
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from "@/components/social-icons"
 import { LangSwitcher } from "@/components/nav/lang-switcher"
-import { footerContent, type Lang } from "@/lib/translations"
+import { footerContent, withLang, type Lang } from "@/lib/translations"
 
 // Odkazy zrcadlí hlavní menu v hlavičce (components/nav/nav-data.ts).
 const productHrefs = ["/#produkty", "/#produkty", "/#produkty", "/#produkty", "/#produkty", "/#produkty"]
@@ -21,6 +21,7 @@ const companyHrefs = [
 
 export function SiteFooter({ lang = "cs" }: { lang?: Lang }) {
   const t = footerContent[lang] ?? footerContent.cs
+  const l = (href: string) => withLang(href, lang)
   const contactPhones = [
     { tel: "+420770169411", label: "+420 770 169 411", email: { href: "mailto:info@konstantahp.cz", label: "info@konstantahp.cz" } },
     { tel: "+420722015842", label: "+420 722 015 842", email: { href: "mailto:nabidky@konstantahp.cz", label: "nabidky@konstantahp.cz" } },
@@ -31,7 +32,7 @@ export function SiteFooter({ lang = "cs" }: { lang?: Lang }) {
     <footer className="border-t border-border bg-background">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 lg:grid-cols-5 lg:px-8">
         <div className="flex flex-col gap-4 md:col-span-2 lg:col-span-1">
-          <a href="#uvod" className="flex items-center" aria-label="Konstanta HP">
+          <a href={l("/#uvod")} className="flex items-center" aria-label="Konstanta HP">
             <Image src="/logo-konstanta.svg" alt="Konstanta HP" width={240} height={64} className="h-14 w-auto" />
           </a>
           <p className="max-w-sm text-base leading-relaxed text-muted-foreground">{t.tagline}</p>
@@ -72,7 +73,7 @@ export function SiteFooter({ lang = "cs" }: { lang?: Lang }) {
           <ul className="flex flex-col gap-2 text-base text-muted-foreground">
             {t.productLinks.map((label, i) => (
               <li key={label}>
-                <a href={productHrefs[i]} className="hover:text-foreground">{label}</a>
+                <a href={l(productHrefs[i])} className="hover:text-foreground">{label}</a>
               </li>
             ))}
           </ul>
@@ -83,7 +84,7 @@ export function SiteFooter({ lang = "cs" }: { lang?: Lang }) {
           <ul className="flex flex-col gap-2 text-base text-muted-foreground">
             {t.companyLinks.map((label, i) => (
               <li key={label}>
-                <a href={companyHrefs[i]} className="hover:text-foreground">{label}</a>
+                <a href={l(companyHrefs[i])} className="hover:text-foreground">{label}</a>
               </li>
             ))}
           </ul>

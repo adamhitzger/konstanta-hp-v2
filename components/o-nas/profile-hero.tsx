@@ -6,7 +6,7 @@ import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
 import { CountUp } from "./count-up"
-import { profileHeroContent, type Lang } from "@/lib/translations"
+import { profileHeroContent, withLang, type Lang } from "@/lib/translations"
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
@@ -228,7 +228,7 @@ export function ProfileHero({ lang = "cs" }: { lang?: Lang }) {
 
           <div data-hero-anim className="pt-2">
             <a
-              href="/#kontakt"
+              href={withLang("/#kontakt", lang)}
               className="group inline-flex items-center gap-3 rounded-full border-2 border-foreground bg-foreground px-7 py-4 font-mono text-[12px] font-medium uppercase tracking-[0.14em] text-background transition-all duration-300 hover:border-brand hover:bg-brand hover:text-brand-foreground"
             >
               {t.cta}

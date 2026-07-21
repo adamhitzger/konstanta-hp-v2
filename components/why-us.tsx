@@ -3,7 +3,7 @@ import { ArrowRight, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Reveal, AnimatedText, Parallax } from "@/components/reveal"
 import Link from "next/link"
-import { whyUsContent, type Lang } from "@/lib/translations"
+import { whyUsContent, withLang, type Lang } from "@/lib/translations"
 
 export function WhyUs({ lang = "cs" }: { lang?: Lang }) {
   const t = whyUsContent[lang] ?? whyUsContent.cs
@@ -42,12 +42,12 @@ export function WhyUs({ lang = "cs" }: { lang?: Lang }) {
 
           <div className="flex flex-row space-x-4">
 
-                      <Button render={<a href="/o-nas" />} nativeButton={false} size="lg" variant="outline" className="w-fit font-semibold hover:border-brand hover:bg-brand hover:text-brand-foreground">
+                      <Button render={<a href={withLang("/o-nas", lang)} />} nativeButton={false} size="lg" variant="outline" className="w-fit font-semibold hover:border-brand hover:bg-brand hover:text-brand-foreground">
                       {t.ctaAbout}
                       <ArrowRight className="ml-1 h-4 w-4" />
                     </Button>
 
-                      <Button render={<Link href="#kontakt" />} nativeButton={false} size="lg" className=" w-fit font-semibold" data-anim>
+                      <Button render={<Link href={withLang("#kontakt", lang)} />} nativeButton={false} size="lg" className=" w-fit font-semibold" data-anim>
                         {t.ctaContact}
                       </Button>
           </div>

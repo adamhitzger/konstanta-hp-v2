@@ -18,6 +18,21 @@ export function getLang(value?: string | string[]): Lang {
   return v === "sk" || v === "de" ? v : "cs"
 }
 
+/**
+ * Appends `?lang=` to an internal href so cross-page links (nav, footer, CTAs)
+ * keep the current language instead of silently falling back to cs. `cs` is
+ * the default, so it's left off. Handles hrefs that already carry a `#hash`
+ * or a `?query`.
+ */
+export function withLang(href: string, lang: Lang): string {
+  if (lang === "cs") return href
+  const hashIndex = href.indexOf("#")
+  const path = hashIndex === -1 ? href : href.slice(0, hashIndex)
+  const hash = hashIndex === -1 ? "" : href.slice(hashIndex)
+  const separator = path.includes("?") ? "&" : "?"
+  return `${path}${separator}lang=${lang}${hash}`
+}
+
 export const langNames: Record<Lang, { label: string; short: string }> = {
   cs: { label: "Čeština", short: "CZ" },
   sk: { label: "Slovenčina", short: "SK" },

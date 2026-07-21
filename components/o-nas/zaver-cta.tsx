@@ -1,6 +1,6 @@
 import { ArrowRight, Phone } from "lucide-react"
 import { AnimatedText } from "@/components/reveal"
-import { zaverCtaContent, type Lang } from "@/lib/translations"
+import { zaverCtaContent, withLang, type Lang } from "@/lib/translations"
 
 /** Closing CTA band. Global CTA is "Poptat řešení" (never "Kalkulace zdarma"). */
 export function ZaverCta({ lang = "cs" }: { lang?: Lang }) {
@@ -35,7 +35,7 @@ export function ZaverCta({ lang = "cs" }: { lang?: Lang }) {
         </p>
         <div className="flex flex-col gap-3 sm:flex-row">
           <a
-            href="/#kontakt"
+            href={withLang("/#kontakt", lang)}
             className="group inline-flex items-center justify-center gap-3 rounded-full bg-brand px-8 py-4 font-mono text-[12px] font-medium uppercase tracking-[0.14em] text-brand-foreground transition-all duration-300 hover:brightness-110"
           >
             {t.ctaSolution}

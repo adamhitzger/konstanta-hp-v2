@@ -4,10 +4,17 @@ import { useEffect } from "react"
 import Lenis from "lenis"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import type { Lang } from "@/lib/translations"
 
 gsap.registerPlugin(ScrollTrigger)
 
-export function SmoothScroll({ children }: { children: React.ReactNode }) {
+export function SmoothScroll({ children, lang = "cs" }: { children: React.ReactNode; lang?: Lang }) {
+  // <html lang> comes from a static root layout (layouts don't receive searchParams),
+  // so every page corrects it here once it knows the actual language.
+  useEffect(() => {
+    document.documentElement.lang = lang
+  }, [lang])
+
   useEffect(() => {
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     if (prefersReduced) return

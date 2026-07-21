@@ -1,4 +1,4 @@
-import { navContent, type Lang } from "@/lib/translations"
+import { navContent, withLang, type Lang } from "@/lib/translations"
 
 /**
  * Navigation model. Two leaf kinds — nezaměňovat:
@@ -20,34 +20,35 @@ export type NavTop =
 
 export function getNavItems(lang: Lang): NavTop[] {
   const t = navContent[lang] ?? navContent.cs
+  const l = (href: string) => withLang(href, lang)
   return [
     {
       label: t.jsmeKonstanta,
       children: [
-        { ...t.jsmeKonstantaChildren[0], href: "/o-nas#jsme-konstanta", type: "anchor" },
-        { ...t.jsmeKonstantaChildren[1], href: "/o-nas#sila-konstanty", type: "anchor" },
-        { ...t.jsmeKonstantaChildren[2], href: "/o-nas#co-ocenite", type: "anchor" },
-        { ...t.jsmeKonstantaChildren[3], href: "/o-nas#jak-to-probiha", type: "anchor" },
-        { ...t.jsmeKonstantaChildren[4], href: "/o-nas#certifikaty", type: "anchor" },
-        { ...t.jsmeKonstantaChildren[5], href: "/o-nas#faq", type: "anchor" },
+        { ...t.jsmeKonstantaChildren[0], href: l("/o-nas#jsme-konstanta"), type: "anchor" },
+        { ...t.jsmeKonstantaChildren[1], href: l("/o-nas#sila-konstanty"), type: "anchor" },
+        { ...t.jsmeKonstantaChildren[2], href: l("/o-nas#co-ocenite"), type: "anchor" },
+        { ...t.jsmeKonstantaChildren[3], href: l("/o-nas#jak-to-probiha"), type: "anchor" },
+        { ...t.jsmeKonstantaChildren[4], href: l("/o-nas#certifikaty"), type: "anchor" },
+        { ...t.jsmeKonstantaChildren[5], href: l("/o-nas#faq"), type: "anchor" },
       ],
     },
     {
       label: t.coNabizime,
       children: [
-        { ...t.coNabizimeChildren[0], href: "/#produkty", type: "anchor" },
-        { ...t.coNabizimeChildren[1], href: "/#produkty", type: "anchor" },
-        { ...t.coNabizimeChildren[2], href: "/#produkty", type: "anchor" },
-        { ...t.coNabizimeChildren[3], href: "/#produkty", type: "anchor" },
-        { ...t.coNabizimeChildren[4], href: "/#produkty", type: "anchor" },
-        { ...t.coNabizimeChildren[5], href: "/#produkty", type: "anchor" },
+        { ...t.coNabizimeChildren[0], href: l("/#produkty"), type: "anchor" },
+        { ...t.coNabizimeChildren[1], href: l("/#produkty"), type: "anchor" },
+        { ...t.coNabizimeChildren[2], href: l("/#produkty"), type: "anchor" },
+        { ...t.coNabizimeChildren[3], href: l("/#produkty"), type: "anchor" },
+        { ...t.coNabizimeChildren[4], href: l("/#produkty"), type: "anchor" },
+        { ...t.coNabizimeChildren[5], href: l("/#produkty"), type: "anchor" },
       ],
     },
-    { label: t.realizace, href: "/#realizace", type: "anchor" },
-    { label: t.konfigurator, href: "/konf", type: "page" },
+    { label: t.realizace, href: l("/#realizace"), type: "anchor" },
+    { label: t.konfigurator, href: l("/konf"), type: "page" },
     // TODO: až vznikne, přesměrovat na dedikovanou routu /pro-firmy (type: "page")
-    { label: t.proFirmy, href: "/#kontakt", type: "anchor" },
-    { label: t.kontakty, href: "/#kontakt", type: "anchor" },
+    { label: t.proFirmy, href: l("/#kontakt"), type: "anchor" },
+    { label: t.kontakty, href: l("/#kontakt"), type: "anchor" },
   ]
 }
 

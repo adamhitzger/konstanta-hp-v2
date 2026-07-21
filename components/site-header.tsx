@@ -6,7 +6,7 @@ import Link from "next/link"
 import { Phone, Mail, ChevronDown, X } from "lucide-react"
 import { getNavItems, hasChildren, HEADER_OFFSET, type NavLeaf } from "@/components/nav/nav-data"
 import { LangSwitcher } from "@/components/nav/lang-switcher"
-import { navContent, type Lang } from "@/lib/translations"
+import { navContent, withLang, type Lang } from "@/lib/translations"
 
 type LenisLike = {
   scrollTo: (t: HTMLElement, o?: Record<string, unknown>) => void
@@ -214,7 +214,7 @@ export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
     <header className="sticky top-0 z-50 w-full border-b-2 border-brand bg-background">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link href="/" className="flex shrink-0 items-center" aria-label="Konstanta HP">
+        <Link href={withLang("/", lang)} className="flex shrink-0 items-center" aria-label="Konstanta HP">
           <Image src="/logo-konstanta.svg" alt="Konstanta HP" width={300} height={104} priority className="h-12 md:h-24 w-auto" />
         </Link>
 
@@ -303,8 +303,8 @@ export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
           </div>
           <LangSwitcher lang={lang} />
           <a
-            href="/#kontakt"
-            onClick={(e) => handleAnchorClick(e, "/#kontakt")}
+            href={withLang("/#kontakt", lang)}
+            onClick={(e) => handleAnchorClick(e, withLang("/#kontakt", lang))}
             className="group inline-flex items-center gap-2 rounded-full border-2 border-foreground bg-foreground px-5 py-2.5 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-background transition-all duration-300 hover:border-brand hover:bg-brand hover:text-brand-foreground"
           >
             {t.cta}
@@ -314,8 +314,8 @@ export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
         {/* ---- Mobile controls ---- */}
         <div className="flex items-center gap-3 lg:hidden">
           <a
-            href="/#kontakt"
-            onClick={(e) => handleAnchorClick(e, "/#kontakt")}
+            href={withLang("/#kontakt", lang)}
+            onClick={(e) => handleAnchorClick(e, withLang("/#kontakt", lang))}
             className="rounded-full border border-foreground bg-foreground px-3 py-2 font-mono text-[10px] font-medium uppercase tracking-[0.1em] text-background"
           >
             {t.ctaShort}
@@ -426,8 +426,8 @@ export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
               <Phone className="h-3.5 w-3.5" /> +420 770 169 411
             </a>
             <a
-              href="/#kontakt"
-              onClick={(e) => handleAnchorClick(e, "/#kontakt", closeMobile)}
+              href={withLang("/#kontakt", lang)}
+              onClick={(e) => handleAnchorClick(e, withLang("/#kontakt", lang), closeMobile)}
               className="rounded-full border-2 border-foreground bg-foreground px-4 py-3 text-center font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-background transition-colors hover:border-brand hover:bg-brand hover:text-brand-foreground"
             >
               {t.cta}
