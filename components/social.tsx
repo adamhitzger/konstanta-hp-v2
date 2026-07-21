@@ -2,54 +2,30 @@ import { ArrowUpRight, Mail } from "lucide-react"
 import Image from "next/image"
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from "@/components/social-icons"
 import { Reveal, SectionHeading } from "@/components/reveal"
+import { socialContent, type Lang } from "@/lib/translations"
 
-const socials = [
-  {
-    name: "Instagram",
-    handle: "@konstantaploty",
-    href: "https://www.instagram.com/konstantaploty/",
-    Icon: InstagramIcon,
-  },
-  {
-    name: "Facebook",
-    handle: "Konstanta HP",
-    href: "https://www.facebook.com/Konstantahp.cz",
-    Icon: FacebookIcon,
-  },
-  {
-    name: "YouTube",
-    handle: "@KONSTANTAHP",
-    href: "https://www.youtube.com/@KONSTANTAHP",
-    Icon: YoutubeIcon,
-  },
-  {
-    name: "E-mail",
-    handle: "info@konstantahp.cz",
-    href: "mailto:info@konstantahp.cz",
-    Icon: Mail,
-  },
+const socialIcons = [InstagramIcon, FacebookIcon, YoutubeIcon, Mail]
+const socialMeta = [
+  { name: "Instagram", handle: "@konstantaploty", href: "https://www.instagram.com/konstantaploty/" },
+  { name: "Facebook", handle: "Konstanta HP", href: "https://www.facebook.com/Konstantahp.cz" },
+  { name: "YouTube", handle: "@KONSTANTAHP", href: "https://www.youtube.com/@KONSTANTAHP" },
+  { name: "", handle: "info@konstantahp.cz", href: "mailto:info@konstantahp.cz" },
 ]
 
 const igUrl = "https://www.instagram.com/konstantaploty/"
-const gallery = [
-  { src: "/ig-1.png", alt: "Hliníkový plot s vodorovnými lamelami" },
-  { src: "/ig-2.png", alt: "Posuvná hliníková brána" },
-  { src: "/ig-3.png", alt: "Detail hliníkových lamel" },
-  { src: "/ig-4.png", alt: "Hliníková branka" },
-  { src: "/ig-5.png", alt: "Hliníková pergola" },
-  { src: "/ig-6.png", alt: "Plot s imitací dřeva" },
-  { src: "/ig-7.png", alt: "Plot s integrovanou schránkou" },
-  { src: "/ig-8.png", alt: "Montáž plotu" },
-  { src: "/ig-9.png", alt: "Dům s osvětleným plotem" },
-]
+const gallerySrcs = ["/ig-1.png", "/ig-2.png", "/ig-3.png", "/ig-4.png", "/ig-5.png", "/ig-6.png", "/ig-7.png", "/ig-8.png", "/ig-9.png"]
 
-export function Social() {
+export function Social({ lang = "cs" }: { lang?: Lang }) {
+  const t = socialContent[lang] ?? socialContent.cs
+  const socials = socialMeta.map((s, i) => ({ ...s, name: i === 3 ? t.emailLabel : s.name, Icon: socialIcons[i] }))
+  const gallery = gallerySrcs.map((src, i) => ({ src, alt: t.galleryAlts[i] }))
+
   return (
     <section id="site" className="bg-background py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          title="Jsme i na sociálních sítích"
-          subtitle="Podívejte se na naše nejnovější realizace, novinky a inspiraci na hliníkové ploty, brány a pergoly."
+          title={t.heading}
+          subtitle={t.subtitle}
           className="mb-12 max-w-2xl"
         />
 
@@ -91,7 +67,7 @@ export function Social() {
               href={igUrl}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`Otevřít příspěvek na Instagramu: ${img.alt}`}
+              aria-label={`${t.igAriaPrefix} ${img.alt}`}
               className="group relative aspect-square overflow-hidden rounded-xl"
             >
               <Image

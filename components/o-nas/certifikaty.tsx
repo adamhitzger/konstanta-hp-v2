@@ -1,25 +1,23 @@
 import { Stamp, ShieldCheck, Trophy, FileCheck } from "lucide-react"
 import { Reveal } from "@/components/reveal"
+import { certifikatyContent, type Lang } from "@/lib/translations"
 
-const items = [
-  { Icon: Stamp, title: "Patentovaný komorový systém", note: "Vlastní chráněná konstrukce" },
-  { Icon: ShieldCheck, title: "Certifikovaný hliník EN-AW", note: "Ověřený španělský dodavatel" },
-  { Icon: Trophy, title: "Firma roku", note: "Ocenění za odvedenou práci" },
-  { Icon: FileCheck, title: "Záruka a doklady", note: "Vše písemně a bez hvězdiček" },
-]
+const icons = [Stamp, ShieldCheck, Trophy, FileCheck]
 
 /** Trust block — restrained badge grid for patents, certificates and awards. */
-export function Certifikaty() {
+export function Certifikaty({ lang = "cs" }: { lang?: Lang }) {
+  const t = certifikatyContent[lang] ?? certifikatyContent.cs
+  const items = t.items.map((it, i) => ({ ...it, Icon: icons[i] }))
   return (
     <section id="certifikaty" className="border-b border-border bg-background py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-10 flex flex-col gap-3">
           <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-brand">
             <span className="h-[2px] w-8 bg-brand" />
-            Certifikáty a patenty
+            {t.kicker}
           </p>
           <h2 className="max-w-2xl font-heading text-3xl font-extrabold uppercase tracking-tight text-balance sm:text-4xl">
-            Za kvalitou stojíme papírově
+            {t.heading}
           </h2>
         </div>
 

@@ -3,15 +3,10 @@ import { ArrowRight, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Reveal, AnimatedText, Parallax } from "@/components/reveal"
 import Link from "next/link"
+import { whyUsContent, type Lang } from "@/lib/translations"
 
-const reasons = [
-  "Vyrábíme i montujeme vše ve vlastní režii",
-  "Garance kvality a maximální spokojenosti",
-  "Hliník bez nutnosti údržby a nátěrů",
-  "Řešení na míru i pro atypické pozemky",
-]
-
-export function WhyUs() {
+export function WhyUs({ lang = "cs" }: { lang?: Lang }) {
+  const t = whyUsContent[lang] ?? whyUsContent.cs
   return (
     <section id="proc-my" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
       <div className="grid items-center gap-12 lg:grid-cols-2">
@@ -27,17 +22,15 @@ export function WhyUs() {
           <div id="o-nas" className="flex flex-col gap-6">
             <AnimatedText
               as="h2"
-              text="Česká firma, která upřednostňuje kvalitu před kvantitou"
+              text={t.heading}
               className="font-heading text-3xl font-extrabold tracking-tight text-balance sm:text-4xl"
             />
             <p data-anim className="text-xl leading-relaxed text-muted-foreground text-pretty transition-[letter-spacing] duration-500 hover:tracking-wide">
-              Jsme Konstanta HP – tým, který bere každou zakázku osobně. Veškeré
-              produkty máme plně ve vlastní režii, a proto můžeme garantovat
-              kvalitu i dlouhou životnost každého plotu.
+              {t.paragraph}
             </p>
 
             <ul data-anim className="flex flex-col gap-3">
-              {reasons.map((r) => (
+              {t.reasons.map((r) => (
                 <li key={r} className="flex items-start gap-3">
                   <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-brand text-brand-foreground">
                     <Check className="h-4 w-4" />
@@ -50,12 +43,12 @@ export function WhyUs() {
           <div className="flex flex-row space-x-4">
 
                       <Button render={<a href="/o-nas" />} nativeButton={false} size="lg" variant="outline" className="w-fit font-semibold hover:border-brand hover:bg-brand hover:text-brand-foreground">
-                      O Konstantě
+                      {t.ctaAbout}
                       <ArrowRight className="ml-1 h-4 w-4" />
                     </Button>
-                
+
                       <Button render={<Link href="#kontakt" />} nativeButton={false} size="lg" className=" w-fit font-semibold" data-anim>
-                        Nezávazná kalkulace
+                        {t.ctaContact}
                       </Button>
           </div>
             

@@ -3,26 +3,24 @@
 import { Timer, BoxSelect, Gem, LifeBuoy } from "lucide-react"
 import { Reveal } from "@/components/reveal"
 import { TiltCard } from "./tilt-card"
+import { coOceniteContent, type Lang } from "@/lib/translations"
 
-const benefits = [
-  { Icon: Timer, title: "Montáž do 24 h", text: "Většinu zakázek dokončíme během jednoho dne." },
-  { Icon: BoxSelect, title: "Patentovaný komorový systém", text: "Vlastní konstrukce pro vyšší pevnost a stabilitu." },
-  { Icon: Gem, title: "Španělský hliník bez kompromisů", text: "Ověřený dodavatel, žádné levné náhražky." },
-  { Icon: LifeBuoy, title: "Servis i po letech", text: "Rozebíratelné konstrukce, opravitelné po částech." },
-]
+const icons = [Timer, BoxSelect, Gem, LifeBuoy]
 
 /** Compact benefit strip — 3–4 highlights pulled from the 10 points. Tilt cards. */
-export function CoOcenite() {
+export function CoOcenite({ lang = "cs" }: { lang?: Lang }) {
+  const t = coOceniteContent[lang] ?? coOceniteContent.cs
+  const benefits = t.benefits.map((b, i) => ({ ...b, Icon: icons[i] }))
   return (
     <section id="co-ocenite" className="border-b border-border bg-background py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-10 flex flex-col gap-3">
           <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-brand">
             <span className="h-[2px] w-8 bg-brand" />
-            Co oceníte
+            {t.kicker}
           </p>
           <h2 className="max-w-2xl font-heading text-3xl font-extrabold uppercase tracking-tight text-balance sm:text-4xl">
-            Nejdůležitější v kostce
+            {t.heading}
           </h2>
         </div>
 

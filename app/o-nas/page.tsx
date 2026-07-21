@@ -11,6 +11,7 @@ import { ProcesFlow } from "@/components/o-nas/proces-flow"
 import { Certifikaty } from "@/components/o-nas/certifikaty"
 import { Faq } from "@/components/o-nas/faq"
 import { ZaverCta } from "@/components/o-nas/zaver-cta"
+import { getLang } from "@/lib/translations"
 
 export const metadata: Metadata = {
   title: "O nás | KONSTANTA – hliníkové ploty, brány a pergoly",
@@ -19,23 +20,30 @@ export const metadata: Metadata = {
   alternates: { canonical: "/o-nas" },
 }
 
-export default function ONasPage() {
+export default async function ONasPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ lang?: string }>
+}) {
+  const { lang: langParam } = await searchParams
+  const lang = getLang(langParam)
+
   return (
     <SmoothScroll>
       <div className="flex min-h-screen flex-col">
-        <SiteHeader />
+        <SiteHeader lang={lang} />
         <main className="flex-1">
-          <ProfileHero />
-          <SectionNav />
-          <Story />
-          <SilaKonstanty />
-          <CoOcenite />
-          <ProcesFlow />
-          <Certifikaty />
-          <Faq />
-          <ZaverCta />
+          <ProfileHero lang={lang} />
+          <SectionNav lang={lang} />
+          <Story lang={lang} />
+          <SilaKonstanty lang={lang} />
+          <CoOcenite lang={lang} />
+          <ProcesFlow lang={lang} />
+          <Certifikaty lang={lang} />
+          <Faq lang={lang} />
+          <ZaverCta lang={lang} />
         </main>
-        <SiteFooter />
+        <SiteFooter lang={lang} />
       </div>
     </SmoothScroll>
   )

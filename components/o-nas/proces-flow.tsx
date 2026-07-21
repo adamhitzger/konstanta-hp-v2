@@ -5,23 +5,19 @@ import { Ruler, PencilRuler, Hammer, Factory, Wrench, BadgeCheck } from "lucide-
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
+import { procesFlowContent, type Lang } from "@/lib/translations"
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
-const steps = [
-  { Icon: Ruler, title: "Komunikace + zaměření", text: "Sejdeme se, projdeme vaše představy a přesně zaměříme pozemek." },
-  { Icon: PencilRuler, title: "Návrh a poptávka řešení", text: "Navrhneme řešení na míru a připravíme jasnou nabídku bez skrytých položek." },
-  { Icon: Hammer, title: "Příprava základů", text: "Připravíme pevné a rovné základy pro dlouhou životnost konstrukce." },
-  { Icon: Factory, title: "Výroba a kontrola kvality", text: "Díly vyrobíme z komorových profilů a každý zkontrolujeme ještě před montáží." },
-  { Icon: Wrench, title: "Montáž do 24 hodin", text: "Sehraný tým osadí většinu zakázek během jednoho dne, čistě a přesně." },
-  { Icon: BadgeCheck, title: "Hotovo a servis", text: "Předáme hotové dílo a zůstáváme k dispozici i po letech." },
-]
+const icons = [Ruler, PencilRuler, Hammer, Factory, Wrench, BadgeCheck]
 
 /**
  * Process timeline. A brand connector line "draws" down (scaleY, scrubbed)
  * as you scroll; each step slides in with a depth offset (y + z + fade).
  */
-export function ProcesFlow() {
+export function ProcesFlow({ lang = "cs" }: { lang?: Lang }) {
+  const t = procesFlowContent[lang] ?? procesFlowContent.cs
+  const steps = t.steps.map((s, i) => ({ ...s, Icon: icons[i] }))
   const root = useRef<HTMLDivElement>(null)
 
   useGSAP(
@@ -74,10 +70,10 @@ export function ProcesFlow() {
         <div className="mb-14 flex flex-col gap-3">
           <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-brand">
             <span className="h-[2px] w-8 bg-brand" />
-            Postup
+            {t.kicker}
           </p>
           <h2 className="max-w-2xl font-heading text-3xl font-extrabold uppercase tracking-tight text-balance sm:text-4xl">
-            Jak to u nás probíhá
+            {t.heading}
           </h2>
         </div>
 
@@ -98,7 +94,7 @@ export function ProcesFlow() {
                 </span>
                 <div className="pt-1">
                   <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand">
-                    Krok {String(i + 1).padStart(2, "0")}
+                    {t.krokLabel(String(i + 1).padStart(2, "0"))}
                   </p>
                   <h3 className="mt-1 font-heading text-xl font-bold uppercase sm:text-2xl">{s.title}</h3>
                   <p className="mt-2 max-w-lg text-lg leading-relaxed text-background/70 text-pretty">

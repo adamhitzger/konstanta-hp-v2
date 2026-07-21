@@ -12,22 +12,12 @@ import { ActionResponse, Contact as ContactType } from "@/types"
 import toast from 'react-hot-toast';
 import { sendGTMEvent } from "@next/third-parties/google";
 import { sendContact } from "@/lib/actions"
-const contactGroups = [
-  {
-    title: "Zaměření a obchod",
-    phone: { value: "+420 770 169 411", href: "tel:+420770169411" },
-    email: { value: "info@konstantahp.cz", href: "mailto:info@konstantahp.cz" },
-  },
-  {
-    title: "Fakturace, kalkulace, nabídky",
-    phone: { value: "+420 722 015 842", href: "tel:+420722015842" },
-    email: { value: "nabidky@konstantahp.cz", href: "mailto:nabidky@konstantahp.cz" },
-  },
-  {
-    title: "Výroba a technické řešení",
-    phone: { value: "+420 728 711 590", href: "tel:+420728711590" },
-    email: null,
-  },
+import { contactContent, type Lang } from "@/lib/translations"
+
+const contactPhones = [
+  { phone: { value: "+420 770 169 411", href: "tel:+420770169411" }, email: { value: "info@konstantahp.cz", href: "mailto:info@konstantahp.cz" } },
+  { phone: { value: "+420 722 015 842", href: "tel:+420722015842" }, email: { value: "nabidky@konstantahp.cz", href: "mailto:nabidky@konstantahp.cz" } },
+  { phone: { value: "+420 728 711 590", href: "tel:+420728711590" }, email: null },
 ]
 
 const actionState: ActionResponse<ContactType> = {
@@ -35,8 +25,9 @@ const actionState: ActionResponse<ContactType> = {
     message: ""
 }
 
-export function Contact() {
-  
+export function Contact({ lang = "cs" }: { lang?: Lang }) {
+  const t = contactContent[lang] ?? contactContent.cs
+  const contactGroups = t.groups.map((g, i) => ({ title: g.title, ...contactPhones[i] }))
 
   const [state, action, isPending] = useActionState(sendContact, actionState)
     
@@ -62,11 +53,11 @@ export function Contact() {
               <div data-c>
                 <AnimatedText
                   as="h2"
-                  text="Pojďme naplánovat váš nový plot"
+                  text={t.heading}
                   className="font-heading text-3xl font-extrabold tracking-tight text-balance"
                 />
                 <p className="mt-4 text-lg leading-relaxed text-background/70 text-pretty transition-[letter-spacing] duration-500 hover:tracking-wide">
-                  Vyplňte formulář a my se vám ozveme s nezávaznou kalkulací zdarma. Zaměření i návrh řešení je u nás samozřejmostí.
+                  {t.paragraph}
                 </p>
               </div>
 
@@ -91,10 +82,10 @@ export function Contact() {
               </ul>
 
               <div data-c className="mt-8 rounded-2xl bg-background/5 p-5 text-sm text-background/70">
-                <p className="mb-2 font-semibold text-background">Fakturační údaje</p>
+                <p className="mb-2 font-semibold text-background">{t.fakturacniUdaje}</p>
                 <p>KONSTANTA - hliníkové ploty s.r.o.</p>
                 <p>IČO: 21827150 &nbsp;·&nbsp; DIČ: CZ21827150</p>
-                <p>Sídlo: Maleč 36, 582 76, Česká republika</p>
+                <p>{t.sidlo} Maleč 36, 582 76, Česká republika</p>
               </div>
             </Reveal>
           </div>
@@ -103,41 +94,42 @@ export function Contact() {
             {state.success ? (
               <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
                 <CheckCircle2 className="h-14 w-14 text-primary" />
-                <h3 className="font-heading text-2xl font-bold">Děkujeme!</h3>
-                <p className="text-muted-foreground">Vaši poptávku jsme přijali. Brzy se vám ozveme.</p>
+                <h3 className="font-heading text-2xl font-bold">{t.successTitle}</h3>
+                <p className="text-muted-foreground">{t.successText}</p>
               </div>
             ) : (
               <form action={action} className="flex flex-col gap-5">
+                <input type="hidden" name="lang" value={lang} />
                 <Reveal variant="right" childSelector="[data-f]" stagger={0.1} className="flex flex-col gap-5">
                   <div data-f className="grid gap-5 sm:grid-cols-2">
                     <div className="flex flex-col gap-2">
-                      <Label htmlFor="name">Jméno a příjmení</Label>
-                      <Input id="name" name="name" required placeholder="Jan Novák" />
+                      <Label htmlFor="name">{t.labels.name}</Label>
+                      <Input id="name" name="name" required placeholder={t.placeholders.name} />
                     </div>
                     <div className="flex flex-col gap-2">
-                      <Label htmlFor="phone">Telefon</Label>
-                      <Input id="phone" name="tel" type="tel" required placeholder="+420 000 000 000" />
+                      <Label htmlFor="phone">{t.labels.phone}</Label>
+                      <Input id="phone" name="tel" type="tel" required placeholder={t.placeholders.phone} />
                     </div>
                   </div>
                    <div data-f className="grid gap-5 sm:grid-cols-2">
                   <div data-f className="flex flex-col gap-2">
-                    <Label htmlFor="email">E-mail</Label>
-                    <Input id="email" name="email" type="email" required placeholder="jan@email.cz" />
+                    <Label htmlFor="email">{t.labels.email}</Label>
+                    <Input id="email" name="email" type="email" required placeholder={t.placeholders.email} />
                   </div>
                   <div data-f className="flex flex-col gap-2">
-                    <Label htmlFor="company">Firma</Label>
-                    <Input id="company" name="company" type="company" required placeholder="Konstanta HP s.r.o" />
+                    <Label htmlFor="company">{t.labels.company}</Label>
+                    <Input id="company" name="company" type="company" required placeholder={t.placeholders.company} />
                   </div>
                   </div>
                   <div data-f className="flex flex-col gap-2">
-                    <Label htmlFor="message">Co potřebujete?</Label>
-                    <Textarea id="message" rows={4} name="msg" placeholder="Mám zájem o plot a posuvnou bránu..." />
+                    <Label htmlFor="message">{t.labels.message}</Label>
+                    <Textarea id="message" rows={4} name="msg" placeholder={t.placeholders.message} />
                   </div>
                   <Button data-f type="submit" size="lg" className="font-semibold transition-transform hover:scale-[1.02]">
-                    {!isPending ? <>Odeslat poptávku</> : <Loader2 className="animate-spin"/>}
+                    {!isPending ? <>{t.submit}</> : <Loader2 className="animate-spin"/>}
                   </Button>
                   <p data-f className="text-xs text-muted-foreground">
-                    Odesláním souhlasíte se zpracováním osobních údajů za účelem vyřízení poptávky.
+                    {t.consent}
                   </p>
                 </Reveal>
               </form>
@@ -145,7 +137,7 @@ export function Contact() {
 
             <Reveal variant="up" className="overflow-hidden rounded-2xl border border-border">
               <iframe
-                title="Mapa - KONSTANTA hliníkové ploty, Maleč 36"
+                title={t.mapTitle}
                 src="https://www.google.com/maps?cid=10837241253732648833&hl=cs&gl=CZ&output=embed"
                 width="100%"
                 height="300"

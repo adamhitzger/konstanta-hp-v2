@@ -1,8 +1,10 @@
 import { ArrowRight, Phone } from "lucide-react"
 import { AnimatedText } from "@/components/reveal"
+import { zaverCtaContent, type Lang } from "@/lib/translations"
 
 /** Closing CTA band. Global CTA is "Poptat řešení" (never "Kalkulace zdarma"). */
-export function ZaverCta() {
+export function ZaverCta({ lang = "cs" }: { lang?: Lang }) {
+  const t = zaverCtaContent[lang] ?? zaverCtaContent.cs
   return (
     <section className="relative overflow-hidden bg-foreground py-24 text-background sm:py-32">
       {/* blueprint grid */}
@@ -25,18 +27,18 @@ export function ZaverCta() {
       <div className="relative mx-auto flex max-w-4xl flex-col items-center gap-8 px-4 text-center sm:px-6">
         <AnimatedText
           as="h2"
-          text="Uděláme to pořádně. Ozvěte se."
+          text={t.heading}
           className="font-heading text-4xl font-extrabold uppercase leading-[0.95] tracking-tight text-balance text-background sm:text-6xl"
         />
         <p className="max-w-xl text-lg leading-relaxed text-background/70">
-          Parťáci, kteří se s vámi lidsky domluví, drží slovo a udělají precizní práci.
+          {t.paragraph}
         </p>
         <div className="flex flex-col gap-3 sm:flex-row">
           <a
             href="/#kontakt"
             className="group inline-flex items-center justify-center gap-3 rounded-full bg-brand px-8 py-4 font-mono text-[12px] font-medium uppercase tracking-[0.14em] text-brand-foreground transition-all duration-300 hover:brightness-110"
           >
-            Poptat řešení
+            {t.ctaSolution}
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </a>
           <a
@@ -44,7 +46,7 @@ export function ZaverCta() {
             className="inline-flex items-center justify-center gap-2.5 rounded-full border border-background/30 px-8 py-4 font-mono text-[12px] font-medium uppercase tracking-[0.14em] text-background transition-colors duration-300 hover:border-background hover:bg-background hover:text-foreground"
           >
             <Phone className="h-4 w-4" />
-            Zavolat
+            {t.ctaCall}
           </a>
         </div>
       </div>

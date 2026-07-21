@@ -6,6 +6,7 @@ import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
 import { CountUp } from "./count-up"
+import { profileHeroContent, type Lang } from "@/lib/translations"
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
@@ -117,7 +118,8 @@ function FenceModel() {
  * - scroll → the outer wrapper spins on Y (scrubbed)
  * These live on separate nested layers so they compose without fighting.
  */
-export function ProfileHero() {
+export function ProfileHero({ lang = "cs" }: { lang?: Lang }) {
+  const t = profileHeroContent[lang] ?? profileHeroContent.cs
   const root = useRef<HTMLDivElement>(null)
   const spinRef = useRef<HTMLDivElement>(null) // scroll-driven rotation
   const tiltRef = useRef<HTMLDivElement>(null) // mouse-driven tilt
@@ -195,27 +197,27 @@ export function ProfileHero() {
         {/* LEFT — copy */}
         <div className="flex flex-col gap-7">
           <p data-hero-anim className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-brand">
-            <span className="h-[2px] w-8 bg-brand" />O nás
+            <span className="h-[2px] w-8 bg-brand" />{t.kicker}
           </p>
 
           <h1
             data-hero-anim
             className="font-heading text-[clamp(3.5rem,9vw,8rem)] font-extrabold uppercase leading-[0.86] tracking-[-0.02em] text-foreground"
           >
-            Jsme
+            {t.titleLines[0]}
             <br />
-            Konstanta<span className="text-brand">.</span>
+            {t.titleLines[1]}<span className="text-brand">.</span>
           </h1>
 
           <p data-hero-anim className="max-w-md text-xl leading-relaxed text-muted-foreground text-pretty">
-            Váš parťák pro precizní ploty, brány a pergoly. Sázíme na kvalitu, která přežije generace.
+            {t.subtitle}
           </p>
 
           <dl data-hero-anim className="flex flex-wrap gap-x-10 gap-y-4 pt-1">
             {[
-              { v: <CountUp value={2022} prefix="od " />, l: "rok vzniku" },
-              { v: <CountUp value={24} suffix=" h" />, l: "montáž do" },
-              { v: <CountUp value={1} suffix="×" />, l: "patentovaný systém" },
+              { v: <CountUp value={2022} prefix={t.stats[0].yearPrefix} />, l: t.stats[0].label },
+              { v: <CountUp value={24} suffix={t.stats[1].suffix} />, l: t.stats[1].label },
+              { v: <CountUp value={1} suffix={t.stats[2].suffix} />, l: t.stats[2].label },
             ].map((s, i) => (
               <div key={i} className="flex flex-col gap-1">
                 <dt className="font-heading text-3xl font-extrabold text-foreground">{s.v}</dt>
@@ -229,7 +231,7 @@ export function ProfileHero() {
               href="/#kontakt"
               className="group inline-flex items-center gap-3 rounded-full border-2 border-foreground bg-foreground px-7 py-4 font-mono text-[12px] font-medium uppercase tracking-[0.14em] text-background transition-all duration-300 hover:border-brand hover:bg-brand hover:text-brand-foreground"
             >
-              Poptat řešení
+              {t.cta}
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </a>
           </div>
@@ -238,7 +240,7 @@ export function ProfileHero() {
         {/* RIGHT — 3D fence model */}
         <div className="relative flex min-h-[340px] items-center justify-center lg:min-h-[520px]">
           <div aria-hidden className="absolute left-2 top-6 hidden font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground sm:block">
-            Hliníkový plot na míru
+            {t.captionLeft}
           </div>
 
           <div style={{ perspective: 1200 }} className="[transform-style:preserve-3d]">
@@ -256,7 +258,7 @@ export function ProfileHero() {
 
           <div aria-hidden className="absolute bottom-6 right-2 hidden items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground sm:flex">
             <span className="h-[1px] w-8 bg-border" />
-            Komorové profily · hliník EN-AW
+            {t.captionRight}
           </div>
         </div>
       </div>

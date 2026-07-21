@@ -1,31 +1,10 @@
 import Image from "next/image"
 import { AnimatedText } from "@/components/reveal"
+import { testimonialsContent, type Lang } from "@/lib/translations"
 
-const reviews = [
-  {
-    name: "Petr Novák",
-    place: "Brno",
-    text: "Naprostá spokojenost. Plot i brána vypadají skvěle a montáž proběhla rychle a čistě. Doporučuji.",
-    image: "/recenze-1.png",
-    project: "Hliníkový plot",
-  },
-  {
-    name: "Jana Dvořáková",
-    place: "Praha",
-    text: "Profesionální přístup od zaměření až po montáž. Konečně plot, o který se nemusíme starat.",
-    image: "/recenze-2.png",
-    project: "Plot s posuvnou bránou",
-  },
-  {
-    name: "Martin Svoboda",
-    place: "Olomouc",
-    text: "Skvělá komunikace a férová cena. Pergola s lamelami předčila naše očekávání.",
-    image: "/recenze-3.png",
-    project: "Bioklimatická pergola",
-  },
-]
+const images = ["/recenze-1.png", "/recenze-2.png", "/recenze-3.png"]
 
-function ReviewCard({ r, uid }: { r: (typeof reviews)[0]; uid: string }) {
+function ReviewCard({ r, uid }: { r: (typeof testimonialsContent)["cs"]["reviews"][0] & { image: string }; uid: string }) {
   return (
     <figure key={uid} className="w-72 shrink-0 overflow-hidden rounded-3xl border border-border bg-card">
       <div className="relative aspect-[4/3] overflow-hidden">
@@ -52,15 +31,17 @@ function ReviewCard({ r, uid }: { r: (typeof reviews)[0]; uid: string }) {
   )
 }
 
-const marqueeSet = [...reviews, ...reviews]
+export function Testimonials({ lang = "cs" }: { lang?: Lang }) {
+  const t = testimonialsContent[lang] ?? testimonialsContent.cs
+  const reviews = t.reviews.map((r, i) => ({ ...r, image: images[i] }))
+  const marqueeSet = [...reviews, ...reviews]
 
-export function Testimonials() {
   return (
     <section className="overflow-hidden py-20">
       <div className="mx-auto mb-12 max-w-7xl px-4 sm:px-6 lg:px-8">
         <AnimatedText
           as="h2"
-          text="Hodnocení od našich klientů"
+          text={t.heading}
           className="font-heading text-3xl font-extrabold tracking-tight text-balance sm:text-4xl"
         />
       </div>

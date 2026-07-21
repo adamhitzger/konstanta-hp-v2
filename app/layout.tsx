@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
 import { Barlow, Barlow_Condensed, JetBrains_Mono } from 'next/font/google'
+import { Toaster } from 'react-hot-toast'
 import './globals.css'
 
 const barlow = Barlow({
@@ -51,6 +52,20 @@ export default function RootLayout({
     >
       <body className="font-sans antialiased overflow-x-hidden">
         {children}
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: 'var(--foreground)',
+              color: 'var(--background)',
+              borderRadius: '9999px',
+              fontSize: '14px',
+              fontWeight: 500,
+              padding: '10px 18px',
+            },
+          }}
+        />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

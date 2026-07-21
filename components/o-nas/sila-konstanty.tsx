@@ -4,28 +4,18 @@ import { useEffect, useRef, useState } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
+import { silaKonstantyContent, type Lang } from "@/lib/translations"
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
-
-const points = [
-  { t: "Komplexní řešení bez starostí", d: "Zajistíme celý proces od návrhu až po montáž. Nemusíte řešit žádné koordinace mezi firmami." },
-  { t: "Vždy myslíme dopředu", d: "Už při návrhu počítáme s budoucím využitím a návazností na další prvky jako pergoly, garáže, brány nebo technologie." },
-  { t: "Promyšlená atypická řešení", d: "Umíme pracovat se svažitým terénem, omezeným prostorem i nestandardními požadavky. Každý projekt hledá vlastní řešení." },
-  { t: "Vlastní patentovaný systém", d: "Používáme vlastní konstrukční systém založený na komorových profilech, který zvyšuje pevnost a stabilitu." },
-  { t: "Bezkonkurenčně kvalitní materiály", d: "Pracujeme s hliníkovými systémy od ověřeného španělského dodavatele. Levné kompromisy nepoužíváme." },
-  { t: "Mimořádný důraz na detail", d: "Čisté spoje, nerezové prvky a lakování v barvě konstrukce. Věci, které nejsou na první pohled vidět, rozhodují nejvíc." },
-  { t: "Důsledná kontrola kvality", d: "Každý díl prochází kontrolou ještě před montáží. Co nesplní nároky, se dál nepouští." },
-  { t: "Montáž v rekordním čase do 24 hodin", d: "Díky přípravě a sehranému týmu zvládáme většinu zakázek dokončit během jednoho dne." },
-  { t: "Snadný servis i po letech", d: "Konstrukce jsou navržené tak, aby šly snadno rozebrat a opravit po částech." },
-  { t: "Normální lidský přístup", d: "Zakládáme si na dlouhodobé spolupráci a odpovědnosti za odvedenou práci." },
-]
 
 /**
  * Sticky two-column: the left side stays pinned with a big running index
  * (01–10) that follows the active point; the 10 points scroll on the right
  * and slide in with a small depth offset. Active point via IntersectionObserver.
  */
-export function SilaKonstanty() {
+export function SilaKonstanty({ lang = "cs" }: { lang?: Lang }) {
+  const t = silaKonstantyContent[lang] ?? silaKonstantyContent.cs
+  const points = t.points
   const root = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(0)
 
@@ -70,12 +60,12 @@ export function SilaKonstanty() {
         <div className="lg:sticky lg:top-32 lg:h-fit lg:self-start">
           <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-brand">
             <span className="h-[2px] w-8 bg-brand" />
-            Proč my
+            {t.kicker}
           </p>
           <h2 className="mt-4 font-heading text-4xl font-extrabold uppercase tracking-tight text-balance sm:text-5xl lg:text-6xl">
-            Síla
+            {t.headingLines[0]}
             <br />
-            Konstanty
+            {t.headingLines[1]}
           </h2>
 
           {/* running index */}

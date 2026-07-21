@@ -2,24 +2,24 @@ import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Reveal, SectionHeading, Parallax } from "@/components/reveal"
+import { realizaceContent, type Lang } from "@/lib/translations"
 
-const items = [
-  { image: "/realizace-1.png", title: "Hliníkový plot", place: "Rodinný dům, Brno", motif: "Tahokov", color: "bg-primary text-primary-foreground" },
-  { image: "/realizace-2.png", title: "Plot s posuvnou bránou", place: "Novostavba, Praha-západ", motif: "Plaňka 90", color: "bg-foreground text-background" },
-  { image: "/realizace-3.png", title: "Plot v dekoru dřeva", place: "Vila, Olomouc", motif: "Okenice standard", color: "bg-accent text-accent-foreground" },
-]
+const images = ["/realizace-1.png", "/realizace-2.png", "/realizace-3.png"]
 
-export function Realizace() {
+export function Realizace({ lang = "cs" }: { lang?: Lang }) {
+  const t = realizaceContent[lang] ?? realizaceContent.cs
+  const items = t.items.map((it, i) => ({ ...it, image: images[i] }))
+
   return (
     <section id="realizace" className="bg-muted py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal variant="up" className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <SectionHeading
-            title="Naše realizace"
+            title={t.heading}
             className="max-w-2xl"
           />
           <Button render={<a href="#realizace" />} nativeButton={false} size="lg" variant="outline" className="w-fit font-semibold hover:border-brand hover:bg-brand hover:text-brand-foreground">
-            Všechny realizace
+            {t.cta}
             <ArrowRight className="ml-1 h-4 w-4" />
           </Button>
         </Reveal>

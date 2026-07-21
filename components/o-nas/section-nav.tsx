@@ -1,15 +1,9 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { sectionNavContent, type Lang } from "@/lib/translations"
 
-const links = [
-  { id: "jsme-konstanta", label: "Jsme Konstanta" },
-  { id: "sila-konstanty", label: "Síla Konstanty" },
-  { id: "co-ocenite", label: "Co oceníte" },
-  { id: "jak-to-probiha", label: "Jak to probíhá" },
-  { id: "certifikaty", label: "Certifikáty" },
-  { id: "faq", label: "FAQ" },
-]
+const linkIds = ["jsme-konstanta", "sila-konstanty", "co-ocenite", "jak-to-probiha", "certifikaty", "faq"]
 
 /**
  * Sticky in-page anchor nav under the main header. Smooth scroll is handled
@@ -18,7 +12,9 @@ const links = [
  * the (horizontally scrollable) nav auto-scrolls to keep the active pill
  * centered in view.
  */
-export function SectionNav() {
+export function SectionNav({ lang = "cs" }: { lang?: Lang }) {
+  const t = sectionNavContent[lang] ?? sectionNavContent.cs
+  const links = linkIds.map((id, i) => ({ id, label: t.links[i] }))
   const [active, setActive] = useState("jsme-konstanta")
   const listRef = useRef<HTMLUListElement>(null)
 

@@ -1,14 +1,11 @@
 import { ShieldCheck, Ruler, Truck, Wrench } from "lucide-react"
 import { Reveal } from "@/components/reveal"
+import { statsContent, type Lang } from "@/lib/translations"
 
-const stats = [
-  { icon: Ruler, code: "[ 01 ]", title: "Výroba na míru", text: "Každý plot navrhujeme přesně podle vašeho pozemku a domu." },
-  { icon: ShieldCheck, code: "[ 02 ]", title: "Bezúdržbový hliník", text: "Nereziví, nehnije a barva drží roky bez nátěrů." },
-  { icon: Truck, code: "[ 03 ]", title: "Montáž po celé ČR", text: "Zaměření, doprava i montáž zajistíme kompletně sami." },
-  { icon: Wrench, code: "[ 04 ]", title: "Vlastní realizace", text: "Vše máme plně v naší režii – od základů po finální montáž." },
-]
+const icons = [Ruler, ShieldCheck, Truck, Wrench]
 
-export function Stats() {
+export function Stats({ lang = "cs" }: { lang?: Lang }) {
+  const stats = (statsContent[lang] ?? statsContent.cs).map((s, i) => ({ ...s, icon: icons[i] }))
   return (
     <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       {/* Rounded table: outer border + overflow-hidden clips corners, inner gap shows border color as dividers */}

@@ -4,7 +4,9 @@ import { useEffect, useRef, useState, type ReactNode } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Phone, Mail, ChevronDown, X } from "lucide-react"
-import { navItems, hasChildren, HEADER_OFFSET, type NavLeaf } from "@/components/nav/nav-data"
+import { getNavItems, hasChildren, HEADER_OFFSET, type NavLeaf } from "@/components/nav/nav-data"
+import { LangSwitcher } from "@/components/nav/lang-switcher"
+import { navContent, type Lang } from "@/lib/translations"
 
 type LenisLike = {
   scrollTo: (t: HTMLElement, o?: Record<string, unknown>) => void
@@ -41,7 +43,7 @@ function handleAnchorClick(e: React.MouseEvent, href: string, onDone?: () => voi
   onDone?.()
 }
 
-/** Renders a leaf: "anchor" → <a> (+smooth), "page" → Next <Link>. */
+/** Renders a leaf: "anchor" → <a> (+smooth), "page" → Next <Link>. Only needs label/href/type — top-level nav items without a dropdown don't carry a `desc`. */
 function NavLeafLink({
   leaf,
   className,
@@ -49,7 +51,7 @@ function NavLeafLink({
   tabIndex,
   children,
 }: {
-  leaf: NavLeaf
+  leaf: Pick<NavLeaf, "label" | "href" | "type">
   className?: string
   onNavigate?: () => void
   tabIndex?: number
@@ -74,7 +76,10 @@ function NavLeafLink({
   )
 }
 
-export function SiteHeader() {
+export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
+  const t = navContent[lang] ?? navContent.cs
+  const navItems = getNavItems(lang)
+
   // ---- Desktop dropdown state ----
   const [openIdx, setOpenIdx] = useState<number | null>(null)
   const closeTimer = useRef<number>(undefined)
@@ -214,7 +219,7 @@ export function SiteHeader() {
         </Link>
 
         {/* ---- Desktop nav ---- */}
-        <nav ref={navRef} aria-label="Hlavní menu" className="hidden lg:block">
+        <nav ref={navRef} aria-label={t.mainMenu} className="hidden lg:block">
           <ul className="flex items-center gap-1">
             {navItems.map((item, i) =>
               hasChildren(item) ? (
@@ -296,12 +301,13 @@ export function SiteHeader() {
               obchod@konstantahp.cz
             </a>
           </div>
+          <LangSwitcher lang={lang} />
           <a
             href="/#kontakt"
             onClick={(e) => handleAnchorClick(e, "/#kontakt")}
             className="group inline-flex items-center gap-2 rounded-full border-2 border-foreground bg-foreground px-5 py-2.5 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-background transition-all duration-300 hover:border-brand hover:bg-brand hover:text-brand-foreground"
           >
-            Poptat řešení
+            {t.cta}
           </a>
         </div>
 
@@ -312,12 +318,12 @@ export function SiteHeader() {
             onClick={(e) => handleAnchorClick(e, "/#kontakt")}
             className="rounded-full border border-foreground bg-foreground px-3 py-2 font-mono text-[10px] font-medium uppercase tracking-[0.1em] text-background"
           >
-            Poptat
+            {t.ctaShort}
           </a>
           <button
             ref={hamburgerRef}
             type="button"
-            aria-label="Otevřít menu"
+            aria-label={t.openMenu}
             aria-expanded={mobileOpen}
             aria-controls="mobile-drawer"
             onClick={() => setMobileOpen(true)}
@@ -345,24 +351,24 @@ export function SiteHeader() {
         ref={drawerRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Hlavní menu"
+        aria-label={t.mainMenu}
         className={`fixed inset-y-0 right-0 z-50 flex w-[86%] max-w-sm flex-col border-l-2 border-brand bg-background shadow-2xl transition-transform duration-300 ease-out motion-reduce:transition-none lg:hidden ${
           mobileOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex h-20 shrink-0 items-center justify-between border-b border-border px-5">
-          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Menu</span>
+          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">{t.menu}</span>
           <button
             type="button"
             onClick={closeMobile}
-            aria-label="Zavřít menu"
+            aria-label={t.closeMenu}
             className="flex h-10 w-10 items-center justify-center border border-foreground text-foreground transition-colors hover:bg-foreground hover:text-background"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        <nav aria-label="Hlavní menu" className="flex-1 overflow-y-auto px-4 py-4">
+        <nav aria-label={t.mainMenu} className="flex-1 overflow-y-auto px-4 py-4">
           <ul className="flex flex-col">
             {navItems.map((item, i) =>
               hasChildren(item) ? (
@@ -415,6 +421,7 @@ export function SiteHeader() {
 
           {/* contact + CTA */}
           <div className="mt-6 flex flex-col gap-3">
+            <LangSwitcher lang={lang} />
             <a href="tel:+420770169411" className="flex items-center gap-2 font-mono text-xs text-foreground/60">
               <Phone className="h-3.5 w-3.5" /> +420 770 169 411
             </a>
@@ -423,7 +430,7 @@ export function SiteHeader() {
               onClick={(e) => handleAnchorClick(e, "/#kontakt", closeMobile)}
               className="rounded-full border-2 border-foreground bg-foreground px-4 py-3 text-center font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-background transition-colors hover:border-brand hover:bg-brand hover:text-brand-foreground"
             >
-              Poptat řešení
+              {t.cta}
             </a>
           </div>
         </nav>

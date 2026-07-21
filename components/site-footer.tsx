@@ -1,30 +1,32 @@
- import Image from "next/image"
+import Image from "next/image"
 import { Phone, Mail } from "lucide-react"
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from "@/components/social-icons"
+import { LangSwitcher } from "@/components/nav/lang-switcher"
+import { footerContent, type Lang } from "@/lib/translations"
 
 // Odkazy zrcadlí hlavní menu v hlavičce (components/nav/nav-data.ts).
-const productLinks = [
-  { label: "Ploty", href: "/#produkty" },
-  { label: "Brány a branky", href: "/#produkty" },
-  { label: "Pergoly", href: "/#produkty" },
-  { label: "Přípravné práce", href: "/#produkty" },
-  { label: "Chytrá řešení", href: "/#produkty" },
-  { label: "Subdodávky", href: "/#produkty" },
+const productHrefs = ["/#produkty", "/#produkty", "/#produkty", "/#produkty", "/#produkty", "/#produkty"]
+
+const companyHrefs = [
+  "/o-nas#jsme-konstanta",
+  "/o-nas#sila-konstanty",
+  "/o-nas#co-ocenite",
+  "/o-nas#jak-to-probiha",
+  "/o-nas#certifikaty",
+  "/o-nas#faq",
+  "/#realizace",
+  "/#kontakt",
+  "/#kontakt",
 ]
 
-const companyLinks = [
-  { label: "Jsme Konstanta", href: "/o-nas#jsme-konstanta" },
-  { label: "Síla Konstanty", href: "/o-nas#sila-konstanty" },
-  { label: "Co oceníte", href: "/o-nas#co-ocenite" },
-  { label: "Jak to u nás probíhá", href: "/o-nas#jak-to-probiha" },
-  { label: "Certifikáty a patenty", href: "/o-nas#certifikaty" },
-  { label: "FAQ", href: "/o-nas#faq" },
-  { label: "Realizace", href: "/#realizace" },
-  { label: "Pro firmy", href: "/#kontakt" },
-  { label: "Kontakty", href: "/#kontakt" },
-]
+export function SiteFooter({ lang = "cs" }: { lang?: Lang }) {
+  const t = footerContent[lang] ?? footerContent.cs
+  const contactPhones = [
+    { tel: "+420770169411", label: "+420 770 169 411", email: { href: "mailto:info@konstantahp.cz", label: "info@konstantahp.cz" } },
+    { tel: "+420722015842", label: "+420 722 015 842", email: { href: "mailto:nabidky@konstantahp.cz", label: "nabidky@konstantahp.cz" } },
+    { tel: "+420728711590", label: "+420 728 711 590", email: null },
+  ]
 
-export function SiteFooter() {
   return (
     <footer className="border-t border-border bg-background">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 lg:grid-cols-5 lg:px-8">
@@ -32,9 +34,7 @@ export function SiteFooter() {
           <a href="#uvod" className="flex items-center" aria-label="Konstanta HP">
             <Image src="/logo-konstanta.svg" alt="Konstanta HP" width={240} height={64} className="h-14 w-auto" />
           </a>
-          <p className="max-w-sm text-base leading-relaxed text-muted-foreground">
-            Výroba a montáž moderních hliníkových plotů, bran, branek a pergol na míru po celé České republice.
-          </p>
+          <p className="max-w-sm text-base leading-relaxed text-muted-foreground">{t.tagline}</p>
           <div className="flex gap-3">
             <a
               href="https://www.instagram.com/konstantaploty/"
@@ -64,75 +64,65 @@ export function SiteFooter() {
               <YoutubeIcon className="h-4 w-4" />
             </a>
           </div>
+          <LangSwitcher lang={lang} variant="footer" />
         </div>
 
         <div>
-          <h3 className="mb-4 inline-block border-b-2 border-brand pb-1 font-heading font-bold">Co nabízíme</h3>
+          <h3 className="mb-4 inline-block border-b-2 border-brand pb-1 font-heading font-bold">{t.coNabizime}</h3>
           <ul className="flex flex-col gap-2 text-base text-muted-foreground">
-            {productLinks.map((l) => (
-              <li key={l.label}>
-                <a href={l.href} className="hover:text-foreground">{l.label}</a>
+            {t.productLinks.map((label, i) => (
+              <li key={label}>
+                <a href={productHrefs[i]} className="hover:text-foreground">{label}</a>
               </li>
             ))}
           </ul>
         </div>
 
         <div>
-          <h3 className="mb-4 inline-block border-b-2 border-brand pb-1 font-heading font-bold">Jsme Konstanta</h3>
+          <h3 className="mb-4 inline-block border-b-2 border-brand pb-1 font-heading font-bold">{t.jsmeKonstanta}</h3>
           <ul className="flex flex-col gap-2 text-base text-muted-foreground">
-            {companyLinks.map((l) => (
-              <li key={l.label}>
-                <a href={l.href} className="hover:text-foreground">{l.label}</a>
+            {t.companyLinks.map((label, i) => (
+              <li key={label}>
+                <a href={companyHrefs[i]} className="hover:text-foreground">{label}</a>
               </li>
             ))}
           </ul>
         </div>
 
         <div>
-          <h3 className="mb-4 inline-block border-b-2 border-brand pb-1 font-heading font-bold">Kontakt</h3>
+          <h3 className="mb-4 inline-block border-b-2 border-brand pb-1 font-heading font-bold">{t.kontakt}</h3>
           <ul className="flex flex-col gap-4 text-sm text-muted-foreground">
-            <li>
-              <p className="mb-1 font-semibold text-foreground">Zaměření a obchod</p>
-              <a href="tel:+420770169411" className="flex items-center gap-2 hover:text-foreground">
-                <Phone className="h-4 w-4 text-primary" /> +420 770 169 411
-              </a>
-              <a href="mailto:info@konstantahp.cz" className="flex items-center gap-2 hover:text-foreground">
-                <Mail className="h-4 w-4 text-primary" /> info@konstantahp.cz
-              </a>
-            </li>
-            <li>
-              <p className="mb-1 font-semibold text-foreground">Fakturace, kalkulace, nabídky</p>
-              <a href="tel:+420722015842" className="flex items-center gap-2 hover:text-foreground">
-                <Phone className="h-4 w-4 text-primary" /> +420 722 015 842
-              </a>
-              <a href="mailto:nabidky@konstantahp.cz" className="flex items-center gap-2 hover:text-foreground">
-                <Mail className="h-4 w-4 text-primary" /> nabidky@konstantahp.cz
-              </a>
-            </li>
-            <li>
-              <p className="mb-1 font-semibold text-foreground">Výroba a technické řešení</p>
-              <a href="tel:+420728711590" className="flex items-center gap-2 hover:text-foreground">
-                <Phone className="h-4 w-4 text-primary" /> +420 728 711 590
-              </a>
-            </li>
+            {t.contactGroups.map((g, i) => (
+              <li key={g.title}>
+                <p className="mb-1 font-semibold text-foreground">{g.title}</p>
+                <a href={`tel:${contactPhones[i].tel}`} className="flex items-center gap-2 hover:text-foreground">
+                  <Phone className="h-4 w-4 text-primary" /> {contactPhones[i].label}
+                </a>
+                {contactPhones[i].email ? (
+                  <a href={contactPhones[i].email!.href} className="flex items-center gap-2 hover:text-foreground">
+                    <Mail className="h-4 w-4 text-primary" /> {contactPhones[i].email!.label}
+                  </a>
+                ) : null}
+              </li>
+            ))}
           </ul>
         </div>
 
         <div>
-          <h3 className="mb-4 inline-block border-b-2 border-brand pb-1 font-heading font-bold">Fakturační údaje</h3>
+          <h3 className="mb-4 inline-block border-b-2 border-brand pb-1 font-heading font-bold">{t.fakturacniUdaje}</h3>
           <div className="flex flex-col gap-1.5 text-sm text-muted-foreground">
             <p className="font-semibold text-foreground">KONSTANTA - hliníkové ploty s.r.o.</p>
             <p>IČO: 21827150</p>
             <p>DIČ: CZ21827150</p>
-            <p>Sídlo: Maleč 36, 582 76, Česká republika</p>
+            <p>{t.sidlo} Maleč 36, 582 76, Česká republika</p>
           </div>
         </div>
       </div>
 
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-6 text-sm text-muted-foreground sm:flex-row sm:px-6 lg:px-8">
-          <p>© {new Date().getFullYear()} Konstanta HP. Všechna práva vyhrazena.</p>
-          <p>Hliníkové ploty na míru</p>
+          <p>© {new Date().getFullYear()} Konstanta HP. {t.rights}</p>
+          <p>{t.bottomTagline}</p>
         </div>
       </div>
     </footer>

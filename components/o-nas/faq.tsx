@@ -2,36 +2,12 @@
 
 import { useState } from "react"
 import { Plus } from "lucide-react"
-
-const faqs = [
-  {
-    q: "Jakou dáváte záruku?",
-    a: "Na konstrukci i montáž dáváme písemnou záruku a stojíme si za ní. A když se něco přihodí i po jejím vypršení, ozvěte se – k odvedené práci se hlásíme.",
-  },
-  {
-    q: "Za jak dlouho zvládnete montáž?",
-    a: "Většinu zakázek osadíme během jednoho dne, tedy do 24 hodin. Přesný termín potvrdíme podle přípravy základů a rozsahu projektu.",
-  },
-  {
-    q: "Zvládnete i atypický nebo svažitý terén?",
-    a: "Ano. Svažitý terén, omezený prostor i nestandardní požadavky jsou pro nás běžná práce – každý projekt řešíme individuálně a hledáme pro něj vlastní řešení.",
-  },
-  {
-    q: "Poradíte si se servisem po letech?",
-    a: "Konstrukce navrhujeme jako rozebíratelné, takže je jde snadno opravit po částech. Nemusíte kvůli jednomu detailu měnit celý plot.",
-  },
-  {
-    q: "Z jakého materiálu ploty vyrábíte?",
-    a: "Pracujeme s hliníkovými systémy od ověřeného španělského dodavatele a s vlastním patentovaným komorovým profilem. Levné kompromisy nepoužíváme.",
-  },
-  {
-    q: "Kde působíte?",
-    a: "Realizujeme zakázky po celé České republice. Napište nám lokalitu a domluvíme se na termínu zaměření.",
-  },
-]
+import { faqContent, type Lang } from "@/lib/translations"
 
 /** Accordion. Height animates via the grid-rows 0fr→1fr trick (smooth, cheap). */
-export function Faq() {
+export function Faq({ lang = "cs" }: { lang?: Lang }) {
+  const t = faqContent[lang] ?? faqContent.cs
+  const faqs = t.faqs
   const [open, setOpen] = useState<number | null>(0)
 
   return (
@@ -40,13 +16,13 @@ export function Faq() {
         <div className="lg:sticky lg:top-32 lg:h-fit">
           <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-brand">
             <span className="h-[2px] w-8 bg-brand" />
-            FAQ
+            {t.kicker}
           </p>
           <h2 className="mt-4 font-heading text-3xl font-extrabold uppercase tracking-tight text-balance sm:text-4xl lg:text-5xl">
-            Časté dotazy
+            {t.heading}
           </h2>
           <p className="mt-4 max-w-sm text-lg leading-relaxed text-muted-foreground">
-            Nenašli jste odpověď? Napište nebo zavolejte, rádi to probereme lidsky.
+            {t.intro}
           </p>
         </div>
 

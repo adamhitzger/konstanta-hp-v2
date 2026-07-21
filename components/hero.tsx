@@ -6,18 +6,16 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
+import { heroContent, type Lang } from "@/lib/translations"
 
-const highlights = ["Bezúdržbový hliník", "Výroba na míru", "Montáž po celé ČR"]
-
-const slides = [
-  { src: "/hero-plot.png", alt: "Moderní hliníkový plot před rodinným domem" },
-  { src: "/hero-plot-2.png", alt: "Hliníková posuvná brána u moderního domu" },
-  { src: "/hero-plot-3.png", alt: "Hliníkový plot v dekoru dřeva kolem zahrady" },
-]
+const slideSrcs = ["/hero-plot.png", "/hero-plot-2.png", "/hero-plot-3.png"]
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
-export function Hero() {
+export function Hero({ lang = "cs" }: { lang?: Lang }) {
+  const t = heroContent[lang] ?? heroContent.cs
+  const highlights = t.highlights
+  const slides = slideSrcs.map((src, i) => ({ src, alt: t.slideAlts[i] }))
   const [current, setCurrent] = useState(0)
   const root = useRef<HTMLDivElement>(null)
   const imageWrap = useRef<HTMLDivElement>(null)
@@ -76,10 +74,10 @@ export function Hero() {
       <div data-h-meta className="border-b border-background/10 px-4 py-2 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-background/30">
-            Konstanta HP · IČO 21827150 · CZ
+            {t.metaLeft}
           </span>
           <span className="hidden font-mono text-[10px] uppercase tracking-[0.15em] text-background/30 sm:block">
-            Hliníkové oplocení na míru · Est. 2010
+            {t.metaRight}
           </span>
         </div>
       </div>
@@ -91,18 +89,17 @@ export function Hero() {
             data-h-title
             className="font-heading text-[clamp(4rem,9vw,10rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.02em] text-balance text-background"
           >
-            Ploty,{" "}
+            {t.titleLines[0]}{" "}
             <br className="hidden sm:block" />
-            které{" "}
+            {t.titleLines[1]}{" "}
             <br className="hidden sm:block" />
-            vydrží.
+            {t.titleLines[2]}
           </h1>
 
           <div className="flex flex-col gap-4">
             <div data-h-divider className="h-[1px] w-16 bg-background/20" />
             <p data-h-text className="max-w-md text-lg leading-relaxed text-background/68 text-pretty">
-              Navrhujeme, vyrábíme a montujeme moderní hliníkové oplocení, brány,
-              branky a pergoly přesně na míru vašemu domu. Bez kompromisů.
+              {t.subtitle}
             </p>
           </div>
 
@@ -121,7 +118,7 @@ export function Hero() {
               href="#kontakt"
               className="group flex items-center justify-between rounded-full border-2 border-background bg-background px-5 py-3.5 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-foreground transition-all duration-[400ms] ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-transparent hover:text-background"
             >
-              Kalkulace zdarma
+              {t.ctaPrimary}
               <span className="ml-5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-foreground/20 transition-all duration-300 group-hover:translate-x-0.5 group-hover:border-background/40">
                 <ArrowRight className="h-3 w-3" />
               </span>
@@ -131,7 +128,7 @@ export function Hero() {
               href="#produkty"
               className="flex items-center justify-center rounded-full border border-background/25 px-5 py-3.5 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-background/55 transition-all duration-300 hover:border-background/55 hover:text-background"
             >
-              Prohlédnout produkty
+              {t.ctaSecondary}
             </a>
           </div>
         </div>
@@ -158,14 +155,14 @@ export function Hero() {
 
               <button
                 onClick={() => go(-1)}
-                aria-label="Předchozí fotka"
+                aria-label={t.prevAlt}
                 className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-background/30 bg-foreground/60 text-background transition-colors hover:bg-foreground/80"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
               <button
                 onClick={() => go(1)}
-                aria-label="Další fotka"
+                aria-label={t.nextAlt}
                 className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-background/30 bg-foreground/60 text-background transition-colors hover:bg-foreground/80"
               >
                 <ChevronRight className="h-4 w-4" />
@@ -177,7 +174,7 @@ export function Hero() {
                   <button
                     key={s.src}
                     onClick={() => setCurrent(i)}
-                    aria-label={`Přejít na fotku ${i + 1}`}
+                    aria-label={t.goToAlt(i + 1)}
                     className={`h-[2px] flex-1 rounded-full transition-all duration-500 ${i === current ? "bg-background" : "bg-background/30"}`}
                   />
                 ))}
@@ -190,9 +187,9 @@ export function Hero() {
             data-h-badge-float
             className="absolute -bottom-5 -left-4 hidden rounded-2xl border border-border bg-background px-5 py-4 shadow-sm sm:block"
           >
-            <p className="font-heading text-4xl font-extrabold uppercase leading-none text-foreground">15+</p>
+            <p className="font-heading text-4xl font-extrabold uppercase leading-none text-foreground">{t.badgeNumber}</p>
             <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-              let zkušeností
+              {t.badgeText}
             </p>
           </div>
         </div>

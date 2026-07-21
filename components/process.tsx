@@ -5,43 +5,15 @@ import Image from "next/image"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
+import { processContent, type Lang } from "@/lib/translations"
 
-const steps = [
-  {
-    num: "01",
-    title: "Zaměření a kalkulace",
-    text: "První schůzku, zaměření i kalkulaci máte zcela zdarma. Projdeme si vaše představy, doporučíme vhodné řešení a navrhneme přesný rozpočet.",
-    image: "/proces-1.png",
-  },
-  {
-    num: "02",
-    title: "Příprava základů",
-    text: "Připravíme a vybetonujeme základy pro pevné a rovné osazení konstrukce, aby plot dokonale držel po celá desetiletí.",
-    image: "/proces-2.png",
-  },
-  {
-    num: "03",
-    title: "Zdění",
-    text: "Vyzdíme podezdívku a sloupky tak, aby šlo vše jednoduše a milimetrově přesně smontovat a výsledek působil čistě.",
-    image: "/proces-3.png",
-  },
-  {
-    num: "04",
-    title: "Montáž",
-    text: "Hliníkové dílce, brány a branky odborně sestavíme a osadíme přímo na místě. Dbáme na detail a perfektní funkci.",
-    image: "/proces-4.png",
-  },
-  {
-    num: "05",
-    title: "Spokojený zákazník",
-    text: "Spokojený zákazník je pro nás tou nejlepší odměnou a nejlepší referencí. Předáme hotové dílo a jsme tu i nadále k dispozici.",
-    image: "/proces-5.png",
-  },
-]
+const images = ["/proces-1.png", "/proces-2.png", "/proces-3.png", "/proces-4.png", "/proces-5.png"]
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
-export function Process() {
+export function Process({ lang = "cs" }: { lang?: Lang }) {
+  const t = processContent[lang] ?? processContent.cs
+  const steps = t.steps.map((s, i) => ({ ...s, image: images[i] }))
   const root = useRef<HTMLDivElement>(null)
 
   useGSAP(
@@ -120,7 +92,7 @@ export function Process() {
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-8 max-w-2xl sm:mb-12">
             <h2 className="font-heading text-3xl font-extrabold uppercase tracking-tight text-balance sm:text-4xl">
-              Průběh realizace krok za krokem
+              {t.heading}
             </h2>
           </div>
 

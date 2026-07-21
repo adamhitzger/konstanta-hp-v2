@@ -1,52 +1,28 @@
 import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 import { Reveal, AnimatedText } from "@/components/reveal"
+import { productsContent, type Lang } from "@/lib/translations"
 
-const products = [
-  {
-    title: "Hliníkové ploty",
-    image: "/produkt-plot.png",
-    tags: ["Bezúdržbové", "Moderní vzhled", "Odolnost"],
-    text: "Horizontální i vertikální profily v široké škále barev RAL.",
-    code: "HP-01",
-  },
-  {
-    title: "Brány",
-    image: "/produkt-brana.png",
-    tags: ["Posuvné", "Křídlové", "S pohonem"],
-    text: "Posuvné i křídlové brány s elektrickým pohonem na dálkové ovládání.",
-    code: "HP-02",
-  },
-  {
-    title: "Branky",
-    image: "/produkt-branka.png",
-    tags: ["Na míru", "Elektrozámek", "Design"],
-    text: "Vstupní branky sladěné s plotem i bránou do jednoho celku.",
-    code: "HP-03",
-  },
-  {
-    title: "Pergoly",
-    image: "/produkt-pergola.png",
-    tags: ["Bioklimatické", "Lamely", "Stínění"],
-    text: "Hliníkové pergoly s nastavitelnými lamelami pro příjemný stín.",
-    code: "HP-04",
-  },
-]
+const images = ["/produkt-plot.png", "/produkt-brana.png", "/produkt-branka.png", "/produkt-pergola.png"]
+const codes = ["HP-01", "HP-02", "HP-03", "HP-04"]
 
 /* Alternating asymmetry — row 1: narrow | wide, row 2: wide | narrow */
 const colSpans = ["lg:col-span-5", "lg:col-span-7", "lg:col-span-7", "lg:col-span-5"]
 
-export function Products() {
+export function Products({ lang = "cs" }: { lang?: Lang }) {
+  const t = productsContent[lang] ?? productsContent.cs
+  const products = t.items.map((p, i) => ({ ...p, image: images[i], code: codes[i] }))
+
   return (
     <section id="produkty" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
       <div className="mb-12 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <AnimatedText
           as="h2"
-          text="Kompletní hliníkové oplocení na míru"
+          text={t.heading}
           className="font-heading text-3xl font-extrabold tracking-tight text-balance sm:text-4xl max-w-2xl"
         />
         <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-brand sm:text-right sm:shrink-0">
-          4 produktové řady
+          {t.badge}
         </p>
       </div>
 
@@ -89,7 +65,7 @@ export function Products() {
                     href="#kontakt"
                     className="mt-4 inline-flex items-center gap-2 font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-background/70 transition-all duration-300 group-hover:gap-3 group-hover:text-brand"
                   >
-                    Poptat <ArrowRight className="h-3 w-3 text-brand" />
+                    {t.cta} <ArrowRight className="h-3 w-3 text-brand" />
                   </a>
                 </div>
               </div>

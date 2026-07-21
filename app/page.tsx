@@ -11,25 +11,33 @@ import { Social } from "@/components/social"
 import { Contact } from "@/components/contact"
 import { SiteFooter } from "@/components/site-footer"
 import HorizontalGallery from "@/components/HorizontalGallery"
+import { getLang } from "@/lib/translations"
 
-export default function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ lang?: string }>
+}) {
+  const { lang: langParam } = await searchParams
+  const lang = getLang(langParam)
+
   return (
     <SmoothScroll>
       <div className="flex min-h-screen flex-col">
-        <SiteHeader />
+        <SiteHeader lang={lang} />
         <main className="flex-1">
-          <HorizontalGallery/>
-          
-          <Stats />
-          <Products />
-          <Process />
-          <WhyUs />
-          <Realizace />
-          <Testimonials />
-          <Social />
-          <Contact />
+          <HorizontalGallery lang={lang} />
+
+          <Stats lang={lang} />
+          <Products lang={lang} />
+          <Process lang={lang} />
+          <WhyUs lang={lang} />
+          <Realizace lang={lang} />
+          <Testimonials lang={lang} />
+          <Social lang={lang} />
+          <Contact lang={lang} />
         </main>
-        <SiteFooter />
+        <SiteFooter lang={lang} />
       </div>
     </SmoothScroll>
   )

@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { galleryContent, heroContent, type Lang } from '@/lib/translations';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -15,46 +16,22 @@ type Slide = {
   person: string; // průhledný cutout rodiny/páru
 };
 
-// Data vychází z produktových řad (viz components/products.tsx).
-// Každé pozadí má vlastní rodinu, na desktopu širokoúhlou fotku.
-const slides: Slide[] = [
-  {
-    title: 'PLOTY',
-    label: 'Hliníkové ploty',
-    imgMobile: '/realizace-1.png',
-    imgDesktop: '/gallery-ploty-wide.png',
-    person: '/gallery-fam-1.png',
-  },
-  {
-    title: 'BRÁNY',
-    label: 'Hliníkové brány',
-    imgMobile: '/hero-plot-2.png',
-    imgDesktop: '/gallery-brany-wide.png',
-    person: '/gallery-fam-2.png',
-  },
-  {
-    title: 'BRANKY',
-    label: 'Hliníkové branky',
-    imgMobile: '/produkt-branka.png',
-    imgDesktop: '/gallery-branky-wide.png',
-    person: '/gallery-fam-3.png',
-  },
-  {
-    title: 'PERGOLY',
-    label: 'Hliníkové pergoly',
-    imgMobile: '/produkt-pergola.png',
-    imgDesktop: '/gallery-pergola-wide.png',
-    person: '/gallery-fam-4.png',
-  },
+// Obrázky vychází z produktových řad (viz components/products.tsx); texty z lib/translations.ts.
+const slideImages = [
+  { imgMobile: '/realizace-1.png', imgDesktop: '/gallery-ploty-wide.png', person: '/gallery-fam-1.png' },
+  { imgMobile: '/hero-plot-2.png', imgDesktop: '/gallery-brany-wide.png', person: '/gallery-fam-2.png' },
+  { imgMobile: '/produkt-branka.png', imgDesktop: '/gallery-branky-wide.png', person: '/gallery-fam-3.png' },
+  { imgMobile: '/produkt-pergola.png', imgDesktop: '/gallery-pergola-wide.png', person: '/gallery-fam-4.png' },
 ];
-
-// Odrážky převzaté z <Hero /> (drží se konzistence napříč webem).
-const heroHighlights = ['Bezúdržbový hliník', 'Výroba na míru', 'Montáž po celé ČR'];
 
 // O kolik px se prvek maximálně posune při parallaxu (speed × BASE).
 const PARALLAX_BASE = 80;
 
-export default function HorizontalGallery() {
+export default function HorizontalGallery({ lang = "cs" }: { lang?: Lang }) {
+  const t = galleryContent[lang] ?? galleryContent.cs
+  const hero = heroContent[lang] ?? heroContent.cs
+  const slides: Slide[] = slideImages.map((img, i) => ({ ...img, title: t.titles[i], label: t.labels[i] }))
+  const heroHighlights = hero.highlights
   const root = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -194,7 +171,7 @@ export default function HorizontalGallery() {
         >
           <div className="mx-auto flex max-w-7xl items-center">
             <span className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-white/80">
-              Konstanta HP · IČO 21827150 · CZ
+              {hero.metaLeft}
             </span>
           </div>
         </div>
@@ -204,15 +181,14 @@ export default function HorizontalGallery() {
           className="pointer-events-none absolute inset-x-0 z-20 select-none text-center font-mono text-[11px] font-medium uppercase tracking-[0.4em] text-white/85 sm:text-xs"
           style={{ top: 'calc(5rem + 3rem)' }}
         >
-          Hliníkové oplocení na míru
+          {t.kicker}
         </span>
 
         {/* ---- Text z <Hero /> – vlevo dole, konstantní (od lg) ---- */}
         <div className="pointer-events-none absolute bottom-[9vh] left-8 z-20 hidden max-w-md flex-col gap-5 [text-shadow:0_2px_16px_rgba(0,0,0,0.55)] lg:flex xl:left-12">
           <div className="h-[2px] w-14 bg-white/60" />
           <p className="text-lg font-medium leading-relaxed text-white">
-            Navrhujeme, vyrábíme a montujeme moderní hliníkové oplocení, brány,
-            branky a pergoly přesně na míru vašemu domu. Bez kompromisů.
+            {hero.subtitle}
           </p>
           <ul className="flex flex-col gap-2.5">
             {heroHighlights.map((h) => (
@@ -235,7 +211,7 @@ export default function HorizontalGallery() {
             href="#kontakt"
             className="group inline-flex items-center gap-3 rounded-full border-2 border-white bg-white px-7 py-3.5 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-foreground shadow-[0_10px_30px_rgba(0,0,0,0.25)] transition-all duration-300 hover:bg-transparent hover:text-white"
           >
-            Nezávazná kalkulace
+            {t.cta}
             <span className="transition-transform duration-300 group-hover:translate-x-1">
               →
             </span>
