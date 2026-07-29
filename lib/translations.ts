@@ -1217,6 +1217,7 @@ export const motivLabels: Record<Lang, Record<string, string>> = {
     tycka: "Tyčka",
     tahokov: "Tahokov",
     "vlastní kombinace": "Vlastní kombinace",
+    drevodekor: "Dřevodekor",
   },
   sk: {
     "o-standart": "Okenica štandard",
@@ -1229,6 +1230,7 @@ export const motivLabels: Record<Lang, Record<string, string>> = {
     tycka: "Tyčka",
     tahokov: "Ťahokov",
     "vlastní kombinace": "Vlastná kombinácia",
+    drevodekor: "Drevodekor",
   },
   de: {
     "o-standart": "Fensterladen Standard",
@@ -1241,6 +1243,57 @@ export const motivLabels: Record<Lang, Record<string, string>> = {
     tycka: "Stab",
     tahokov: "Streckmetall",
     "vlastní kombinace": "Eigene Kombination",
+    drevodekor: "Holzdekor",
+  },
+}
+
+/** UI texty galerie reálných fotek (ProductSection, PergolaTypeTile, PhotoLightbox). */
+export const photoGalleryContent: Record<
+  Lang,
+  {
+    openGallery: string
+    viewPhotosOf: string
+    photoSingular: string
+    photoPlural: string
+    morePhotos: string
+    motivHeading: string
+    prevPhoto: string
+    nextPhoto: string
+    photoAt: string
+  }
+> = {
+  cs: {
+    openGallery: "Prohlédnout galerii",
+    viewPhotosOf: "Zobrazit fotografie realizací",
+    photoSingular: "fotka",
+    photoPlural: "fotek",
+    morePhotos: "dalších fotek",
+    motivHeading: "Motiv",
+    prevPhoto: "Předchozí fotka",
+    nextPhoto: "Další fotka",
+    photoAt: "Fotka",
+  },
+  sk: {
+    openGallery: "Pozrieť galériu",
+    viewPhotosOf: "Zobraziť fotografie realizácií",
+    photoSingular: "fotka",
+    photoPlural: "fotiek",
+    morePhotos: "ďalších fotiek",
+    motivHeading: "Motív",
+    prevPhoto: "Predchádzajúca fotka",
+    nextPhoto: "Ďalšia fotka",
+    photoAt: "Fotka",
+  },
+  de: {
+    openGallery: "Galerie ansehen",
+    viewPhotosOf: "Fotos der Umsetzungen ansehen",
+    photoSingular: "Foto",
+    photoPlural: "Fotos",
+    morePhotos: "weitere Fotos",
+    motivHeading: "Motiv",
+    prevPhoto: "Vorheriges Foto",
+    nextPhoto: "Nächstes Foto",
+    photoAt: "Foto",
   },
 }
 

@@ -10,9 +10,10 @@ import { sendGTMEvent } from "@next/third-parties/google"
 import { confSchema, type ConfiguratorType } from "@/lib/schemas"
 import { gateProducts } from "@/lib/konf-content"
 import { sendConf } from "@/lib/actions"
-import type { ConfPhotos } from "@/types"
+import type { ConfPhotosWithMotiv } from "@/types"
 import { Button } from "@/components/ui/button"
 import { KonfProgress } from "./konf-progress"
+import { GateIcon, WicketIcon, PostsIcon, PanelMotifIcon, PaintIcon, ContactIcon } from "./konf-icons"
 import { Slide } from "./slide"
 import { StepBrana } from "./step-brana"
 import { StepBranka } from "./step-branka"
@@ -24,7 +25,10 @@ import { konfContent, type Lang } from "@/lib/translations"
 
 const LAST_STEP = konfContent.cs.steps.length - 1
 
-const emptyPhotos: ConfPhotos = {
+// Pořadí musí odpovídat `konfContent.<lang>.steps` (Brána, Branka, Sloupky, Dílce a motiv, Barva, Kontakt).
+const stepIcons = [GateIcon, WicketIcon, PostsIcon, PanelMotifIcon, PaintIcon, ContactIcon]
+
+const emptyPhotos: ConfPhotosWithMotiv = {
   jednokridla: [],
   dvoukridla: [],
   samonosna: [],
@@ -42,7 +46,7 @@ const emptyPhotos: ConfPhotos = {
   zahrada: [],
 }
 
-export function Configurator({ photos = emptyPhotos, lang = "cs" }: { photos?: ConfPhotos; lang?: Lang }) {
+export function Configurator({ photos = emptyPhotos, lang = "cs" }: { photos?: ConfPhotosWithMotiv; lang?: Lang }) {
   const t = konfContent[lang] ?? konfContent.cs
   const [step, setStep] = useState(0)
   const [direction, setDirection] = useState(1)
@@ -142,11 +146,11 @@ export function Configurator({ photos = emptyPhotos, lang = "cs" }: { photos?: C
         <p className="max-w-2xl text-lg text-muted-foreground text-pretty">{t.subheading}</p>
       </div>
 
-      <div ref={topRef} className="scroll-mt-24 rounded-3xl border border-border bg-card p-5 sm:p-8">
-        <KonfProgress step={step} steps={t.steps} />
+      <div ref={topRef} className="scroll-mt-24 rounded-3xl border border-border bg-card p-5 sm:grid sm:grid-cols-[220px_1fr] sm:gap-8 sm:p-8 lg:grid-cols-[260px_1fr] lg:gap-10">
+        <KonfProgress step={step} steps={t.steps} icons={stepIcons} />
 
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onValid, onInvalid)} className="flex flex-col gap-10">
+          <form onSubmit={handleSubmit(onValid, onInvalid)} className="flex min-w-0 flex-col gap-10">
             <div className="relative overflow-hidden py-8">
               <AnimatePresence mode="wait" custom={direction} initial={false}>
                 {step === 0 && (

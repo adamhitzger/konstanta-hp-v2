@@ -138,3 +138,13 @@
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
+
+/* Hides the scrollbar on horizontally-scrollable strips (step progress, motif filter chips)
+   while keeping them scrollable. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

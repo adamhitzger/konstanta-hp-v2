@@ -107,7 +107,7 @@ export function ImageRadioGrid({
 }) {
   const t = formControlsContent[lang] ?? formControlsContent.cs
   return (
-    <RadioGroup value={value} onValueChange={(v) => onChange(v as string)} className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+    <RadioGroup value={value} onValueChange={(v) => onChange(v as string)} className="grid grid-cols-2 gap-4 sm:grid-cols-3">
       {options.map((opt) => {
         const active = value === opt.value
         return (
@@ -119,9 +119,9 @@ export function ImageRadioGrid({
             )}
           >
             {opt.image ? (
-              <Image src={opt.image} alt={opt.label} width={140} height={140} className="aspect-square w-full max-w-[140px] rounded-xl border border-border bg-background object-contain p-2" />
+              <Image src={opt.image} alt={opt.label} width={220} height={220} className="aspect-square w-full max-w-[220px] rounded-xl bg-background object-contain p-2" />
             ) : (
-              <span className="flex aspect-square w-full max-w-[140px] items-center justify-center rounded-xl border border-dashed border-border text-xs text-muted-foreground">
+              <span className="flex aspect-square w-full max-w-[220px] items-center justify-center rounded-xl border border-dashed border-border text-xs text-muted-foreground">
                 {t.customSolution}
               </span>
             )}

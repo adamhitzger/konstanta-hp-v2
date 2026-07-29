@@ -4,9 +4,10 @@ import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { Configurator } from "@/components/configurator/configurator"
 import { sanityFetch } from "@/sanity/lib/client"
-import { CONF_IMGS_QUERY } from "@/sanity/lib/queries"
-import type { ConfPhotos } from "@/types"
+import { PRODUCT_PHOTOS_QUERY } from "@/sanity/lib/queries"
+import type { ProductPhotosDoc } from "@/types"
 import { getLang } from "@/lib/translations"
+import { buildGalleryPhotos } from "@/lib/product-photos"
 
 export const metadata: Metadata = {
   title: "Konfigurátor oplocení | KONSTANTA – hliníkové ploty, brány a pergoly",
@@ -20,21 +21,22 @@ export default async function KonfOploceniPage({
 }: {
   searchParams: Promise<{ lang?: string }>
 }) {
-  const [{ lang: langParam }, photos] = await Promise.all([
+  const [{ lang: langParam }, photoDocs] = await Promise.all([
     searchParams,
-    sanityFetch<ConfPhotos | null>({ query: CONF_IMGS_QUERY }).catch((error) => {
-      console.error("Nepodařilo se načíst fotky konfigurátoru ze Sanity:", error)
+    sanityFetch<ProductPhotosDoc[] | null>({ query: PRODUCT_PHOTOS_QUERY }).catch((error) => {
+      console.error("Nepodařilo se načíst fotky produktových variant ze Sanity:", error)
       return null
     }),
   ])
   const lang = getLang(langParam)
+  const photos = buildGalleryPhotos(photoDocs)
 
   return (
     <SmoothScroll lang={lang}>
       <div className="flex min-h-screen flex-col">
         <SiteHeader lang={lang} />
         <main className="flex-1">
-          <Configurator photos={photos ?? undefined} lang={lang} />
+          <Configurator photos={photos} lang={lang} />
         </main>
         <SiteFooter lang={lang} />
       </div>

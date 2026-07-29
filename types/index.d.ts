@@ -44,6 +44,51 @@ export interface ConfPhotos {
   zahrada: string[];
 }
 
+/** Jedna reálná fotka realizace + `motiv` (výplň), odvozený z toho, ve kterém poli
+ * `productPhotos` dokumentu (okS/p60/tahokov/…) byla fotka nahraná — viz lib/product-photos.ts. */
+export interface ConfPhotoItem {
+  url: string;
+  motiv?: string;
+}
+
+/** Fotky pro galerii v konfigurátoru, sestavené z `productPhotos` (lib/product-photos.ts)
+ * a rozřazené pod stejné klíče, které používají `gateProducts`/kroky konfigurátoru. */
+export interface ConfPhotosWithMotiv {
+  jednokridla: ConfPhotoItem[];
+  dvoukridla: ConfPhotoItem[];
+  samonosna: ConfPhotoItem[];
+  poKolejnici: ConfPhotoItem[];
+  telPoj: ConfPhotoItem[];
+  telSam: ConfPhotoItem[];
+  atypicka: ConfPhotoItem[];
+  sikma: ConfPhotoItem[];
+  skladaci: ConfPhotoItem[];
+  sekcni: ConfPhotoItem[];
+  branka: ConfPhotoItem[];
+  ploty: ConfPhotoItem[];
+  pristresek: ConfPhotoItem[];
+  bioklimaticka: ConfPhotoItem[];
+  zahrada: ConfPhotoItem[];
+}
+
+/** Raw tvar jednoho `productPhotos` dokumentu z PRODUCT_PHOTOS_QUERY — jeden dokument
+ * na konkrétní produkt (rozlišený `nameCs`), fotky rozdělené po jednotlivých motivech. */
+export interface ProductPhotosDoc {
+  cat?: "brany" | "branky" | "ploty" | "pergoly";
+  nameCs?: string;
+  okS: string[];
+  okK: string[];
+  okKM: string[];
+  p60: string[];
+  p90: string[];
+  p120: string[];
+  p150: string[];
+  tycka: string[];
+  vlKom: string[];
+  drevodekor: string[];
+  tahokov: string[];
+}
+
 export interface ProductPhoto {
   banner: string;
   nameCs: string;

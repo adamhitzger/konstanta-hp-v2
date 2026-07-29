@@ -22,7 +22,7 @@ function MountOption({
   return (
     <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-5">
       <div className="flex items-center gap-4">
-        <Image src={image} alt={label} width={80} height={80} className="size-16 shrink-0 rounded-xl border border-border bg-background object-contain p-1.5 sm:size-20" />
+        <Image src={image} alt={label} width={80} height={80} className="size-16 shrink-0 rounded-xl bg-background object-contain p-1.5 sm:size-20" />
         <div className="flex-1">
           <InlineCheckbox
             label={label}

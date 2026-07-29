@@ -155,6 +155,26 @@ export const FINISHED_WORK = groq`*[_type == 'finishedWork']{
   "pristresek": pristresek[].asset->url,
 }`;
 
+// Reálné fotky realizací pro galerii v konfigurátoru žijí v `productPhotos` — jeden
+// dokument na konkrétní produkt (spárovaný přes `nameCs`, viz lib/product-photos.ts),
+// s fotkami rozdělenými po jednotlivých motivech. Nesouvisí s CONF_IMGS_QUERY/PERG_IMGS_QUERY
+// výše, které pořád krmí e-maily/xlsx (lib/actions.ts, ConfMail, PergMail) beze změny.
+export const PRODUCT_PHOTOS_QUERY = groq`*[_type == "productPhotos"]{
+  cat,
+  nameCs,
+  "okS": okS[].asset->url,
+  "okK": okK[].asset->url,
+  "okKM": okKM[].asset->url,
+  "p60": p60[].asset->url,
+  "p90": p90[].asset->url,
+  "p120": p120[].asset->url,
+  "p150": p150[].asset->url,
+  "tycka": tycka[].asset->url,
+  "vlKom": vlKom[].asset->url,
+  "drevodekor": drevodekor[].asset->url,
+  "tahokov": tahokov[].asset->url
+}`;
+
    export const STEPS_QUERY = groq`*[_type == "steps"][0]{
   steps[]{
     "photos": photos[].asset->url,

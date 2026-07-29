@@ -212,14 +212,14 @@ export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b-2 border-brand bg-background">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 xl:px-8">
         {/* Logo */}
         <Link href={withLang("/", lang)} className="flex shrink-0 items-center" aria-label="Konstanta HP">
           <Image src="/logo-konstanta.svg" alt="Konstanta HP" width={300} height={104} priority className="h-12 md:h-24 w-auto" />
         </Link>
 
         {/* ---- Desktop nav ---- */}
-        <nav ref={navRef} aria-label={t.mainMenu} className="hidden lg:block">
+        <nav ref={navRef} aria-label={t.mainMenu} className="hidden xl:block">
           <ul className="flex items-center gap-1">
             {navItems.map((item, i) =>
               hasChildren(item) ? (
@@ -284,7 +284,7 @@ export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
         </nav>
 
         {/* ---- Desktop contact + CTA ---- */}
-        <div className="hidden items-center gap-5 lg:flex">
+        <div className="hidden items-center gap-5 xl:flex">
           <div className="hidden flex-col items-end gap-0.5 xl:flex">
             <a
               href="tel:+420770169411"
@@ -312,7 +312,7 @@ export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
         </div>
 
         {/* ---- Mobile controls ---- */}
-        <div className="flex items-center gap-3 lg:hidden">
+        <div className="flex items-center gap-3 xl:hidden">
           <a
             href={withLang("/#kontakt", lang)}
             onClick={(e) => handleAnchorClick(e, withLang("/#kontakt", lang))}
@@ -340,7 +340,7 @@ export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
       <div
         aria-hidden
         onClick={closeMobile}
-        className={`fixed inset-0 z-40 bg-foreground/50 backdrop-blur-sm transition-opacity duration-300 motion-reduce:transition-none lg:hidden ${
+        className={`fixed inset-0 z-40 bg-foreground/50 backdrop-blur-sm transition-opacity duration-300 motion-reduce:transition-none xl:hidden ${
           mobileOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       />
@@ -352,7 +352,7 @@ export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
         role="dialog"
         aria-modal="true"
         aria-label={t.mainMenu}
-        className={`fixed inset-y-0 right-0 z-50 flex w-[86%] max-w-sm flex-col border-l-2 border-brand bg-background shadow-2xl transition-transform duration-300 ease-out motion-reduce:transition-none lg:hidden ${
+        className={`fixed inset-y-0 right-0 z-50 flex w-[86%] max-w-sm flex-col border-l-2 border-brand bg-background shadow-2xl transition-transform duration-300 ease-out motion-reduce:transition-none xl:hidden ${
           mobileOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
