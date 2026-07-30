@@ -80,7 +80,7 @@ export function ProductSection({
         {/* Model + reálná fotka realizace vedle sebe, jako dvojice na středu karty. */}
         <div className="flex items-center justify-center gap-4">
           {image ? (
-              <Image src={image} alt={imageAlt ?? title} width={400} height={400} className="rounded-2xl  object-contain p-3" />
+              <Image src={image} alt={imageAlt ?? title} width={400} height={400} className="rounded-3xl  object-contain p-3" />
               
           ) : null}
 
@@ -89,10 +89,10 @@ export function ProductSection({
               <button
                 type="button"
                 onClick={() => setLightboxOpen(true)}
-                className="group relative aspect-square w-full overflow-hidden rounded-2xl bg-background"
+                className="group relative aspect-square w-full overflow-hidden rounded-xl bg-background"
                 aria-label={`${gt.viewPhotosOf}: ${title}`}
               >
-                <Image src={coverPhoto.url} alt={`${title} — realizace`} fill sizes="10vw" className="rounded-2xl object-cover" unoptimized />
+                <Image src={coverPhoto.url} alt={`${title} — realizace`} fill sizes="10vw" className="rounded-xl object-cover" unoptimized />
                 <span className="absolute inset-0 flex items-center justify-center rounded-2xl bg-foreground/0 transition-colors group-hover:bg-foreground/40">
                   <Expand className="size-5 text-background opacity-0 transition-opacity group-hover:opacity-100" />
                 </span>

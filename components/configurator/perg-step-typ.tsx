@@ -55,23 +55,23 @@ function PergolaTypeTile({
       onClick={onSelect}
       className={cn(
         "flex cursor-pointer flex-col gap-6 rounded-2xl border p-5 text-left transition-colors",
-        active ? "border-brand/30 bg-brand/12" : "border-border bg-card",
+        active ? "border-brand/30 bg-brand/3" : "border-border bg-card",
       )}
     >
       <div className="flex flex-col items-center gap-4">
         {/* Model + reálná fotka realizace vedle sebe, jako dvojice na středu dlaždice. */}
         <div className="flex items-center justify-center gap-4">
-          <Image src={image} alt={label} width={400} height={400} className="rounded-2xl object-contain p-3" />
+          <Image src={image} alt={label} width={400} height={400} className="rounded-3xl object-contain p-3" />
 
           {coverPhoto ? (
             <div className="hidden w-30 shrink-0 flex-col gap-2 sm:w-28 lg:flex lg:w-32">
               <button
                 type="button"
                 onClick={openGallery}
-                className="group relative aspect-square w-full overflow-hidden rounded-2xl bg-background"
+                className="group relative aspect-square w-full overflow-hidden rounded-xl bg-background"
                 aria-label={`${gt.viewPhotosOf}: ${label}`}
               >
-                <Image src={coverPhoto.url} alt={`${label} — realizace`} fill sizes="10vw" className="rounded-2xl object-cover" unoptimized />
+                <Image src={coverPhoto.url} alt={`${label} — realizace`} fill sizes="10vw" className="rounded-xl object-cover" unoptimized />
                 <span className="absolute inset-0 flex items-center justify-center rounded-2xl bg-foreground/0 transition-colors group-hover:bg-foreground/40">
                   <Expand className="size-5 text-background opacity-0 transition-opacity group-hover:opacity-100" />
                 </span>
