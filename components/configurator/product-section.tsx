@@ -7,6 +7,7 @@ import { useFormContext, type Path } from "react-hook-form"
 import type { ConfiguratorType } from "@/lib/schemas"
 import type { ConfPhotoItem } from "@/types"
 import { photoGalleryContent, type Lang } from "@/lib/translations"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -69,45 +70,35 @@ export function ProductSection({
   }
 
   return (
-    <div className="flex flex-col gap-6 rounded-2xl border border-border bg-card p-5 transition-colors has-data-[active=true]:border-foreground/30" data-active={count > 0}>
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:gap-12">
-        {image ? (
-          <div className="mx-auto w-full max-w-xs shrink-0 lg:mx-0 lg:w-1/2 lg:max-w-none">
-            <div className="aspect-square w-full overflow-hidden rounded-xl bg-background">
-              <Image src={image} alt={imageAlt ?? title} width={480} height={480} className="size-full object-contain p-4" />
-            </div>
-          </div>
-        ) : null}
+    <div
+      className={cn(
+        "flex flex-col gap-6 rounded-2xl border p-5 transition-colors",
+        count > 0 ? "border-brand/30 bg-brand/2" : "border-border bg-card",
+      )}
+    >
+      <div className="flex flex-col items-center gap-4">
+        {/* Model + reálná fotka realizace vedle sebe, jako dvojice na středu karty. */}
+        <div className="flex items-center justify-center gap-4">
+          {image ? (
+              <Image src={image} alt={imageAlt ?? title} width={400} height={400} className="rounded-2xl  object-contain p-3" />
+              
+          ) : null}
 
-        <div className="flex flex-1 flex-col items-end gap-3">
-          <span className="font-heading text-lg font-bold sm:text-xl">{title}</span>
-
-          {photos.length > 0 ? (
-            <>
-              {/* Dokud se karta neskládá do řádku (foto vedle modelu), foto by viselo pod
-                  modelem — místo něj proto necháme jen textový odkaz na galerii až do `lg`. */}
+          {coverPhoto ? (
+            <div className="hidden lg:flex w-30 shrink-0 flex-col gap-2 sm:w-28 lg:w-32">
               <button
                 type="button"
                 onClick={() => setLightboxOpen(true)}
-                className="flex w-fit items-center gap-1.5 rounded-lg border border-dashed border-border px-3 py-2 text-xs font-medium text-brand lg:hidden"
-              >
-                <Images className="size-3.5" />
-                {gt.openGallery} ({photos.length} {photos.length === 1 ? gt.photoSingular : gt.photoPlural})
-              </button>
-
-              {/* lg+: reálná fotka realizace, zmenšená na polovinu, s hover náznakem rozkliknutí. */}
-              <button
-                type="button"
-                onClick={() => setLightboxOpen(true)}
-                className="group relative hidden aspect-[4/3] w-1/2 overflow-hidden rounded-xl bg-background lg:block"
+                className="group relative aspect-square w-full overflow-hidden rounded-2xl bg-background"
                 aria-label={`${gt.viewPhotosOf}: ${title}`}
               >
-                <Image src={coverPhoto.url} alt={`${title} — realizace`} fill sizes="15vw" className="object-cover" unoptimized />
-                <span className="absolute inset-0 flex items-center justify-center bg-foreground/0 transition-colors group-hover:bg-foreground/40">
+                <Image src={coverPhoto.url} alt={`${title} — realizace`} fill sizes="10vw" className="rounded-2xl object-cover" unoptimized />
+                <span className="absolute inset-0 flex items-center justify-center rounded-2xl bg-foreground/0 transition-colors group-hover:bg-foreground/40">
                   <Expand className="size-5 text-background opacity-0 transition-opacity group-hover:opacity-100" />
                 </span>
               </button>
 
+              {/* PC: počet dalších fotek pod reálnou fotkou. */}
               {restPhotos.length > 0 ? (
                 <button
                   type="button"
@@ -117,25 +108,39 @@ export function ProductSection({
                   <Images className="size-3.5" />+{restPhotos.length} {gt.morePhotos}
                 </button>
               ) : null}
-            </>
+            </div>
           ) : null}
+        </div>
 
-          <div className="mt-1 flex items-center gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              size="icon-sm"
-              onClick={() => setCount(count - 1)}
-              disabled={count === 0}
-              aria-label={`Ubrat ${title}`}
-            >
-              <Minus />
-            </Button>
-            <span className="w-5 text-center font-mono text-sm tabular-nums">{count}</span>
-            <Button type="button" size="icon-sm" onClick={() => setCount(count + 1)} aria-label={`Přidat ${title}`}>
-              <Plus />
-            </Button>
-          </div>
+        <span className="text-center font-heading text-lg font-bold sm:text-xl">{title}</span>
+
+        {/* Mobil/tablet: textový odkaz na galerii mezi názvem a množstvím. */}
+        {photos.length > 0 ? (
+          <button
+            type="button"
+            onClick={() => setLightboxOpen(true)}
+            className="flex w-fit items-center gap-1.5 rounded-lg border border-dashed border-border px-3 py-2 text-xs font-medium text-brand lg:hidden"
+          >
+            <Images className="size-3.5" />
+            {gt.openGallery} ({photos.length} {photos.length === 1 ? gt.photoSingular : gt.photoPlural})
+          </button>
+        ) : null}
+
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="icon-sm"
+            onClick={() => setCount(count - 1)}
+            disabled={count === 0}
+            aria-label={`Ubrat ${title}`}
+          >
+            <Minus />
+          </Button>
+          <span className="w-5 text-center font-mono text-sm tabular-nums">{count}</span>
+          <Button type="button" size="icon-sm" onClick={() => setCount(count + 1)} aria-label={`Přidat ${title}`}>
+            <Plus />
+          </Button>
         </div>
       </div>
 

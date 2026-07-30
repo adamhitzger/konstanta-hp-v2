@@ -54,58 +54,58 @@ function PergolaTypeTile({
     <div
       onClick={onSelect}
       className={cn(
-        "flex cursor-pointer flex-col gap-5 rounded-2xl border border-border bg-card p-5 text-left transition-colors hover:border-foreground/40 lg:flex-row lg:items-start lg:gap-10",
-        active && "border-foreground",
+        "flex cursor-pointer flex-col gap-6 rounded-2xl border p-5 text-left transition-colors",
+        active ? "border-brand/30 bg-brand/12" : "border-border bg-card",
       )}
     >
-      <div className="mx-auto w-full max-w-xs shrink-0 lg:mx-0 lg:w-1/2 lg:max-w-none">
-        <div className="aspect-square w-full overflow-hidden rounded-xl bg-background">
-          <Image src={image} alt={label} width={480} height={480} className="size-full object-contain p-4" />
-        </div>
-      </div>
+      <div className="flex flex-col items-center gap-4">
+        {/* Model + reálná fotka realizace vedle sebe, jako dvojice na středu dlaždice. */}
+        <div className="flex items-center justify-center gap-4">
+          <Image src={image} alt={label} width={400} height={400} className="rounded-2xl object-contain p-3" />
 
-      <div className="flex flex-1 flex-col items-end gap-3">
-        <span className="flex items-center gap-1.5 font-heading text-lg font-bold sm:text-xl">
+          {coverPhoto ? (
+            <div className="hidden w-30 shrink-0 flex-col gap-2 sm:w-28 lg:flex lg:w-32">
+              <button
+                type="button"
+                onClick={openGallery}
+                className="group relative aspect-square w-full overflow-hidden rounded-2xl bg-background"
+                aria-label={`${gt.viewPhotosOf}: ${label}`}
+              >
+                <Image src={coverPhoto.url} alt={`${label} — realizace`} fill sizes="10vw" className="rounded-2xl object-cover" unoptimized />
+                <span className="absolute inset-0 flex items-center justify-center rounded-2xl bg-foreground/0 transition-colors group-hover:bg-foreground/40">
+                  <Expand className="size-5 text-background opacity-0 transition-opacity group-hover:opacity-100" />
+                </span>
+              </button>
+
+              {/* PC: počet dalších fotek pod reálnou fotkou. */}
+              {restPhotos.length > 0 ? (
+                <button
+                  type="button"
+                  onClick={openGallery}
+                  className="hidden w-fit items-center gap-1.5 text-xs font-medium text-brand hover:underline lg:flex"
+                >
+                  <Images className="size-3.5" />+{restPhotos.length} {gt.morePhotos}
+                </button>
+              ) : null}
+            </div>
+          ) : null}
+        </div>
+
+        <span className="flex items-center gap-1.5 text-center font-heading text-lg font-bold sm:text-xl">
           <RadioGroupItem value={value} onClick={(e) => e.stopPropagation()} tabIndex={-1} />
           {label}
         </span>
 
+        {/* Mobil/tablet: textový odkaz na galerii pod názvem. */}
         {photos.length > 0 ? (
-          <>
-            {/* Dokud se dlaždice neskládá do řádku (foto vedle modelu), foto by viselo pod
-                modelem — místo něj proto necháme jen textový odkaz na galerii až do `lg`. */}
-            <button
-              type="button"
-              onClick={openGallery}
-              className="flex w-fit items-center gap-1.5 rounded-lg border border-dashed border-border px-3 py-2 text-xs font-medium text-brand lg:hidden"
-            >
-              <Images className="size-3.5" />
-              {gt.openGallery} ({photos.length} {photos.length === 1 ? gt.photoSingular : gt.photoPlural})
-            </button>
-
-            {/* lg+: reálná fotka realizace, s hover náznakem rozkliknutí. */}
-            <button
-              type="button"
-              onClick={openGallery}
-              className="group relative hidden aspect-[4/3] w-1/2 overflow-hidden rounded-xl bg-background lg:block"
-              aria-label={`${gt.viewPhotosOf}: ${label}`}
-            >
-              <Image src={coverPhoto.url} alt={`${label} — realizace`} fill sizes="15vw" className="object-cover" unoptimized />
-              <span className="absolute inset-0 flex items-center justify-center bg-foreground/0 transition-colors group-hover:bg-foreground/40">
-                <Expand className="size-5 text-background opacity-0 transition-opacity group-hover:opacity-100" />
-              </span>
-            </button>
-
-            {restPhotos.length > 0 ? (
-              <button
-                type="button"
-                onClick={openGallery}
-                className="hidden w-fit items-center gap-1.5 text-xs font-medium text-brand hover:underline lg:flex"
-              >
-                <Images className="size-3.5" />+{restPhotos.length} {gt.morePhotos}
-              </button>
-            ) : null}
-          </>
+          <button
+            type="button"
+            onClick={openGallery}
+            className="flex w-fit items-center gap-1.5 rounded-lg border border-dashed border-border px-3 py-2 text-xs font-medium text-brand lg:hidden"
+          >
+            <Images className="size-3.5" />
+            {gt.openGallery} ({photos.length} {photos.length === 1 ? gt.photoSingular : gt.photoPlural})
+          </button>
         ) : null}
       </div>
 
