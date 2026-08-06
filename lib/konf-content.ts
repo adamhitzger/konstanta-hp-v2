@@ -40,7 +40,7 @@ export const gateProducts: GateProductConfig[] = [
   {
     id: "dvoukridla",
     label: "Otočná brána dvoukřídlá",
-    image: "/modely/brany/dvoukridla.png",
+    image: "/modely/brany/dvoukridla.webp",
     enabledField: "dvoukridla",
     countField: "celkem2K",
     arrayField: "rozmery2KBran",
@@ -49,7 +49,7 @@ export const gateProducts: GateProductConfig[] = [
   {
     id: "jednokridla",
     label: "Otočná brána jednokřídlá",
-    image: "/modely/brany/jednokridla.png",
+    image: "/modely/brany/jednokridla.webp",
     enabledField: "jednokridla",
     countField: "celkemK",
     arrayField: "rozmeryKBran",
@@ -58,7 +58,7 @@ export const gateProducts: GateProductConfig[] = [
   {
     id: "samonosna",
     label: "Samonosná posuvná brána",
-    image: "/modely/brany/samonosna.png",
+    image: "/modely/brany/samonosna.webp",
     enabledField: "samonosna",
     countField: "celkemS",
     arrayField: "rozmerySBran",
@@ -67,7 +67,7 @@ export const gateProducts: GateProductConfig[] = [
   {
     id: "posuvna",
     label: "Brána posuvná po kolejnici",
-    image: "/modely/brany/posuvna.png",
+    image: "/modely/brany/posuvna.webp",
     enabledField: "posuvna",
     countField: "celkemP",
     arrayField: "rozmeryPBran",
@@ -76,7 +76,7 @@ export const gateProducts: GateProductConfig[] = [
   {
     id: "telSam",
     label: "Brána teleskopická samonosná",
-    image: "/modely/brany/telSam.png",
+    image: "/modely/brany/telSam.webp",
     enabledField: "telSam",
     countField: "celkemTS",
     arrayField: "rozmeryTSBran",
@@ -85,7 +85,7 @@ export const gateProducts: GateProductConfig[] = [
   {
     id: "telPoj",
     label: "Brána teleskopická pojízdná",
-    image: "/modely/brany/telPoj.png",
+    image: "/modely/brany/telPoj.webp",
     enabledField: "telPoj",
     countField: "celkemTP",
     arrayField: "rozmeryTPBran",
@@ -94,7 +94,7 @@ export const gateProducts: GateProductConfig[] = [
   {
     id: "atypicka",
     label: "Brána atypická",
-    image: "/modely/brany/atypicka.png",
+    image: "/modely/brany/atypicka.webp",
     enabledField: "atypicka",
     countField: "celkemA",
     arrayField: "rozmeryABran",
@@ -103,7 +103,7 @@ export const gateProducts: GateProductConfig[] = [
   {
     id: "sikma",
     label: "Brána šikmá",
-    image: "/modely/brany/sikma.png",
+    image: "/modely/brany/sikma.webp",
     enabledField: "sikma",
     countField: "celkemSik",
     arrayField: "rozmerySikBran",
@@ -112,7 +112,7 @@ export const gateProducts: GateProductConfig[] = [
   {
     id: "skladaci",
     label: "Brána skládací",
-    image: "/modely/brany/skladaci.png",
+    image: "/modely/brany/skladaci.webp",
     enabledField: "skladaci",
     countField: "celkemSkl",
     arrayField: "rozmerySklBran",
@@ -121,7 +121,7 @@ export const gateProducts: GateProductConfig[] = [
   {
     id: "sekcni",
     label: "Brána sekční",
-    image: "/modely/brany/sekcni.png",
+    image: "/modely/brany/sekcni.webp",
     enabledField: "sekcni",
     countField: "celkemSek",
     arrayField: "rozmerySekBran",
@@ -131,8 +131,8 @@ export const gateProducts: GateProductConfig[] = [
 
 export const sloupkyOptions = [
   { value: "vlastni", label: "Mám své", image: null },
-  { value: "hliníkové", label: "Hliníkové", image: "/modely/sloupky/hlinikove.png" },
-  { value: "betonové", label: "Betonové", image: "/modely/sloupky/betonove.png" },
+  { value: "hliníkové", label: "Hliníkové", image: "/modely/sloupky/hlinikove.webp" },
+  { value: "betonové", label: "Betonové", image: "/modely/sloupky/betonove.webp" },
 ] as const
 
 export const povrchTvarniceOptions = [
@@ -159,9 +159,9 @@ export const barvyTvarniceStipany = [
 ]
 
 export const dilceMaterialImage: Record<string, string> = {
-  "hliníkové": "/modely/dilce/hlinikove.png",
-  "betonové": "/modely/dilce/betonove.png",
-  vlastni: "/modely/dilce/hlinikove.png",
+  "hliníkové": "/modely/dilce/hlinikove.webp",
+  "betonové": "/modely/dilce/betonove.webp",
+  "vlastni": "/modely/dilce/hlinikove.webp",
 }
 
 export const motivy = [

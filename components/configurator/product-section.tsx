@@ -85,7 +85,7 @@ export function ProductSection({
           ) : null}
 
           {coverPhoto ? (
-            <div className="hidden lg:flex w-30 shrink-0 flex-col gap-2 sm:w-28 lg:w-32">
+            <div className="hidden 2xl:flex w-30 shrink-0 flex-col gap-2 sm:w-28 lg:w-32">
               <button
                 type="button"
                 onClick={() => setLightboxOpen(true)}
@@ -103,7 +103,7 @@ export function ProductSection({
                 <button
                   type="button"
                   onClick={() => setLightboxOpen(true)}
-                  className="hidden w-fit items-center gap-1.5 text-xs font-medium text-brand hover:underline lg:flex"
+                  className="hidden w-fit items-center gap-1.5 text-xs font-medium text-brand hover:underline 2xl:flex"
                 >
                   <Images className="size-3.5" />+{restPhotos.length} {gt.morePhotos}
                 </button>
@@ -119,7 +119,7 @@ export function ProductSection({
           <button
             type="button"
             onClick={() => setLightboxOpen(true)}
-            className="flex w-fit items-center gap-1.5 rounded-lg border border-dashed border-border px-3 py-2 text-xs font-medium text-brand lg:hidden"
+            className="flex w-fit items-center gap-1.5 rounded-lg border border-dashed border-border px-3 py-2 text-xs font-medium text-brand 2xl:hidden"
           >
             <Images className="size-3.5" />
             {gt.openGallery} ({photos.length} {photos.length === 1 ? gt.photoSingular : gt.photoPlural})

@@ -48,7 +48,7 @@ export function KonfProgress({
   return (
     <>
       {/* Mobil: pevně přilepený (sticky) vodorovný pruh nahoře nad obsahem. */}
-      <div className="no-scrollbar sticky top-0 z-20 -mx-5 -mt-5 flex items-center gap-3 overflow-x-auto rounded-t-3xl bg-card/95 px-5 pt-5 pb-6 backdrop-blur-sm sm:hidden">
+      <div className=" no-scrollbar sticky top-0 z-20 -mx-5 -mt-5 flex items-center gap-3 overflow-x-auto rounded-t-3xl bg-card/95 px-5 pt-5 pb-6 backdrop-blur-sm sm:hidden">
         {steps.map((label, i) => {
           const status = i < step ? "done" : i === step ? "active" : "upcoming"
           const Icon = icons[i]

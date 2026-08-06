@@ -38,7 +38,7 @@ export function StepBranka({ onNext, photos, lang = "cs" }: { onNext: () => void
 
       <ProductSection
         title={t.productTitle}
-        image="/modely/branka.png"
+        image="/modely/branka.webp"
         imageAlt={t.productTitle}
         galleryPhotos={photos.branka}
         enabledField="branka"

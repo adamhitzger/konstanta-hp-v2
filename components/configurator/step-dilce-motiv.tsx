@@ -17,11 +17,11 @@ export function StepDilceMotiv({ onNext, photos, lang = "cs" }: { onNext: () => 
   const motivT = motivLabels[lang] ?? motivLabels.cs
 
   const motivOptions = [
-    ...motivy.map((m) => ({ value: m.src, label: motivT[m.src] ?? m.motiv, image: `/modely/motivy/${m.imgSrc}.png` })),
+    ...motivy.map((m) => ({ value: m.src, label: motivT[m.src] ?? m.motiv, image: `/modely/motivy/${m.imgSrc}.webp` })),
     { value: "vlastní kombinace", label: motivT["vlastní kombinace"] ?? "Vlastní kombinace", image: null },
   ]
 
-  const panelImage = typSloupku === "hliníkové" ? "/modely/dilce/hlinikove.png" : "/modely/dilce/betonove.png"
+  const panelImage = typSloupku === "hliníkové" ? "/modely/dilce/hlinikove.webp" : "/modely/dilce/betonove.webp"
 
   return (
     <div className="flex flex-col gap-8">

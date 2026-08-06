@@ -15,16 +15,16 @@ export const pergCopy = {
 export const pergSteps = ["Typ a stínění", "Upevnění", "Barva", "Kontakt"] as const
 
 export const pergolaTypeOptions = [
-  { value: "bioklimaticka", label: "Bioklimatická", image: "/modely/pergoly/bioklim.png", photosKey: "bioklimaticka" as const },
-  { value: "zimni_zahrada", label: "Zimní zahrada", image: "/modely/pergoly/zimni_zahrada.png", photosKey: "zahrada" as const },
-  { value: "pristresek", label: "Přístřešek", image: "/modely/pergoly/pristresek.png", photosKey: "pristresek" as const },
+  { value: "bioklimaticka", label: "Bioklimatická", image: "/modely/pergoly/bioklim.webp", photosKey: "bioklimaticka" as const },
+  { value: "zimni_zahrada", label: "Zimní zahrada", image: "/modely/pergoly/zimni_zahrada.webp", photosKey: "zahrada" as const },
+  { value: "pristresek", label: "Přístřešek", image: "/modely/pergoly/pristresek.webp", photosKey: "pristresek" as const },
 ]
 
 export const stineniOptions = [
   { value: "žádné", label: "Žádné", image: null, onlyNonZimniZahrada: false },
-  { value: "rolety", label: "Screenové rolety", image: "/modely/pergoly/rolety.png", onlyNonZimniZahrada: false },
-  { value: "pevne", label: "Pevné", image: "/modely/pergoly/pevne.png", onlyNonZimniZahrada: true },
-  { value: "zaskleni", label: "Zasklení", image: "/modely/pergoly/zaskleni.png", onlyNonZimniZahrada: true },
+  { value: "rolety", label: "Screenové rolety", image: "/modely/pergoly/rolety.webp", onlyNonZimniZahrada: false },
+  { value: "pevne", label: "Pevné", image: "/modely/pergoly/pevne.webp", onlyNonZimniZahrada: true },
+  { value: "zaskleni", label: "Zasklení", image: "/modely/pergoly/zaskleni.webp", onlyNonZimniZahrada: true },
 ]
 
 export const stranyOptions = [
@@ -35,8 +35,8 @@ export const stranyOptions = [
 ]
 
 export const strechaMaterialOptions = [
-  { value: "sklo", label: "Ze skla", image: "/modely/pergoly/sklo.png" },
-  { value: "polykarbonat", label: "Z polykarbonátu", image: "/modely/pergoly/polykarbonat.png" },
+  { value: "sklo", label: "Ze skla", image: "/modely/pergoly/sklo.webp" },
+  { value: "polykarbonat", label: "Z polykarbonátu", image: "/modely/pergoly/polykarbonat.webp" },
 ]
 
 export const mountOptions = [
@@ -44,19 +44,19 @@ export const mountOptions = [
     field: "stojici" as const,
     rozmeryField: "rozmeryStojiciP" as const,
     label: "Pergola samostatně stojící",
-    image: "/modely/pergoly/samostatna.png",
+    image: "/modely/pergoly/samostatna.webp",
   },
   {
     field: "keStene" as const,
     rozmeryField: "rozmeryPkStene" as const,
     label: "Pergola přisazená ke stěně",
-    image: "/modely/pergoly/kestene.png",
+    image: "/modely/pergoly/kestene.webp",
   },
   {
     field: "kRohu" as const,
     rozmeryField: "rozmeryPkRohu" as const,
     label: "Pergola přisazená k rohu",
-    image: "/modely/pergoly/kerohu.png",
+    image: "/modely/pergoly/kerohu.webp",
   },
 ]
 

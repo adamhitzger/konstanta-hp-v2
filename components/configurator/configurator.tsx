@@ -140,13 +140,13 @@ export function Configurator({ photos = emptyPhotos, lang = "cs" }: { photos?: C
   }
 
   return (
-    <section id="konf" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+    <section id="konf" className="mx-auto max-w-8xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="mb-10 flex flex-col items-center gap-3 text-center">
         <h1 className="font-heading text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">{t.heading}</h1>
         <p className="max-w-2xl text-lg text-muted-foreground text-pretty">{t.subheading}</p>
       </div>
 
-      <div ref={topRef} className="scroll-mt-24 rounded-3xl border border-border bg-card p-5 sm:grid sm:grid-cols-[220px_1fr] sm:gap-8 sm:p-8 lg:grid-cols-[260px_1fr] lg:gap-10">
+      <div ref={topRef} className="scroll-mt-24 rounded-3xl border border-border bg-card p-5 sm:grid sm:grid-cols-[220px_1fr] sm:gap-8 sm:p-8 lg:grid-cols-[300px_1fr] lg:gap-10">
         <KonfProgress step={step} steps={t.steps} icons={stepIcons} />
 
         <FormProvider {...methods}>
