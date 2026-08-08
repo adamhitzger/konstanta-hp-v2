@@ -6,6 +6,7 @@ import { ChevronDown } from "lucide-react"
 import type { PortableBlock, ProductInfo } from "@/types"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { productInfoContent, type Lang } from "@/lib/translations"
+import { cn } from "@/lib/utils"
 
 /**
  * Minimální renderer Portable Textu pro `popisCs`/`popisSk`/`popisDe`.
@@ -54,11 +55,15 @@ function PortableDescription({ blocks }: { blocks: PortableBlock[] }) {
 export function ProductInfoLink({
   info,
   fallbackTitle,
+  onBrand = false,
   lang = "cs",
 }: {
   info?: ProductInfo
   /** Název z konfigurátoru — použije se, když je `info.name` v Sanity prázdný. */
   fallbackTitle: string
+  /** Karta je podbarvená plnou brand oranžovou — odkaz se překlopí do bílé,
+   * jinak by oranžová na oranžové zmizela. */
+  onBrand?: boolean
   lang?: Lang
 }) {
   const [open, setOpen] = useState(false)
@@ -77,7 +82,12 @@ export function ProductInfoLink({
       <button
         type="button"
         onClick={openDialog}
-        className="group inline-flex items-center gap-1 text-sm font-medium text-brand underline underline-offset-4 decoration-brand/40 transition-colors hover:decoration-brand"
+        className={cn(
+          "group inline-flex items-center gap-1 text-sm font-medium underline underline-offset-4 transition-colors",
+          onBrand
+            ? "text-brand-foreground decoration-brand-foreground/50 hover:decoration-brand-foreground"
+            : "text-brand decoration-brand/40 hover:decoration-brand",
+        )}
       >
         {t.trigger}
         <ChevronDown className="size-3.5 shrink-0 transition-transform duration-200 group-hover:translate-y-0.5" />

@@ -101,7 +101,9 @@ export function ProductSection({
     <div
       className={cn(
         "flex flex-col gap-5 rounded-2xl border p-5 transition-colors",
-        selected ? "border-brand/60 bg-brand/8" : "border-border bg-card",
+        // Vybraná karta jede plnou brand oranžovou; všechno, co je jinak oranžové
+        // (odkazy, popisky), se proto níž překlápí do bílé, jinak by na pozadí zaniklo.
+        selected ? "border-brand bg-brand text-brand-foreground" : "border-border bg-card",
       )}
     >
       <div className="flex flex-col items-center gap-4">
@@ -113,8 +115,9 @@ export function ProductSection({
               alt={imageAlt ?? title}
               width={400}
               height={400}
-              /* Modely mají bílé pozadí — `mix-blend-multiply` ho schová i na oranžově
-                 podbarvené (vybrané) kartě, bez nutnosti ořezávat zdrojové obrázky. */
+              /* Modely mají bílé (neprůhledné) pozadí — `mix-blend-multiply` ho schová
+                 i na oranžově podbarvené vybrané kartě, bez ořezávání zdrojových obrázků.
+                 Model se tím na oranžové zároveň tónuje do oranžova. */
               className="h-28 min-w-0 flex-1 object-contain mix-blend-multiply sm:h-32 lg:h-36"
             />
           ) : null}
@@ -136,7 +139,10 @@ export function ProductSection({
               <button
                 type="button"
                 onClick={() => setLightboxOpen(true)}
-                className="flex items-center gap-1 text-left text-[11px] leading-tight font-medium text-brand hover:underline"
+                className={cn(
+                  "flex items-center gap-1 text-left text-[11px] leading-tight font-medium hover:underline",
+                  selected ? "text-brand-foreground" : "text-brand",
+                )}
               >
                 <Images className="size-3 shrink-0" />
                 {restPhotos.length > 0
@@ -149,7 +155,7 @@ export function ProductSection({
 
         <div className="flex flex-col items-center gap-1">
           <span className="text-center font-heading text-lg font-bold sm:text-xl">{title}</span>
-          <ProductInfoLink info={info} fallbackTitle={title} lang={lang} />
+          <ProductInfoLink info={info} fallbackTitle={title} lang={lang} onBrand={selected} />
         </div>
 
         {/* Výběr produktu — jeden checkbox, žádné +/- počítadlo. */}
@@ -159,7 +165,9 @@ export function ProductSection({
             // by z checkboxu jinak byl nepřiměřeně široký pruh.
             "flex w-full max-w-sm cursor-pointer items-center justify-center gap-2.5 rounded-xl border px-4 py-3 text-sm font-semibold transition-colors",
             selected
-              ? "border-brand bg-brand/15 text-brand"
+              // Na oranžové kartě je bílá výplň silnější signál „vybráno“ než
+              // další odstín oranžové, který by na pozadí zanikl.
+              ? "border-brand-foreground bg-brand-foreground text-brand"
               : "border-border bg-background text-foreground hover:border-foreground/40",
           )}
         >
@@ -177,26 +185,26 @@ export function ProductSection({
       </div>
 
       {selected ? (
-        <div className="flex flex-col gap-4 border-t border-brand/25 pt-4">
+        <div className="flex flex-col gap-4 border-t border-brand-foreground/30 pt-4">
           {Array.from({ length: count }).map((_, i) => (
             <div key={i} className="flex flex-col gap-2">
               {count > 1 ? (
-                <span className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                <span className="text-xs font-semibold tracking-wide text-brand-foreground/80 uppercase">
                   {st.sizeLabel} {i + 1}
                 </span>
               ) : null}
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                 <div className="flex flex-col gap-1.5">
                   <Label>{dimensionLabels.vyska}</Label>
-                  <Input type="number" min={0} {...register(`${String(arrayField)}.${i}.vyska` as Path<ConfiguratorType>, numberFieldOptions)} />
+                  <Input type="number" min={0} className="border-transparent bg-background text-foreground" {...register(`${String(arrayField)}.${i}.vyska` as Path<ConfiguratorType>, numberFieldOptions)} />
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <Label>{dimensionLabels.delka}</Label>
-                  <Input type="number" min={0} {...register(`${String(arrayField)}.${i}.delka` as Path<ConfiguratorType>, numberFieldOptions)} />
+                  <Input type="number" min={0} className="border-transparent bg-background text-foreground" {...register(`${String(arrayField)}.${i}.delka` as Path<ConfiguratorType>, numberFieldOptions)} />
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <Label>{dimensionLabels.pocet}</Label>
-                  <Input type="number" min={0} {...register(`${String(arrayField)}.${i}.pocet` as Path<ConfiguratorType>, numberFieldOptions)} />
+                  <Input type="number" min={0} className="border-transparent bg-background text-foreground" {...register(`${String(arrayField)}.${i}.pocet` as Path<ConfiguratorType>, numberFieldOptions)} />
                 </div>
                 {extraToggles && extraToggles.length > 0 ? (
                   <div className="col-span-2 flex flex-wrap gap-x-5 gap-y-2 sm:col-span-3">
@@ -204,6 +212,9 @@ export function ProductSection({
                       <InlineCheckbox
                         key={t.name}
                         label={t.label}
+                        /* InlineCheckbox má natvrdo `text-foreground/80` — na oranžové
+                           kartě je to černá na oranžové, takže se přebíjí přes cn(). */
+                        className="text-brand-foreground"
                         {...register(`${String(arrayField)}.${i}.${t.name}` as Path<ConfiguratorType>)}
                       />
                     ))}
@@ -217,7 +228,7 @@ export function ProductSection({
             <button
               type="button"
               onClick={() => setCount(count + 1)}
-              className="text-xs font-semibold text-brand hover:underline"
+              className="text-xs font-semibold text-brand-foreground hover:underline"
             >
               + {st.addSize}
             </button>
@@ -225,7 +236,7 @@ export function ProductSection({
               <button
                 type="button"
                 onClick={removeLastSize}
-                className="text-xs font-medium text-muted-foreground hover:text-foreground"
+                className="text-xs font-medium text-brand-foreground/75 hover:text-brand-foreground"
               >
                 {st.removeLast}
               </button>
