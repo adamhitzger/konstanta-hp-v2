@@ -1,10 +1,11 @@
 "use client"
 
-import type { ComponentType, SVGProps } from "react"
+import { useEffect, useRef, type ComponentType, type SVGProps } from "react"
 import { Check } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 type StepIcon = ComponentType<SVGProps<SVGSVGElement>>
+type StepStatus = "done" | "active" | "upcoming"
 
 function StepTile({
   Icon,
@@ -12,7 +13,7 @@ function StepTile({
   size,
 }: {
   Icon: StepIcon
-  status: "done" | "active" | "upcoming"
+  status: StepStatus
   size: "sm" | "lg"
 }) {
   return (
@@ -20,14 +21,14 @@ function StepTile({
       className={cn(
         "relative flex shrink-0 items-center justify-center rounded-2xl border transition-colors",
         size === "lg" ? "size-16" : "size-12",
-        status === "active" && "border-brand bg-brand text-brand-foreground",
-        status === "done" && "border-brand/30 bg-brand/12 text-brand",
-        status === "upcoming" && "border-border bg-muted text-muted-foreground",
+        status === "active" && "border-brand bg-brand text-brand-foreground shadow-sm",
+        status === "done" && "border-brand/25 bg-brand/10 text-brand",
+        status === "upcoming" && "border-border bg-background text-muted-foreground",
       )}
     >
       <Icon className={size === "lg" ? "size-8" : "size-6"} />
       {status === "done" ? (
-        <span className="absolute -right-1 -bottom-1 flex size-5 items-center justify-center rounded-full bg-brand text-brand-foreground ring-2 ring-background">
+        <span className="absolute -right-1 -bottom-1 flex size-5 items-center justify-center rounded-full bg-brand text-brand-foreground ring-2 ring-accent">
           <Check className="size-3" />
         </span>
       ) : null}
@@ -35,6 +36,13 @@ function StepTile({
   )
 }
 
+/**
+ * Postranní (resp. na mobilu horní) přehled kroků konfigurátoru.
+ *
+ * Celý pruh je šedý (`bg-accent`), aktivní krok dostane bílou "záložku" ve stejné barvě,
+ * jakou má formulář — a protože pruh sousedí s formulářem bez mezery, bílá plocha kolem
+ * ikony plynule přechází do formuláře.
+ */
 export function KonfProgress({
   step,
   steps,
@@ -45,41 +53,35 @@ export function KonfProgress({
   /** Ikona pro každý krok (stejné pořadí a délka jako `steps`). */
   icons: readonly StepIcon[]
 }) {
+  const activeMobileRef = useRef<HTMLDivElement>(null)
+
+  // Na mobilu je pruh vodorovný scroller — aktivní krok si k sobě sám doroluje.
+  useEffect(() => {
+    activeMobileRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" })
+  }, [step])
+
+  const statusOf = (i: number): StepStatus => (i < step ? "done" : i === step ? "active" : "upcoming")
+
   return (
     <>
-      {/* Mobil: pevně přilepený (sticky) vodorovný pruh nahoře nad obsahem. */}
-      <div className=" no-scrollbar sticky top-0 z-20 -mx-5 -mt-5 flex items-center gap-3 overflow-x-auto rounded-t-3xl bg-card/95 px-5 pt-5 pb-6 backdrop-blur-sm sm:hidden">
+      {/* Mobil: pevně přilepený (sticky) vodorovný pruh nahoře nad formulářem. */}
+      <div className="no-scrollbar sticky top-0 z-20 flex items-end gap-1 overflow-x-auto rounded-t-3xl bg-accent px-4 pt-4 sm:hidden">
         {steps.map((label, i) => {
-          const status = i < step ? "done" : i === step ? "active" : "upcoming"
+          const status = statusOf(i)
           const Icon = icons[i]
           return (
-            <div key={label} className="flex shrink-0 items-center gap-2">
+            <div
+              key={label}
+              ref={status === "active" ? activeMobileRef : undefined}
+              className={cn(
+                "flex shrink-0 items-center gap-2.5 rounded-t-2xl px-3 pt-2 pb-4 transition-colors",
+                status === "active" && "bg-card",
+              )}
+            >
               <StepTile Icon={Icon} status={status} size="sm" />
-              <span className={cn("text-sm font-medium whitespace-nowrap", status === "upcoming" ? "text-muted-foreground" : "text-foreground")}>
-                {label}
-              </span>
-              {i < steps.length - 1 ? <div className="h-px w-5 shrink-0 bg-border" /> : null}
-            </div>
-          )
-        })}
-      </div>
-
-      {/* Tablet a výše: pevný levý sidebar, viditelný už od `sm`. */}
-      <nav className="hidden shrink-0 flex-col sm:sticky sm:top-24 sm:flex sm:self-start" aria-label="Průběh konfigurace">
-        {steps.map((label, i) => {
-          const status = i < step ? "done" : i === step ? "active" : "upcoming"
-          const Icon = icons[i]
-          return (
-            <div key={label} className="flex items-stretch gap-4">
-              <div className="flex flex-col items-center">
-                <StepTile Icon={Icon} status={status} size="lg" />
-                {i < steps.length - 1 ? (
-                  <div className={cn("my-2.5 w-px flex-1 bg-border", status === "done" && "bg-brand/40")} />
-                ) : null}
-              </div>
               <span
                 className={cn(
-                  "pt-4 pb-20 text-sm font-semibold text-pretty",
+                  "text-sm font-medium whitespace-nowrap",
                   status === "upcoming" ? "text-muted-foreground" : "text-foreground",
                 )}
               >
@@ -88,7 +90,45 @@ export function KonfProgress({
             </div>
           )
         })}
-      </nav>
+      </div>
+
+      {/* Tablet a výše: šedý sloupec přes celou výšku karty, uvnitř sticky seznam kroků. */}
+      <div className="hidden rounded-l-3xl bg-accent sm:block">
+        <nav className="sticky top-24 flex flex-col py-8" aria-label="Průběh konfigurace">
+          {steps.map((label, i) => {
+            const status = statusOf(i)
+            const Icon = icons[i]
+            return (
+              <div key={label}>
+                <div
+                  className={cn(
+                    "flex items-center gap-4 rounded-l-2xl py-3 pl-2 transition-colors lg:pl-2 ml-4",
+                    status === "active" && "bg-card",
+                  )}
+                >
+                  <StepTile Icon={Icon} status={status} size="lg" />
+                  <span
+                    className={cn(
+                      "pr-4 text-sm font-semibold text-pretty",
+                      status === "upcoming" ? "text-muted-foreground" : "text-foreground",
+                    )}
+                  >
+                    {label}
+                  </span>
+                </div>
+                {i < steps.length - 1 ? (
+                  <div
+                    className={cn(
+                      "ml-[3.25rem] h-6 w-px lg:ml-[3.75rem]",
+                      status === "done" ? "bg-brand/40" : "bg-border",
+                    )}
+                  />
+                ) : null}
+              </div>
+            )
+          })}
+        </nav>
+      </div>
     </>
   )
 }

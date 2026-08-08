@@ -1297,6 +1297,56 @@ export const photoGalleryContent: Record<
   },
 }
 
+/** UI texty odkazu a popupu „Podrobnější informace“ (ProductInfoDialog). */
+export const productInfoContent: Record<Lang, { trigger: string; close: string; photosAlt: string }> = {
+  cs: {
+    trigger: "Podrobnější informace",
+    close: "Zavřít",
+    photosAlt: "fotka produktu",
+  },
+  sk: {
+    trigger: "Podrobnejšie informácie",
+    close: "Zavrieť",
+    photosAlt: "fotka produktu",
+  },
+  de: {
+    trigger: "Ausführlichere Informationen",
+    close: "Schließen",
+    photosAlt: "Produktfoto",
+  },
+}
+
+/** UI texty výběrového checkboxu na produktové kartě (ProductSection). */
+export const productSelectContent: Record<
+  Lang,
+  { select: string; selected: string; addedToast: string; sizeLabel: string; addSize: string; removeLast: string }
+> = {
+  cs: {
+    select: "Vybrat",
+    selected: "Máte vybráno",
+    addedToast: "přidáno do výběru",
+    sizeLabel: "Rozměr",
+    addSize: "Přidat další rozměr",
+    removeLast: "Odebrat poslední",
+  },
+  sk: {
+    select: "Vybrať",
+    selected: "Máte vybraté",
+    addedToast: "pridané do výberu",
+    sizeLabel: "Rozmer",
+    addSize: "Pridať ďalší rozmer",
+    removeLast: "Odobrať posledný",
+  },
+  de: {
+    select: "Auswählen",
+    selected: "Ausgewählt",
+    addedToast: "zur Auswahl hinzugefügt",
+    sizeLabel: "Maß",
+    addSize: "Weiteres Maß hinzufügen",
+    removeLast: "Letztes entfernen",
+  },
+}
+
 export const sloupkyLabels: Record<Lang, Record<string, string>> = {
   cs: { vlastni: "Mám své", "hliníkové": "Hliníkové", "betonové": "Betonové" },
   sk: { vlastni: "Mám vlastné", "hliníkové": "Hliníkové", "betonové": "Betónové" },

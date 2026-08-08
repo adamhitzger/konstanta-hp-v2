@@ -10,7 +10,7 @@ import { sendGTMEvent } from "@next/third-parties/google"
 import { confSchema, type ConfiguratorType } from "@/lib/schemas"
 import { gateProducts } from "@/lib/konf-content"
 import { sendConf } from "@/lib/actions"
-import type { ConfPhotosWithMotiv } from "@/types"
+import type { ConfPhotosWithMotiv, ConfProductInfo } from "@/types"
 import { Button } from "@/components/ui/button"
 import { KonfProgress } from "./konf-progress"
 import { GateIcon, WicketIcon, PostsIcon, PanelMotifIcon, PaintIcon, ContactIcon } from "./konf-icons"
@@ -46,7 +46,15 @@ const emptyPhotos: ConfPhotosWithMotiv = {
   zahrada: [],
 }
 
-export function Configurator({ photos = emptyPhotos, lang = "cs" }: { photos?: ConfPhotosWithMotiv; lang?: Lang }) {
+export function Configurator({
+  photos = emptyPhotos,
+  info = {},
+  lang = "cs",
+}: {
+  photos?: ConfPhotosWithMotiv
+  info?: ConfProductInfo
+  lang?: Lang
+}) {
   const t = konfContent[lang] ?? konfContent.cs
   const [step, setStep] = useState(0)
   const [direction, setDirection] = useState(1)
@@ -146,21 +154,23 @@ export function Configurator({ photos = emptyPhotos, lang = "cs" }: { photos?: C
         <p className="max-w-2xl text-lg text-muted-foreground text-pretty">{t.subheading}</p>
       </div>
 
-      <div ref={topRef} className="scroll-mt-24 rounded-3xl border border-border bg-card p-5 sm:grid sm:grid-cols-[220px_1fr] sm:gap-8 sm:p-8 lg:grid-cols-[300px_1fr] lg:gap-10">
+      {/* Bez `gap` a bez paddingu na wrapperu: bílá „záložka“ aktivního kroku v šedém
+          pruhu tak navazuje přímo na bílou plochu formuláře. */}
+      <div ref={topRef} className="scroll-mt-24 rounded-3xl border border-border bg-card sm:grid sm:grid-cols-[240px_1fr] lg:grid-cols-[300px_1fr]">
         <KonfProgress step={step} steps={t.steps} icons={stepIcons} />
 
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onValid, onInvalid)} className="flex min-w-0 flex-col gap-10">
+          <form onSubmit={handleSubmit(onValid, onInvalid)} className="flex min-w-0 flex-col gap-10 p-5 sm:p-8">
             <div className="relative overflow-hidden py-8">
               <AnimatePresence mode="wait" custom={direction} initial={false}>
                 {step === 0 && (
                   <Slide key="brana" direction={direction}>
-                    <StepBrana onNext={goNext} photos={photos} lang={lang} />
+                    <StepBrana onNext={goNext} photos={photos} info={info} lang={lang} />
                   </Slide>
                 )}
                 {step === 1 && (
                   <Slide key="branka" direction={direction}>
-                    <StepBranka onNext={goNext} photos={photos} lang={lang} />
+                    <StepBranka onNext={goNext} photos={photos} info={info} lang={lang} />
                   </Slide>
                 )}
                 {step === 2 && (
@@ -170,7 +180,7 @@ export function Configurator({ photos = emptyPhotos, lang = "cs" }: { photos?: C
                 )}
                 {step === 3 && (
                   <Slide key="dilce" direction={direction}>
-                    <StepDilceMotiv onNext={goNext} photos={photos} lang={lang} />
+                    <StepDilceMotiv onNext={goNext} photos={photos} info={info} lang={lang} />
                   </Slide>
                 )}
                 {step === 4 && (

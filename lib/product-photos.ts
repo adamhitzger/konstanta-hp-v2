@@ -1,4 +1,11 @@
-import type { ConfPhotoItem, ConfPhotosWithMotiv, ProductPhotosDoc } from "@/types"
+import type {
+  ConfPhotoItem,
+  ConfPhotosWithMotiv,
+  ConfProductInfo,
+  PortableBlock,
+  ProductPhotosDoc,
+} from "@/types"
+import type { Lang } from "@/lib/translations"
 
 /**
  * `productPhotos` dokumenty v Sanity nemají žádné strojové id — rozlišují se jen
@@ -64,6 +71,65 @@ export function buildGalleryPhotos(docs: ProductPhotosDoc[] | null | undefined):
   for (const key of Object.keys(PRODUCT_PHOTOS_NAME_MAP) as (keyof ConfPhotosWithMotiv)[]) {
     const doc = byName.get(PRODUCT_PHOTOS_NAME_MAP[key])
     result[key] = doc ? flattenDoc(doc) : []
+  }
+  return result
+}
+
+/** Kolik fotek se ukáže v popupu „Podrobnější informace“. */
+const INFO_PHOTO_COUNT = 3
+
+/**
+ * V Sanity je vyplněný jen `nameCs`/`popisCs` u všech dokumentů, kdežto `nameDe`
+ * je u většiny bran `null`. Prázdný název by na kartě vykreslil prázdný nadpis,
+ * tak se padá zpátky na češtinu — radši český text než žádný.
+ */
+function pickLocalized<T>(cs: T | undefined, sk: T | undefined, de: T | undefined, lang: Lang): T | undefined {
+  const preferred = lang === "sk" ? sk : lang === "de" ? de : cs
+  return preferred ?? cs
+}
+
+function hasText(blocks: PortableBlock[] | undefined): boolean {
+  return Boolean(blocks?.some((b) => b.children?.some((c) => c.text?.trim())))
+}
+
+/**
+ * Sestaví lokalizované texty + pár fotek pro popup „Podrobnější informace“.
+ * Bere stejné `productPhotos` dokumenty jako `buildGalleryPhotos` a páruje je přes
+ * tutéž `PRODUCT_PHOTOS_NAME_MAP`, takže karta má info a galerii pod jedním `photosKey`.
+ *
+ * Produkt, ke kterému v Sanity není dokument (nebo má prázdný popis), se ve výsledku
+ * neobjeví — karta pak odkaz „Podrobnější informace“ vůbec nevykreslí.
+ */
+export function buildProductInfo(
+  docs: ProductPhotosDoc[] | null | undefined,
+  lang: Lang,
+): ConfProductInfo {
+  const byName = new Map<string, ProductPhotosDoc>()
+  for (const doc of docs ?? []) {
+    if (doc.nameCs) byName.set(doc.nameCs.trim(), doc)
+  }
+
+  const result: ConfProductInfo = {}
+  for (const key of Object.keys(PRODUCT_PHOTOS_NAME_MAP) as (keyof ConfPhotosWithMotiv)[]) {
+    const doc = byName.get(PRODUCT_PHOTOS_NAME_MAP[key])
+    if (!doc) continue
+
+    const popis = pickLocalized(doc.popisCs, doc.popisSk, doc.popisDe, lang)
+    if (!hasText(popis)) continue
+
+    // `photo` (Úvodní fotka) je kurátorovaný záběr produktu, tak jde první;
+    // zbytek se doplní z fotek realizací, bez duplicit.
+    const gallery = flattenDoc(doc).map((p) => p.url)
+    const photos = [...new Set([doc.banner, ...gallery].filter(Boolean) as string[])].slice(
+      0,
+      INFO_PHOTO_COUNT,
+    )
+
+    result[key] = {
+      name: pickLocalized(doc.nameCs, doc.nameSk, doc.nameDe, lang)?.trim() ?? "",
+      popis: popis ?? [],
+      photos,
+    }
   }
   return result
 }

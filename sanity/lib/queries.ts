@@ -159,20 +159,29 @@ export const FINISHED_WORK = groq`*[_type == 'finishedWork']{
 // dokument na konkrétní produkt (spárovaný přes `nameCs`, viz lib/product-photos.ts),
 // s fotkami rozdělenými po jednotlivých motivech. Nesouvisí s CONF_IMGS_QUERY/PERG_IMGS_QUERY
 // výše, které pořád krmí e-maily/xlsx (lib/actions.ts, ConfMail, PergMail) beze změny.
+// `[0..4]` = strop 5 fotek na motiv. Bez něj query tahá i 60+ URL na jeden produkt
+// (Plotové dílce, Branka), což jsou data, která galerie stejně nikdy nezobrazí najednou.
+// Zvednutí stropu = změna tohohle jednoho rozsahu na všech polích.
 export const PRODUCT_PHOTOS_QUERY = groq`*[_type == "productPhotos"]{
   cat,
   nameCs,
-  "okS": okS[].asset->url,
-  "okK": okK[].asset->url,
-  "okKM": okKM[].asset->url,
-  "p60": p60[].asset->url,
-  "p90": p90[].asset->url,
-  "p120": p120[].asset->url,
-  "p150": p150[].asset->url,
-  "tycka": tycka[].asset->url,
-  "vlKom": vlKom[].asset->url,
-  "drevodekor": drevodekor[].asset->url,
-  "tahokov": tahokov[].asset->url
+  nameSk,
+  nameDe,
+  popisCs,
+  popisSk,
+  popisDe,
+  "banner": photo.asset->url,
+  "okS": okS[0..4].asset->url,
+  "okK": okK[0..4].asset->url,
+  "okKM": okKM[0..4].asset->url,
+  "p60": p60[0..4].asset->url,
+  "p90": p90[0..4].asset->url,
+  "p120": p120[0..4].asset->url,
+  "p150": p150[0..4].asset->url,
+  "tycka": tycka[0..4].asset->url,
+  "vlKom": vlKom[0..4].asset->url,
+  "drevodekor": drevodekor[0..4].asset->url,
+  "tahokov": tahokov[0..4].asset->url
 }`;
 
    export const STEPS_QUERY = groq`*[_type == "steps"][0]{

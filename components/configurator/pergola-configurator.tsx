@@ -9,7 +9,7 @@ import toast from "react-hot-toast"
 import { sendGTMEvent } from "@next/third-parties/google"
 import { pergolaSchema, type PergolaConfType, type PergolaFormInput } from "@/lib/schemas"
 import { sendPergConf } from "@/lib/actions"
-import type { ConfPhotosWithMotiv } from "@/types"
+import type { ConfPhotosWithMotiv, ConfProductInfo } from "@/types"
 import { Button } from "@/components/ui/button"
 import { KonfProgress } from "./konf-progress"
 import { PergolaTypeIcon, MountIcon, PaintIcon, ContactIcon } from "./konf-icons"
@@ -43,7 +43,15 @@ const emptyPhotos: ConfPhotosWithMotiv = {
   zahrada: [],
 }
 
-export function PergolaConfigurator({ photos = emptyPhotos, lang = "cs" }: { photos?: ConfPhotosWithMotiv; lang?: Lang }) {
+export function PergolaConfigurator({
+  photos = emptyPhotos,
+  info = {},
+  lang = "cs",
+}: {
+  photos?: ConfPhotosWithMotiv
+  info?: ConfProductInfo
+  lang?: Lang
+}) {
   const t = pergContent[lang] ?? pergContent.cs
   const [step, setStep] = useState(0)
   const [direction, setDirection] = useState(1)
@@ -133,22 +141,23 @@ export function PergolaConfigurator({ photos = emptyPhotos, lang = "cs" }: { pho
   }
 
   return (
-    <section id="pergkonf" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+    <section id="pergkonf" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="mb-10 flex flex-col items-center gap-3 text-center">
         <h1 className="font-heading text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">{t.heading}</h1>
         <p className="max-w-2xl text-lg text-muted-foreground text-pretty">{t.subheading}</p>
       </div>
 
-      <div ref={topRef} className="scroll-mt-24 rounded-3xl border border-border bg-card p-5 sm:grid sm:grid-cols-[220px_1fr] sm:gap-8 sm:p-8 lg:grid-cols-[260px_1fr] lg:gap-10">
+      {/* Bez `gap` a bez paddingu na wrapperu — viz komentář v `configurator.tsx`. */}
+      <div ref={topRef} className="scroll-mt-24 rounded-3xl border border-border bg-card sm:grid sm:grid-cols-[240px_1fr] lg:grid-cols-[280px_1fr]">
         <KonfProgress step={step} steps={t.steps} icons={stepIcons} />
 
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onValid, onInvalid)} className="flex min-w-0 flex-col gap-10">
+          <form onSubmit={handleSubmit(onValid, onInvalid)} className="flex min-w-0 flex-col gap-10 p-5 sm:p-8">
             <div className="relative overflow-hidden py-8">
               <AnimatePresence mode="wait" custom={direction} initial={false}>
                 {step === 0 && (
                   <Slide key="typ" direction={direction}>
-                    <PergStepTyp photos={photos} lang={lang} />
+                    <PergStepTyp photos={photos} info={info} lang={lang} />
                   </Slide>
                 )}
                 {step === 1 && (

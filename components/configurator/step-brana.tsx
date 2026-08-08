@@ -2,13 +2,13 @@
 
 import { useFormContext } from "react-hook-form"
 import type { ConfiguratorType } from "@/lib/schemas"
-import type { ConfPhotosWithMotiv } from "@/types"
+import type { ConfPhotosWithMotiv, ConfProductInfo } from "@/types"
 import { gateProducts } from "@/lib/konf-content"
 import { DeclineCard } from "./form-controls"
 import { ProductSection } from "./product-section"
 import { gateLabels, gateExtrasLabels, stepBranaContent, konfContent, type Lang } from "@/lib/translations"
 
-export function StepBrana({ onNext, photos, lang = "cs" }: { onNext: () => void; photos: ConfPhotosWithMotiv; lang?: Lang }) {
+export function StepBrana({ onNext, photos, info = {}, lang = "cs" }: { onNext: () => void; photos: ConfPhotosWithMotiv; info?: ConfProductInfo; lang?: Lang }) {
   const { watch, setValue } = useFormContext<ConfiguratorType>()
   const brana = watch("brana")
   const t = stepBranaContent[lang] ?? stepBranaContent.cs
@@ -47,6 +47,7 @@ export function StepBrana({ onNext, photos, lang = "cs" }: { onNext: () => void;
             image={gate.image}
             imageAlt={labels[gate.id] ?? gate.label}
             galleryPhotos={photos[gate.photosKey]}
+            info={info[gate.photosKey]}
             enabledField={gate.enabledField}
             countField={gate.countField}
             arrayField={gate.arrayField}

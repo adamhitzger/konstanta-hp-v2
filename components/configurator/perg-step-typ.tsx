@@ -5,10 +5,11 @@ import Image from "next/image"
 import { Expand, Images } from "lucide-react"
 import { useFormContext } from "react-hook-form"
 import type { PergolaConfType } from "@/lib/schemas"
-import type { ConfPhotoItem, ConfPhotosWithMotiv } from "@/types"
+import type { ConfPhotoItem, ConfPhotosWithMotiv, ConfProductInfo, ProductInfo } from "@/types"
 import { pergolaTypeOptions, stineniOptions, stranyOptions, strechaMaterialOptions } from "@/lib/perg-content"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { PhotoLightbox } from "./photo-lightbox"
+import { ProductInfoLink } from "./product-info-dialog"
 import { InlineCheckbox } from "./form-controls"
 import { pergolaTypeLabels, stineniLabels, strechaMaterialLabels, pergStepTypContent, photoGalleryContent, type Lang } from "@/lib/translations"
 import { cn } from "@/lib/utils"
@@ -29,6 +30,7 @@ function PergolaTypeTile({
   image,
   active,
   galleryPhotos,
+  info,
   onSelect,
   lang = "cs",
 }: {
@@ -37,6 +39,7 @@ function PergolaTypeTile({
   image: string
   active: boolean
   galleryPhotos?: ConfPhotoItem[]
+  info?: ProductInfo
   onSelect: () => void
   lang?: Lang
 }) {
@@ -55,58 +58,56 @@ function PergolaTypeTile({
       onClick={onSelect}
       className={cn(
         "flex cursor-pointer flex-col gap-6 rounded-2xl border p-5 text-left transition-colors",
-        active ? "border-brand/30 bg-brand/3" : "border-border bg-card",
+        active ? "border-brand/60 bg-brand/8" : "border-border bg-card",
       )}
     >
       <div className="flex flex-col items-center gap-4">
-        {/* Model + reálná fotka realizace vedle sebe, jako dvojice na středu dlaždice. */}
-        <div className="flex items-center justify-center gap-4">
-          <Image src={image} alt={label} width={400} height={400} className="rounded-3xl object-contain p-3" />
+        {/* Model vlevo (roztáhne se do zbylého místa), reálná fotka realizace vpravo. */}
+        <div className="flex w-full items-center justify-center gap-4">
+          <Image
+            src={image}
+            alt={label}
+            width={400}
+            height={400}
+            /* Viz `product-section.tsx` — bílé pozadí modelu schová `mix-blend-multiply`. */
+            className="h-28 min-w-0 flex-1 object-contain mix-blend-multiply sm:h-32 lg:h-36"
+          />
 
           {coverPhoto ? (
-            <div className="hidden w-30 shrink-0 flex-col gap-2 sm:w-28 lg:flex lg:w-32">
+            <div className="flex w-[38%] max-w-36 min-w-20 shrink-0 flex-col gap-1.5">
               <button
                 type="button"
                 onClick={openGallery}
                 className="group relative aspect-square w-full overflow-hidden rounded-xl bg-background"
                 aria-label={`${gt.viewPhotosOf}: ${label}`}
               >
-                <Image src={coverPhoto.url} alt={`${label} — realizace`} fill sizes="10vw" className="rounded-xl object-cover" unoptimized />
-                <span className="absolute inset-0 flex items-center justify-center rounded-2xl bg-foreground/0 transition-colors group-hover:bg-foreground/40">
+                <Image src={coverPhoto.url} alt={`${label} — realizace`} fill sizes="15vw" className="object-cover" unoptimized />
+                <span className="absolute inset-0 flex items-center justify-center bg-foreground/0 transition-colors group-hover:bg-foreground/40">
                   <Expand className="size-5 text-background opacity-0 transition-opacity group-hover:opacity-100" />
                 </span>
               </button>
 
-              {/* PC: počet dalších fotek pod reálnou fotkou. */}
-              {restPhotos.length > 0 ? (
-                <button
-                  type="button"
-                  onClick={openGallery}
-                  className="hidden w-fit items-center gap-1.5 text-xs font-medium text-brand hover:underline lg:flex"
-                >
-                  <Images className="size-3.5" />+{restPhotos.length} {gt.morePhotos}
-                </button>
-              ) : null}
+              <button
+                type="button"
+                onClick={openGallery}
+                className="flex items-center gap-1 text-left text-[11px] leading-tight font-medium text-brand hover:underline"
+              >
+                <Images className="size-3 shrink-0" />
+                {restPhotos.length > 0
+                  ? `+${restPhotos.length} ${gt.morePhotos}`
+                  : `${photos.length} ${photos.length === 1 ? gt.photoSingular : gt.photoPlural}`}
+              </button>
             </div>
           ) : null}
         </div>
 
-        <span className="flex items-center gap-1.5 text-center font-heading text-lg font-bold sm:text-xl">
-          <RadioGroupItem value={value} onClick={(e) => e.stopPropagation()} tabIndex={-1} />
-          {label}
-        </span>
-
-        {/* Mobil/tablet: textový odkaz na galerii pod názvem. */}
-        {photos.length > 0 ? (
-          <button
-            type="button"
-            onClick={openGallery}
-            className="flex w-fit items-center gap-1.5 rounded-lg border border-dashed border-border px-3 py-2 text-xs font-medium text-brand lg:hidden"
-          >
-            <Images className="size-3.5" />
-            {gt.openGallery} ({photos.length} {photos.length === 1 ? gt.photoSingular : gt.photoPlural})
-          </button>
-        ) : null}
+        <div className="flex flex-col items-center gap-1">
+          <span className="flex items-center gap-1.5 text-center font-heading text-lg font-bold sm:text-xl">
+            <RadioGroupItem value={value} onClick={(e) => e.stopPropagation()} tabIndex={-1} />
+            {label}
+          </span>
+          <ProductInfoLink info={info} fallbackTitle={label} lang={lang} />
+        </div>
       </div>
 
       {photos.length > 0 ? (
@@ -116,7 +117,15 @@ function PergolaTypeTile({
   )
 }
 
-export function PergStepTyp({ photos, lang = "cs" }: { photos: ConfPhotosWithMotiv; lang?: Lang }) {
+export function PergStepTyp({
+  photos,
+  info = {},
+  lang = "cs",
+}: {
+  photos: ConfPhotosWithMotiv
+  info?: ConfProductInfo
+  lang?: Lang
+}) {
   const { watch, setValue, register } = useFormContext<PergolaConfType>()
   const pergola = watch("pergola")
   const stineni = watch("stineni")
@@ -145,6 +154,7 @@ export function PergStepTyp({ photos, lang = "cs" }: { photos: ConfPhotosWithMot
             image={opt.image}
             active={pergola === opt.value}
             galleryPhotos={photos[opt.photosKey]}
+            info={info[opt.photosKey]}
             onSelect={() => setValue("pergola", opt.value)}
             lang={lang}
           />

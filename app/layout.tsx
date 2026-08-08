@@ -57,12 +57,50 @@ export default function RootLayout({
           toastOptions={{
             duration: 4000,
             style: {
-              background: 'var(--foreground)',
-              color: 'var(--background)',
+              background: '#ffffff',
+              color: '#0a0a0a',
+              border: '1px solid rgba(0, 0, 0, 0.08)',
               borderRadius: '9999px',
               fontSize: '14px',
               fontWeight: 500,
               padding: '10px 18px',
+              boxShadow:
+                '0 1px 2px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.12)',
+            },
+            /* Oranžová = brand akcent (--brand), stejně jako badge v patičce
+               a why-us. Chyby zůstávají červené, aby si nesly svůj význam. */
+            success: {
+              iconTheme: {
+                primary: 'var(--brand)',
+                secondary: 'var(--brand-foreground)',
+              },
+            },
+            loading: {
+              iconTheme: {
+                primary: 'var(--brand)',
+                secondary: 'var(--brand-foreground)',
+              },
+            },
+            error: {
+              iconTheme: { primary: '#dc2626', secondary: '#ffffff' },
+            },
+            /* Prosté toast() nemá ikonu — dáme mu brand tečku s prstencem,
+               aby i neutrální hlášky nesly oranžovou. */
+            blank: {
+              icon: (
+                <span
+                  aria-hidden
+                  style={{
+                    display: 'block',
+                    width: '10px',
+                    height: '10px',
+                    flexShrink: 0,
+                    borderRadius: '9999px',
+                    background: 'var(--brand)',
+                    boxShadow: '0 0 0 4px color-mix(in oklab, var(--brand) 18%, transparent)',
+                  }}
+                />
+              ),
             },
           }}
         />

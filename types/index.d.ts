@@ -71,11 +71,41 @@ export interface ConfPhotosWithMotiv {
   zahrada: ConfPhotoItem[];
 }
 
+/** Jeden blok Portable Textu (pole `popisCs`/`popisSk`/`popisDe` v `productPhotos`).
+ * Popisy z Studia jsou prostý text s inline marks — žádné vlastní bloky, obrázky
+ * ani anotace — proto stačí tenhle úzký tvar a ne celý `@portabletext/types`. */
+export interface PortableBlock {
+  _key?: string;
+  _type?: string;
+  style?: string;
+  listItem?: string;
+  children?: { _key?: string; _type?: string; text?: string; marks?: string[] }[];
+}
+
+/** Lokalizovaný popis produktu + pár fotek pro popup „Podrobnější informace“.
+ * Skládá se v `lib/product-photos.ts` ze stejných `productPhotos` dokumentů,
+ * které krmí galerii — jen se z nich čtou jiná pole. */
+export interface ProductInfo {
+  name: string;
+  popis: PortableBlock[];
+  photos: string[];
+}
+
+/** `ProductInfo` rozřazené pod stejné klíče jako `ConfPhotosWithMotiv`, aby se
+ * karty konfigurátoru odkazovaly na oboje jedním `photosKey`. */
+export type ConfProductInfo = Partial<Record<keyof ConfPhotosWithMotiv, ProductInfo>>;
+
 /** Raw tvar jednoho `productPhotos` dokumentu z PRODUCT_PHOTOS_QUERY — jeden dokument
  * na konkrétní produkt (rozlišený `nameCs`), fotky rozdělené po jednotlivých motivech. */
 export interface ProductPhotosDoc {
   cat?: "brany" | "branky" | "ploty" | "pergoly";
   nameCs?: string;
+  nameSk?: string;
+  nameDe?: string;
+  popisCs?: PortableBlock[];
+  popisSk?: PortableBlock[];
+  popisDe?: PortableBlock[];
+  banner?: string;
   okS: string[];
   okK: string[];
   okKM: string[];

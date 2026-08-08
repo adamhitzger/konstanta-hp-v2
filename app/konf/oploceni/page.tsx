@@ -7,7 +7,7 @@ import { sanityFetch } from "@/sanity/lib/client"
 import { PRODUCT_PHOTOS_QUERY } from "@/sanity/lib/queries"
 import type { ProductPhotosDoc } from "@/types"
 import { getLang } from "@/lib/translations"
-import { buildGalleryPhotos } from "@/lib/product-photos"
+import { buildGalleryPhotos, buildProductInfo } from "@/lib/product-photos"
 
 export const metadata: Metadata = {
   title: "Konfigurátor oplocení | KONSTANTA – hliníkové ploty, brány a pergoly",
@@ -30,13 +30,14 @@ export default async function KonfOploceniPage({
   ])
   const lang = getLang(langParam)
   const photos = buildGalleryPhotos(photoDocs)
+  const info = buildProductInfo(photoDocs, lang)
 
   return (
     <SmoothScroll lang={lang}>
       <div className="flex min-h-screen flex-col">
         <SiteHeader lang={lang} />
         <main className="flex-1">
-          <Configurator photos={photos} lang={lang} />
+          <Configurator photos={photos} info={info} lang={lang} />
         </main>
         <SiteFooter lang={lang} />
       </div>

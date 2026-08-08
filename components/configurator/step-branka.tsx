@@ -2,12 +2,12 @@
 
 import { useFormContext } from "react-hook-form"
 import type { ConfiguratorType } from "@/lib/schemas"
-import type { ConfPhotosWithMotiv } from "@/types"
+import type { ConfPhotosWithMotiv, ConfProductInfo } from "@/types"
 import { DeclineCard } from "./form-controls"
 import { ProductSection } from "./product-section"
 import { brankaExtrasLabels, stepBrankaContent, type Lang } from "@/lib/translations"
 
-export function StepBranka({ onNext, photos, lang = "cs" }: { onNext: () => void; photos: ConfPhotosWithMotiv; lang?: Lang }) {
+export function StepBranka({ onNext, photos, info = {}, lang = "cs" }: { onNext: () => void; photos: ConfPhotosWithMotiv; info?: ConfProductInfo; lang?: Lang }) {
   const { watch, setValue } = useFormContext<ConfiguratorType>()
   const branka = watch("branka")
   const t = stepBrankaContent[lang] ?? stepBrankaContent.cs
@@ -41,6 +41,7 @@ export function StepBranka({ onNext, photos, lang = "cs" }: { onNext: () => void
         image="/modely/branka.webp"
         imageAlt={t.productTitle}
         galleryPhotos={photos.branka}
+        info={info.branka}
         enabledField="branka"
         countField="celkemBranek"
         arrayField="rozmeryBranek"

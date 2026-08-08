@@ -2,13 +2,13 @@
 
 import { useFormContext } from "react-hook-form"
 import type { ConfiguratorType } from "@/lib/schemas"
-import type { ConfPhotosWithMotiv } from "@/types"
+import type { ConfPhotosWithMotiv, ConfProductInfo } from "@/types"
 import { motivy } from "@/lib/konf-content"
 import { DeclineCard, ImageRadioGrid } from "./form-controls"
 import { ProductSection } from "./product-section"
 import { motivLabels, stepDilceMotivContent, type Lang } from "@/lib/translations"
 
-export function StepDilceMotiv({ onNext, photos, lang = "cs" }: { onNext: () => void; photos: ConfPhotosWithMotiv; lang?: Lang }) {
+export function StepDilceMotiv({ onNext, photos, info = {}, lang = "cs" }: { onNext: () => void; photos: ConfPhotosWithMotiv; info?: ConfProductInfo; lang?: Lang }) {
   const { watch, setValue } = useFormContext<ConfiguratorType>()
   const motiv = watch("motiv")
   const typSloupku = watch("typSloupku")
@@ -45,6 +45,7 @@ export function StepDilceMotiv({ onNext, photos, lang = "cs" }: { onNext: () => 
         image={panelImage}
         imageAlt={t.productTitle}
         galleryPhotos={photos.ploty}
+        info={info.ploty}
         enabledField="dilce"
         countField="celkemDilcu"
         arrayField="rozmeryDilcu"

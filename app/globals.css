@@ -5,6 +5,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Tailwind v4 nemá `3xl` breakpoint ani `max-w-8xl` v defaultu — konfigurátor
+     je na obojí odkazuje, takže je doplňujeme, jinak se ty třídy tiše zahodí. */
+  --breakpoint-3xl: 112rem;
+  --container-8xl: 90rem;
   --font-heading: var(--font-barlow-condensed), var(--font-barlow), sans-serif;
   --font-sans: var(--font-barlow), sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
