@@ -102,7 +102,7 @@ export function KonfProgress({
               <div key={label}>
                 <div
                   className={cn(
-                    "flex items-center gap-4 rounded-l-2xl py-3 pl-2 transition-colors lg:pl-2 ml-4",
+                    "flex items-center gap-4 rounded-l-2xl py-4 pl-4 transition-colors lg:pl-4 ml-4",
                     status === "active" && "bg-card",
                   )}
                 >

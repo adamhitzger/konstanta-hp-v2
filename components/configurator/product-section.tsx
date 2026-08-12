@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { Check, Images, Expand } from "lucide-react"
+import { Check, ThumbsUp } from "lucide-react"
 import toast from "react-hot-toast"
 import { useFormContext, type Path } from "react-hook-form"
 import type { ConfiguratorType } from "@/lib/schemas"
@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { InlineCheckbox } from "./form-controls"
-import { PhotoLightbox } from "./photo-lightbox"
+import { PhotoLightbox, PhotoThumbs } from "./photo-lightbox"
 import { ProductInfoLink } from "./product-info-dialog"
 
 export type ExtraToggle = { name: string; label: string }
@@ -22,7 +22,7 @@ const numberFieldOptions = { setValueAs: (v: unknown) => (v === "" ? undefined :
 /**
  * Jedna opakovatelná produktová položka konfigurátoru: brána, branka nebo plotový dílec.
  * Sdílí stejný tvar polí (`enabled` bool + `count` number + pole rozměrů) napříč všemi
- * deseti typy bran i brankou/dílci, takže přidání dalšího produktu = jeden nový záznam
+ * typy bran i brankou/dílci, takže přidání dalšího produktu = jeden nový záznam
  * v `lib/konf-content.ts`, žádný nový komponent.
  *
  * Výběr se dělá jedním checkboxem (ne +/- počítadlem) — `count` je tím pádem počet
@@ -65,7 +65,6 @@ export function ProductSection({
   const st = productSelectContent[lang] ?? productSelectContent.cs
 
   const photos = galleryPhotos?.filter((p) => p.url) ?? []
-  const [coverPhoto, ...restPhotos] = photos
   const selected = count > 0
 
   const setCount = (next: number) => {
@@ -100,111 +99,75 @@ export function ProductSection({
   return (
     <div
       className={cn(
-        "flex flex-col gap-5 rounded-2xl border p-5 transition-colors",
-        // Vybraná karta jede plnou brand oranžovou; všechno, co je jinak oranžové
-        // (odkazy, popisky), se proto níž překlápí do bílé, jinak by na pozadí zaniklo.
-        selected ? "border-brand bg-brand text-brand-foreground" : "border-border bg-card",
+        // Vybraná karta zůstává bílá — výběr signalizuje oranžový rámeček a oranžově
+        // podbarvená spodní část s rozměry, ne plná oranžová přes celou kartu.
+        "flex flex-col overflow-hidden rounded-2xl border bg-card transition-colors",
+        selected ? "border-brand" : "border-border",
       )}
     >
-      <div className="flex flex-col items-center gap-4">
-        {/* Model vlevo (roztáhne se do zbylého místa), reálná fotka realizace vpravo jako čtvercový náhled. */}
-        <div className="flex w-full items-center justify-center gap-4">
-          {image ? (
-            <Image
-              src={image}
-              alt={imageAlt ?? title}
-              width={400}
-              height={400}
-              /* Modely mají bílé (neprůhledné) pozadí — `mix-blend-multiply` ho schová
-                 i na oranžově podbarvené vybrané kartě, bez ořezávání zdrojových obrázků.
-                 Model se tím na oranžové zároveň tónuje do oranžova. */
-              className="h-28 min-w-0 flex-1 object-contain mix-blend-multiply sm:h-32 lg:h-36"
-            />
-          ) : null}
+      <div className="flex flex-col items-center gap-4 p-5">
+        {image ? (
+          <Image
+            src={image}
+            alt={imageAlt ?? title}
+            width={400}
+            height={400}
+            /* Modely mají bílé (neprůhledné) pozadí — `mix-blend-multiply` ho schová
+               bez ořezávání zdrojových obrázků. */
+            className="h-28 w-full object-contain mix-blend-multiply sm:h-32 lg:h-36"
+          />
+        ) : null}
 
-          {coverPhoto ? (
-            <div className="flex w-[38%] max-w-36 min-w-20 shrink-0 flex-col gap-1.5">
-              <button
-                type="button"
-                onClick={() => setLightboxOpen(true)}
-                className="group relative aspect-square w-full overflow-hidden rounded-xl bg-background"
-                aria-label={`${gt.viewPhotosOf}: ${title}`}
-              >
-                <Image src={coverPhoto.url} alt={`${title} — realizace`} fill sizes="15vw" className="object-cover" unoptimized />
-                <span className="absolute inset-0 flex items-center justify-center bg-foreground/0 transition-colors group-hover:bg-foreground/40">
-                  <Expand className="size-5 text-background opacity-0 transition-opacity group-hover:opacity-100" />
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setLightboxOpen(true)}
-                className={cn(
-                  "flex items-center gap-1 text-left text-[11px] leading-tight font-medium hover:underline",
-                  selected ? "text-brand-foreground" : "text-brand",
-                )}
-              >
-                <Images className="size-3 shrink-0" />
-                {restPhotos.length > 0
-                  ? `+${restPhotos.length} ${gt.morePhotos}`
-                  : `${photos.length} ${photos.length === 1 ? gt.photoSingular : gt.photoPlural}`}
-              </button>
-            </div>
-          ) : null}
-        </div>
+        <PhotoThumbs photos={photos} title={title} label={gt.viewPhotosOf} onOpen={() => setLightboxOpen(true)} />
 
         <div className="flex flex-col items-center gap-1">
           <span className="text-center font-heading text-lg font-bold sm:text-xl">{title}</span>
-          <ProductInfoLink info={info} fallbackTitle={title} lang={lang} onBrand={selected} />
+          <ProductInfoLink info={info} fallbackTitle={title} lang={lang} />
         </div>
 
         {/* Výběr produktu — jeden checkbox, žádné +/- počítadlo. */}
-        <label
-          className={cn(
-            // `max-w-sm`: u samostatné karty (branka, dílce) přes celou šířku formuláře
-            // by z checkboxu jinak byl nepřiměřeně široký pruh.
-            "flex w-full max-w-sm cursor-pointer items-center justify-center gap-2.5 rounded-xl border px-4 py-3 text-sm font-semibold transition-colors",
-            selected
-              // Na oranžové kartě je bílá výplň silnější signál „vybráno“ než
-              // další odstín oranžové, který by na pozadí zanikl.
-              ? "border-brand-foreground bg-brand-foreground text-brand"
-              : "border-border bg-background text-foreground hover:border-foreground/40",
-          )}
-        >
+        {/* `max-w-sm`: u samostatné karty (branka, dílce) přes celou šířku formuláře
+            by z checkboxu jinak byl nepřiměřeně široký pruh.
+            Tlačítko je oranžové vždy (i nevybrané) — je to hlavní akce karty;
+            vybraný stav se pozná podle bílé výplně checkboxu. */}
+        <label className="flex w-full max-w-sm cursor-pointer items-center justify-center gap-2.5 rounded-xl border border-brand bg-brand px-4 py-3 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand/90">
           <span
             className={cn(
               "flex size-5 shrink-0 items-center justify-center rounded-[6px] border transition-colors",
-              selected ? "border-brand bg-brand text-brand-foreground" : "border-input bg-card",
+              selected ? "border-brand-foreground bg-brand-foreground text-brand" : "border-brand-foreground/60 bg-brand-foreground/15",
             )}
           >
             {selected ? <Check className="size-3.5" /> : null}
           </span>
           <input type="checkbox" className="sr-only" checked={selected} onChange={toggleSelected} />
+          {selected ? <ThumbsUp className="size-4 text-white shrink-0" /> : null}
           {selected ? st.selected : st.select}
         </label>
       </div>
 
       {selected ? (
-        <div className="flex flex-col gap-4 border-t border-brand-foreground/30 pt-4">
+        /* Spodní část (rozměry + doplňky) je jediná oranžová plocha karty, a to
+           v jemném odstínu — plná brand oranžová by ve formulářových polích rušila. */
+        <div className="flex flex-col gap-4 border-t border-brand/25 bg-brand/10 p-5">
           {Array.from({ length: count }).map((_, i) => (
             <div key={i} className="flex flex-col gap-2">
               {count > 1 ? (
-                <span className="text-xs font-semibold tracking-wide text-brand-foreground/80 uppercase">
+                <span className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                   {st.sizeLabel} {i + 1}
                 </span>
               ) : null}
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                 <div className="flex flex-col gap-1.5">
                   <Label>{dimensionLabels.vyska}</Label>
-                  <Input type="number" min={0} className="border-transparent bg-background text-foreground" {...register(`${String(arrayField)}.${i}.vyska` as Path<ConfiguratorType>, numberFieldOptions)} />
+                  <Input type="number" min={0} className="border-brand/20 bg-background text-foreground" {...register(`${String(arrayField)}.${i}.vyska` as Path<ConfiguratorType>, numberFieldOptions)} />
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <Label>{dimensionLabels.delka}</Label>
-                  <Input type="number" min={0} className="border-transparent bg-background text-foreground" {...register(`${String(arrayField)}.${i}.delka` as Path<ConfiguratorType>, numberFieldOptions)} />
+                  <Input type="number" min={0} className="border-brand/20 bg-background text-foreground" {...register(`${String(arrayField)}.${i}.delka` as Path<ConfiguratorType>, numberFieldOptions)} />
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <Label>{dimensionLabels.pocet}</Label>
-                  <Input type="number" min={0} className="border-transparent bg-background text-foreground" {...register(`${String(arrayField)}.${i}.pocet` as Path<ConfiguratorType>, numberFieldOptions)} />
+                  <Input type="number" min={0} className="border-brand/20 bg-background text-foreground" {...register(`${String(arrayField)}.${i}.pocet` as Path<ConfiguratorType>, numberFieldOptions)} />
                 </div>
                 {extraToggles && extraToggles.length > 0 ? (
                   <div className="col-span-2 flex flex-wrap gap-x-5 gap-y-2 sm:col-span-3">
@@ -212,9 +175,6 @@ export function ProductSection({
                       <InlineCheckbox
                         key={t.name}
                         label={t.label}
-                        /* InlineCheckbox má natvrdo `text-foreground/80` — na oranžové
-                           kartě je to černá na oranžové, takže se přebíjí přes cn(). */
-                        className="text-brand-foreground"
                         {...register(`${String(arrayField)}.${i}.${t.name}` as Path<ConfiguratorType>)}
                       />
                     ))}
@@ -228,7 +188,7 @@ export function ProductSection({
             <button
               type="button"
               onClick={() => setCount(count + 1)}
-              className="text-xs font-semibold text-brand-foreground hover:underline"
+              className="text-xs font-semibold text-brand hover:underline"
             >
               + {st.addSize}
             </button>
@@ -236,7 +196,7 @@ export function ProductSection({
               <button
                 type="button"
                 onClick={removeLastSize}
-                className="text-xs font-medium text-brand-foreground/75 hover:text-brand-foreground"
+                className="text-xs font-medium text-muted-foreground hover:text-foreground"
               >
                 {st.removeLast}
               </button>

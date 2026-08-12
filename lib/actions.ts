@@ -497,7 +497,6 @@ let bezDPH: number =0;
     switch(name){
       case "Brána teleskopická samonosná":
       case "Brána atypická":
-      case "Brána šikmá":
       case "Brána sekční":
         vzor = 12000;
         break;
@@ -566,7 +565,6 @@ if(!data.brana){
     { name: "Brána teleskopická samonosná", data: data.rozmeryTSBran },
     { name: "Brána teleskopická pojízdná", data: data.rozmeryTPBran },
     { name: "Brána atypická", data: data.rozmeryABran },
-    { name: "Brána šikmá", data: data.rozmerySikBran },
     { name: "Brána sekční", data: data.rozmerySekBran },
     { name: "Brána skládací", data: data.rozmerySklBran },
   ];

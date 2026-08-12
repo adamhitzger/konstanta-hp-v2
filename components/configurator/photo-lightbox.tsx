@@ -38,6 +38,58 @@ function MotivChip({
   )
 }
 
+/** Kolik náhledů se vejde pod model, než se zbytek schová za „+N" na poslední dlaždici. */
+const THUMB_LIMIT = 3
+
+/**
+ * Řádek miniatur reálných fotek pod modelem produktu — jediný vstup do `PhotoLightbox`.
+ * Záměrně drobné (28–32 px): karta má vizuálně vést model produktu, fotky realizací
+ * jsou jen pozvánka do galerie, ne druhý obrázek soupeřící o pozornost.
+ *
+ * `stopPropagation` je kvůli dlaždicím pergol, kde je klik na celou kartu zároveň
+ * výběrem typu — bez něj by otevření galerie vybralo i pergolu.
+ */
+export function PhotoThumbs({
+  photos,
+  title,
+  label,
+  onOpen,
+}: {
+  photos: ConfPhotoItem[]
+  title: string
+  /** Lokalizované „Zobrazit fotky" pro `aria-label`. */
+  label: string
+  onOpen: () => void
+}) {
+  if (photos.length === 0) return null
+  const shown = photos.slice(0, THUMB_LIMIT)
+  const hidden = photos.length - shown.length
+
+  return (
+    <div className="flex items-center gap-1.5">
+      {shown.map((photo, i) => (
+        <button
+          key={`${photo.url}-${i}`}
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onOpen()
+          }}
+          className="group relative size-8 shrink-0 overflow-hidden rounded-md border border-border bg-background transition-colors hover:border-brand sm:size-9"
+          aria-label={`${label}: ${title}`}
+        >
+          <Image src={photo.url} alt={`${title} — realizace ${i + 1}`} fill sizes="36px" className="object-cover" unoptimized />
+          {i === shown.length - 1 && hidden > 0 ? (
+            <span className="absolute inset-0 flex items-center justify-center bg-foreground/55 text-[10px] font-semibold text-background">
+              +{hidden}
+            </span>
+          ) : null}
+        </button>
+      ))}
+    </div>
+  )
+}
+
 /**
  * Velký prosklouzávací náhled reálných fotek realizací — 3/4 šířky obrazovky,
  * místo drobných dlaždic vedle sebe. Pokud aspoň jedna fotka má v Sanity vyplněný

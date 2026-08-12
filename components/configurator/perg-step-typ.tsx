@@ -1,14 +1,13 @@
 "use client"
 
-import { useState, type MouseEvent } from "react"
+import { useState } from "react"
 import Image from "next/image"
-import { Expand, Images } from "lucide-react"
 import { useFormContext } from "react-hook-form"
 import type { PergolaConfType } from "@/lib/schemas"
 import type { ConfPhotoItem, ConfPhotosWithMotiv, ConfProductInfo, ProductInfo } from "@/types"
 import { pergolaTypeOptions, stineniOptions, stranyOptions, strechaMaterialOptions } from "@/lib/perg-content"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { PhotoLightbox } from "./photo-lightbox"
+import { PhotoLightbox, PhotoThumbs } from "./photo-lightbox"
 import { ProductInfoLink } from "./product-info-dialog"
 import { InlineCheckbox } from "./form-controls"
 import { pergolaTypeLabels, stineniLabels, strechaMaterialLabels, pergStepTypContent, photoGalleryContent, type Lang } from "@/lib/translations"
@@ -45,13 +44,7 @@ function PergolaTypeTile({
 }) {
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const photos = galleryPhotos?.filter((p) => p.url) ?? []
-  const [coverPhoto, ...restPhotos] = photos
   const gt = photoGalleryContent[lang] ?? photoGalleryContent.cs
-
-  const openGallery = (e: MouseEvent) => {
-    e.stopPropagation()
-    setLightboxOpen(true)
-  }
 
   return (
     <div
@@ -62,44 +55,16 @@ function PergolaTypeTile({
       )}
     >
       <div className="flex flex-col items-center gap-4">
-        {/* Model vlevo (roztáhne se do zbylého místa), reálná fotka realizace vpravo. */}
-        <div className="flex w-full items-center justify-center gap-4">
-          <Image
-            src={image}
-            alt={label}
-            width={400}
-            height={400}
-            /* Viz `product-section.tsx` — bílé pozadí modelu schová `mix-blend-multiply`. */
-            className="h-28 min-w-0 flex-1 object-contain mix-blend-multiply sm:h-32 lg:h-36"
-          />
+        <Image
+          src={image}
+          alt={label}
+          width={400}
+          height={400}
+          /* Viz `product-section.tsx` — bílé pozadí modelu schová `mix-blend-multiply`. */
+          className="h-28 w-full object-contain mix-blend-multiply sm:h-32 lg:h-36"
+        />
 
-          {coverPhoto ? (
-            <div className="flex w-[38%] max-w-36 min-w-20 shrink-0 flex-col gap-1.5">
-              <button
-                type="button"
-                onClick={openGallery}
-                className="group relative aspect-square w-full overflow-hidden rounded-xl bg-background"
-                aria-label={`${gt.viewPhotosOf}: ${label}`}
-              >
-                <Image src={coverPhoto.url} alt={`${label} — realizace`} fill sizes="15vw" className="object-cover" unoptimized />
-                <span className="absolute inset-0 flex items-center justify-center bg-foreground/0 transition-colors group-hover:bg-foreground/40">
-                  <Expand className="size-5 text-background opacity-0 transition-opacity group-hover:opacity-100" />
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={openGallery}
-                className="flex items-center gap-1 text-left text-[11px] leading-tight font-medium text-brand hover:underline"
-              >
-                <Images className="size-3 shrink-0" />
-                {restPhotos.length > 0
-                  ? `+${restPhotos.length} ${gt.morePhotos}`
-                  : `${photos.length} ${photos.length === 1 ? gt.photoSingular : gt.photoPlural}`}
-              </button>
-            </div>
-          ) : null}
-        </div>
+        <PhotoThumbs photos={photos} title={label} label={gt.viewPhotosOf} onOpen={() => setLightboxOpen(true)} />
 
         <div className="flex flex-col items-center gap-1">
           <span className="flex items-center gap-1.5 text-center font-heading text-lg font-bold sm:text-xl">

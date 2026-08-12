@@ -34,13 +34,13 @@ export type GateProductConfig = {
   photosKey: keyof ConfPhotos
 }
 
-// Deset typů vjezdových bran — přesně názvy polí ze stávajícího confSchema,
+// Devět typů vjezdových bran — přesně názvy polí ze stávajícího confSchema,
 // aby formulář zůstal kompatibilní s existující akcí `sendConf`.
 export const gateProducts: GateProductConfig[] = [
   {
     id: "dvoukridla",
     label: "Otočná brána dvoukřídlá",
-    image: "/modely/brany/dvoukridla.webp",
+    image: "/modely/lamark/dvoukridla.webp",
     enabledField: "dvoukridla",
     countField: "celkem2K",
     arrayField: "rozmery2KBran",
@@ -67,7 +67,7 @@ export const gateProducts: GateProductConfig[] = [
   {
     id: "posuvna",
     label: "Brána posuvná po kolejnici",
-    image: "/modely/brany/posuvna.webp",
+    image: "/modely/lamark/posuvna.webp",
     enabledField: "posuvna",
     countField: "celkemP",
     arrayField: "rozmeryPBran",
@@ -99,15 +99,6 @@ export const gateProducts: GateProductConfig[] = [
     countField: "celkemA",
     arrayField: "rozmeryABran",
     photosKey: "atypicka",
-  },
-  {
-    id: "sikma",
-    label: "Brána šikmá",
-    image: "/modely/brany/sikma.webp",
-    enabledField: "sikma",
-    countField: "celkemSik",
-    arrayField: "rozmerySikBran",
-    photosKey: "sikma",
   },
   {
     id: "skladaci",

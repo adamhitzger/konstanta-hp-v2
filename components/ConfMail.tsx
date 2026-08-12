@@ -116,15 +116,6 @@ export const ConfMail = ({
                             style={image}
                           />
                   }
-                   {!data.sikma && photos.sikma != null &&
-                   <Img
-                            src={photos.sikma[0]}
-                            width="280"
-                            height="280"
-                            alt="Logo Konstanta HP"
-                            style={image}
-                          />
-                  }
                    {!data.sekcni && photos.sekcni != null &&
                    <Img
                             src={photos.sekcni[0]}

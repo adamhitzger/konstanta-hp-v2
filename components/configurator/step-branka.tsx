@@ -38,7 +38,7 @@ export function StepBranka({ onNext, photos, info = {}, lang = "cs" }: { onNext:
 
       <ProductSection
         title={t.productTitle}
-        image="/modely/branka.webp"
+        image="/modely/lamark/branka.webp"
         imageAlt={t.productTitle}
         galleryPhotos={photos.branka}
         info={info.branka}
