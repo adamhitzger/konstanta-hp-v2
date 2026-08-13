@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import type { ConfPhotoItem } from "@/types"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
-import { motivLabels, photoGalleryContent, type Lang } from "@/lib/translations"
+import { konfCommonContent, motivLabels, photoGalleryContent, type Lang } from "@/lib/translations"
 import { cn } from "@/lib/utils"
 
 function MotivChip({
@@ -54,13 +54,16 @@ export function PhotoThumbs({
   title,
   label,
   onOpen,
+  lang = "cs",
 }: {
   photos: ConfPhotoItem[]
   title: string
   /** Lokalizované „Zobrazit fotky" pro `aria-label`. */
   label: string
   onOpen: () => void
+  lang?: Lang
 }) {
+  const gt = photoGalleryContent[lang] ?? photoGalleryContent.cs
   if (photos.length === 0) return null
   const shown = photos.slice(0, THUMB_LIMIT)
   const hidden = photos.length - shown.length
@@ -75,10 +78,10 @@ export function PhotoThumbs({
             e.stopPropagation()
             onOpen()
           }}
-          className="group relative size-8 shrink-0 overflow-hidden rounded-md border border-border bg-background transition-colors hover:border-brand sm:size-9"
+          className="group relative size-8 hover:scale-95 hover:rounded-xl shrink-0 overflow-hidden rounded-md border border-border bg-background transition-colors hover:border-brand sm:size-10"
           aria-label={`${label}: ${title}`}
         >
-          <Image src={photo.url} alt={`${title} — realizace ${i + 1}`} fill sizes="36px" className="object-cover" unoptimized />
+          <Image src={photo.url} alt={`${title} — ${gt.realization} ${i + 1}`} fill sizes="56px" className="object-cover" unoptimized />
           {i === shown.length - 1 && hidden > 0 ? (
             <span className="absolute inset-0 flex items-center justify-center bg-foreground/55 text-[10px] font-semibold text-background">
               +{hidden}
@@ -112,6 +115,7 @@ export function PhotoLightbox({
 }) {
   const t = motivLabels[lang] ?? motivLabels.cs
   const gt = photoGalleryContent[lang] ?? photoGalleryContent.cs
+  const kt = konfCommonContent[lang] ?? konfCommonContent.cs
   const [index, setIndex] = useState(initialIndex)
   const [direction, setDirection] = useState(1)
   const [activeMotiv, setActiveMotiv] = useState<string | null>(null)
@@ -160,7 +164,7 @@ export function PhotoLightbox({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex h-[85dvh] w-full max-w-none flex-col gap-0 overflow-hidden p-0 sm:w-[75vw]">
+      <DialogContent className="flex h-[85dvh] w-full max-w-none flex-col gap-0 overflow-hidden p-0 sm:w-[75vw]" closeLabel={kt.close}>
         <DialogTitle className="sr-only">{title}</DialogTitle>
 
         <div className="flex min-h-0 flex-1 flex-col sm:flex-row">
@@ -195,7 +199,7 @@ export function PhotoLightbox({
               >
                 <Image
                   src={filtered[index].url}
-                  alt={`${title} — realizace ${index + 1}`}
+                  alt={`${title} — ${gt.realization} ${index + 1}`}
                   fill
                   sizes="75vw"
                   className="object-contain"

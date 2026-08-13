@@ -1257,6 +1257,8 @@ export const photoGalleryContent: Record<
     prevPhoto: string
     nextPhoto: string
     photoAt: string
+    /** Slovo v `alt` fotky realizace: „<název produktu> — realizace 3“. */
+    realization: string
   }
 > = {
   cs: {
@@ -1269,6 +1271,7 @@ export const photoGalleryContent: Record<
     prevPhoto: "Předchozí fotka",
     nextPhoto: "Další fotka",
     photoAt: "Fotka",
+    realization: "realizace",
   },
   sk: {
     openGallery: "Pozrieť galériu",
@@ -1280,6 +1283,7 @@ export const photoGalleryContent: Record<
     prevPhoto: "Predchádzajúca fotka",
     nextPhoto: "Ďalšia fotka",
     photoAt: "Fotka",
+    realization: "realizácia",
   },
   de: {
     openGallery: "Galerie ansehen",
@@ -1291,6 +1295,7 @@ export const photoGalleryContent: Record<
     prevPhoto: "Vorheriges Foto",
     nextPhoto: "Nächstes Foto",
     photoAt: "Foto",
+    realization: "Umsetzung",
   },
 }
 
@@ -1316,7 +1321,16 @@ export const productInfoContent: Record<Lang, { trigger: string; close: string; 
 /** UI texty výběrového checkboxu na produktové kartě (ProductSection). */
 export const productSelectContent: Record<
   Lang,
-  { select: string; selected: string; addedToast: string; sizeLabel: string; addSize: string; removeLast: string }
+  {
+    select: string
+    selected: string
+    addedToast: string
+    sizeLabel: string
+    addSize: string
+    removeLast: string
+    /** Tlačítko pod vyplněnými rozměry, které posune uživatele na další krok konfigurátoru. */
+    continueStep: string
+  }
 > = {
   cs: {
     select: "Vybrat",
@@ -1325,6 +1339,7 @@ export const productSelectContent: Record<
     sizeLabel: "Rozměr",
     addSize: "Přidat další rozměr",
     removeLast: "Odebrat poslední",
+    continueStep: "Pokračovat na další krok",
   },
   sk: {
     select: "Vybrať",
@@ -1333,6 +1348,7 @@ export const productSelectContent: Record<
     sizeLabel: "Rozmer",
     addSize: "Pridať ďalší rozmer",
     removeLast: "Odobrať posledný",
+    continueStep: "Pokračovať na ďalší krok",
   },
   de: {
     select: "Auswählen",
@@ -1341,6 +1357,7 @@ export const productSelectContent: Record<
     sizeLabel: "Maß",
     addSize: "Weiteres Maß hinzufügen",
     removeLast: "Letztes entfernen",
+    continueStep: "Weiter zum nächsten Schritt",
   },
 }
 
@@ -1360,6 +1377,16 @@ export const formControlsContent = {
   cs: { customSolution: "Vlastní řešení" },
   sk: { customSolution: "Vlastné riešenie" },
   de: { customSolution: "Eigene Lösung" },
+}
+
+/**
+ * Texty sdílené oběma konfigurátory (oplocení i pergoly), které nejsou vázané
+ * na konkrétní krok — postranní přehled kroků a zavírání popupů.
+ */
+export const konfCommonContent: Record<Lang, { progressLabel: string; close: string }> = {
+  cs: { progressLabel: "Průběh konfigurace", close: "Zavřít" },
+  sk: { progressLabel: "Priebeh konfigurácie", close: "Zavrieť" },
+  de: { progressLabel: "Konfigurationsfortschritt", close: "Schließen" },
 }
 
 export const stepBranaContent = {

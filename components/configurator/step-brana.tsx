@@ -54,6 +54,7 @@ export function StepBrana({ onNext, photos, info = {}, lang = "cs" }: { onNext: 
             extraToggles={gateExtras}
             dimensionLabels={dimensionLabels}
             onFirstEnable={() => setValue("brana", false)}
+            onNext={onNext}
             lang={lang}
           />
         ))}

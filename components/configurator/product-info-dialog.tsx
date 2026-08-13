@@ -96,6 +96,7 @@ export function ProductInfoLink({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
           className="max-w-4xl gap-5"
+          closeLabel={t.close}
           /* Karta pergoly pod popupem je klikatelná (= výběr typu); bez tohohle
              by klik uvnitř popupu probublal na dlaždici pod ním. */
           onClick={(e) => e.stopPropagation()}
@@ -105,13 +106,13 @@ export function ProductInfoLink({
           {info.photos.length > 0 ? (
             <div className="grid grid-cols-3 gap-3">
               {info.photos.map((url, i) => (
-                <div key={url} className="relative aspect-[4/3] overflow-hidden rounded-xl bg-background">
+                <div key={url} className="relative aspect-[4/3]  overflow-hidden rounded-xl bg-background">
                   <Image
                     src={url}
                     alt={`${title} — ${t.photosAlt} ${i + 1}`}
                     fill
                     sizes="(min-width: 640px) 18rem, 30vw"
-                    className="object-cover"
+                    className="object-cover "
                     unoptimized
                   />
                 </div>

@@ -149,7 +149,7 @@ export function PergolaConfigurator({
 
       {/* Bez `gap` a bez paddingu na wrapperu — viz komentář v `configurator.tsx`. */}
       <div ref={topRef} className="scroll-mt-24 rounded-3xl border border-border bg-card sm:grid sm:grid-cols-[240px_1fr] lg:grid-cols-[280px_1fr]">
-        <KonfProgress step={step} steps={t.steps} icons={stepIcons} />
+        <KonfProgress step={step} steps={t.steps} icons={stepIcons} lang={lang} />
 
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onValid, onInvalid)} className="flex min-w-0 flex-col gap-10 p-5 sm:p-8">
@@ -162,7 +162,7 @@ export function PergolaConfigurator({
                 )}
                 {step === 1 && (
                   <Slide key="upevneni" direction={direction}>
-                    <PergStepUpevneni lang={lang} />
+                    <PergStepUpevneni onNext={goNext} lang={lang} />
                   </Slide>
                 )}
                 {step === 2 && (

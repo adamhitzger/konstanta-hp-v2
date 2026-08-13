@@ -157,7 +157,7 @@ export function Configurator({
       {/* Bez `gap` a bez paddingu na wrapperu: bílá „záložka“ aktivního kroku v šedém
           pruhu tak navazuje přímo na bílou plochu formuláře. */}
       <div ref={topRef} className="scroll-mt-24 rounded-3xl border border-border bg-card sm:grid sm:grid-cols-[240px_1fr] lg:grid-cols-[300px_1fr]">
-        <KonfProgress step={step} steps={t.steps} icons={stepIcons} />
+        <KonfProgress step={step} steps={t.steps} icons={stepIcons} lang={lang} />
 
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onValid, onInvalid)} className="flex min-w-0 flex-col gap-10 p-5 sm:p-8">

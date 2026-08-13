@@ -47,6 +47,7 @@ export function StepBranka({ onNext, photos, info = {}, lang = "cs" }: { onNext:
         arrayField="rozmeryBranek"
         extraToggles={brankaExtras}
         dimensionLabels={t.dimensionLabels}
+        onNext={onNext}
         lang={lang}
       />
     </div>

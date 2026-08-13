@@ -19,7 +19,15 @@ function DialogPortal({ children, ...props }: React.ComponentProps<typeof Dialog
   )
 }
 
-function DialogContent({ className, children, ...props }: React.ComponentProps<typeof DialogPrimitive.Popup>) {
+function DialogContent({
+  className,
+  children,
+  closeLabel = 'Zavřít',
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Popup> & {
+  /** Lokalizovaný text pro čtečky u křížku vpravo nahoře. */
+  closeLabel?: string
+}) {
   return (
     <DialogPortal>
       {/* This wrapper isn't part of base-ui's open/closed state machine, so it can
@@ -36,7 +44,7 @@ function DialogContent({ className, children, ...props }: React.ComponentProps<t
           {children}
           <DialogPrimitive.Close className="absolute top-4 right-4 rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
             <X className="size-4" />
-            <span className="sr-only">Zavřít</span>
+            <span className="sr-only">{closeLabel}</span>
           </DialogPrimitive.Close>
         </DialogPrimitive.Popup>
       </div>

@@ -12,9 +12,9 @@ import { formControlsContent, type Lang } from "@/lib/translations"
 export const InlineCheckbox = forwardRef<HTMLInputElement, { label: string } & ComponentPropsWithoutRef<"input">>(
   ({ label, className, id, ...props }, ref) => (
     <label htmlFor={id} className={cn("flex cursor-pointer items-center gap-2 text-sm text-foreground/80", className)}>
-      <span className="relative flex size-4 shrink-0 items-center justify-center rounded-[5px] border border-input has-[:checked]:border-foreground has-[:checked]:bg-foreground">
+      <span className="relative flex size-4 shrink-0 items-center justify-center rounded-[5px] border border-input transition-colors has-[:checked]:border-brand has-[:checked]:bg-brand">
         <input ref={ref} id={id} type="checkbox" className="peer absolute inset-0 size-full cursor-pointer opacity-0" {...props} />
-        <Check className="pointer-events-none size-3 text-background opacity-0 peer-checked:opacity-100" />
+        <Check className="pointer-events-none size-3 text-brand-foreground opacity-0 peer-checked:opacity-100" />
       </span>
       {label}
     </label>
@@ -37,8 +37,10 @@ export function DeclineCard({
       type="button"
       onClick={onClick}
       className={cn(
-        "flex w-full items-center gap-3 rounded-2xl border border-dashed border-border bg-transparent px-5 py-4 text-left text-sm font-medium text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground",
-        active && "border-solid border-foreground bg-foreground text-background hover:border-foreground",
+        "flex w-full items-center gap-3 rounded-2xl border border-dashed border-border bg-transparent px-5 py-4 text-left text-sm font-medium text-muted-foreground transition-colors hover:border-brand/40 hover:text-foreground",
+        // Odmítnutí je taky výběr — potvrzuje se stejnou oranžovou jako produktová karta,
+        // jen v jemném odstínu, aby na kroku nesoupeřilo s kartami produktů.
+        active && "border-solid border-brand bg-brand/10 text-foreground hover:border-brand",
       )}
     >
       <span
@@ -71,12 +73,18 @@ export function ColorSwatchGroup({
   return (
     <RadioGroup value={value} onValueChange={(v) => onChange(v as string)} className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6">
       {colors.map((c) => {
+        const active = value === (c.value ?? c.color.toLowerCase())
         // Žádné id/htmlFor: base-ui Radio je <span> s vnořeným skrytým <input>,
         // který není nativně "labelovatelný" – klik funguje jen přes vnoření do <label>.
         return (
           <label
             key={c.color}
-            className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border border-transparent p-2 text-center transition-colors hover:border-border"
+            className={cn(
+              // Samotný oranžový puntík u názvu barvy je na mřížce vzorků špatně vidět —
+              // vybraný vzorek proto dostane i oranžový rámeček jako produktová karta.
+              "flex cursor-pointer flex-col items-center gap-2 rounded-xl border p-2 text-center transition-colors",
+              active ? "border-brand bg-brand/10" : "border-transparent hover:border-border",
+            )}
           >
             <span
               className="size-12 rounded-full border border-border shadow-sm"
@@ -114,8 +122,10 @@ export function ImageRadioGrid({
           <label
             key={opt.value}
             className={cn(
-              "flex cursor-pointer flex-col items-center gap-2 rounded-2xl border border-border bg-card p-4 text-center transition-colors hover:border-foreground/40",
-              active && "border-foreground",
+              // Stejný jazyk výběru jako u produktových karet (`ProductSection`):
+              // `border-2` je tu vždy, aby přepnutí na oranžovou neposunulo obsah dlaždice.
+              "flex cursor-pointer flex-col items-center gap-2 rounded-2xl border-2 bg-card p-4 text-center transition-colors hover:border-brand/40",
+              active ? "border-brand" : "border-border",
             )}
           >
             {opt.image ? (

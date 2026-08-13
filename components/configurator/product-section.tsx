@@ -2,13 +2,14 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { Check, ThumbsUp } from "lucide-react"
+import { Check, MoveRight, ThumbsUp } from "lucide-react"
 import toast from "react-hot-toast"
 import { useFormContext, type Path } from "react-hook-form"
 import type { ConfiguratorType } from "@/lib/schemas"
 import type { ConfPhotoItem, ProductInfo } from "@/types"
-import { photoGalleryContent, productSelectContent, type Lang } from "@/lib/translations"
+import { konfContent, photoGalleryContent, productSelectContent, type Lang } from "@/lib/translations"
 import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { InlineCheckbox } from "./form-controls"
@@ -39,8 +40,9 @@ export function ProductSection({
   countField,
   arrayField,
   extraToggles,
-  dimensionLabels = { vyska: "Výška (mm)", delka: "Šířka průjezdu (mm)", pocet: "Počet (ks)" },
+  dimensionLabels,
   onFirstEnable,
+  onNext,
   lang = "cs",
 }: {
   title: string
@@ -54,8 +56,11 @@ export function ProductSection({
   countField: keyof ConfiguratorType
   arrayField: keyof ConfiguratorType
   extraToggles?: ExtraToggle[]
+  /** Nevyplněné popisky se vezmou z `konfContent.<lang>.dimensionLabels`. */
   dimensionLabels?: { vyska: string; delka: string; pocet: string }
   onFirstEnable?: () => void
+  /** Posun na další krok konfigurátoru. Když chybí, tlačítko „Pokračovat“ se nevykreslí. */
+  onNext?: () => void
   lang?: Lang
 }) {
   const { register, watch, setValue, getValues } = useFormContext<ConfiguratorType>()
@@ -63,6 +68,7 @@ export function ProductSection({
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const gt = photoGalleryContent[lang] ?? photoGalleryContent.cs
   const st = productSelectContent[lang] ?? productSelectContent.cs
+  const dims = dimensionLabels ?? (konfContent[lang] ?? konfContent.cs).dimensionLabels
 
   const photos = galleryPhotos?.filter((p) => p.url) ?? []
   const selected = count > 0
@@ -101,7 +107,7 @@ export function ProductSection({
       className={cn(
         // Vybraná karta zůstává bílá — výběr signalizuje oranžový rámeček a oranžově
         // podbarvená spodní část s rozměry, ne plná oranžová přes celou kartu.
-        "flex flex-col overflow-hidden rounded-2xl border bg-card transition-colors",
+        "flex flex-col overflow-hidden rounded-2xl border-2 bg-card transition-colors",
         selected ? "border-brand" : "border-border",
       )}
     >
@@ -118,7 +124,7 @@ export function ProductSection({
           />
         ) : null}
 
-        <PhotoThumbs photos={photos} title={title} label={gt.viewPhotosOf} onOpen={() => setLightboxOpen(true)} />
+        <PhotoThumbs photos={photos} title={title} label={gt.viewPhotosOf} onOpen={() => setLightboxOpen(true)} lang={lang} />
 
         <div className="flex flex-col items-center gap-1">
           <span className="text-center font-heading text-lg font-bold sm:text-xl">{title}</span>
@@ -130,7 +136,9 @@ export function ProductSection({
             by z checkboxu jinak byl nepřiměřeně široký pruh.
             Tlačítko je oranžové vždy (i nevybrané) — je to hlavní akce karty;
             vybraný stav se pozná podle bílé výplně checkboxu. */}
-        <label className="flex w-full max-w-sm cursor-pointer items-center justify-center gap-2.5 rounded-xl border border-brand bg-brand px-4 py-3 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand/90">
+        <label className={cn("flex w-full max-w-sm cursor-pointer items-center justify-center gap-2.5 rounded-xl border  px-4 py-3 text-sm font-semibold text-brand-foreground ",
+          selected ? "border-brand bg-brand transition-colors hover:bg-brand/90": "bg-black"
+        )}>
           <span
             className={cn(
               "flex size-5 shrink-0 items-center justify-center rounded-[6px] border transition-colors",
@@ -158,15 +166,15 @@ export function ProductSection({
               ) : null}
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                 <div className="flex flex-col gap-1.5">
-                  <Label>{dimensionLabels.vyska}</Label>
+                  <Label>{dims.vyska}</Label>
                   <Input type="number" min={0} className="border-brand/20 bg-background text-foreground" {...register(`${String(arrayField)}.${i}.vyska` as Path<ConfiguratorType>, numberFieldOptions)} />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <Label>{dimensionLabels.delka}</Label>
+                  <Label>{dims.delka}</Label>
                   <Input type="number" min={0} className="border-brand/20 bg-background text-foreground" {...register(`${String(arrayField)}.${i}.delka` as Path<ConfiguratorType>, numberFieldOptions)} />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <Label>{dimensionLabels.pocet}</Label>
+                  <Label>{dims.pocet}</Label>
                   <Input type="number" min={0} className="border-brand/20 bg-background text-foreground" {...register(`${String(arrayField)}.${i}.pocet` as Path<ConfiguratorType>, numberFieldOptions)} />
                 </div>
                 {extraToggles && extraToggles.length > 0 ? (
@@ -202,6 +210,17 @@ export function ProductSection({
               </button>
             ) : null}
           </div>
+
+          {/* Zkratka na další krok přímo z karty — spodní lišta formuláře je u delších
+              kroků (víc typů bran pod sebou) mimo obrazovku a uživatel po vyplnění
+              rozměrů nemá kam kliknout. `onNext` si i tady projde validací kroku
+              v konfigurátoru, takže chybějící volbu jinde na kroku vytkne toastem. */}
+          {onNext ? (
+            <Button type="button" size="lg" className="self-end" onClick={onNext}>
+              {st.continueStep}
+              <MoveRight />
+            </Button>
+          ) : null}
         </div>
       ) : null}
 

@@ -15,12 +15,15 @@ function RadioGroupItem({ className, ...props }: React.ComponentProps<typeof Rad
     <RadioPrimitive.Root
       data-slot="radio-group-item"
       className={cn(
-        "flex size-4 shrink-0 items-center justify-center rounded-full border border-input outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 data-[checked]:border-foreground disabled:cursor-not-allowed disabled:opacity-50",
+        // Zaškrtnutý stav je brand oranžový (ne černý) — radio je v konfigurátorech
+        // vždy uvnitř karty, jejíž výběr signalizuje oranžový rámeček, a černý puntík
+        // uvnitř oranžové karty působil jako druhý, konkurenční stav.
+        "flex size-4 shrink-0 items-center justify-center rounded-full border border-input outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 data-[checked]:border-brand disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}
       {...props}
     >
-      <RadioPrimitive.Indicator className="size-2 rounded-full bg-foreground data-[unchecked]:hidden" />
+      <RadioPrimitive.Indicator className="size-2 rounded-full bg-brand data-[unchecked]:hidden" />
     </RadioPrimitive.Root>
   )
 }

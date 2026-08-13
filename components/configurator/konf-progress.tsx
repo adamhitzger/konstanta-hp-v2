@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type ComponentType, type SVGProps } from "react"
 import { Check } from "lucide-react"
+import { konfCommonContent, type Lang } from "@/lib/translations"
 import { cn } from "@/lib/utils"
 
 type StepIcon = ComponentType<SVGProps<SVGSVGElement>>
@@ -47,12 +48,15 @@ export function KonfProgress({
   step,
   steps,
   icons,
+  lang = "cs",
 }: {
   step: number
   steps: readonly string[]
   /** Ikona pro každý krok (stejné pořadí a délka jako `steps`). */
   icons: readonly StepIcon[]
+  lang?: Lang
 }) {
+  const t = konfCommonContent[lang] ?? konfCommonContent.cs
   const activeMobileRef = useRef<HTMLDivElement>(null)
 
   // Na mobilu je pruh vodorovný scroller — aktivní krok si k sobě sám doroluje.
@@ -94,7 +98,7 @@ export function KonfProgress({
 
       {/* Tablet a výše: šedý sloupec přes celou výšku karty, uvnitř sticky seznam kroků. */}
       <div className="hidden rounded-l-3xl bg-accent sm:block">
-        <nav className="sticky top-24 flex flex-col py-8" aria-label="Průběh konfigurace">
+        <nav className="sticky top-24 flex flex-col py-8" aria-label={t.progressLabel}>
           {steps.map((label, i) => {
             const status = statusOf(i)
             const Icon = icons[i]

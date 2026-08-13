@@ -50,8 +50,9 @@ function PergolaTypeTile({
     <div
       onClick={onSelect}
       className={cn(
-        "flex cursor-pointer flex-col gap-6 rounded-2xl border p-5 text-left transition-colors",
-        active ? "border-brand/60 bg-brand/8" : "border-border bg-card",
+        // Shodné s `ProductSection`: karta zůstává bílá, výběr nese jen oranžový rámeček.
+        "flex cursor-pointer flex-col gap-6 rounded-2xl border-2 bg-card p-5 text-left transition-colors",
+        active ? "border-brand" : "border-border",
       )}
     >
       <div className="flex flex-col items-center gap-4">
@@ -64,7 +65,7 @@ function PergolaTypeTile({
           className="h-28 w-full object-contain mix-blend-multiply sm:h-32 lg:h-36"
         />
 
-        <PhotoThumbs photos={photos} title={label} label={gt.viewPhotosOf} onOpen={() => setLightboxOpen(true)} />
+        <PhotoThumbs photos={photos} title={label} label={gt.viewPhotosOf} onOpen={() => setLightboxOpen(true)} lang={lang} />
 
         <div className="flex flex-col items-center gap-1">
           <span className="flex items-center gap-1.5 text-center font-heading text-lg font-bold sm:text-xl">
@@ -134,7 +135,7 @@ export function PergStepTyp({
             {strechaMaterialOptions.map((opt) => (
               <label
                 key={opt.value}
-                className={`flex cursor-pointer flex-col items-center gap-2 rounded-2xl border border-border bg-card p-4 text-center transition-colors hover:border-foreground/40 ${material === opt.value ? "border-foreground" : ""}`}
+                className={cn("flex cursor-pointer flex-col items-center gap-2 rounded-2xl border-2 bg-card p-4 text-center transition-colors hover:border-brand/40", material === opt.value ? "border-brand" : "border-border")}
               >
                 <Image src={opt.image} alt={materialT[opt.value] ?? opt.label} width={160} height={160} className="aspect-square w-full max-w-[140px] rounded-xl bg-background object-contain p-3" />
                 <span className="flex items-center gap-1.5 text-sm font-semibold">
@@ -156,7 +157,7 @@ export function PergStepTyp({
                 .map((opt) => (
                   <label
                     key={opt.value}
-                    className={`flex cursor-pointer flex-col items-center gap-2 rounded-2xl border border-border bg-card p-4 text-center transition-colors hover:border-foreground/40 ${stineni === opt.value ? "border-foreground" : ""}`}
+                    className={cn("flex cursor-pointer flex-col items-center gap-2 rounded-2xl border-2 bg-card p-4 text-center transition-colors hover:border-brand/40", stineni === opt.value ? "border-brand" : "border-border")}
                   >
                     {opt.image ? (
                       <Image src={opt.image} alt={stineniT[opt.value] ?? opt.label} width={220} height={220} className="aspect-square w-full max-w-[220px] rounded-xl bg-background object-contain p-3" />
