@@ -111,46 +111,56 @@ export function ProductSection({
         selected ? "border-brand" : "border-border",
       )}
     >
-      <div className="flex flex-col items-center gap-4 p-5">
-        {image ? (
-          <Image
-            src={image}
-            alt={imageAlt ?? title}
-            width={400}
-            height={400}
-            /* Modely mají bílé (neprůhledné) pozadí — `mix-blend-multiply` ho schová
-               bez ořezávání zdrojových obrázků. */
-            className="h-28 w-full object-contain mix-blend-multiply sm:h-32 lg:h-36"
-          />
-        ) : null}
+      {/* Karty v gridu jsou stejně vysoké. Přebytečnou výšku spolkne `flex-1` na
+          bloku s modelem (obrázek zůstane vycentrovaný), takže název, odkaz na
+          podrobnosti i tlačítko „Vybrat“ sedí u spodní hrany a napříč řadou jsou
+          v jedné rovině — i u karet, kde chybí řádek s fotkami realizací. */}
+      <div className="flex flex-1 flex-col items-center gap-4 p-5">
+        <div className="flex w-full flex-1 flex-col items-center justify-center gap-4">
+          {image ? (
+            <Image
+              src={image}
+              alt={imageAlt ?? title}
+              width={400}
+              height={400}
+              /* Modely mají bílé (neprůhledné) pozadí — `mix-blend-multiply` ho schová
+                 bez ořezávání zdrojových obrázků. */
+              className="h-28 w-full object-contain mix-blend-multiply sm:h-32 lg:h-36"
+            />
+          ) : null}
 
-        <PhotoThumbs photos={photos} title={title} label={gt.viewPhotosOf} onOpen={() => setLightboxOpen(true)} lang={lang} />
-
-        <div className="flex flex-col items-center gap-1">
-          <span className="text-center font-heading text-lg font-bold sm:text-xl">{title}</span>
-          <ProductInfoLink info={info} fallbackTitle={title} lang={lang} />
+          <PhotoThumbs photos={photos} title={title} label={gt.viewPhotosOf} onOpen={() => setLightboxOpen(true)} lang={lang} />
         </div>
 
-        {/* Výběr produktu — jeden checkbox, žádné +/- počítadlo. */}
-        {/* `max-w-sm`: u samostatné karty (branka, dílce) přes celou šířku formuláře
-            by z checkboxu jinak byl nepřiměřeně široký pruh.
-            Tlačítko je oranžové vždy (i nevybrané) — je to hlavní akce karty;
-            vybraný stav se pozná podle bílé výplně checkboxu. */}
-        <label className={cn("flex w-full max-w-sm cursor-pointer items-center justify-center gap-2.5 rounded-xl border  px-4 py-3 text-sm font-semibold text-brand-foreground ",
-          selected ? "border-brand bg-brand transition-colors hover:bg-brand/90": "bg-black"
-        )}>
-          <span
-            className={cn(
-              "flex size-5 shrink-0 items-center justify-center rounded-[6px] border transition-colors",
-              selected ? "border-brand-foreground bg-brand-foreground text-brand" : "border-brand-foreground/60 bg-brand-foreground/15",
-            )}
-          >
-            {selected ? <Check className="size-3.5" /> : null}
-          </span>
-          <input type="checkbox" className="sr-only" checked={selected} onChange={toggleSelected} />
-          {selected ? <ThumbsUp className="size-4 text-white shrink-0" /> : null}
-          {selected ? st.selected : st.select}
-        </label>
+        <div className="flex w-full flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-1">
+            <span className="text-center font-heading text-lg font-bold sm:text-xl">{title}</span>
+            <ProductInfoLink info={info} fallbackTitle={title} lang={lang} />
+          </div>
+
+          {/* Výběr produktu — jeden checkbox, žádné +/- počítadlo. */}
+          {/* `max-w-sm`: u samostatné karty (branka, dílce) přes celou šířku formuláře
+              by z checkboxu jinak byl nepřiměřeně široký pruh.
+              Nevybraný stav je bílý s oranžovým rámečkem i textem, vybraný se
+              překlopí do plné brand oranžové. */}
+          <label className={cn("flex w-full max-w-sm cursor-pointer items-center justify-center gap-2.5 rounded-xl border px-4 py-3 text-sm font-semibold transition-colors",
+            selected
+              ? "border-brand bg-brand text-brand-foreground hover:bg-brand/90"
+              : "border-brand bg-card text-brand hover:bg-brand/10",
+          )}>
+            <span
+              className={cn(
+                "flex size-5 shrink-0 items-center justify-center rounded-[6px] border transition-colors",
+                selected ? "border-brand-foreground bg-brand-foreground text-brand" : "border-brand bg-brand/10",
+              )}
+            >
+              {selected ? <Check className="size-3.5" /> : null}
+            </span>
+            <input type="checkbox" className="sr-only" checked={selected} onChange={toggleSelected} />
+            {selected ? <ThumbsUp className="size-4 shrink-0" /> : null}
+            {selected ? st.selected : st.select}
+          </label>
+        </div>
       </div>
 
       {selected ? (

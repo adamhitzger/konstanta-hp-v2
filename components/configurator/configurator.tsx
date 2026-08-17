@@ -21,9 +21,28 @@ import { StepSloupky } from "./step-sloupky"
 import { StepDilceMotiv } from "./step-dilce-motiv"
 import { StepBarva } from "./step-barva"
 import { StepKontakt } from "./step-kontakt"
-import { konfContent, type Lang } from "@/lib/translations"
+import { konfContent, gateLabels, stepBrankaContent, stepDilceMotivContent, type Lang } from "@/lib/translations"
 
 const LAST_STEP = konfContent.cs.steps.length - 1
+
+type SizeRow = { vyska?: number; delka?: number; pocet?: number }
+
+/**
+ * Vybraný produkt musí mít u *každé* sady rozměrů vyplněnou výšku, šířku i počet.
+ * `count` je počet sad (zaškrtnutí = 1, „Přidat další rozměr" ho zvyšuje), takže
+ * kontrolujeme přesně prvních `count` položek pole — delší pole může zůstat po
+ * odebrání sady, kratší (nebo díra v něm) znamená nevyplněný formulář.
+ */
+const hasCompleteSizes = (count: number, rows: unknown): boolean => {
+  if (!(count > 0)) return true
+  const list = Array.isArray(rows) ? (rows as SizeRow[]) : []
+  for (let i = 0; i < count; i++) {
+    const row = list[i]
+    if (!row) return false
+    if (!(Number(row.vyska) > 0) || !(Number(row.delka) > 0) || !(Number(row.pocet) > 0)) return false
+  }
+  return true
+}
 
 // Pořadí musí odpovídat `konfContent.<lang>.steps` (Brána, Branka, Sloupky, Dílce a motiv, Barva, Kontakt).
 const stepIcons = [GateIcon, WicketIcon, PostsIcon, PanelMotifIcon, PaintIcon, ContactIcon]
@@ -72,18 +91,36 @@ export function Configurator({
     setTimeout(() => topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 80)
   }
 
-  /** Než pustíme uživatele dál, ověříme, že u dané kapitoly padlo alespoň nějaké rozhodnutí. */
+  /**
+   * Než pustíme uživatele dál, ověříme, že u dané kapitoly padlo alespoň nějaké
+   * rozhodnutí — a u vybraných produktů i to, že má vyplněné rozměry.
+   */
   const checkStepRequirement = (currentStep: number): string | null => {
     const values = getValues()
+    const missingSizes = (product: string) => t.validation.rozmery.replace("{product}", product)
+
     switch (currentStep) {
       case 0: {
+        // `brana === true` = uživatel bránu odmítl kartou „Nechci bránu"; rozměry
+        // případně rozvybrané dřív pak nemá smysl vymáhat.
+        if (values.brana === true) return null
         const anyGate = gateProducts.some((g) => Number(values[g.countField as keyof ConfiguratorType] ?? 0) > 0)
-        if (values.brana === true || anyGate) return null
-        return t.validation.brana
+        if (!anyGate) return t.validation.brana
+        const labels = gateLabels[lang] ?? gateLabels.cs
+        for (const g of gateProducts) {
+          const count = Number(values[g.countField as keyof ConfiguratorType] ?? 0)
+          if (!hasCompleteSizes(count, values[g.arrayField as keyof ConfiguratorType])) {
+            return missingSizes(labels[g.id] ?? g.label)
+          }
+        }
+        return null
       }
       case 1: {
-        if (values.branka !== undefined) return null
-        return t.validation.branka
+        if (values.branka === undefined) return t.validation.branka
+        if (!hasCompleteSizes(Number(values.celkemBranek ?? 0), values.rozmeryBranek)) {
+          return missingSizes((stepBrankaContent[lang] ?? stepBrankaContent.cs).productTitle)
+        }
+        return null
       }
       case 2: {
         if (values.typSloupku) return null
@@ -91,6 +128,9 @@ export function Configurator({
       }
       case 3: {
         if (values.dilce === undefined) return t.validation.dilce
+        if (!hasCompleteSizes(Number(values.celkemDilcu ?? 0), values.rozmeryDilcu)) {
+          return missingSizes((stepDilceMotivContent[lang] ?? stepDilceMotivContent.cs).productTitle)
+        }
         if (!values.motiv) return t.validation.motiv
         return null
       }

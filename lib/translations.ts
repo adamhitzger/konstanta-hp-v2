@@ -1037,6 +1037,8 @@ export const konfContent = {
     validation: {
       brana: "Zvolte typ brány, nebo zaškrtněte, že vjezdovou bránu nechcete.",
       branka: "Zvolte, zda chcete v plotu branku, nebo zaškrtněte, že ji nechcete.",
+      /** `{product}` se nahradí názvem vybraného produktu s nevyplněnými rozměry. */
+      rozmery: "Vyplňte prosím všechny rozměry u produktu: {product}",
       sloupky: "Vyberte, zda máte vlastní sloupky, nebo je chcete od nás.",
       dilce: "Zvolte, zda chcete plotové dílce, nebo zaškrtněte, že je nechcete.",
       motiv: "Vyberte motiv oplocení.",
@@ -1058,6 +1060,7 @@ export const konfContent = {
     validation: {
       brana: "Zvoľte typ brány, alebo zaškrtnite, že vjazdovú bránu nechcete.",
       branka: "Zvoľte, či chcete v plote bránku, alebo zaškrtnite, že ju nechcete.",
+      rozmery: "Vyplňte, prosím, všetky rozmery pri produkte: {product}",
       sloupky: "Vyberte, či máte vlastné stĺpiky, alebo ich chcete od nás.",
       dilce: "Zvoľte, či chcete plotové dielce, alebo zaškrtnite, že ich nechcete.",
       motiv: "Vyberte motív oplotenia.",
@@ -1079,6 +1082,7 @@ export const konfContent = {
     validation: {
       brana: "Wählen Sie einen Tortyp oder markieren Sie, dass Sie kein Einfahrtstor möchten.",
       branka: "Wählen Sie, ob Sie eine Tür im Zaun möchten, oder markieren Sie, dass Sie keine möchten.",
+      rozmery: "Bitte füllen Sie alle Maße beim Produkt aus: {product}",
       sloupky: "Wählen Sie, ob Sie eigene Pfosten haben oder sie von uns möchten.",
       dilce: "Wählen Sie, ob Sie Zaunelemente möchten, oder markieren Sie, dass Sie keine möchten.",
       motiv: "Wählen Sie das Zaunmotiv.",
