@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { createPortal } from "react-dom"
 import Image from "next/image"
 import { AnimatePresence, motion } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
@@ -41,6 +42,39 @@ function MotivChip({
 /** Kolik náhledů se vejde pod model, než se zbytek schová za „+N" na poslední dlaždici. */
 const THUMB_LIMIT = 3
 
+/** Rozměry plovoucího náhledu u kurzoru (px) — počítá se s nimi i při držení v okně. */
+const PREVIEW_W = 358
+const PREVIEW_H = 316
+/** Odstup od hrotu kurzoru, ať náhled nepřekrývá miniaturu, nad kterou se stojí. */
+const PREVIEW_GAP = 18
+const VIEWPORT_PAD = 8
+
+/**
+ * Zvětšenina miniatury, která visí u kurzoru. Vykresluje se portálem do `body`:
+ * produktová karta má `overflow-hidden` a krok konfigurátoru se animuje transformem,
+ * takže uvnitř stromu by se náhled ořízl (a `fixed` by se vztáhl k transformu, ne k oknu).
+ */
+function ThumbPreview({ url, alt, x, y }: { url: string; alt: string; x: number; y: number }) {
+  if (typeof document === "undefined") return null
+
+  // Vpravo od kurzoru, dokud je kam — u pravého okraje okna se náhled překlopí doleva.
+  const left =
+    x + PREVIEW_GAP + PREVIEW_W + VIEWPORT_PAD > window.innerWidth
+      ? Math.max(VIEWPORT_PAD, x - PREVIEW_GAP - PREVIEW_W)
+      : x + PREVIEW_GAP
+  const top = Math.max(VIEWPORT_PAD, Math.min(y - PREVIEW_H / 2, window.innerHeight - PREVIEW_H - VIEWPORT_PAD))
+
+  return createPortal(
+    <div
+      style={{ left, top, width: PREVIEW_W, height: PREVIEW_H }}
+      className="pointer-events-none fixed z-60 overflow-hidden rounded-xl border border-border bg-background shadow-xl animate-in fade-in-0 zoom-in-95 duration-150"
+    >
+      <Image src={url} alt={alt} fill sizes="388px" className="object-cover" unoptimized />
+    </div>,
+    document.body,
+  )
+}
+
 /**
  * Řádek miniatur reálných fotek pod modelem produktu — jediný vstup do `PhotoLightbox`.
  * Záměrně drobné (28–32 px): karta má vizuálně vést model produktu, fotky realizací
@@ -64,6 +98,9 @@ export function PhotoThumbs({
   lang?: Lang
 }) {
   const gt = photoGalleryContent[lang] ?? photoGalleryContent.cs
+  /** Která miniatura je pod kurzorem a kde ten kurzor je — pro plovoucí zvětšeninu. */
+  const [preview, setPreview] = useState<{ index: number; x: number; y: number } | null>(null)
+
   if (photos.length === 0) return null
   const shown = photos.slice(0, THUMB_LIMIT)
   const hidden = photos.length - shown.length
@@ -76,8 +113,20 @@ export function PhotoThumbs({
           type="button"
           onClick={(e) => {
             e.stopPropagation()
+            setPreview(null)
             onOpen()
           }}
+          /* Náhled je čistě myší záležitost — na dotyku by po klepnutí zůstal viset
+             přes otevřený lightbox. */
+          onPointerEnter={(e) => {
+            if (e.pointerType !== "mouse") return
+            setPreview({ index: i, x: e.clientX, y: e.clientY })
+          }}
+          onPointerMove={(e) => {
+            if (e.pointerType !== "mouse") return
+            setPreview({ index: i, x: e.clientX, y: e.clientY })
+          }}
+          onPointerLeave={() => setPreview(null)}
           className="group relative size-8 hover:scale-95 hover:rounded-xl shrink-0 overflow-hidden rounded-md border border-border bg-background transition-colors hover:border-brand sm:size-10"
           aria-label={`${label}: ${title}`}
         >
@@ -89,6 +138,15 @@ export function PhotoThumbs({
           ) : null}
         </button>
       ))}
+
+      {preview ? (
+        <ThumbPreview
+          url={shown[preview.index].url}
+          alt={`${title} — ${gt.realization} ${preview.index + 1}`}
+          x={preview.x}
+          y={preview.y}
+        />
+      ) : null}
     </div>
   )
 }

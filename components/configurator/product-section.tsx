@@ -108,7 +108,7 @@ export function ProductSection({
         // Vybraná karta zůstává bílá — výběr signalizuje oranžový rámeček a oranžově
         // podbarvená spodní část s rozměry, ne plná oranžová přes celou kartu.
         "flex flex-col overflow-hidden rounded-2xl border-2 bg-card transition-colors",
-        selected ? "border-brand" : "border-border",
+        selected ? "border-brand border-3" : "border-border",
       )}
     >
       {/* Karty v gridu jsou stejně vysoké. Přebytečnou výšku spolkne `flex-1` na
@@ -141,23 +141,19 @@ export function ProductSection({
           {/* Výběr produktu — jeden checkbox, žádné +/- počítadlo. */}
           {/* `max-w-sm`: u samostatné karty (branka, dílce) přes celou šířku formuláře
               by z checkboxu jinak byl nepřiměřeně široký pruh.
-              Nevybraný stav je bílý s oranžovým rámečkem i textem, vybraný se
-              překlopí do plné brand oranžové. */}
-          <label className={cn("flex w-full max-w-sm cursor-pointer items-center justify-center gap-2.5 rounded-xl border px-4 py-3 text-sm font-semibold transition-colors",
-            selected
-              ? "border-brand bg-brand text-brand-foreground hover:bg-brand/90"
-              : "border-brand bg-card text-brand hover:bg-brand/10",
-          )}>
+              Nevybrané tlačítko je černé, po zaškrtnutí se překlopí do brand
+              oranžové s palcem nahoru (stejné jako u pergol v `perg-step-upevneni`). */}
+          <label className={"flex w-full max-w-sm cursor-pointer items-center justify-center gap-2.5 rounded-xl border px-4 py-3 text-sm font-semibold text-brand-foreground transition-colors bg-black"}>
             <span
               className={cn(
                 "flex size-5 shrink-0 items-center justify-center rounded-[6px] border transition-colors",
-                selected ? "border-brand-foreground bg-brand-foreground text-brand" : "border-brand bg-brand/10",
+                selected ? "border-brand-foreground bg-brand-foreground text-brand" : "border-brand-foreground/60 bg-brand-foreground/15",
               )}
             >
-              {selected ? <Check className="size-3.5" /> : null}
+              {selected ? <Check className="size-3.5 text-black" /> : null}
             </span>
             <input type="checkbox" className="sr-only" checked={selected} onChange={toggleSelected} />
-            {selected ? <ThumbsUp className="size-4 shrink-0" /> : null}
+            {selected ? <ThumbsUp className="size-4 shrink-0 text-white" /> : null}
             {selected ? st.selected : st.select}
           </label>
         </div>
