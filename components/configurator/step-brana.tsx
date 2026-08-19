@@ -7,6 +7,7 @@ import { gateProducts } from "@/lib/konf-content"
 import { DeclineCard } from "./form-controls"
 import { ProductSection } from "./product-section"
 import { gateLabels, gateExtrasLabels, stepBranaContent, konfContent, type Lang } from "@/lib/translations"
+import { StepTitle } from "./step-title"
 
 export function StepBrana({ onNext, photos, info = {}, lang = "cs" }: { onNext: () => void; photos: ConfPhotosWithMotiv; info?: ConfProductInfo; lang?: Lang }) {
   const { watch, setValue } = useFormContext<ConfiguratorType>()
@@ -24,7 +25,7 @@ export function StepBrana({ onNext, photos, info = {}, lang = "cs" }: { onNext: 
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="font-heading text-2xl font-bold sm:text-3xl">{t.title}</h2>
+        <StepTitle pre={t.titlePre} accent={t.titleAccent} post={t.titlePost} />
         <p className="mt-1 text-muted-foreground">
           {t.desc}
         </p>

@@ -6,6 +6,7 @@ import type { ConfPhotosWithMotiv, ConfProductInfo } from "@/types"
 import { DeclineCard } from "./form-controls"
 import { ProductSection } from "./product-section"
 import { brankaExtrasLabels, stepBrankaContent, type Lang } from "@/lib/translations"
+import { StepTitle } from "./step-title"
 
 export function StepBranka({ onNext, photos, info = {}, lang = "cs" }: { onNext: () => void; photos: ConfPhotosWithMotiv; info?: ConfProductInfo; lang?: Lang }) {
   const { watch, setValue } = useFormContext<ConfiguratorType>()
@@ -21,7 +22,7 @@ export function StepBranka({ onNext, photos, info = {}, lang = "cs" }: { onNext:
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="font-heading text-2xl font-bold sm:text-3xl">{t.title}</h2>
+        <StepTitle pre={t.titlePre} accent={t.titleAccent} post={t.titlePost} />
         <p className="mt-1 text-muted-foreground">{t.desc}</p>
       </div>
 

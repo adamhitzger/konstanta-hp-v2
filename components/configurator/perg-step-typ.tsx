@@ -11,6 +11,7 @@ import { PhotoLightbox, PhotoThumbs } from "./photo-lightbox"
 import { ProductInfoLink } from "./product-info-dialog"
 import { InlineCheckbox } from "./form-controls"
 import { pergolaTypeLabels, stineniLabels, strechaMaterialLabels, pergStepTypContent, photoGalleryContent, type Lang } from "@/lib/translations"
+import { StepTitle } from "./step-title"
 import { cn } from "@/lib/utils"
 
 /**
@@ -107,7 +108,7 @@ export function PergStepTyp({
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h2 className="font-heading text-2xl font-bold sm:text-3xl">{t.title1}</h2>
+        <StepTitle pre={t.title1Pre} accent={t.title1Accent} post={t.title1Post} />
         <p className="mt-1 text-muted-foreground">{t.desc1}</p>
       </div>
 
@@ -149,7 +150,7 @@ export function PergStepTyp({
       ) : (
         <>
           <div>
-            <h2 className="font-heading text-xl font-bold">{t.shadeTitle}</h2>
+            <StepTitle pre={t.shadeTitlePre} accent={t.shadeTitleAccent} post={t.shadeTitlePost} className="text-xl sm:text-xl" />
             <p className="mt-1 mb-3 text-muted-foreground">{t.shadeDesc}</p>
             <RadioGroup value={stineni ?? ""} onValueChange={(v) => setValue("stineni", v as string)} className="grid grid-cols-2 gap-4 sm:grid-cols-3">
               {stineniOptions

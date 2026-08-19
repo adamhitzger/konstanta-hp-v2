@@ -108,7 +108,7 @@ export function ProductSection({
         // Vybraná karta zůstává bílá — výběr signalizuje oranžový rámeček a oranžově
         // podbarvená spodní část s rozměry, ne plná oranžová přes celou kartu.
         "flex flex-col overflow-hidden rounded-2xl border-2 bg-card transition-colors",
-        selected ? "border-brand border-3" : "border-border",
+        selected ? "border-brand " : "border-border",
       )}
     >
       {/* Karty v gridu jsou stejně vysoké. Přebytečnou výšku spolkne `flex-1` na
@@ -143,14 +143,14 @@ export function ProductSection({
               by z checkboxu jinak byl nepřiměřeně široký pruh.
               Nevybrané tlačítko je černé, po zaškrtnutí se překlopí do brand
               oranžové s palcem nahoru (stejné jako u pergol v `perg-step-upevneni`). */}
-          <label className={"flex w-full max-w-sm cursor-pointer items-center justify-center gap-2.5 rounded-xl border px-4 py-3 text-sm font-semibold text-brand-foreground transition-colors bg-black"}>
+          <label className={cn("flex w-full max-w-sm cursor-pointer items-center justify-center gap-2.5 rounded-xl border px-4 py-3 text-sm font-semibold text-brand-foreground transition-colors ",selected ? "bg-brand" :"bg-black")}>
             <span
               className={cn(
                 "flex size-5 shrink-0 items-center justify-center rounded-[6px] border transition-colors",
-                selected ? "border-brand-foreground bg-brand-foreground text-brand" : "border-brand-foreground/60 bg-brand-foreground/15",
+                selected ? "border-brand-foreground bg-brand-foreground text-brand" : "border-brand-foreground/60 bg-brand-foreground",
               )}
             >
-              {selected ? <Check className="size-3.5 text-black" /> : null}
+              {selected ? <Check className="size-3.5 text-brand" /> : null}
             </span>
             <input type="checkbox" className="sr-only" checked={selected} onChange={toggleSelected} />
             {selected ? <ThumbsUp className="size-4 shrink-0 text-white" /> : null}
@@ -162,7 +162,7 @@ export function ProductSection({
       {selected ? (
         /* Spodní část (rozměry + doplňky) je jediná oranžová plocha karty, a to
            v jemném odstínu — plná brand oranžová by ve formulářových polích rušila. */
-        <div className="flex flex-col gap-4 border-t border-brand/25 bg-brand/10 p-5">
+        <div className="flex flex-col gap-4 border-t border-brand/25 bg-brand/25 p-5">
           {Array.from({ length: count }).map((_, i) => (
             <div key={i} className="flex flex-col gap-2">
               {count > 1 ? (
@@ -173,15 +173,15 @@ export function ProductSection({
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                 <div className="flex flex-col gap-1.5">
                   <Label>{dims.vyska}</Label>
-                  <Input type="number" min={0} className="border-brand/20 bg-background text-foreground" {...register(`${String(arrayField)}.${i}.vyska` as Path<ConfiguratorType>, numberFieldOptions)} />
+                  <Input type="number" min={0} className="border-brand/20 bg-white text-foreground" {...register(`${String(arrayField)}.${i}.vyska` as Path<ConfiguratorType>, numberFieldOptions)} />
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <Label>{dims.delka}</Label>
-                  <Input type="number" min={0} className="border-brand/20 bg-background text-foreground" {...register(`${String(arrayField)}.${i}.delka` as Path<ConfiguratorType>, numberFieldOptions)} />
+                  <Input type="number" min={0} className="border-brand/20 bg-white text-foreground" {...register(`${String(arrayField)}.${i}.delka` as Path<ConfiguratorType>, numberFieldOptions)} />
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <Label>{dims.pocet}</Label>
-                  <Input type="number" min={0} className="border-brand/20 bg-background text-foreground" {...register(`${String(arrayField)}.${i}.pocet` as Path<ConfiguratorType>, numberFieldOptions)} />
+                  <Input type="number" min={0} className="border-brand/20 bg-white text-foreground" {...register(`${String(arrayField)}.${i}.pocet` as Path<ConfiguratorType>, numberFieldOptions)} />
                 </div>
                 {extraToggles && extraToggles.length > 0 ? (
                   <div className="col-span-2 flex flex-wrap gap-x-5 gap-y-2 sm:col-span-3">

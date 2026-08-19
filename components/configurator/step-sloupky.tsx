@@ -7,6 +7,7 @@ import { ColorSwatchGroup, ImageRadioGrid } from "./form-controls"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { sloupkyLabels, povrchLabels, colorLabels, stepSloupkyContent, type Lang } from "@/lib/translations"
+import { StepTitle } from "./step-title"
 
 export function StepSloupky({ lang = "cs" }: { lang?: Lang }) {
   const { watch, setValue } = useFormContext<ConfiguratorType>()
@@ -26,7 +27,7 @@ export function StepSloupky({ lang = "cs" }: { lang?: Lang }) {
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h2 className="font-heading text-2xl font-bold sm:text-3xl">{t.title}</h2>
+        <StepTitle pre={t.titlePre} accent={t.titleAccent} post={t.titlePost} />
         <p className="mt-1 text-muted-foreground">{t.desc}</p>
       </div>
 

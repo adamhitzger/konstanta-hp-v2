@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { mountLabels, mountDimensionLabelsContent, pergStepUpevneniContent, productSelectContent, type Lang } from "@/lib/translations"
+import { StepTitle } from "./step-title"
 import { cn } from "@/lib/utils"
 
 /**
@@ -121,7 +122,7 @@ export function PergStepUpevneni({ onNext, lang = "cs" }: { onNext?: () => void;
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="font-heading text-2xl font-bold sm:text-3xl">{t.title}</h2>
+        <StepTitle pre={t.titlePre} accent={t.titleAccent} post={t.titlePost} />
         <p className="mt-1 text-muted-foreground">{t.desc}</p>
       </div>
 

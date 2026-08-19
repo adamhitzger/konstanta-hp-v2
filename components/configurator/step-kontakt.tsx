@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { kontaktStepContent, type Lang } from "@/lib/translations"
+import { StepTitle } from "./step-title"
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null
@@ -22,7 +23,7 @@ export function StepKontakt({ lang = "cs" }: { lang?: Lang }) {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="font-heading text-2xl font-bold sm:text-3xl">{t.title}</h2>
+        <StepTitle pre={t.titlePre} accent={t.titleAccent} post={t.titlePost} />
         <p className="mt-1 text-muted-foreground">{t.desc}</p>
       </div>
 

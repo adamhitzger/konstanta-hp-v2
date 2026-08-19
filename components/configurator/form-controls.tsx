@@ -12,7 +12,7 @@ import { formControlsContent, type Lang } from "@/lib/translations"
 export const InlineCheckbox = forwardRef<HTMLInputElement, { label: string } & ComponentPropsWithoutRef<"input">>(
   ({ label, className, id, ...props }, ref) => (
     <label htmlFor={id} className={cn("flex cursor-pointer items-center gap-2 text-sm text-foreground/80", className)}>
-      <span className="relative flex size-4 shrink-0 items-center justify-center rounded-[5px] border border-input transition-colors has-[:checked]:border-brand has-[:checked]:bg-brand">
+      <span className="relative flex size-4 shrink-0 items-center justify-center rounded-[5px] border border-black/40 transition-colors has-[:checked]:border-brand has-[:checked]:bg-brand">
         <input ref={ref} id={id} type="checkbox" className="peer absolute inset-0 size-full cursor-pointer opacity-0" {...props} />
         <Check className="pointer-events-none size-3 text-brand-foreground opacity-0 peer-checked:opacity-100" />
       </span>

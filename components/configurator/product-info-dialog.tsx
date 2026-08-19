@@ -83,7 +83,7 @@ export function ProductInfoLink({
         type="button"
         onClick={openDialog}
         className={cn(
-          "group inline-flex items-center gap-1 text-sm font-medium underline underline-offset-4 transition-colors",
+          "group inline-flex items-center gap-1 text-sm font-medium hover:underline underline-offset-4 transition-colors hover:cursor-pointer",
           onBrand
             ? "text-brand-foreground decoration-brand-foreground/50 hover:decoration-brand-foreground"
             : "text-brand decoration-brand/40 hover:decoration-brand",

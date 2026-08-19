@@ -1338,7 +1338,7 @@ export const productSelectContent: Record<
 > = {
   cs: {
     select: "Vybrat",
-    selected: "Máte vybráno",
+    selected: "Máte zvoleno",
     addedToast: "přidáno do výběru",
     sizeLabel: "Rozměr",
     addSize: "Přidat další rozměr",
@@ -1347,7 +1347,7 @@ export const productSelectContent: Record<
   },
   sk: {
     select: "Vybrať",
-    selected: "Máte vybraté",
+    selected: "Máte zvolené",
     addedToast: "pridané do výberu",
     sizeLabel: "Rozmer",
     addSize: "Pridať ďalší rozmer",
@@ -1394,39 +1394,41 @@ export const konfCommonContent: Record<Lang, { progressLabel: string; close: str
 }
 
 export const stepBranaContent = {
-  cs: { title: "Chcete vjezdovou bránu?", desc: "Vyberte jeden nebo víc typů bran, které vás zajímají, a doplňte rozměry. Klidně jich zvolte i víc najednou.", decline: "Nechci vjezdovou bránu" },
-  sk: { title: "Chcete vjazdovú bránu?", desc: "Vyberte jeden alebo viac typov brán, ktoré vás zaujímajú, a doplňte rozmery. Pokojne ich zvoľte aj viac naraz.", decline: "Nechcem vjazdovú bránu" },
-  de: { title: "Möchten Sie ein Einfahrtstor?", desc: "Wählen Sie einen oder mehrere Tortypen, die Sie interessieren, und ergänzen Sie die Maße. Sie können auch mehrere gleichzeitig auswählen.", decline: "Ich möchte kein Einfahrtstor" },
+  cs: { titlePre: "Chcete ", titleAccent: "vjezdovou bránu", titlePost: "?", desc: "Vyberte jeden nebo víc typů bran, které vás zajímají, a doplňte rozměry. Klidně jich zvolte i víc najednou.", decline: "Nechci vjezdovou bránu" },
+  sk: { titlePre: "Chcete ", titleAccent: "vjazdovú bránu", titlePost: "?", desc: "Vyberte jeden alebo viac typov brán, ktoré vás zaujímajú, a doplňte rozmery. Pokojne ich zvoľte aj viac naraz.", decline: "Nechcem vjazdovú bránu" },
+  de: { titlePre: "Möchten Sie ein ", titleAccent: "Einfahrtstor", titlePost: "?", desc: "Wählen Sie einen oder mehrere Tortypen, die Sie interessieren, und ergänzen Sie die Maße. Sie können auch mehrere gleichzeitig auswählen.", decline: "Ich möchte kein Einfahrtstor" },
 }
 
 export const stepBrankaContent = {
-  cs: { title: "Chcete v plotu branku?", desc: "Branka pro pěší vstup na pozemek, samostatně od vjezdové brány.", decline: "Nechci v plotu branku", productTitle: "Branka v oplocení", dimensionLabels: { vyska: "Výška branky (mm)", delka: "Šířka branky (mm)", pocet: "Počet branek (ks)" } },
-  sk: { title: "Chcete v plote bránku?", desc: "Bránka pre peší vstup na pozemok, samostatne od vjazdovej brány.", decline: "Nechcem v plote bránku", productTitle: "Bránka v oplotení", dimensionLabels: { vyska: "Výška bránky (mm)", delka: "Šírka bránky (mm)", pocet: "Počet bránok (ks)" } },
-  de: { title: "Möchten Sie eine Tür im Zaun?", desc: "Tür für den Fußgängerzugang zum Grundstück, unabhängig vom Einfahrtstor.", decline: "Ich möchte keine Tür im Zaun", productTitle: "Tür im Zaun", dimensionLabels: { vyska: "Türhöhe (mm)", delka: "Türbreite (mm)", pocet: "Anzahl Türen (Stk.)" } },
+  cs: { titlePre: "Chcete v plotu ", titleAccent: "branku", titlePost: "?", desc: "Branka pro pěší vstup na pozemek, samostatně od vjezdové brány.", decline: "Nechci v plotu branku", productTitle: "Branka v oplocení", dimensionLabels: { vyska: "Výška branky (mm)", delka: "Šířka branky (mm)", pocet: "Počet branek (ks)" } },
+  sk: { titlePre: "Chcete v plote ", titleAccent: "bránku", titlePost: "?", desc: "Bránka pre peší vstup na pozemok, samostatne od vjazdovej brány.", decline: "Nechcem v plote bránku", productTitle: "Bránka v oplotení", dimensionLabels: { vyska: "Výška bránky (mm)", delka: "Šírka bránky (mm)", pocet: "Počet bránok (ks)" } },
+  de: { titlePre: "Möchten Sie eine ", titleAccent: "Tür im Zaun", titlePost: "?", desc: "Tür für den Fußgängerzugang zum Grundstück, unabhängig vom Einfahrtstor.", decline: "Ich möchte keine Tür im Zaun", productTitle: "Tür im Zaun", dimensionLabels: { vyska: "Türhöhe (mm)", delka: "Türbreite (mm)", pocet: "Anzahl Türen (Stk.)" } },
 }
 
 export const stepSloupkyContent = {
-  cs: { title: "Chcete sloupky?", desc: "Vlastní, hliníkové, nebo betonovou tvárnici s výběrem barvy a povrchu.", povrchLabel: "Povrch tvárnice", barvaLabel: "Barva tvárnice" },
-  sk: { title: "Chcete stĺpiky?", desc: "Vlastné, hliníkové, alebo betónovú tvárnicu s výberom farby a povrchu.", povrchLabel: "Povrch tvárnice", barvaLabel: "Farba tvárnice" },
-  de: { title: "Möchten Sie Pfosten?", desc: "Eigene, Aluminium- oder Betonpfosten mit Auswahl von Farbe und Oberfläche.", povrchLabel: "Oberfläche des Pfostens", barvaLabel: "Farbe des Pfostens" },
+  cs: { titlePre: "Chcete ", titleAccent: "sloupky", titlePost: "?", desc: "Vlastní, hliníkové, nebo betonovou tvárnici s výběrem barvy a povrchu.", povrchLabel: "Povrch tvárnice", barvaLabel: "Barva tvárnice" },
+  sk: { titlePre: "Chcete ", titleAccent: "stĺpiky", titlePost: "?", desc: "Vlastné, hliníkové, alebo betónovú tvárnicu s výberom farby a povrchu.", povrchLabel: "Povrch tvárnice", barvaLabel: "Farba tvárnice" },
+  de: { titlePre: "Möchten Sie ", titleAccent: "Pfosten", titlePost: "?", desc: "Eigene, Aluminium- oder Betonpfosten mit Auswahl von Farbe und Oberfläche.", povrchLabel: "Oberfläche des Pfostens", barvaLabel: "Farbe des Pfostens" },
 }
 
 export const stepDilceMotivContent = {
-  cs: { title1: "Chcete plotové dílce?", desc1: "Vyplňte rozměry dílců, pokud je chcete objednat spolu s bránou.", decline: "Nechci plotové dílce", productTitle: "Plotové dílce", dimensionLabels: { vyska: "Výška dílců (mm)", delka: "Délka dílců (mm)", pocet: "Počet dílců (ks)" }, title2: "Zvolte motiv oplocení", desc2: "Motiv určuje tvar výplně plotových dílců." },
-  sk: { title1: "Chcete plotové dielce?", desc1: "Vyplňte rozmery dielcov, ak ich chcete objednať spolu s bránou.", decline: "Nechcem plotové dielce", productTitle: "Plotové dielce", dimensionLabels: { vyska: "Výška dielcov (mm)", delka: "Dĺžka dielcov (mm)", pocet: "Počet dielcov (ks)" }, title2: "Zvoľte motív oplotenia", desc2: "Motív určuje tvar výplne plotových dielcov." },
-  de: { title1: "Möchten Sie Zaunelemente?", desc1: "Geben Sie die Maße der Elemente an, wenn Sie sie zusammen mit dem Tor bestellen möchten.", decline: "Ich möchte keine Zaunelemente", productTitle: "Zaunelemente", dimensionLabels: { vyska: "Höhe der Elemente (mm)", delka: "Länge der Elemente (mm)", pocet: "Anzahl Elemente (Stk.)" }, title2: "Wählen Sie das Zaunmotiv", desc2: "Das Motiv bestimmt die Form der Füllung der Zaunelemente." },
+  cs: { title1Pre: "Chcete ", title1Accent: "plotové dílce", title1Post: "?", desc1: "Vyplňte rozměry dílců, pokud je chcete objednat spolu s bránou.", decline: "Nechci plotové dílce", productTitle: "Plotové dílce", dimensionLabels: { vyska: "Výška dílců (mm)", delka: "Délka dílců (mm)", pocet: "Počet dílců (ks)" }, title2Pre: "Zvolte ", title2Accent: "motiv oplocení", title2Post: "", desc2: "Motiv určuje tvar výplně plotových dílců." },
+  sk: { title1Pre: "Chcete ", title1Accent: "plotové dielce", title1Post: "?", desc1: "Vyplňte rozmery dielcov, ak ich chcete objednať spolu s bránou.", decline: "Nechcem plotové dielce", productTitle: "Plotové dielce", dimensionLabels: { vyska: "Výška dielcov (mm)", delka: "Dĺžka dielcov (mm)", pocet: "Počet dielcov (ks)" }, title2Pre: "Zvoľte ", title2Accent: "motív oplotenia", title2Post: "", desc2: "Motív určuje tvar výplne plotových dielcov." },
+  de: { title1Pre: "Möchten Sie ", title1Accent: "Zaunelemente", title1Post: "?", desc1: "Geben Sie die Maße der Elemente an, wenn Sie sie zusammen mit dem Tor bestellen möchten.", decline: "Ich möchte keine Zaunelemente", productTitle: "Zaunelemente", dimensionLabels: { vyska: "Höhe der Elemente (mm)", delka: "Länge der Elemente (mm)", pocet: "Anzahl Elemente (Stk.)" }, title2Pre: "Wählen Sie das ", title2Accent: "Zaunmotiv", title2Post: "", desc2: "Das Motiv bestimmt die Form der Füllung der Zaunelemente." },
 }
 
 export const stepBarvaContent = {
-  cs: { title: "Jakou si přejete barvu?", desc: "Vyberte jednu z běžných barev, nebo zadejte vlastní RAL kód.", ralLabel: "Vlastní RAL kód", ralPlaceholder: "např. RAL 7016" },
-  sk: { title: "Akú farbu si želáte?", desc: "Vyberte jednu z bežných farieb, alebo zadajte vlastný RAL kód.", ralLabel: "Vlastný RAL kód", ralPlaceholder: "napr. RAL 7016" },
-  de: { title: "Welche Farbe wünschen Sie?", desc: "Wählen Sie eine der gängigen Farben oder geben Sie einen eigenen RAL-Code ein.", ralLabel: "Eigener RAL-Code", ralPlaceholder: "z. B. RAL 7016" },
+  cs: { titlePre: "Jakou si přejete ", titleAccent: "barvu", titlePost: "?", desc: "Vyberte jednu z běžných barev, nebo zadejte vlastní RAL kód.", ralLabel: "Vlastní RAL kód", ralPlaceholder: "např. RAL 7016" },
+  sk: { titlePre: "Akú ", titleAccent: "farbu", titlePost: " si želáte?", desc: "Vyberte jednu z bežných farieb, alebo zadajte vlastný RAL kód.", ralLabel: "Vlastný RAL kód", ralPlaceholder: "napr. RAL 7016" },
+  de: { titlePre: "Welche ", titleAccent: "Farbe", titlePost: " wünschen Sie?", desc: "Wählen Sie eine der gängigen Farben oder geben Sie einen eigenen RAL-Code ein.", ralLabel: "Eigener RAL-Code", ralPlaceholder: "z. B. RAL 7016" },
 }
 
 // Sdílený obsah kontaktního kroku pro OBA konfigurátory (step-kontakt.tsx i perg-step-kontakt.tsx)
 export const kontaktStepContent = {
   cs: {
-    title: "Vyplňte osobní údaje",
+    titlePre: "Vyplňte ",
+    titleAccent: "osobní údaje",
+    titlePost: "",
     desc: "Poslední krok — na tyto údaje vám pošleme nezávaznou kalkulaci.",
     fullname: "Celé jméno*",
     fullnamePlaceholder: "Zadejte celé jméno",
@@ -1448,7 +1450,9 @@ export const kontaktStepContent = {
     consent: "Odesláním souhlasíte se zpracováním osobních údajů za účelem vyřízení poptávky.",
   },
   sk: {
-    title: "Vyplňte osobné údaje",
+    titlePre: "Vyplňte ",
+    titleAccent: "osobné údaje",
+    titlePost: "",
     desc: "Posledný krok — na tieto údaje vám pošleme nezáväznú kalkuláciu.",
     fullname: "Celé meno*",
     fullnamePlaceholder: "Zadajte celé meno",
@@ -1470,7 +1474,9 @@ export const kontaktStepContent = {
     consent: "Odoslaním súhlasíte so spracovaním osobných údajov na účely vybavenia dopytu.",
   },
   de: {
-    title: "Geben Sie Ihre persönlichen Daten ein",
+    titlePre: "Geben Sie Ihre ",
+    titleAccent: "persönlichen Daten",
+    titlePost: " ein",
     desc: "Letzter Schritt — an diese Daten senden wir Ihnen eine unverbindliche Kalkulation.",
     fullname: "Vollständiger Name*",
     fullnamePlaceholder: "Geben Sie Ihren vollständigen Namen ein",
@@ -1583,33 +1589,45 @@ export const mountDimensionLabelsContent = {
 
 export const pergStepTypContent = {
   cs: {
-    title1: "Zvolte typ pergoly",
+    title1Pre: "Zvolte ",
+    title1Accent: "typ pergoly",
+    title1Post: "",
     desc1: "Bioklimatická pergola s lamelami, zasklená zimní zahrada, nebo jednoduchý přístřešek.",
     roofTitle: "Střešní krytina",
     roofDesc: "Materiál střechy přístřešku.",
-    shadeTitle: "Chcete stínění?",
+    shadeTitlePre: "Chcete ",
+    shadeTitleAccent: "stínění",
+    shadeTitlePost: "?",
     shadeDesc: "Screenové rolety chrání před sluncem i pohledy, pevné stínění a zasklení jde kombinovat s lamelami.",
     noShade: "Bez stínění",
     sidesTitle: "Strany stínění",
     sidesDesc: "Označte strany pergoly, které chcete zastínit.",
   },
   sk: {
-    title1: "Zvoľte typ pergoly",
+    title1Pre: "Zvoľte ",
+    title1Accent: "typ pergoly",
+    title1Post: "",
     desc1: "Bioklimatická pergola s lamelami, zasklená zimná záhrada, alebo jednoduchý prístrešok.",
     roofTitle: "Strešná krytina",
     roofDesc: "Materiál strechy prístrešku.",
-    shadeTitle: "Chcete tienenie?",
+    shadeTitlePre: "Chcete ",
+    shadeTitleAccent: "tienenie",
+    shadeTitlePost: "?",
     shadeDesc: "Screenové rolety chránia pred slnkom aj pohľadmi, pevné tienenie a zasklenie sa dá kombinovať s lamelami.",
     noShade: "Bez tienenia",
     sidesTitle: "Strany tienenia",
     sidesDesc: "Označte strany pergoly, ktoré chcete zatieniť.",
   },
   de: {
-    title1: "Wählen Sie den Pergola-Typ",
+    title1Pre: "Wählen Sie den ",
+    title1Accent: "Pergola-Typ",
+    title1Post: "",
     desc1: "Bioklimatische Pergola mit Lamellen, verglaster Wintergarten oder einfacher Unterstand.",
     roofTitle: "Dacheindeckung",
     roofDesc: "Material des Unterstanddachs.",
-    shadeTitle: "Möchten Sie eine Beschattung?",
+    shadeTitlePre: "Möchten Sie eine ",
+    shadeTitleAccent: "Beschattung",
+    shadeTitlePost: "?",
     shadeDesc: "Screen-Rollos schützen vor Sonne und Blicken, feste Beschattung und Verglasung lassen sich mit Lamellen kombinieren.",
     noShade: "Ohne Beschattung",
     sidesTitle: "Beschattete Seiten",
@@ -1618,7 +1636,7 @@ export const pergStepTypContent = {
 }
 
 export const pergStepUpevneniContent = {
-  cs: { title: "Jak chcete upevnit pergolu?", desc: "Vyberte jeden nebo víc způsobů uchycení a doplňte rozměry." },
-  sk: { title: "Ako chcete pergolu upevniť?", desc: "Vyberte jeden alebo viac spôsobov uchytenia a doplňte rozmery." },
-  de: { title: "Wie möchten Sie die Pergola befestigen?", desc: "Wählen Sie eine oder mehrere Befestigungsarten und ergänzen Sie die Maße." },
+  cs: { titlePre: "Jak chcete upevnit ", titleAccent: "pergolu", titlePost: "?", desc: "Vyberte jeden nebo víc způsobů uchycení a doplňte rozměry." },
+  sk: { titlePre: "Ako chcete ", titleAccent: "pergolu", titlePost: " upevniť?", desc: "Vyberte jeden alebo viac spôsobov uchytenia a doplňte rozmery." },
+  de: { titlePre: "Wie möchten Sie die ", titleAccent: "Pergola", titlePost: " befestigen?", desc: "Wählen Sie eine oder mehrere Befestigungsarten und ergänzen Sie die Maße." },
 }

@@ -8,6 +8,7 @@ import { ColorSwatchGroup } from "./form-controls"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { colorLabels, stepBarvaContent, type Lang } from "@/lib/translations"
+import { StepTitle } from "./step-title"
 
 export function StepBarva({ lang = "cs" }: { lang?: Lang }) {
   const { watch, setValue } = useFormContext<ConfiguratorType>()
@@ -22,7 +23,7 @@ export function StepBarva({ lang = "cs" }: { lang?: Lang }) {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="font-heading text-2xl font-bold sm:text-3xl">{t.title}</h2>
+        <StepTitle pre={t.titlePre} accent={t.titleAccent} post={t.titlePost} />
         <p className="mt-1 text-muted-foreground">{t.desc}</p>
       </div>
 

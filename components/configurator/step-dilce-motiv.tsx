@@ -7,6 +7,7 @@ import { motivy } from "@/lib/konf-content"
 import { DeclineCard, ImageRadioGrid } from "./form-controls"
 import { ProductSection } from "./product-section"
 import { motivLabels, stepDilceMotivContent, type Lang } from "@/lib/translations"
+import { StepTitle } from "./step-title"
 
 export function StepDilceMotiv({ onNext, photos, info = {}, lang = "cs" }: { onNext: () => void; photos: ConfPhotosWithMotiv; info?: ConfProductInfo; lang?: Lang }) {
   const { watch, setValue } = useFormContext<ConfiguratorType>()
@@ -26,7 +27,7 @@ export function StepDilceMotiv({ onNext, photos, info = {}, lang = "cs" }: { onN
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h2 className="font-heading text-2xl font-bold sm:text-3xl">{t.title1}</h2>
+        <StepTitle pre={t.title1Pre} accent={t.title1Accent} post={t.title1Post} />
         <p className="mt-1 text-muted-foreground">{t.desc1}</p>
       </div>
 
@@ -54,7 +55,7 @@ export function StepDilceMotiv({ onNext, photos, info = {}, lang = "cs" }: { onN
       />
 
       <div>
-        <h2 className="font-heading text-2xl font-bold sm:text-3xl">{t.title2}</h2>
+        <StepTitle pre={t.title2Pre} accent={t.title2Accent} post={t.title2Post} />
         <p className="mt-1 mb-4 text-muted-foreground">{t.desc2}</p>
         <ImageRadioGrid
           value={motiv ?? ""}
