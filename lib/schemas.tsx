@@ -17,7 +17,7 @@ export const productSchema = z.object({
     company: z.string().optional(),
     pocet: z.number().min(1, {message: "Zadejte počet"}),
     delka: z.number().min(1, {message: "Zadejte délku"}),
-    barva: z.string().min(1, {message: "Zadejte bravu"}),
+    barva: z.string().min(1, {message: "Zadejte barvu"}),
     address: z.string().min(1,{message: "Adresa je povinná"}),
     obec: z.string().min(1, {message:"Obec je povinná"}),
     msg: z.string().max(100, {message: "Zpráva je moc dlouhá"}),
@@ -133,6 +133,12 @@ export const confSchema = z.object({
     barvaTvarnice: z.string().optional(),
     povrchTvarnice: z.string().optional(),
     tvarnice: z.string().optional(),
+    // Spodní uchycení sloupků — jen u hliníkových. `uchyceniSvepomoci` rozlišuje,
+    // jestli betonování/zdění děláme my, nebo si ho zákazník udělá sám;
+    // `rozmerSloupku` (100×100 / 150×150) dává smysl jen u nabetonování a patky.
+    uchyceniSloupku: z.string().optional(),
+    uchyceniSvepomoci: z.boolean().optional(),
+    rozmerSloupku: z.string().optional(),
     dilce: z.boolean().optional(),
     celkemDilcu: z.number().optional(),
     rozmeryDilcu: z.object({
@@ -153,7 +159,22 @@ export const confSchema = z.object({
     widthD: z.number().optional(),
     heightD: z.number().optional(),
     motiv: z.string(),
+    /** Laserové vypálení vzoru do plochy dílce — doplněk k motivu, jen ano/ne. */
+    vypaleniPlochy: z.boolean().optional(),
     barva: z.string(),
+    // Zábradlí (krok Barva). Stejná trojice polí jako u bran/branek, aby šlo použít
+    // `ProductSection`. Výplň je buď sklo (odstín v `zabradliSklo`), nebo hliník
+    // se stejnou nabídkou motivů jako plotové dílce (`zabradliMotiv`).
+    zabradli: z.boolean().optional(),
+    celkemZabradli: z.number().optional(),
+    rozmeryZabradli: z.object({
+        delka: z.number().optional(),
+        vyska: z.number().optional(),
+        pocet: z.number().optional(),
+    }).array().optional(),
+    zabradliMaterial: z.string().optional(),
+    zabradliSklo: z.string().optional(),
+    zabradliMotiv: z.string().optional(),
     fullname: z.string()
         .min(6, {message: "Krátké jméno"})
         .max(40, {message: "Jméno je moc dlouhé"}),

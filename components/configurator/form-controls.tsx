@@ -146,6 +146,46 @@ export function ImageRadioGrid({
   )
 }
 
+/**
+ * Textová varianta `ImageRadioGrid` pro volby, ke kterým nemáme model ani fotku
+ * (spodní uchycení sloupků). Stejný jazyk výběru — oranžový rámeček u aktivní
+ * karty — jen bez obrázkové plochy, aby z toho nebyl prázdný placeholder.
+ */
+export function RadioCardGroup({
+  value,
+  onChange,
+  options,
+  className,
+}: {
+  value: string
+  onChange: (value: string) => void
+  options: { value: string; label: string; desc?: string }[]
+  className?: string
+}) {
+  return (
+    <RadioGroup value={value} onValueChange={(v) => onChange(v as string)} className={cn("grid gap-3 sm:grid-cols-3", className)}>
+      {options.map((opt) => {
+        const active = value === opt.value
+        return (
+          <label
+            key={opt.value}
+            className={cn(
+              "flex cursor-pointer flex-col gap-1.5 rounded-2xl border-2 bg-card p-4 transition-colors hover:border-brand/40",
+              active ? "border-brand" : "border-border",
+            )}
+          >
+            <span className="flex items-start gap-2 text-sm font-semibold">
+              <RadioGroupItem value={opt.value} className="mt-0.5 shrink-0" />
+              {opt.label}
+            </span>
+            {opt.desc ? <span className="text-xs text-muted-foreground">{opt.desc}</span> : null}
+          </label>
+        )
+      })}
+    </RadioGroup>
+  )
+}
+
 export function FieldGroup({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="flex flex-col gap-1.5">

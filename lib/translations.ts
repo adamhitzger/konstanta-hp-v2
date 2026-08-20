@@ -1406,21 +1406,168 @@ export const stepBrankaContent = {
 }
 
 export const stepSloupkyContent = {
-  cs: { titlePre: "Chcete ", titleAccent: "sloupky", titlePost: "?", desc: "Vlastní, hliníkové, nebo betonovou tvárnici s výběrem barvy a povrchu.", povrchLabel: "Povrch tvárnice", barvaLabel: "Barva tvárnice" },
-  sk: { titlePre: "Chcete ", titleAccent: "stĺpiky", titlePost: "?", desc: "Vlastné, hliníkové, alebo betónovú tvárnicu s výberom farby a povrchu.", povrchLabel: "Povrch tvárnice", barvaLabel: "Farba tvárnice" },
-  de: { titlePre: "Möchten Sie ", titleAccent: "Pfosten", titlePost: "?", desc: "Eigene, Aluminium- oder Betonpfosten mit Auswahl von Farbe und Oberfläche.", povrchLabel: "Oberfläche des Pfostens", barvaLabel: "Farbe des Pfostens" },
+  cs: {
+    titlePre: "Chcete ",
+    titleAccent: "sloupky",
+    titlePost: "?",
+    desc: "Vlastní, hliníkové, nebo betonovou tvárnici s výběrem barvy a povrchu.",
+    povrchLabel: "Povrch tvárnice",
+    barvaLabel: "Barva tvárnice",
+    uchyceniTitlePre: "Spodní ",
+    uchyceniTitleAccent: "uchycení sloupků",
+    uchyceniTitlePost: "",
+    uchyceniDesc: "Způsob, jakým se sloupky ukotví do země. Zaměření je vždy na nás.",
+    provedeniLabel: "Provedení",
+    rozmerLabel: "Rozměr sloupku",
+  },
+  sk: {
+    titlePre: "Chcete ",
+    titleAccent: "stĺpiky",
+    titlePost: "?",
+    desc: "Vlastné, hliníkové, alebo betónovú tvárnicu s výberom farby a povrchu.",
+    povrchLabel: "Povrch tvárnice",
+    barvaLabel: "Farba tvárnice",
+    uchyceniTitlePre: "Spodné ",
+    uchyceniTitleAccent: "uchytenie stĺpikov",
+    uchyceniTitlePost: "",
+    uchyceniDesc: "Spôsob, akým sa stĺpiky ukotvia do zeme. Zameranie je vždy na nás.",
+    provedeniLabel: "Prevedenie",
+    rozmerLabel: "Rozmer stĺpika",
+  },
+  de: {
+    titlePre: "Möchten Sie ",
+    titleAccent: "Pfosten",
+    titlePost: "?",
+    desc: "Eigene, Aluminium- oder Betonpfosten mit Auswahl von Farbe und Oberfläche.",
+    povrchLabel: "Oberfläche des Pfostens",
+    barvaLabel: "Farbe des Pfostens",
+    uchyceniTitlePre: "Untere ",
+    uchyceniTitleAccent: "Pfostenbefestigung",
+    uchyceniTitlePost: "",
+    uchyceniDesc: "Art der Verankerung der Pfosten im Boden. Das Aufmaß übernehmen immer wir.",
+    provedeniLabel: "Ausführung",
+    rozmerLabel: "Pfostenmaß",
+  },
+}
+
+/** Popisky tří způsobů spodního uchycení sloupků (`uchyceniSloupkuOptions`). */
+export const uchyceniSloupkuLabels: Record<Lang, Record<string, { label: string; desc: string }>> = {
+  cs: {
+    nabetonovani: { label: "Nabetonování sloupku", desc: "Sloupek se osadí a zabetonuje přímo do země." },
+    patka: { label: "Sloupek na patce", desc: "Sloupek se přišroubuje na kotevní patku — na hotovou betonovou plochu." },
+    zdena: { label: "Kompletně zděná část plotů včetně sloupků", desc: "Zděná podezdívka i sloupky, včetně zaměření." },
+  },
+  sk: {
+    nabetonovani: { label: "Nabetónovanie stĺpika", desc: "Stĺpik sa osadí a zabetónuje priamo do zeme." },
+    patka: { label: "Stĺpik na pätke", desc: "Stĺpik sa priskrutkuje na kotviacu pätku — na hotovú betónovú plochu." },
+    zdena: { label: "Kompletne murovaná časť plotov vrátane stĺpikov", desc: "Murovaná podmurovka aj stĺpiky, vrátane zamerania." },
+  },
+  de: {
+    nabetonovani: { label: "Einbetonieren des Pfostens", desc: "Der Pfosten wird gesetzt und direkt im Boden einbetoniert." },
+    patka: { label: "Pfosten auf Fußplatte", desc: "Der Pfosten wird auf eine Ankerplatte geschraubt — auf fertige Betonfläche." },
+    zdena: { label: "Komplett gemauerter Zaunsockel inklusive Pfosten", desc: "Gemauerter Sockel und Pfosten, inklusive Aufmaß." },
+  },
+}
+
+/**
+ * Přepínač „uděláme my / svépomocí“. Sloveso se liší podle volby — u nabetonování
+ * jde o betonování, u zděné části o zdění — proto dvě sady popisků, ne jedna.
+ */
+export const provedeniLabels: Record<Lang, Record<string, { vcetne: string; svepomoci: string }>> = {
+  cs: {
+    nabetonovani: { vcetne: "Včetně betonování", svepomoci: "Betonování svépomocí" },
+    zdena: { vcetne: "Včetně zdění", svepomoci: "Zdění svépomocí" },
+  },
+  sk: {
+    nabetonovani: { vcetne: "Vrátane betónovania", svepomoci: "Betónovanie svojpomocne" },
+    zdena: { vcetne: "Vrátane murovania", svepomoci: "Murovanie svojpomocne" },
+  },
+  de: {
+    nabetonovani: { vcetne: "Inklusive Betonieren", svepomoci: "Betonieren in Eigenleistung" },
+    zdena: { vcetne: "Inklusive Mauern", svepomoci: "Mauern in Eigenleistung" },
+  },
 }
 
 export const stepDilceMotivContent = {
-  cs: { title1Pre: "Chcete ", title1Accent: "plotové dílce", title1Post: "?", desc1: "Vyplňte rozměry dílců, pokud je chcete objednat spolu s bránou.", decline: "Nechci plotové dílce", productTitle: "Plotové dílce", dimensionLabels: { vyska: "Výška dílců (mm)", delka: "Délka dílců (mm)", pocet: "Počet dílců (ks)" }, title2Pre: "Zvolte ", title2Accent: "motiv oplocení", title2Post: "", desc2: "Motiv určuje tvar výplně plotových dílců." },
-  sk: { title1Pre: "Chcete ", title1Accent: "plotové dielce", title1Post: "?", desc1: "Vyplňte rozmery dielcov, ak ich chcete objednať spolu s bránou.", decline: "Nechcem plotové dielce", productTitle: "Plotové dielce", dimensionLabels: { vyska: "Výška dielcov (mm)", delka: "Dĺžka dielcov (mm)", pocet: "Počet dielcov (ks)" }, title2Pre: "Zvoľte ", title2Accent: "motív oplotenia", title2Post: "", desc2: "Motív určuje tvar výplne plotových dielcov." },
-  de: { title1Pre: "Möchten Sie ", title1Accent: "Zaunelemente", title1Post: "?", desc1: "Geben Sie die Maße der Elemente an, wenn Sie sie zusammen mit dem Tor bestellen möchten.", decline: "Ich möchte keine Zaunelemente", productTitle: "Zaunelemente", dimensionLabels: { vyska: "Höhe der Elemente (mm)", delka: "Länge der Elemente (mm)", pocet: "Anzahl Elemente (Stk.)" }, title2Pre: "Wählen Sie das ", title2Accent: "Zaunmotiv", title2Post: "", desc2: "Das Motiv bestimmt die Form der Füllung der Zaunelemente." },
+  cs: { title1Pre: "Chcete ", title1Accent: "plotové dílce", title1Post: "?", desc1: "Vyplňte rozměry dílců, pokud je chcete objednat spolu s bránou.", decline: "Nechci plotové dílce", productTitle: "Plotové dílce", dimensionLabels: { vyska: "Výška dílců (mm)", delka: "Délka dílců (mm)", pocet: "Počet dílců (ks)" }, title2Pre: "Zvolte ", title2Accent: "motiv oplocení", title2Post: "", desc2: "Motiv určuje tvar výplně plotových dílců.", title3Pre: "Chcete ", title3Accent: "vypálení plochy", title3Post: "?", desc3: "Laserem vypálený vzor do plné plochy dílce. Podívejte se na náhledy realizací.", vypaleniLabel: "Chci vypálení plochy" },
+  sk: { title1Pre: "Chcete ", title1Accent: "plotové dielce", title1Post: "?", desc1: "Vyplňte rozmery dielcov, ak ich chcete objednať spolu s bránou.", decline: "Nechcem plotové dielce", productTitle: "Plotové dielce", dimensionLabels: { vyska: "Výška dielcov (mm)", delka: "Dĺžka dielcov (mm)", pocet: "Počet dielcov (ks)" }, title2Pre: "Zvoľte ", title2Accent: "motív oplotenia", title2Post: "", desc2: "Motív určuje tvar výplne plotových dielcov.", title3Pre: "Chcete ", title3Accent: "vypálenie plochy", title3Post: "?", desc3: "Laserom vypálený vzor do plnej plochy dielca. Pozrite sa na náhľady realizácií.", vypaleniLabel: "Chcem vypálenie plochy" },
+  de: { title1Pre: "Möchten Sie ", title1Accent: "Zaunelemente", title1Post: "?", desc1: "Geben Sie die Maße der Elemente an, wenn Sie sie zusammen mit dem Tor bestellen möchten.", decline: "Ich möchte keine Zaunelemente", productTitle: "Zaunelemente", dimensionLabels: { vyska: "Höhe der Elemente (mm)", delka: "Länge der Elemente (mm)", pocet: "Anzahl Elemente (Stk.)" }, title2Pre: "Wählen Sie das ", title2Accent: "Zaunmotiv", title2Post: "", desc2: "Das Motiv bestimmt die Form der Füllung der Zaunelemente.", title3Pre: "Möchten Sie einen ", title3Accent: "Flächenausschnitt", title3Post: "?", desc3: "Per Laser in die volle Fläche des Elements geschnittenes Muster. Sehen Sie sich die Vorschauen an.", vypaleniLabel: "Ich möchte einen Flächenausschnitt" },
 }
 
 export const stepBarvaContent = {
-  cs: { titlePre: "Jakou si přejete ", titleAccent: "barvu", titlePost: "?", desc: "Vyberte jednu z běžných barev, nebo zadejte vlastní RAL kód.", ralLabel: "Vlastní RAL kód", ralPlaceholder: "např. RAL 7016" },
-  sk: { titlePre: "Akú ", titleAccent: "farbu", titlePost: " si želáte?", desc: "Vyberte jednu z bežných farieb, alebo zadajte vlastný RAL kód.", ralLabel: "Vlastný RAL kód", ralPlaceholder: "napr. RAL 7016" },
-  de: { titlePre: "Welche ", titleAccent: "Farbe", titlePost: " wünschen Sie?", desc: "Wählen Sie eine der gängigen Farben oder geben Sie einen eigenen RAL-Code ein.", ralLabel: "Eigener RAL-Code", ralPlaceholder: "z. B. RAL 7016" },
+  cs: {
+    titlePre: "Jakou si přejete ",
+    titleAccent: "barvu",
+    titlePost: "?",
+    desc: "Vyberte jednu z běžných barev, nebo zadejte vlastní RAL kód.",
+    ralLabel: "Vlastní RAL kód",
+    ralPlaceholder: "např. RAL 7016",
+  },
+  sk: {
+    titlePre: "Akú ",
+    titleAccent: "farbu",
+    titlePost: " si želáte?",
+    desc: "Vyberte jednu z bežných farieb, alebo zadajte vlastný RAL kód.",
+    ralLabel: "Vlastný RAL kód",
+    ralPlaceholder: "napr. RAL 7016",
+  },
+  de: {
+    titlePre: "Welche ",
+    titleAccent: "Farbe",
+    titlePost: " wünschen Sie?",
+    desc: "Wählen Sie eine der gängigen Farben oder geben Sie einen eigenen RAL-Code ein.",
+    ralLabel: "Eigener RAL-Code",
+    ralPlaceholder: "z. B. RAL 7016",
+  },
+}
+
+/** Zábradlí — samostatný blok nad výběrem barvy na kroku „Barva“. */
+export const stepZabradliContent = {
+  cs: {
+    titlePre: "Chcete ",
+    titleAccent: "zábradlí",
+    titlePost: "?",
+    desc: "Skleněné nebo hliníkové zábradlí k terase či schodišti, ve stejné barvě jako oplocení.",
+    productTitle: "Zábradlí",
+    dimensionLabels: { vyska: "Výška zábradlí (mm)", delka: "Šířka zábradlí (mm)", pocet: "Počet (ks)" },
+    materialLabel: "Výplň zábradlí",
+    skloLabel: "Odstín skla",
+    motivLabel: "Motiv výplně",
+  },
+  sk: {
+    titlePre: "Chcete ",
+    titleAccent: "zábradlie",
+    titlePost: "?",
+    desc: "Sklenené alebo hliníkové zábradlie k terase či schodisku, v rovnakej farbe ako oplotenie.",
+    productTitle: "Zábradlie",
+    dimensionLabels: { vyska: "Výška zábradlia (mm)", delka: "Šírka zábradlia (mm)", pocet: "Počet (ks)" },
+    materialLabel: "Výplň zábradlia",
+    skloLabel: "Odtieň skla",
+    motivLabel: "Motív výplne",
+  },
+  de: {
+    titlePre: "Möchten Sie ein ",
+    titleAccent: "Geländer",
+    titlePost: "?",
+    desc: "Glas- oder Aluminiumgeländer für Terrasse oder Treppe, in derselben Farbe wie der Zaun.",
+    productTitle: "Geländer",
+    dimensionLabels: { vyska: "Höhe des Geländers (mm)", delka: "Breite des Geländers (mm)", pocet: "Anzahl (Stk.)" },
+    materialLabel: "Geländerfüllung",
+    skloLabel: "Glaston",
+    motivLabel: "Motiv der Füllung",
+  },
+}
+
+export const zabradliMaterialLabels: Record<Lang, Record<string, string>> = {
+  cs: { sklo: "Sklo", "hliník": "Hliník" },
+  sk: { sklo: "Sklo", "hliník": "Hliník" },
+  de: { sklo: "Glas", "hliník": "Aluminium" },
+}
+
+export const zabradliSkloLabels: Record<Lang, Record<string, string>> = {
+  cs: { "Čiré": "Čiré", "Matné": "Matné", Antracit: "Antracit" },
+  sk: { "Čiré": "Číre", "Matné": "Matné", Antracit: "Antracit" },
+  de: { "Čiré": "Klar", "Matné": "Satiniert", Antracit: "Anthrazit" },
 }
 
 // Sdílený obsah kontaktního kroku pro OBA konfigurátory (step-kontakt.tsx i perg-step-kontakt.tsx)

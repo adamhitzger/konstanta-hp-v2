@@ -126,6 +126,22 @@ export const sloupkyOptions = [
   { value: "betonové", label: "Betonové", image: "/modely/sloupky/betonove.webp" },
 ] as const
 
+/**
+ * Spodní uchycení hliníkových sloupků. `svepomoci` = varianta má přepínač
+ * „uděláme my / svépomocí“, `rozmer` = nabízí se profil 100×100 nebo 150×150 mm.
+ * Fotky zatím nejsou, volby jsou proto čistě textové karty.
+ */
+export const uchyceniSloupkuOptions = [
+  { value: "nabetonovani", label: "Nabetonování sloupku", svepomoci: true, rozmer: true },
+  { value: "patka", label: "Sloupek na patce", svepomoci: false, rozmer: true },
+  { value: "zdena", label: "Kompletně zděná část plotů včetně sloupků", svepomoci: true, rozmer: false },
+] as const
+
+export const rozmerSloupkuOptions = [
+  { value: "100x100", label: "100 × 100 mm" },
+  { value: "150x150", label: "150 × 150 mm" },
+] as const
+
 export const povrchTvarniceOptions = [
   { value: "standard", label: "Standard" },
   { value: "stipany", label: "Štípaný" },
@@ -168,12 +184,29 @@ export const motivy = [
 ]
 
 export const barvyOplocení = [
-  { code: "#50d71e", color: "Zelená" },
   { code: "#b5beb9", color: "Šedá" },
-  { code: "#FFFFFF", color: "Bílá" },
+  { code: "#654321", color: "Hnědá" },
   { code: "#383E42", color: "Antracit" },
-  { code: "#8B4512", color: "Dřevodekor" },
+  { code: "#8B4512", color: "Dřevěný dekor" },
   { code: "#000000", color: "Černá" },
+]
+
+/**
+ * Výplň zábradlí. Sklo má vlastní tři odstíny, hliník přebírá stejnou nabídku
+ * motivů jako plotové dílce (`motivy`), takže se pro něj žádný seznam nedubluje.
+ * Model zábradlí zatím nemáme — karta i galerie proto jedou na fotkách oplocení.
+ */
+export const zabradliImage = "/modely/dilce/hlinikove.webp"
+
+export const zabradliMaterialOptions = [
+  { value: "sklo", label: "Sklo", image: null },
+  { value: "hliník", label: "Hliník", image: zabradliImage },
+] as const
+
+export const zabradliSkloOptions = [
+  { code: "#dbe9f0", color: "Čiré" },
+  { code: "#ced8dc", color: "Matné" },
+  { code: "#383E42", color: "Antracit" },
 ]
 
 export const konfSteps = ["Brána", "Branka", "Sloupky", "Dílce a motiv", "Barva", "Kontakt"] as const

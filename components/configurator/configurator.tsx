@@ -220,12 +220,12 @@ export function Configurator({
                 )}
                 {step === 3 && (
                   <Slide key="dilce" direction={direction}>
-                    <StepDilceMotiv onNext={goNext} photos={photos} info={info} lang={lang} />
+                    <StepDilceMotiv photos={photos} info={info} lang={lang} />
                   </Slide>
                 )}
                 {step === 4 && (
                   <Slide key="barva" direction={direction}>
-                    <StepBarva lang={lang} />
+                    <StepBarva photos={photos} info={info} onBack={goBack} lang={lang} />
                   </Slide>
                 )}
                 {step === 5 && (
