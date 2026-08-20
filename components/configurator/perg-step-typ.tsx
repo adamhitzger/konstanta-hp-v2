@@ -10,7 +10,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { PhotoLightbox, PhotoThumbs } from "./photo-lightbox"
 import { ProductInfoLink } from "./product-info-dialog"
 import { InlineCheckbox } from "./form-controls"
-import { pergolaTypeLabels, stineniLabels, strechaMaterialLabels, pergStepTypContent, photoGalleryContent, type Lang } from "@/lib/translations"
+import { pergolaTypeLabels, stineniLabels, stranyLabels, strechaMaterialLabels, pergStepTypContent, photoGalleryContent, type Lang } from "@/lib/translations"
 import { StepTitle } from "./step-title"
 import { cn } from "@/lib/utils"
 
@@ -101,6 +101,7 @@ export function PergStepTyp({
   const typeT = pergolaTypeLabels[lang] ?? pergolaTypeLabels.cs
   const stineniT = stineniLabels[lang] ?? stineniLabels.cs
   const materialT = strechaMaterialLabels[lang] ?? strechaMaterialLabels.cs
+  const stranyT = stranyLabels[lang] ?? stranyLabels.cs
 
   const isPristresek = pergola === "pristresek"
   const isZimniZahrada = pergola === "zimni_zahrada"
@@ -181,7 +182,7 @@ export function PergStepTyp({
             <p className="mt-1 mb-3 text-muted-foreground">{t.sidesDesc}</p>
             <div className="flex flex-wrap gap-x-6 gap-y-2">
               {stranyOptions.map((s) => (
-                <InlineCheckbox key={s.name} label={s.label} {...register(s.name)} />
+                <InlineCheckbox key={s.name} label={stranyT[s.name] ?? s.label} {...register(s.name)} />
               ))}
             </div>
           </div>

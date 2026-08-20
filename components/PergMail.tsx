@@ -187,7 +187,7 @@ export const PergMail = (data: PergolaConfType, photos: ConfPhotos
                   style={image}
                     />
                     <Column style={th}>Strany</Column>
-                    <Column style={td}>{[data.a && "A", data.b && "B", data.c && "C", data.d && "D"].filter(Boolean).join(", ") || "Neuvedeno"}</Column>
+                    <Column style={td}>{[data.a && "A – přední (vchodové)", data.b && "B – zadní", data.c && "C – levé", data.d && "D – pravé"].filter(Boolean).join(", ") || "Neuvedeno"}</Column>
                 </Row>
                     :null}
                 </>

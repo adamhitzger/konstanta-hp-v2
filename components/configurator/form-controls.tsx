@@ -110,7 +110,8 @@ export function ImageRadioGrid({
 }: {
   value: string
   onChange: (value: string) => void
-  options: { value: string; label: string; image: string | null }[]
+  /** `image: null` vykreslí místo modelu popisek — buď `placeholder`, nebo „Vlastní řešení“. */
+  options: { value: string; label: string; image: string | null; placeholder?: string }[]
   lang?: Lang
 }) {
   const t = formControlsContent[lang] ?? formControlsContent.cs
@@ -131,8 +132,8 @@ export function ImageRadioGrid({
             {opt.image ? (
               <Image src={opt.image} alt={opt.label} width={220} height={220} className="aspect-square w-full max-w-[220px] rounded-xl bg-background object-contain p-2" />
             ) : (
-              <span className="flex aspect-square w-full max-w-[220px] items-center justify-center rounded-xl border border-dashed border-border text-xs text-muted-foreground">
-                {t.customSolution}
+              <span className="flex aspect-square w-full max-w-[220px] items-center justify-center rounded-xl border border-dashed border-border p-2 text-center text-xs text-muted-foreground">
+                {opt.placeholder ?? t.customSolution}
               </span>
             )}
             <span className="flex items-center gap-1.5 text-sm font-semibold">

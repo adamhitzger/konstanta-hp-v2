@@ -159,8 +159,6 @@ export const confSchema = z.object({
     widthD: z.number().optional(),
     heightD: z.number().optional(),
     motiv: z.string(),
-    /** Laserové vypálení vzoru do plochy dílce — doplněk k motivu, jen ano/ne. */
-    vypaleniPlochy: z.boolean().optional(),
     barva: z.string(),
     // Zábradlí (krok Barva). Stejná trojice polí jako u bran/branek, aby šlo použít
     // `ProductSection`. Výplň je buď sklo (odstín v `zabradliSklo`), nebo hliník

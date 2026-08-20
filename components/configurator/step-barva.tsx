@@ -6,6 +6,7 @@ import type { ConfiguratorType } from "@/lib/schemas"
 import type { ConfPhotosWithMotiv, ConfProductInfo } from "@/types"
 import {
   barvyOplocení,
+  motivImage,
   motivy,
   zabradliImage,
   zabradliMaterialOptions,
@@ -17,6 +18,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
   colorLabels,
+  formControlsContent,
   motivLabels,
   stepBarvaContent,
   stepZabradliContent,
@@ -48,6 +50,7 @@ export function StepBarva({
   const zt = stepZabradliContent[lang] ?? stepZabradliContent.cs
   const colorT = colorLabels[lang] ?? colorLabels.cs
   const motivT = motivLabels[lang] ?? motivLabels.cs
+  const fc = formControlsContent[lang] ?? formControlsContent.cs
   const materialT = zabradliMaterialLabels[lang] ?? zabradliMaterialLabels.cs
   const skloT = zabradliSkloLabels[lang] ?? zabradliSkloLabels.cs
   const colors = barvyOplocení.map((c) => ({ code: c.code, value: c.color.toLowerCase(), color: colorT[c.color] ?? c.color }))
@@ -68,7 +71,8 @@ export function StepBarva({
   const motivOptions = motivy.map((m) => ({
     value: m.src,
     label: motivT[m.src] ?? m.motiv,
-    image: `/modely/motivy/${m.imgSrc}.webp`,
+    image: motivImage(m),
+    placeholder: fc.noPreview,
   }))
 
   return (

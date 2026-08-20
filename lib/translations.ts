@@ -1033,7 +1033,7 @@ export const konfContent = {
     back: "Zpět",
     sendText: "Odeslat poptávku",
     dimensionLabels: { vyska: "Výška (mm)", delka: "Šířka průjezdu (mm)", pocet: "Počet (ks)" },
-    steps: ["Brána", "Branka", "Sloupky", "Dílce a motiv", "Barva", "Kontakt"],
+    steps: ["Brána", "Branka", "Sloupky", "Dílce a motiv", "Zábradlí a barva", "Kontakt"],
     validation: {
       brana: "Zvolte typ brány, nebo zaškrtněte, že vjezdovou bránu nechcete.",
       branka: "Zvolte, zda chcete v plotu branku, nebo zaškrtněte, že ji nechcete.",
@@ -1056,7 +1056,7 @@ export const konfContent = {
     back: "Späť",
     sendText: "Odoslať dopyt",
     dimensionLabels: { vyska: "Výška (mm)", delka: "Šírka prejazdu (mm)", pocet: "Počet (ks)" },
-    steps: ["Brána", "Bránka", "Stĺpiky", "Dielce a motív", "Farba", "Kontakt"],
+    steps: ["Brána", "Bránka", "Stĺpiky", "Dielce a motív", "Zábradlie a farba", "Kontakt"],
     validation: {
       brana: "Zvoľte typ brány, alebo zaškrtnite, že vjazdovú bránu nechcete.",
       branka: "Zvoľte, či chcete v plote bránku, alebo zaškrtnite, že ju nechcete.",
@@ -1078,7 +1078,7 @@ export const konfContent = {
     back: "Zurück",
     sendText: "Anfrage senden",
     dimensionLabels: { vyska: "Höhe (mm)", delka: "Durchfahrtsbreite (mm)", pocet: "Anzahl (Stk.)" },
-    steps: ["Tor", "Tür", "Pfosten", "Elemente und Motiv", "Farbe", "Kontakt"],
+    steps: ["Tor", "Tür", "Pfosten", "Elemente und Motiv", "Geländer und Farbe", "Kontakt"],
     validation: {
       brana: "Wählen Sie einen Tortyp oder markieren Sie, dass Sie kein Einfahrtstor möchten.",
       branka: "Wählen Sie, ob Sie eine Tür im Zaun möchten, oder markieren Sie, dass Sie keine möchten.",
@@ -1217,6 +1217,7 @@ export const motivLabels: Record<Lang, Record<string, string>> = {
     "planka-150": "Plaňka 150",
     tycka: "Tyčka",
     tahokov: "Tahokov",
+    vypaleni: "Vypálení plochy",
     "vlastní kombinace": "Vlastní kombinace",
     drevodekor: "Dřevodekor",
   },
@@ -1230,6 +1231,7 @@ export const motivLabels: Record<Lang, Record<string, string>> = {
     "planka-150": "Latka 150",
     tycka: "Tyčka",
     tahokov: "Ťahokov",
+    vypaleni: "Vypálenie plochy",
     "vlastní kombinace": "Vlastná kombinácia",
     drevodekor: "Drevodekor",
   },
@@ -1243,6 +1245,7 @@ export const motivLabels: Record<Lang, Record<string, string>> = {
     "planka-150": "Lamelle 150",
     tycka: "Stab",
     tahokov: "Streckmetall",
+    vypaleni: "Flächenausschnitt",
     "vlastní kombinace": "Eigene Kombination",
     drevodekor: "Holzdekor",
   },
@@ -1378,9 +1381,9 @@ export const povrchLabels: Record<Lang, Record<string, string>> = {
 }
 
 export const formControlsContent = {
-  cs: { customSolution: "Vlastní řešení" },
-  sk: { customSolution: "Vlastné riešenie" },
-  de: { customSolution: "Eigene Lösung" },
+  cs: { customSolution: "Vlastní řešení", noPreview: "Náhled připravujeme" },
+  sk: { customSolution: "Vlastné riešenie", noPreview: "Náhľad pripravujeme" },
+  de: { customSolution: "Eigene Lösung", noPreview: "Vorschau in Vorbereitung" },
 }
 
 /**
@@ -1489,9 +1492,9 @@ export const provedeniLabels: Record<Lang, Record<string, { vcetne: string; svep
 }
 
 export const stepDilceMotivContent = {
-  cs: { title1Pre: "Chcete ", title1Accent: "plotové dílce", title1Post: "?", desc1: "Vyplňte rozměry dílců, pokud je chcete objednat spolu s bránou.", decline: "Nechci plotové dílce", productTitle: "Plotové dílce", dimensionLabels: { vyska: "Výška dílců (mm)", delka: "Délka dílců (mm)", pocet: "Počet dílců (ks)" }, title2Pre: "Zvolte ", title2Accent: "motiv oplocení", title2Post: "", desc2: "Motiv určuje tvar výplně plotových dílců.", title3Pre: "Chcete ", title3Accent: "vypálení plochy", title3Post: "?", desc3: "Laserem vypálený vzor do plné plochy dílce. Podívejte se na náhledy realizací.", vypaleniLabel: "Chci vypálení plochy" },
-  sk: { title1Pre: "Chcete ", title1Accent: "plotové dielce", title1Post: "?", desc1: "Vyplňte rozmery dielcov, ak ich chcete objednať spolu s bránou.", decline: "Nechcem plotové dielce", productTitle: "Plotové dielce", dimensionLabels: { vyska: "Výška dielcov (mm)", delka: "Dĺžka dielcov (mm)", pocet: "Počet dielcov (ks)" }, title2Pre: "Zvoľte ", title2Accent: "motív oplotenia", title2Post: "", desc2: "Motív určuje tvar výplne plotových dielcov.", title3Pre: "Chcete ", title3Accent: "vypálenie plochy", title3Post: "?", desc3: "Laserom vypálený vzor do plnej plochy dielca. Pozrite sa na náhľady realizácií.", vypaleniLabel: "Chcem vypálenie plochy" },
-  de: { title1Pre: "Möchten Sie ", title1Accent: "Zaunelemente", title1Post: "?", desc1: "Geben Sie die Maße der Elemente an, wenn Sie sie zusammen mit dem Tor bestellen möchten.", decline: "Ich möchte keine Zaunelemente", productTitle: "Zaunelemente", dimensionLabels: { vyska: "Höhe der Elemente (mm)", delka: "Länge der Elemente (mm)", pocet: "Anzahl Elemente (Stk.)" }, title2Pre: "Wählen Sie das ", title2Accent: "Zaunmotiv", title2Post: "", desc2: "Das Motiv bestimmt die Form der Füllung der Zaunelemente.", title3Pre: "Möchten Sie einen ", title3Accent: "Flächenausschnitt", title3Post: "?", desc3: "Per Laser in die volle Fläche des Elements geschnittenes Muster. Sehen Sie sich die Vorschauen an.", vypaleniLabel: "Ich möchte einen Flächenausschnitt" },
+  cs: { title1Pre: "Chcete ", title1Accent: "plotové dílce", title1Post: "?", desc1: "Vyplňte rozměry dílců, pokud je chcete objednat spolu s bránou.", decline: "Nechci plotové dílce", productTitle: "Plotové dílce", dimensionLabels: { vyska: "Výška dílců (mm)", delka: "Délka dílců (mm)", pocet: "Počet dílců (ks)" }, title2Pre: "Zvolte ", title2Accent: "motiv oplocení", title2Post: "", desc2: "Motiv určuje tvar výplně plotových dílců." },
+  sk: { title1Pre: "Chcete ", title1Accent: "plotové dielce", title1Post: "?", desc1: "Vyplňte rozmery dielcov, ak ich chcete objednať spolu s bránou.", decline: "Nechcem plotové dielce", productTitle: "Plotové dielce", dimensionLabels: { vyska: "Výška dielcov (mm)", delka: "Dĺžka dielcov (mm)", pocet: "Počet dielcov (ks)" }, title2Pre: "Zvoľte ", title2Accent: "motív oplotenia", title2Post: "", desc2: "Motív určuje tvar výplne plotových dielcov." },
+  de: { title1Pre: "Möchten Sie ", title1Accent: "Zaunelemente", title1Post: "?", desc1: "Geben Sie die Maße der Elemente an, wenn Sie sie zusammen mit dem Tor bestellen möchten.", decline: "Ich möchte keine Zaunelemente", productTitle: "Zaunelemente", dimensionLabels: { vyska: "Höhe der Elemente (mm)", delka: "Länge der Elemente (mm)", pocet: "Anzahl Elemente (Stk.)" }, title2Pre: "Wählen Sie das ", title2Accent: "Zaunmotiv", title2Post: "", desc2: "Das Motiv bestimmt die Form der Füllung der Zaunelemente." },
 }
 
 export const stepBarvaContent = {
@@ -1714,6 +1717,13 @@ export const stineniLabels: Record<Lang, Record<string, string>> = {
   cs: { "žádné": "Žádné", rolety: "Screenové rolety", pevne: "Pevné", zaskleni: "Zasklení" },
   sk: { "žádné": "Žiadne", rolety: "Screenové rolety", pevne: "Pevné", zaskleni: "Zasklenie" },
   de: { "žádné": "Keine", rolety: "Screen-Rollos", pevne: "Fest", zaskleni: "Verglasung" },
+}
+
+/** Strany pergoly k zastínění. Klíče `a`–`d` odpovídají polím v `pergolaSchema`. */
+export const stranyLabels: Record<Lang, Record<string, string>> = {
+  cs: { a: "Přední (vchodové)", b: "Zadní", c: "Levé", d: "Pravé" },
+  sk: { a: "Predné (vchodové)", b: "Zadné", c: "Ľavé", d: "Pravé" },
+  de: { a: "Vorne (Eingangsseite)", b: "Hinten", c: "Links", d: "Rechts" },
 }
 
 export const strechaMaterialLabels: Record<Lang, Record<string, string>> = {

@@ -171,7 +171,11 @@ export const dilceMaterialImage: Record<string, string> = {
   "vlastni": "/modely/dilce/hlinikove.webp",
 }
 
-export const motivy = [
+/**
+ * Motivy výplně — sdílí je plotové dílce i hliníkové zábradlí. `imgSrc: null`
+ * znamená, že k motivu zatím nemáme model (mřížka pak vykreslí placeholder).
+ */
+export const motivy: { src: string; motiv: string; imgSrc: string | null }[] = [
   { src: "o-standart", motiv: "Okenice standard", imgSrc: "standart" },
   { src: "kapka", motiv: "Okenice kapka", imgSrc: "kapka" },
   { src: "kapka-mini", motiv: "Okenice kapka mini", imgSrc: "kapka-mini" },
@@ -181,7 +185,11 @@ export const motivy = [
   { src: "planka-150", motiv: "Plaňka 150", imgSrc: "p150" },
   { src: "tycka", motiv: "Tyčka", imgSrc: "tycka" },
   { src: "tahokov", motiv: "Tahokov", imgSrc: "tahokov" },
+  { src: "vypaleni", motiv: "Vypálení plochy", imgSrc: null },
 ]
+
+/** Cesta k modelu motivu, nebo `null` u motivů bez fotky. */
+export const motivImage = (m: (typeof motivy)[number]) => (m.imgSrc ? `/modely/motivy/${m.imgSrc}.webp` : null)
 
 export const barvyOplocení = [
   { code: "#b5beb9", color: "Šedá" },
@@ -209,4 +217,4 @@ export const zabradliSkloOptions = [
   { code: "#383E42", color: "Antracit" },
 ]
 
-export const konfSteps = ["Brána", "Branka", "Sloupky", "Dílce a motiv", "Barva", "Kontakt"] as const
+export const konfSteps = ["Brána", "Branka", "Sloupky", "Dílce a motiv", "Barva a zábradlí", "Kontakt"] as const

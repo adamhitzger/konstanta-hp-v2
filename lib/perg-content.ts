@@ -27,11 +27,15 @@ export const stineniOptions = [
   { value: "zaskleni", label: "Zasklení", image: "/modely/pergoly/zaskleni.webp", onlyNonZimniZahrada: true },
 ]
 
+/**
+ * Strany pergoly, které lze zastínit. Klíče `a`–`d` zůstávají — drží je `pergolaSchema`
+ * i e-mail s obrázkem, kde jsou strany popsané písmeny; mění se jen popisek pro uživatele.
+ */
 export const stranyOptions = [
-  { name: "a" as const, label: "A" },
-  { name: "b" as const, label: "B" },
-  { name: "c" as const, label: "C" },
-  { name: "d" as const, label: "D" },
+  { name: "a" as const, label: "Přední (vchodové)" },
+  { name: "b" as const, label: "Zadní" },
+  { name: "c" as const, label: "Levé" },
+  { name: "d" as const, label: "Pravé" },
 ]
 
 export const strechaMaterialOptions = [
