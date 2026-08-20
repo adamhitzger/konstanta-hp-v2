@@ -8,7 +8,7 @@ import { ProductSection } from "./product-section"
 import { brankaExtrasLabels, stepBrankaContent, type Lang } from "@/lib/translations"
 import { StepTitle } from "./step-title"
 
-export function StepBranka({ onNext, photos, info = {}, lang = "cs" }: { onNext: () => void; photos: ConfPhotosWithMotiv; info?: ConfProductInfo; lang?: Lang }) {
+export function StepBranka({ onNext, onBack, photos, info = {}, lang = "cs" }: { onNext: () => void; onBack?: () => void; photos: ConfPhotosWithMotiv; info?: ConfProductInfo; lang?: Lang }) {
   const { watch, setValue } = useFormContext<ConfiguratorType>()
   const branka = watch("branka")
   const t = stepBrankaContent[lang] ?? stepBrankaContent.cs
@@ -49,6 +49,7 @@ export function StepBranka({ onNext, photos, info = {}, lang = "cs" }: { onNext:
         extraToggles={brankaExtras}
         dimensionLabels={t.dimensionLabels}
         onNext={onNext}
+        onBack={onBack}
         lang={lang}
       />
     </div>

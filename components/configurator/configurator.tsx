@@ -210,7 +210,7 @@ export function Configurator({
                 )}
                 {step === 1 && (
                   <Slide key="branka" direction={direction}>
-                    <StepBranka onNext={goNext} photos={photos} info={info} lang={lang} />
+                    <StepBranka onNext={goNext} onBack={goBack} photos={photos} info={info} lang={lang} />
                   </Slide>
                 )}
                 {step === 2 && (

@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { Check, MoveRight, ThumbsUp } from "lucide-react"
+import { Check, MoveLeft, MoveRight, ThumbsUp } from "lucide-react"
 import toast from "react-hot-toast"
 import { useFormContext, type Path } from "react-hook-form"
 import type { ConfiguratorType } from "@/lib/schemas"
@@ -43,6 +43,7 @@ export function ProductSection({
   dimensionLabels,
   onFirstEnable,
   onNext,
+  onBack,
   lang = "cs",
 }: {
   title: string
@@ -61,6 +62,8 @@ export function ProductSection({
   onFirstEnable?: () => void
   /** Posun na další krok konfigurátoru. Když chybí, tlačítko „Pokračovat“ se nevykreslí. */
   onNext?: () => void
+  /** Návrat o krok zpět. Když chybí (první krok konfigurátoru), tlačítko „Zpět“ se nevykreslí. */
+  onBack?: () => void
   lang?: Lang
 }) {
   const { register, watch, setValue, getValues } = useFormContext<ConfiguratorType>()
@@ -68,7 +71,8 @@ export function ProductSection({
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const gt = photoGalleryContent[lang] ?? photoGalleryContent.cs
   const st = productSelectContent[lang] ?? productSelectContent.cs
-  const dims = dimensionLabels ?? (konfContent[lang] ?? konfContent.cs).dimensionLabels
+  const kt = konfContent[lang] ?? konfContent.cs
+  const dims = dimensionLabels ?? kt.dimensionLabels
 
   const photos = galleryPhotos?.filter((p) => p.url) ?? []
   const selected = count > 0
@@ -217,15 +221,25 @@ export function ProductSection({
             ) : null}
           </div>
 
-          {/* Zkratka na další krok přímo z karty — spodní lišta formuláře je u delších
+          {/* Zkratka na sousední kroky přímo z karty — spodní lišta formuláře je u delších
               kroků (víc typů bran pod sebou) mimo obrazovku a uživatel po vyplnění
               rozměrů nemá kam kliknout. `onNext` si i tady projde validací kroku
               v konfigurátoru, takže chybějící volbu jinde na kroku vytkne toastem. */}
-          {onNext ? (
-            <Button type="button" size="lg" className="self-end" onClick={onNext}>
-              {st.continueStep}
-              <MoveRight />
-            </Button>
+          {onBack || onNext ? (
+            <div className="flex flex-wrap items-center justify-end gap-3">
+              {onBack ? (
+                <Button type="button" size="lg" variant="outline" onClick={onBack}>
+                  <MoveLeft />
+                  {kt.back}
+                </Button>
+              ) : null}
+              {onNext ? (
+                <Button type="button" size="lg" onClick={onNext}>
+                  {st.continueStep}
+                  <MoveRight />
+                </Button>
+              ) : null}
+            </div>
           ) : null}
         </div>
       ) : null}
