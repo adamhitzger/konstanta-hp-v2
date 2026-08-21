@@ -80,6 +80,23 @@ export function PanelMotifIcon(props: IconProps) {
   )
 }
 
+/** Zábradlí — madlo na sloupcích s výplní (čelní pohled). */
+export function RailingIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      {/* madlo */}
+      <path d="M3 6.5h18" />
+      {/* krajní sloupky */}
+      <path d="M5 6.5v13M19 6.5v13" />
+      {/* výplň */}
+      <path d="M5 10.5h14" />
+      <path d="M9.7 6.5v13M14.3 6.5v13" />
+      {/* podlaha */}
+      <path d="M3 19.5h18" />
+    </svg>
+  )
+}
+
 /** Barva — kapka barvy. */
 export function PaintIcon(props: IconProps) {
   return (

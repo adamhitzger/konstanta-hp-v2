@@ -10,7 +10,14 @@ import { Label } from "@/components/ui/label"
 import { colorLabels, stepBarvaContent, type Lang } from "@/lib/translations"
 import { StepTitle } from "./step-title"
 
-export function PergStepBarva({ lang = "cs" }: { lang?: Lang }) {
+export function PergStepBarva({
+  onNext,
+  lang = "cs",
+}: {
+  /** Kliknutí na hotový vzorník posune na další krok; vlastní RAL kód ne — ten se teprve dopisuje. */
+  onNext?: () => void
+  lang?: Lang
+}) {
   const { watch, setValue } = useFormContext<PergolaConfType>()
   const barva = watch("barva")
   const [ralCode, setRalCode] = useState("")
@@ -27,7 +34,14 @@ export function PergStepBarva({ lang = "cs" }: { lang?: Lang }) {
         <p className="mt-1 text-muted-foreground">{t.desc}</p>
       </div>
 
-      <ColorSwatchGroup value={isCustom ? "" : (barva ?? "")} onChange={(v) => setValue("barva", v)} colors={colors} />
+      <ColorSwatchGroup
+        value={isCustom ? "" : (barva ?? "")}
+        onChange={(v) => {
+          setValue("barva", v)
+          onNext?.()
+        }}
+        colors={colors}
+      />
 
       <div className="flex max-w-xs flex-col gap-1.5">
         <Label htmlFor="perg-ral">{t.ralLabel}</Label>

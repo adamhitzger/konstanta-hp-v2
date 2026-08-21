@@ -1,30 +1,27 @@
 "use client"
 
-import { useRef, useState, useTransition } from "react"
+import { useRef, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AnimatePresence } from "framer-motion"
-import { Loader2, MoveRight, MoveLeft } from "lucide-react"
+import { MoveRight, MoveLeft } from "lucide-react"
 import toast from "react-hot-toast"
-import { sendGTMEvent } from "@next/third-parties/google"
-import { pergolaSchema, type PergolaConfType, type PergolaFormInput } from "@/lib/schemas"
-import { sendPergConf } from "@/lib/actions"
+import { zabradliSchema, type ZabradliConfType } from "@/lib/schemas"
 import type { ConfPhotosWithMotiv, ConfProductInfo } from "@/types"
 import { Button } from "@/components/ui/button"
 import { KonfProgress } from "./konf-progress"
 import { KonfSuccess } from "./konf-success"
-import { PergolaTypeIcon, MountIcon, PaintIcon, ContactIcon } from "./konf-icons"
+import { RailingIcon, PanelMotifIcon, ContactIcon } from "./konf-icons"
 import { Slide } from "./slide"
-import { PergStepTyp } from "./perg-step-typ"
-import { PergStepUpevneni } from "./perg-step-upevneni"
-import { PergStepBarva } from "./perg-step-barva"
-import { PergStepKontakt } from "./perg-step-kontakt"
-import { pergContent, type Lang } from "@/lib/translations"
+import { ZabStepZabradli } from "./zab-step-zabradli"
+import { ZabStepMotiv } from "./zab-step-motiv"
+import { StepKontakt } from "./step-kontakt"
+import { zabradliConfContent, type Lang } from "@/lib/translations"
 
-const LAST_STEP = pergContent.cs.steps.length - 1
+const LAST_STEP = zabradliConfContent.cs.steps.length - 1
 
-// Pořadí musí odpovídat `pergContent.<lang>.steps` (Typ a stínění, Upevnění, Barva, Kontakt).
-const stepIcons = [PergolaTypeIcon, MountIcon, PaintIcon, ContactIcon]
+// Pořadí musí odpovídat `zabradliConfContent.<lang>.steps` (Zábradlí, Motiv, Kontakt).
+const stepIcons = [RailingIcon, PanelMotifIcon, ContactIcon]
 
 const emptyPhotos: ConfPhotosWithMotiv = {
   jednokridla: [],
@@ -44,7 +41,27 @@ const emptyPhotos: ConfPhotosWithMotiv = {
   zahrada: [],
 }
 
-export function PergolaConfigurator({
+type SizeRow = { vyska?: number; delka?: number; pocet?: number }
+
+/** U zábradlí musí mít *každá* sada rozměrů vyplněnou výšku, šířku i počet — viz `configurator.tsx`. */
+const hasCompleteSizes = (count: number, rows: unknown): boolean => {
+  if (!(count > 0)) return true
+  const list = Array.isArray(rows) ? (rows as SizeRow[]) : []
+  for (let i = 0; i < count; i++) {
+    const row = list[i]
+    if (!row) return false
+    if (!(Number(row.vyska) > 0) || !(Number(row.delka) > 0) || !(Number(row.pocet) > 0)) return false
+  }
+  return true
+}
+
+/**
+ * Konfigurátor zábradlí — samostatná poptávka o třech krocích (zábradlí, motiv, kontakt).
+ *
+ * Zatím bez server action a bez e-mailu: `onValid` data jen vypíše do konzole,
+ * odesílání se dodělá, až budou ceny a react-email šablona.
+ */
+export function ZabradliConfigurator({
   photos = emptyPhotos,
   info = {},
   lang = "cs",
@@ -53,21 +70,16 @@ export function PergolaConfigurator({
   info?: ConfProductInfo
   lang?: Lang
 }) {
-  const t = pergContent[lang] ?? pergContent.cs
+  const t = zabradliConfContent[lang] ?? zabradliConfContent.cs
   const [step, setStep] = useState(0)
   const [direction, setDirection] = useState(1)
   const [sent, setSent] = useState(false)
-  const [isPending, startTransition] = useTransition()
   const topRef = useRef<HTMLDivElement>(null)
 
-  // `useForm`'s 3 generics (input/context/output) are needed here because `rozmeryObjekt`
-  // in `pergolaSchema` uses z.preprocess — its parsed output type differs from the raw
-  // field values react-hook-form holds before validation runs.
-  const methods = useForm<PergolaFormInput, unknown, PergolaConfType>({
-    resolver: zodResolver(pergolaSchema),
+  const methods = useForm<ZabradliConfType>({
+    resolver: zodResolver(zabradliSchema),
     shouldUnregister: false,
     mode: "all",
-    defaultValues: { a: false, b: false, c: false, d: false },
   })
   const { handleSubmit, reset, getValues } = methods
 
@@ -79,20 +91,16 @@ export function PergolaConfigurator({
     const values = getValues()
     switch (currentStep) {
       case 0: {
-        if (!values.pergola) return t.validation.pergola
-        if (values.pergola === "pristresek") {
-          if (!values.material) return t.validation.material
-        } else if (!values.stineni) {
-          return t.validation.stineni
-        }
+        const count = Number(values.celkemZabradli ?? 0)
+        if (!(count > 0)) return t.validation.zabradli
+        if (!hasCompleteSizes(count, values.rozmeryZabradli)) return t.validation.rozmery
+        if (!values.zabradliMaterial) return t.validation.material
+        if (!values.barva) return t.validation.barva
         return null
       }
       case 1: {
-        if (!values.stojici && !values.keStene && !values.kRohu) return t.validation.upevneni
-        return null
-      }
-      case 2: {
-        if (!values.barva) return t.validation.barva
+        if (values.zabradliMaterial === "sklo" && !values.zabradliSklo) return t.validation.sklo
+        if (values.zabradliMaterial === "hliník" && !values.zabradliMotiv) return t.validation.motiv
         return null
       }
       default:
@@ -117,22 +125,12 @@ export function PergolaConfigurator({
     scrollToTop()
   }
 
-  const onValid = (data: PergolaConfType) => {
-    startTransition(async () => {
-      const res = await sendPergConf(data)
-      if (!res.success) {
-        toast.error(res.message)
-        return
-      }
-      toast.success(res.message)
-      sendGTMEvent({
-        event: "generate_lead",
-        form_type: "poptávka",
-        inquired_product: "pergoly",
-      })
-      setSent(true)
-      scrollToTop()
-    })
+  // TODO: až budou ceny, nahradit server action + react-email šablonou (jako `sendConf`).
+  const onValid = (data: ZabradliConfType) => {
+    console.log(data)
+    toast.success(t.submitPlaceholder)
+    setSent(true)
+    scrollToTop()
   }
 
   /** Návrat z potvrzení na prázdný formulář — „Odeslat další poptávku". */
@@ -145,7 +143,10 @@ export function PergolaConfigurator({
   }
 
   const onInvalid = (errors: Record<string, { message?: string } | undefined>) => {
-    if (errors.barva) toast.error(t.validation.invalidBarva)
+    if (errors.barva) toast.error(t.validation.barva)
+    if (errors.zabradliMaterial) toast.error(t.validation.material)
+    if (errors.zabradliSklo) toast.error(t.validation.sklo)
+    if (errors.zabradliMotiv) toast.error(t.validation.motiv)
     if (errors.fullname || errors.email || errors.phoneNumber || errors.zip || errors.address || errors.obec) {
       toast.error(t.validation.invalidContact)
     }
@@ -153,14 +154,14 @@ export function PergolaConfigurator({
 
   if (sent) {
     return (
-      <section id="pergkonf" ref={topRef} className="mx-auto max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
+      <section id="zabkonf" ref={topRef} className="mx-auto max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
         <KonfSuccess lang={lang} onReset={startOver} />
       </section>
     )
   }
 
   return (
-    <section id="pergkonf" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <section id="zabkonf" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="mb-10 flex flex-col items-center gap-3 text-center">
         <h1 className="font-heading text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">{t.heading}</h1>
         <p className="max-w-2xl text-lg text-muted-foreground text-pretty">{t.subheading}</p>
@@ -175,23 +176,18 @@ export function PergolaConfigurator({
             <div className="relative overflow-hidden py-8">
               <AnimatePresence mode="wait" custom={direction} initial={false}>
                 {step === 0 && (
-                  <Slide key="typ" direction={direction}>
-                    <PergStepTyp photos={photos} info={info} lang={lang} />
+                  <Slide key="zabradli" direction={direction}>
+                    <ZabStepZabradli photos={photos} info={info} onNext={goNext} lang={lang} />
                   </Slide>
                 )}
                 {step === 1 && (
-                  <Slide key="upevneni" direction={direction}>
-                    <PergStepUpevneni onNext={goNext} lang={lang} />
+                  <Slide key="motiv" direction={direction}>
+                    <ZabStepMotiv onNext={goNext} lang={lang} />
                   </Slide>
                 )}
                 {step === 2 && (
-                  <Slide key="barva" direction={direction}>
-                    <PergStepBarva onNext={goNext} lang={lang} />
-                  </Slide>
-                )}
-                {step === 3 && (
                   <Slide key="kontakt" direction={direction}>
-                    <PergStepKontakt lang={lang} />
+                    <StepKontakt lang={lang} />
                   </Slide>
                 )}
               </AnimatePresence>
@@ -204,8 +200,9 @@ export function PergolaConfigurator({
                   <MoveRight />
                 </Button>
               ) : (
-                <Button type="submit" disabled={isPending}>
-                  {isPending ? <Loader2 className="animate-spin" /> : <>{t.sendText}<MoveRight /></>}
+                <Button type="submit">
+                  {t.sendText}
+                  <MoveRight />
                 </Button>
               )}
               {step > 0 ? (

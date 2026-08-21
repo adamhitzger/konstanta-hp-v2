@@ -992,30 +992,33 @@ export const konfPickerContent = {
   cs: {
     eyebrow: "Konfigurátor zdarma",
     heading: "Co si nakonfigurujeme?",
-    subtitle: "Vyberte si oplocení nebo pergolu — projdete pár kroků a na konci vám pošleme nezávaznou kalkulaci.",
+    subtitle: "Vyberte si oplocení, pergolu nebo zábradlí — projdete pár kroků a na konci vám pošleme nezávaznou kalkulaci.",
     cards: [
       { title: "Oplocení", description: "Brána, branka, sloupky, dílce a motiv na míru vašemu pozemku." },
       { title: "Pergoly", description: "Bioklimatická pergola, zimní zahrada nebo přístřešek se stíněním." },
+      { title: "Zábradlí", description: "Skleněné nebo hliníkové zábradlí k terase, balkonu i schodišti." },
     ],
     cta: "Spustit konfigurátor",
   },
   sk: {
     eyebrow: "Konfigurátor zadarmo",
     heading: "Čo si nakonfigurujeme?",
-    subtitle: "Vyberte si oplotenie alebo pergolu — prejdete pár krokmi a na konci vám pošleme nezáväznú kalkuláciu.",
+    subtitle: "Vyberte si oplotenie, pergolu alebo zábradlie — prejdete pár krokmi a na konci vám pošleme nezáväznú kalkuláciu.",
     cards: [
       { title: "Oplotenie", description: "Brána, bránka, stĺpiky, dielce a motív na mieru vášmu pozemku." },
       { title: "Pergoly", description: "Bioklimatická pergola, zimná záhrada alebo prístrešok so tienením." },
+      { title: "Zábradlie", description: "Sklenené alebo hliníkové zábradlie k terase, balkónu aj schodisku." },
     ],
     cta: "Spustiť konfigurátor",
   },
   de: {
     eyebrow: "Kostenloser Konfigurator",
     heading: "Was möchten Sie konfigurieren?",
-    subtitle: "Wählen Sie Zaun oder Pergola — durchlaufen Sie ein paar Schritte, und am Ende senden wir Ihnen eine unverbindliche Kalkulation.",
+    subtitle: "Wählen Sie Zaun, Pergola oder Geländer — durchlaufen Sie ein paar Schritte, und am Ende senden wir Ihnen eine unverbindliche Kalkulation.",
     cards: [
       { title: "Zaun", description: "Tor, Tür, Pfosten, Elemente und Motiv nach Maß für Ihr Grundstück." },
       { title: "Pergolen", description: "Bioklimatische Pergola, Wintergarten oder überdachter Unterstand mit Beschattung." },
+      { title: "Geländer", description: "Glas- oder Aluminiumgeländer für Terrasse, Balkon und Treppe." },
     ],
     cta: "Konfigurator starten",
   },
@@ -1033,7 +1036,7 @@ export const konfContent = {
     back: "Zpět",
     sendText: "Odeslat poptávku",
     dimensionLabels: { vyska: "Výška (mm)", delka: "Šířka průjezdu (mm)", pocet: "Počet (ks)" },
-    steps: ["Brána", "Branka", "Sloupky", "Dílce a motiv", "Zábradlí a barva", "Kontakt"],
+    steps: ["Brána", "Branka", "Sloupky", "Dílce a motiv", "Barva", "Kontakt"],
     validation: {
       brana: "Zvolte typ brány, nebo zaškrtněte, že vjezdovou bránu nechcete.",
       branka: "Zvolte, zda chcete v plotu branku, nebo zaškrtněte, že ji nechcete.",
@@ -1056,7 +1059,7 @@ export const konfContent = {
     back: "Späť",
     sendText: "Odoslať dopyt",
     dimensionLabels: { vyska: "Výška (mm)", delka: "Šírka prejazdu (mm)", pocet: "Počet (ks)" },
-    steps: ["Brána", "Bránka", "Stĺpiky", "Dielce a motív", "Zábradlie a farba", "Kontakt"],
+    steps: ["Brána", "Bránka", "Stĺpiky", "Dielce a motív", "Farba", "Kontakt"],
     validation: {
       brana: "Zvoľte typ brány, alebo zaškrtnite, že vjazdovú bránu nechcete.",
       branka: "Zvoľte, či chcete v plote bránku, alebo zaškrtnite, že ju nechcete.",
@@ -1078,7 +1081,7 @@ export const konfContent = {
     back: "Zurück",
     sendText: "Anfrage senden",
     dimensionLabels: { vyska: "Höhe (mm)", delka: "Durchfahrtsbreite (mm)", pocet: "Anzahl (Stk.)" },
-    steps: ["Tor", "Tür", "Pfosten", "Elemente und Motiv", "Geländer und Farbe", "Kontakt"],
+    steps: ["Tor", "Tür", "Pfosten", "Elemente und Motiv", "Farbe", "Kontakt"],
     validation: {
       brana: "Wählen Sie einen Tortyp oder markieren Sie, dass Sie kein Einfahrtstor möchten.",
       branka: "Wählen Sie, ob Sie eine Tür im Zaun möchten, oder markieren Sie, dass Sie keine möchten.",
@@ -1217,6 +1220,7 @@ export const motivLabels: Record<Lang, Record<string, string>> = {
     "planka-150": "Plaňka 150",
     tycka: "Tyčka",
     tahokov: "Tahokov",
+    "lamela-105": "Lamela 105",
     vypaleni: "Vypálení plochy",
     "vlastní kombinace": "Vlastní kombinace",
     drevodekor: "Dřevodekor",
@@ -1231,6 +1235,7 @@ export const motivLabels: Record<Lang, Record<string, string>> = {
     "planka-150": "Latka 150",
     tycka: "Tyčka",
     tahokov: "Ťahokov",
+    "lamela-105": "Lamela 105",
     vypaleni: "Vypálenie plochy",
     "vlastní kombinace": "Vlastná kombinácia",
     drevodekor: "Drevodekor",
@@ -1245,6 +1250,7 @@ export const motivLabels: Record<Lang, Record<string, string>> = {
     "planka-150": "Lamelle 150",
     tycka: "Stab",
     tahokov: "Streckmetall",
+    "lamela-105": "Jalousielamelle 105",
     vypaleni: "Flächenausschnitt",
     "vlastní kombinace": "Eigene Kombination",
     drevodekor: "Holzdekor",
@@ -1524,40 +1530,31 @@ export const stepBarvaContent = {
   },
 }
 
-/** Zábradlí — samostatný blok nad výběrem barvy na kroku „Barva“. */
+/** Zábradlí — produktová část 1. kroku konfigurátoru zábradlí (/konf/zabradli). */
 export const stepZabradliContent = {
   cs: {
     titlePre: "Chcete ",
     titleAccent: "zábradlí",
     titlePost: "?",
-    desc: "Skleněné nebo hliníkové zábradlí k terase či schodišti, ve stejné barvě jako oplocení.",
     productTitle: "Zábradlí",
     dimensionLabels: { vyska: "Výška zábradlí (mm)", delka: "Šířka zábradlí (mm)", pocet: "Počet (ks)" },
     materialLabel: "Výplň zábradlí",
-    skloLabel: "Odstín skla",
-    motivLabel: "Motiv výplně",
   },
   sk: {
     titlePre: "Chcete ",
     titleAccent: "zábradlie",
     titlePost: "?",
-    desc: "Sklenené alebo hliníkové zábradlie k terase či schodisku, v rovnakej farbe ako oplotenie.",
     productTitle: "Zábradlie",
     dimensionLabels: { vyska: "Výška zábradlia (mm)", delka: "Šírka zábradlia (mm)", pocet: "Počet (ks)" },
     materialLabel: "Výplň zábradlia",
-    skloLabel: "Odtieň skla",
-    motivLabel: "Motív výplne",
   },
   de: {
     titlePre: "Möchten Sie ein ",
     titleAccent: "Geländer",
     titlePost: "?",
-    desc: "Glas- oder Aluminiumgeländer für Terrasse oder Treppe, in derselben Farbe wie der Zaun.",
     productTitle: "Geländer",
     dimensionLabels: { vyska: "Höhe des Geländers (mm)", delka: "Breite des Geländers (mm)", pocet: "Anzahl (Stk.)" },
     materialLabel: "Geländerfüllung",
-    skloLabel: "Glaston",
-    motivLabel: "Motiv der Füllung",
   },
 }
 
@@ -1571,6 +1568,150 @@ export const zabradliSkloLabels: Record<Lang, Record<string, string>> = {
   cs: { "Čiré": "Čiré", "Matné": "Matné", Antracit: "Antracit" },
   sk: { "Čiré": "Číre", "Matné": "Matné", Antracit: "Antracit" },
   de: { "Čiré": "Klar", "Matné": "Satiniert", Antracit: "Anthrazit" },
+}
+
+/**
+ * Potvrzení po úspěšném odeslání — sdílí ho všechny tři konfigurátory.
+ * Záměrně bez rozpisu dalších kroků („poptávka přijata → zpracování → …"):
+ * poptávky nikde neukládáme, takže bychom stav nemohli nijak posouvat.
+ */
+export const konfSuccessContent = {
+  cs: {
+    eyebrow: "Máme to",
+    heading: "Poptávka byla úspěšně odeslána",
+    desc: "Vaše poptávka dorazila našim specialistům. Projdou si zadání a ozvou se vám na uvedený e-mail nebo telefon — zpravidla do dvou pracovních dnů.",
+    note: "Kopii poptávky jsme vám poslali na e-mail. Kdyby vás mezitím něco napadlo, stačí odpovědět na něj, nebo nám zavolat.",
+    home: "Zpět na hlavní stránku",
+    again: "Odeslat další poptávku",
+  },
+  sk: {
+    eyebrow: "Máme to",
+    heading: "Dopyt bol úspešne odoslaný",
+    desc: "Váš dopyt dorazil našim špecialistom. Prejdú si zadanie a ozvú sa vám na uvedený e-mail alebo telefón — spravidla do dvoch pracovných dní.",
+    note: "Kópiu dopytu sme vám poslali na e-mail. Ak vás medzitým niečo napadne, stačí naň odpovedať, alebo nám zavolať.",
+    home: "Späť na hlavnú stránku",
+    again: "Odoslať ďalší dopyt",
+  },
+  de: {
+    eyebrow: "Angekommen",
+    heading: "Die Anfrage wurde erfolgreich gesendet",
+    desc: "Ihre Anfrage ist bei unseren Spezialisten eingegangen. Sie sehen sich Ihre Angaben an und melden sich per E-Mail oder Telefon — in der Regel innerhalb von zwei Werktagen.",
+    note: "Eine Kopie der Anfrage haben wir Ihnen per E-Mail geschickt. Falls Ihnen noch etwas einfällt, antworten Sie einfach darauf oder rufen Sie uns an.",
+    home: "Zurück zur Startseite",
+    again: "Weitere Anfrage senden",
+  },
+}
+
+// ---------------------------------------------------------------------------
+// KONFIGURÁTOR ZÁBRADLÍ (/konf/zabradli) — samostatná poptávka o třech krocích.
+// Popisky produktu (název, rozměry, výplň) sdílí se `stepZabradliContent` výše,
+// tady je jen to, co je specifické pro samostatnou stránku.
+// ---------------------------------------------------------------------------
+
+export const zabradliConfContent = {
+  cs: {
+    heading: "Nakonfigurujte si zábradlí",
+    subheading: "Skleněné nebo hliníkové zábradlí k terase, balkonu i schodišti. Projděte tři kroky a na konci vám pošleme nezávaznou kalkulaci.",
+    next: "Další krok",
+    back: "Zpět",
+    sendText: "Odeslat poptávku",
+    steps: ["Zábradlí", "Motiv", "Kontakt"],
+    /** Dokud není hotová server action, odeslání jen vypíše data do konzole. */
+    submitPlaceholder: "Konfigurace zatím jen do konzole — odesílání se teprve dodělává.",
+    stepDesc: "Vyplňte rozměry zábradlí, vyberte výplň a barvu rámu.",
+    barvaTitlePre: "Jakou si přejete ",
+    barvaTitleAccent: "barvu rámu",
+    barvaTitlePost: "?",
+    motivTitlePre: "Zvolte ",
+    motivTitleAccent: "motiv výplně",
+    motivTitlePost: "",
+    motivDesc: "Motiv určuje tvar hliníkové výplně zábradlí.",
+    skloTitlePre: "Zvolte ",
+    skloTitleAccent: "odstín skla",
+    skloTitlePost: "",
+    skloDesc: "Odstín výplně skleněného zábradlí.",
+    materialTitlePre: "Chybí ",
+    materialTitleAccent: "výplň zábradlí",
+    materialTitlePost: "",
+    materialHint: "Nejdřív si na předchozím kroku vyberte výplň zábradlí — sklo, nebo hliník.",
+    validation: {
+      zabradli: "Vyberte zábradlí a vyplňte jeho rozměry.",
+      rozmery: "Vyplňte prosím u zábradlí všechny rozměry.",
+      material: "Vyberte výplň zábradlí — sklo, nebo hliník.",
+      barva: "Vyberte barvu zábradlí.",
+      sklo: "Vyberte odstín skla.",
+      motiv: "Vyberte motiv výplně zábradlí.",
+      invalidContact: "Zkontrolujte prosím kontaktní údaje",
+    },
+  },
+  sk: {
+    heading: "Nakonfigurujte si zábradlie",
+    subheading: "Sklenené alebo hliníkové zábradlie k terase, balkónu aj schodisku. Prejdite tri kroky a na konci vám pošleme nezáväznú kalkuláciu.",
+    next: "Ďalší krok",
+    back: "Späť",
+    sendText: "Odoslať dopyt",
+    steps: ["Zábradlie", "Motív", "Kontakt"],
+    submitPlaceholder: "Konfigurácia zatiaľ len do konzoly — odosielanie sa ešte dorába.",
+    stepDesc: "Vyplňte rozmery zábradlia, vyberte výplň a farbu rámu.",
+    barvaTitlePre: "Akú ",
+    barvaTitleAccent: "farbu rámu",
+    barvaTitlePost: " si želáte?",
+    motivTitlePre: "Zvoľte ",
+    motivTitleAccent: "motív výplne",
+    motivTitlePost: "",
+    motivDesc: "Motív určuje tvar hliníkovej výplne zábradlia.",
+    skloTitlePre: "Zvoľte ",
+    skloTitleAccent: "odtieň skla",
+    skloTitlePost: "",
+    skloDesc: "Odtieň výplne skleneného zábradlia.",
+    materialTitlePre: "Chýba ",
+    materialTitleAccent: "výplň zábradlia",
+    materialTitlePost: "",
+    materialHint: "Najprv si na predchádzajúcom kroku vyberte výplň zábradlia — sklo, alebo hliník.",
+    validation: {
+      zabradli: "Vyberte zábradlie a vyplňte jeho rozmery.",
+      rozmery: "Vyplňte, prosím, pri zábradlí všetky rozmery.",
+      material: "Vyberte výplň zábradlia — sklo, alebo hliník.",
+      barva: "Vyberte farbu zábradlia.",
+      sklo: "Vyberte odtieň skla.",
+      motiv: "Vyberte motív výplne zábradlia.",
+      invalidContact: "Skontrolujte, prosím, kontaktné údaje",
+    },
+  },
+  de: {
+    heading: "Konfigurieren Sie Ihr Geländer",
+    subheading: "Glas- oder Aluminiumgeländer für Terrasse, Balkon und Treppe. Durchlaufen Sie drei Schritte, und am Ende senden wir Ihnen eine unverbindliche Kalkulation.",
+    next: "Nächster Schritt",
+    back: "Zurück",
+    sendText: "Anfrage senden",
+    steps: ["Geländer", "Motiv", "Kontakt"],
+    submitPlaceholder: "Konfiguration vorerst nur in der Konsole — der Versand wird noch fertiggestellt.",
+    stepDesc: "Geben Sie die Maße des Geländers an und wählen Sie Füllung und Rahmenfarbe.",
+    barvaTitlePre: "Welche ",
+    barvaTitleAccent: "Rahmenfarbe",
+    barvaTitlePost: " wünschen Sie?",
+    motivTitlePre: "Wählen Sie das ",
+    motivTitleAccent: "Motiv der Füllung",
+    motivTitlePost: "",
+    motivDesc: "Das Motiv bestimmt die Form der Aluminiumfüllung des Geländers.",
+    skloTitlePre: "Wählen Sie den ",
+    skloTitleAccent: "Glaston",
+    skloTitlePost: "",
+    skloDesc: "Der Ton der Füllung des Glasgeländers.",
+    materialTitlePre: "Es fehlt die ",
+    materialTitleAccent: "Geländerfüllung",
+    materialTitlePost: "",
+    materialHint: "Wählen Sie zuerst im vorherigen Schritt die Geländerfüllung — Glas oder Aluminium.",
+    validation: {
+      zabradli: "Wählen Sie das Geländer und geben Sie seine Maße an.",
+      rozmery: "Bitte füllen Sie alle Maße des Geländers aus.",
+      material: "Wählen Sie die Geländerfüllung — Glas oder Aluminium.",
+      barva: "Wählen Sie die Farbe des Geländers.",
+      sklo: "Wählen Sie den Glaston.",
+      motiv: "Wählen Sie das Motiv der Geländerfüllung.",
+      invalidContact: "Bitte überprüfen Sie Ihre Kontaktdaten",
+    },
+  },
 }
 
 // Sdílený obsah kontaktního kroku pro OBA konfigurátory (step-kontakt.tsx i perg-step-kontakt.tsx)

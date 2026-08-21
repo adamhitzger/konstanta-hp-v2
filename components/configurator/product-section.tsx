@@ -5,7 +5,7 @@ import Image from "next/image"
 import { Check, MoveLeft, MoveRight, ThumbsUp } from "lucide-react"
 import toast from "react-hot-toast"
 import { useFormContext, type Path } from "react-hook-form"
-import type { ConfiguratorType } from "@/lib/schemas"
+import type { ConfiguratorType, ZabradliConfType } from "@/lib/schemas"
 import type { ConfPhotoItem, ProductInfo } from "@/types"
 import { konfContent, photoGalleryContent, productSelectContent, type Lang } from "@/lib/translations"
 import { cn } from "@/lib/utils"
@@ -17,6 +17,15 @@ import { PhotoLightbox, PhotoThumbs } from "./photo-lightbox"
 import { ProductInfoLink } from "./product-info-dialog"
 
 export type ExtraToggle = { name: string; label: string }
+
+/**
+ * Název pole produktu. Konfigurátor oplocení i konfigurátor zábradlí drží produkty
+ * ve stejném tvaru (bool + count + pole rozměrů), jen v jiném schématu — proto
+ * bereme klíče z obou. Uvnitř se pracuje s `Path<ConfiguratorType>`, react-hook-form
+ * je za běhu stejně netypovaný a formulářový kontext přijde z toho konfigurátoru,
+ * ve kterém je karta vykreslená.
+ */
+export type ProductField = keyof ConfiguratorType | keyof ZabradliConfType
 
 const numberFieldOptions = { setValueAs: (v: unknown) => (v === "" ? undefined : Number(v)) }
 
@@ -53,9 +62,9 @@ export function ProductSection({
   galleryPhotos?: ConfPhotoItem[]
   /** Lokalizovaný popis + fotky pro popup „Podrobnější informace“ pod názvem. */
   info?: ProductInfo
-  enabledField: keyof ConfiguratorType
-  countField: keyof ConfiguratorType
-  arrayField: keyof ConfiguratorType
+  enabledField: ProductField
+  countField: ProductField
+  arrayField: ProductField
   extraToggles?: ExtraToggle[]
   /** Nevyplněné popisky se vezmou z `konfContent.<lang>.dimensionLabels`. */
   dimensionLabels?: { vyska: string; delka: string; pocet: string }

@@ -13,6 +13,7 @@ import { sendConf } from "@/lib/actions"
 import type { ConfPhotosWithMotiv, ConfProductInfo } from "@/types"
 import { Button } from "@/components/ui/button"
 import { KonfProgress } from "./konf-progress"
+import { KonfSuccess } from "./konf-success"
 import { GateIcon, WicketIcon, PostsIcon, PanelMotifIcon, PaintIcon, ContactIcon } from "./konf-icons"
 import { Slide } from "./slide"
 import { StepBrana } from "./step-brana"
@@ -77,6 +78,7 @@ export function Configurator({
   const t = konfContent[lang] ?? konfContent.cs
   const [step, setStep] = useState(0)
   const [direction, setDirection] = useState(1)
+  const [sent, setSent] = useState(false)
   const [isPending, startTransition] = useTransition()
   const topRef = useRef<HTMLDivElement>(null)
 
@@ -173,9 +175,18 @@ export function Configurator({
         form_type: "kalkulace",
         inquired_product: "oplocení",
       })
-      setStep(0)
-      reset()
+      setSent(true)
+      scrollToTop()
     })
+  }
+
+  /** Návrat z potvrzení na prázdný formulář — „Odeslat další poptávku". */
+  const startOver = () => {
+    reset()
+    setStep(0)
+    setDirection(1)
+    setSent(false)
+    scrollToTop()
   }
 
   const onInvalid = (errors: Record<string, { message?: string } | undefined>) => {
@@ -185,6 +196,14 @@ export function Configurator({
     if (errors.fullname || errors.email || errors.phoneNumber || errors.zip || errors.address || errors.obec) {
       toast.error(t.validation.invalidContact)
     }
+  }
+
+  if (sent) {
+    return (
+      <section id="konf" ref={topRef} className="mx-auto max-w-8xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
+        <KonfSuccess lang={lang} onReset={startOver} />
+      </section>
+    )
   }
 
   return (
@@ -220,12 +239,12 @@ export function Configurator({
                 )}
                 {step === 3 && (
                   <Slide key="dilce" direction={direction}>
-                    <StepDilceMotiv photos={photos} info={info} lang={lang} />
+                    <StepDilceMotiv photos={photos} info={info} onNext={goNext} lang={lang} />
                   </Slide>
                 )}
                 {step === 4 && (
                   <Slide key="barva" direction={direction}>
-                    <StepBarva photos={photos} info={info} onBack={goBack} lang={lang} />
+                    <StepBarva onNext={goNext} lang={lang} />
                   </Slide>
                 )}
                 {step === 5 && (

@@ -9,7 +9,18 @@ import { ProductSection } from "./product-section"
 import { formControlsContent, motivLabels, stepDilceMotivContent, type Lang } from "@/lib/translations"
 import { StepTitle } from "./step-title"
 
-export function StepDilceMotiv({ photos, info = {}, lang = "cs" }: { photos: ConfPhotosWithMotiv; info?: ConfProductInfo; lang?: Lang }) {
+export function StepDilceMotiv({
+  photos,
+  info = {},
+  onNext,
+  lang = "cs",
+}: {
+  photos: ConfPhotosWithMotiv
+  info?: ConfProductInfo
+  /** Výběr motivu je poslední volba kroku — po kliknutí rovnou posuneme dál. */
+  onNext?: () => void
+  lang?: Lang
+}) {
   const { watch, setValue } = useFormContext<ConfiguratorType>()
   const motiv = watch("motiv")
   const typSloupku = watch("typSloupku")
@@ -58,7 +69,15 @@ export function StepDilceMotiv({ photos, info = {}, lang = "cs" }: { photos: Con
       <div>
         <StepTitle pre={t.title2Pre} accent={t.title2Accent} post={t.title2Post} />
         <p className="mt-1 mb-4 text-muted-foreground">{t.desc2}</p>
-        <ImageRadioGrid value={motiv ?? ""} onChange={(v) => setValue("motiv", v)} options={motivOptions} lang={lang} />
+        <ImageRadioGrid
+          value={motiv ?? ""}
+          onChange={(v) => {
+            setValue("motiv", v)
+            onNext?.()
+          }}
+          options={motivOptions}
+          lang={lang}
+        />
       </div>
     </div>
   )

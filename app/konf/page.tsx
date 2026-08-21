@@ -13,8 +13,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/konf" },
 }
 
-const pickerHrefs = ["/konf/oploceni", "/konf/pergoly"]
-const pickerImages = ["/gallery-ploty-wide.png", "/gallery-pergola-wide.png"]
+const pickerHrefs = ["/konf/oploceni", "/konf/pergoly", "/konf/zabradli"]
+// TODO: zábradlí jede zatím na fotce plotů — až bude fotka realizace zábradlí, vyměnit.
+const pickerImages = ["/gallery-ploty-wide.png", "/gallery-pergola-wide.png", "/gallery-ploty-wide.png"]
 
 export default async function KonfPickerPage({
   searchParams,
@@ -44,7 +45,7 @@ export default async function KonfPickerPage({
               </p>
             </div>
 
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {pickerCards.map((card) => (
                 <Link
                   key={card.href}
@@ -55,7 +56,7 @@ export default async function KonfPickerPage({
                     src={card.image}
                     alt={card.title}
                     fill
-                    sizes="(max-width: 640px) 100vw, 50vw"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />

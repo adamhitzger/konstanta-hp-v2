@@ -213,9 +213,10 @@ export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
   return (
     <header className="sticky top-0 z-50 w-full border-b-2 border-brand bg-background">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 xl:px-8">
-        {/* Logo */}
+        {/* Logo — kotva vlevo. Výška se vejde do `h-20` hlavičky, jinak by logo bylo
+            tak široké, že by na velkých obrazovkách doléhalo na seznam stránek. */}
         <Link href={withLang("/", lang)} className="flex shrink-0 items-center" aria-label="Konstanta HP">
-          <Image src="/logo-konstanta.svg" alt="Konstanta HP" width={300} height={104} priority className="h-12 md:h-24 w-auto" />
+          <Image src="/logo-konstanta.svg" alt="Konstanta HP" width={300} height={104} priority className="h-12 w-auto xl:h-14" />
         </Link>
 
         {/* ---- Desktop nav ---- */}

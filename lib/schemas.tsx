@@ -160,19 +160,8 @@ export const confSchema = z.object({
     heightD: z.number().optional(),
     motiv: z.string(),
     barva: z.string(),
-    // Zábradlí (krok Barva). Stejná trojice polí jako u bran/branek, aby šlo použít
-    // `ProductSection`. Výplň je buď sklo (odstín v `zabradliSklo`), nebo hliník
-    // se stejnou nabídkou motivů jako plotové dílce (`zabradliMotiv`).
-    zabradli: z.boolean().optional(),
-    celkemZabradli: z.number().optional(),
-    rozmeryZabradli: z.object({
-        delka: z.number().optional(),
-        vyska: z.number().optional(),
-        pocet: z.number().optional(),
-    }).array().optional(),
-    zabradliMaterial: z.string().optional(),
-    zabradliSklo: z.string().optional(),
-    zabradliMotiv: z.string().optional(),
+    // Zábradlí má vlastní konfigurátor (`zabradliSchema` níž, /konf/zabradli) —
+    // v oplocení už se nekonfiguruje.
     fullname: z.string()
         .min(6, {message: "Krátké jméno"})
         .max(40, {message: "Jméno je moc dlouhé"}),
@@ -193,7 +182,65 @@ export const confSchema = z.object({
 
 });
 
+/**
+ * Konfigurátor zábradlí (/konf/zabradli) — samostatná poptávka, ne doplněk oplocení.
+ * Pole se schválně jmenují stejně jako v `confSchema`, aby na kroky šly beze změny
+ * použít `ProductSection` i `StepKontakt` (oba jsou typované na `ConfiguratorType`).
+ *
+ * Výplň je buď sklo (odstín v `zabradliSklo`), nebo hliník s motivem (`zabradliMotiv`) —
+ * povinné je vždy jen to pole, které odpovídá zvolenému materiálu, proto `.check()`.
+ */
+export const zabradliSchema = z.object({
+    zabradli: z.boolean().optional(),
+    celkemZabradli: z.number().optional(),
+    rozmeryZabradli: z.object({
+        delka: z.number().optional(),
+        vyska: z.number().optional(),
+        pocet: z.number().optional(),
+    }).array().optional(),
+    zabradliMaterial: z.string().min(1, {message: "Vyberte výplň zábradlí"}),
+    zabradliSklo: z.string().optional(),
+    zabradliMotiv: z.string().optional(),
+    barva: z.string().min(1, {message: "Vyberte barvu zábradlí"}),
+    fullname: z.string()
+        .min(6, {message: "Krátké jméno"})
+        .max(40, {message: "Jméno je moc dlouhé"}),
+    email: z.string().email({message: "Nesprávný formát e-mailu"}),
+    company: z.string().optional(),
+    phoneNumber: z.string().regex(phoneRegex, {
+        message: "Nesprávný formát tel. čísla",
+    }),
+    zip: z.string().regex(pscRegex, {
+        message: "Zadali jste PSČ v nesprávném formátu"
+    }).min(5,{message: "PSČ je povinné"}),
+    address: z.string().min(1,{message: "Adresa je povinná"}),
+    obec: z.string().min(1, {message:"Obec je povinná"}),
+    message: z.string().optional(),
+    file: z
+        .any()
+        .optional(),
+}).check((ctx) => {
+    const { zabradliMaterial, zabradliSklo, zabradliMotiv } = ctx.value
+    if (zabradliMaterial === "sklo" && !zabradliSklo) {
+        ctx.issues.push({
+            code: "custom",
+            message: "Vyberte odstín skla",
+            path: ["zabradliSklo"],
+            input: ctx.value,
+        })
+    }
+    if (zabradliMaterial === "hliník" && !zabradliMotiv) {
+        ctx.issues.push({
+            code: "custom",
+            message: "Vyberte motiv výplně",
+            path: ["zabradliMotiv"],
+            input: ctx.value,
+        })
+    }
+})
+
 export type ConfiguratorType = z.infer<typeof confSchema>
+export type ZabradliConfType = z.infer<typeof zabradliSchema>
 export type PergolaConfType = z.infer<typeof pergolaSchema>
 // `rozmeryObjekt` uses z.preprocess, so its parsed (output) shape differs from what
 // react-hook-form holds before validation runs — useForm needs the input shape too.

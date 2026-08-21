@@ -185,6 +185,8 @@ export const motivy: { src: string; motiv: string; imgSrc: string | null }[] = [
   { src: "planka-150", motiv: "Plaňka 150", imgSrc: "p150" },
   { src: "tycka", motiv: "Tyčka", imgSrc: "tycka" },
   { src: "tahokov", motiv: "Tahokov", imgSrc: "tahokov" },
+  // Šikmá (žaluziová) lamela z profilu RP-51038, krycí výška 105,5 mm.
+  { src: "lamela-105", motiv: "Lamela 105", imgSrc: "lamela-105" },
   { src: "vypaleni", motiv: "Vypálení plochy", imgSrc: null },
 ]
 
@@ -207,7 +209,8 @@ export const barvyOplocení = [
 export const zabradliImage = "/modely/dilce/hlinikove.webp"
 
 export const zabradliMaterialOptions = [
-  { value: "sklo", label: "Sklo", image: null },
+  // Model skla sdílíme se zasklením přístřešku v konfigurátoru pergol.
+  { value: "sklo", label: "Sklo", image: "/modely/pergoly/sklo.webp" },
   { value: "hliník", label: "Hliník", image: zabradliImage },
 ] as const
 
@@ -217,4 +220,4 @@ export const zabradliSkloOptions = [
   { code: "#383E42", color: "Antracit" },
 ]
 
-export const konfSteps = ["Brána", "Branka", "Sloupky", "Dílce a motiv", "Barva a zábradlí", "Kontakt"] as const
+export const konfSteps = ["Brána", "Branka", "Sloupky", "Dílce a motiv", "Barva", "Kontakt"] as const
