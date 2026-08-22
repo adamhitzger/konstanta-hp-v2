@@ -95,7 +95,6 @@ export function ZabradliConfigurator({
         if (!(count > 0)) return t.validation.zabradli
         if (!hasCompleteSizes(count, values.rozmeryZabradli)) return t.validation.rozmery
         if (!values.zabradliMaterial) return t.validation.material
-        if (!values.barva) return t.validation.barva
         return null
       }
       case 1: {
@@ -143,7 +142,6 @@ export function ZabradliConfigurator({
   }
 
   const onInvalid = (errors: Record<string, { message?: string } | undefined>) => {
-    if (errors.barva) toast.error(t.validation.barva)
     if (errors.zabradliMaterial) toast.error(t.validation.material)
     if (errors.zabradliSklo) toast.error(t.validation.sklo)
     if (errors.zabradliMotiv) toast.error(t.validation.motiv)
@@ -177,7 +175,7 @@ export function ZabradliConfigurator({
               <AnimatePresence mode="wait" custom={direction} initial={false}>
                 {step === 0 && (
                   <Slide key="zabradli" direction={direction}>
-                    <ZabStepZabradli photos={photos} info={info} onNext={goNext} lang={lang} />
+                    <ZabStepZabradli photos={photos} info={info} lang={lang} />
                   </Slide>
                 )}
                 {step === 1 && (

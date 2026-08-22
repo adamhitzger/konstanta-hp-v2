@@ -1021,8 +1021,8 @@ export async function sendContact(
         const data = validatedData.data;
         const sendMail = await transporter.sendMail({
           from: process.env.FROM_EMAIL,
-          //to: "nabidky@konstantahp.cz",
-          to: "adam.hitzger@icloud.com",
+          to: "nabidky@konstantahp.cz",
+          //to: "adam.hitzger@icloud.com",
           subject: "Nový kontakt",
           text: `Celé jméno: ${data.name}, Email: ${data.email}, Tel. číslo: ${data.tel}, Firma: ${data.company}, Zpráva: ${data.msg}`,
         });

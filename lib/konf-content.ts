@@ -186,7 +186,7 @@ export const motivy: { src: string; motiv: string; imgSrc: string | null }[] = [
   { src: "tycka", motiv: "Tyčka", imgSrc: "tycka" },
   { src: "tahokov", motiv: "Tahokov", imgSrc: "tahokov" },
   // Šikmá (žaluziová) lamela z profilu RP-51038, krycí výška 105,5 mm.
-  { src: "lamela-105", motiv: "Lamela 105", imgSrc: "lamela-105" },
+  { src: "lamela-105", motiv: "Lamela Z", imgSrc: "lamela-105" },
   { src: "vypaleni", motiv: "Vypálení plochy", imgSrc: null },
 ]
 

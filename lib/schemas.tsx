@@ -201,7 +201,6 @@ export const zabradliSchema = z.object({
     zabradliMaterial: z.string().min(1, {message: "Vyberte výplň zábradlí"}),
     zabradliSklo: z.string().optional(),
     zabradliMotiv: z.string().optional(),
-    barva: z.string().min(1, {message: "Vyberte barvu zábradlí"}),
     fullname: z.string()
         .min(6, {message: "Krátké jméno"})
         .max(40, {message: "Jméno je moc dlouhé"}),
