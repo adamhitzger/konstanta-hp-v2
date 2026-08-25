@@ -21,6 +21,9 @@ export function StepBrana({ onNext, photos, info = {}, lang = "cs" }: { onNext: 
     { name: "tahoma", label: extrasT.tahoma },
     { name: "ovladac", label: extrasT.ovladac },
   ]
+  // Výztužná tyč se nabízí jen u křídlových bran — u posuvných a teleskopických
+  // se křídlo nevyztužuje, viz `kridlova` v `gateProducts`.
+  const reinforcementExtra = { name: "tyc", label: extrasT.tyc }
 
   return (
     <div className="flex flex-col gap-6">
@@ -52,7 +55,7 @@ export function StepBrana({ onNext, photos, info = {}, lang = "cs" }: { onNext: 
             enabledField={gate.enabledField}
             countField={gate.countField}
             arrayField={gate.arrayField}
-            extraToggles={gateExtras}
+            extraToggles={gate.kridlova ? [...gateExtras, reinforcementExtra] : gateExtras}
             dimensionLabels={dimensionLabels}
             onFirstEnable={() => setValue("brana", false)}
             onNext={onNext}

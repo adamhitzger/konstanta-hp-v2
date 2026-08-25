@@ -119,7 +119,7 @@ export function PergolaConfigurator({
 
   const onValid = (data: PergolaConfType) => {
     startTransition(async () => {
-      const res = await sendPergConf(data)
+      const res = await sendPergConf(data, lang)
       if (!res.success) {
         toast.error(res.message)
         return

@@ -164,7 +164,7 @@ export function Configurator({
 
   const onValid = (data: ConfiguratorType) => {
     startTransition(async () => {
-      const res = await sendConf(data)
+      const res = await sendConf(data, lang)
       if (!res.success) {
         toast.error(res.message)
         return

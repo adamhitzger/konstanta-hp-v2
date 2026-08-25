@@ -12,11 +12,17 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { InlineCheckbox } from "./form-controls"
+import { InlineCheckbox, InlineRadio } from "./form-controls"
 import { PhotoLightbox, PhotoThumbs } from "./photo-lightbox"
 import { ProductInfoLink } from "./product-info-dialog"
 
 export type ExtraToggle = { name: string; label: string }
+
+/**
+ * Skupina vzájemně se vylučujících doplňků jedné sady rozměrů (kování branky).
+ * `name` je pole v rozměrovém objektu, do kterého se uloží `value` vybrané volby.
+ */
+export type ExtraRadioGroup = { name: string; title: string; options: { value: string; label: string }[] }
 
 /**
  * Název pole produktu. Konfigurátor oplocení i konfigurátor zábradlí drží produkty
@@ -49,6 +55,7 @@ export function ProductSection({
   countField,
   arrayField,
   extraToggles,
+  extraRadios,
   dimensionLabels,
   onFirstEnable,
   onNext,
@@ -66,6 +73,8 @@ export function ProductSection({
   countField: ProductField
   arrayField: ProductField
   extraToggles?: ExtraToggle[]
+  /** Doplňky typu „vyber právě jeden“ — vykreslí se pod checkboxy jako radio skupiny. */
+  extraRadios?: ExtraRadioGroup[]
   /** Nevyplněné popisky se vezmou z `konfContent.<lang>.dimensionLabels`. */
   dimensionLabels?: { vyska: string; delka: string; pocet: string }
   onFirstEnable?: () => void
@@ -207,6 +216,25 @@ export function ProductSection({
                     ))}
                   </div>
                 ) : null}
+                {extraRadios?.map((group) => (
+                  /* Radio skupina má vlastní řádek s nadpisem — bez něj by volby splynuly
+                     s checkboxy nad nimi a nebylo by poznat, že jde vybrat jen jednu. */
+                  <div key={group.name} className="col-span-2 flex flex-col gap-2 sm:col-span-3">
+                    <span className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                      {group.title}
+                    </span>
+                    <div className="flex flex-wrap gap-x-5 gap-y-2">
+                      {group.options.map((opt) => (
+                        <InlineRadio
+                          key={opt.value}
+                          label={opt.label}
+                          value={opt.value}
+                          {...register(`${String(arrayField)}.${i}.${group.name}` as Path<ConfiguratorType>)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           ))}

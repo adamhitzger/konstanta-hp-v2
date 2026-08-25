@@ -18,28 +18,43 @@ import os from 'os';
 import  fs  from 'fs';
 import { ConfPhotos } from "@/types";
 import { CONF_IMGS_QUERY, PERG_IMGS_QUERY } from "@/sanity/lib/queries";
-import { getLang } from "@/lib/translations";
+import {
+  type Lang,
+  colorLabels,
+  gateLabels,
+  getLang,
+  localeTags,
+  motivLabels,
+  povrchLabels,
+  quoteContent,
+  quoteItemsContent,
+  sloupkyLabels,
+} from "@/lib/translations";
 
-// Zprávy vracené `sendContact` uživateli (toast) — lokalizované podle skrytého
-// pole `lang` z kontaktního formuláře (components/contact.tsx).
+// Zprávy vracené uživateli (toast) — lokalizované podle jazyka formuláře:
+// u kontaktu podle skrytého pole `lang` (components/contact.tsx), u konfigurátorů
+// podle argumentu `langValue` v `sendConf` / `sendPergConf`.
 const contactActionMessages = {
   cs: {
     invalid: "Některá pole jste nevyplnili dobře",
     mailFailed: "Nepodařilo se odeslat e-mail. Zkuste to znovu",
     success: "Děkujeme za záslání! Co nevidět se Vám ozveme.",
     failed: "Nepovedlo se odeslat Vaše údaje",
+    calcFailed: "Nepodařilo se vytvořit soubor s kalkulací.",
   },
   sk: {
     invalid: "Niektoré polia ste nevyplnili správne",
     mailFailed: "Nepodarilo sa odoslať e-mail. Skúste to znova",
     success: "Ďakujeme za odoslanie! Čoskoro sa vám ozveme.",
     failed: "Nepodarilo sa odoslať vaše údaje",
+    calcFailed: "Nepodarilo sa vytvoriť súbor s kalkuláciou.",
   },
   de: {
     invalid: "Einige Felder wurden nicht korrekt ausgefüllt",
     mailFailed: "Die E-Mail konnte nicht gesendet werden. Versuchen Sie es erneut",
     success: "Vielen Dank für Ihre Nachricht! Wir melden uns in Kürze bei Ihnen.",
     failed: "Ihre Daten konnten nicht gesendet werden",
+    calcFailed: "Die Kalkulationsdatei konnte nicht erstellt werden.",
   },
 } as const
 
@@ -143,14 +158,27 @@ function tableHrRow(): string {
     </tr>
   `;
 }
-function buildProductRows( item: string, mnozstvi: number | string,cena: number, dph: number, cenaSDph: number): string {
+
+/**
+ * Formátování částek podle jazyka příjemce. Měna zůstává CZK — ceník se
+ * nepřepočítává, mění se jen oddělovač tisíců a zkratka měny.
+ */
+type Money = (value: number) => string;
+
+function moneyFormatter(lang: Lang): Money {
+  const locale = localeTags[lang] ?? localeTags.cs;
+  const { currency } = quoteItemsContent[lang] ?? quoteItemsContent.cs;
+  return (value: number) => `${Number(value.toFixed(0)).toLocaleString(locale)} ${currency}`;
+}
+
+function buildProductRows(money: Money, item: string, mnozstvi: number | string,cena: number, dph: number, cenaSDph: number): string {
     return`
       <tr>
         <td style="border:1px solid #ddd;">${item}</td>
         <td style="border:1px solid #ddd;">${mnozstvi} </td>
-        <td style="border:1px solid #ddd;">${Number((cena).toFixed(0)).toLocaleString("cs-CZ")} Kč</td>
-        <td style="border:1px solid #ddd;">${Number((dph).toFixed(0)).toLocaleString("cs-CZ")} Kč</td>
-        <td style="border:1px solid #ddd;">${Number((cenaSDph).toFixed(0)).toLocaleString("cs-CZ")} Kč</td>
+        <td style="border:1px solid #ddd;">${money(cena)}</td>
+        <td style="border:1px solid #ddd;">${money(dph)}</td>
+        <td style="border:1px solid #ddd;">${money(cenaSDph)}</td>
       </tr>
     `;
   ;
@@ -165,6 +193,19 @@ function buildProductRowsString( item: string, mnozstvi: string): string {
   ;
 }
 
+/**
+ * Sestaví HTML cenové nabídky pro `generatePdf` (Puppeteer → A4 PDF).
+ *
+ * Stránkování si dokument řídí sám: obsah je v `#src` jako seznam bloků a skript
+ * na konci `<body>` je přesype do pevně vysokých „archů“ (`.sheet`), z nichž každý
+ * má vlastní záhlaví i zápatí. Tabulka položek se přitom láme po skupinách řádků
+ * (brána + její příplatky drží pohromadě) a na každém archu dostane znovu hlavičku.
+ * Proto se nikde nepoužívá `page-break-inside` ani Puppeteer header/footerTemplate —
+ * odkazy v zápatí by v templatu nebyly proklikatelné a nešlo by je obarvit.
+ *
+ * Vše, co skript měří, má pevnou výšku (fotky, logo), takže se layout nemění podle
+ * toho, jestli se obrázky stihly načíst dřív než se skript rozběhne.
+ */
 function htmlToPdf(
   userName: string,
   userEmail: string,
@@ -176,307 +217,687 @@ function htmlToPdf(
   photo3: string,
   productRows: string,
   sazbaDph: number,
-  company?: string
+  /** Poznámka zákazníka z konfigurátoru (`data.message`) — vykreslí se jako vlastní blok. */
+  poznamka?: string,
+  firma?: string,
+  /** Jazyk nabídky — texty i formát data/čísel jdou podle něj. */
+  lang: Lang = "cs"
 ): string {
 
-const year = new Date().getFullYear();
+  const q = quoteContent[lang] ?? quoteContent.cs;
+  const locale = localeTags[lang] ?? localeTags.cs;
+  /**
+   * Podle čeho `hydrate()` pozná souhrnný řádek tabulky. `createXlsx` ho skládá
+   * z `quoteItemsContent.<lang>.celkem`, takže marker musí jít ze stejného zdroje.
+   */
+  const totalMarker = (quoteItemsContent[lang] ?? quoteItemsContent.cs).celkem
+    .replace(":", "")
+    .trim()
+    .toLowerCase();
 
-return `
-<!DOCTYPE html>
-<html lang="cs">
+  const esc = (v?: string) =>
+    String(v ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
+
+  const now = new Date();
+  const dat = (d: Date) => d.toLocaleDateString(locale, { day: "numeric", month: "numeric", year: "numeric" });
+  const pad = (n: number) => String(n).padStart(2, "0");
+  // Číslo nabídky: datum + čas vygenerování. Stačí na rozlišení nabídek, nepotřebuje
+  // čítač v databázi.
+  const cisloNabidky = `CN-${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}`;
+  const platnostDo = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+
+  const photos = [photo1, photo2, photo3].filter(Boolean);
+
+  // Ikony sítí — stejné cesty jako `components/social-icons.tsx`, aby PDF a web
+  // ukazovaly stejný tvar. Čtverec drží barvu sítě, glyf je bílý.
+  const socials = [
+    {
+      href: "https://www.facebook.com/Konstantahp.cz",
+      label: "Facebook",
+      color: "#1877F2",
+      path: `<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>`,
+    },
+    {
+      href: "https://www.instagram.com/konstantaploty/",
+      label: "Instagram",
+      color: "#E4405F",
+      path: `<rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>`,
+    },
+    {
+      href: "https://www.youtube.com/@KONSTANTAHP",
+      label: "YouTube",
+      color: "#FF0000",
+      path: `<path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/>`,
+    },
+  ];
+
+  const socialHtml = socials
+    .map(
+      (s) => `<a class="soc" href="${s.href}" title="${s.label}" style="background:${s.color}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${s.path}</svg>
+      </a>`,
+    )
+    .join("");
+
+  return `<!DOCTYPE html>
+<html lang="${lang}">
 <head>
 <meta charset="UTF-8"/>
-
+<title>${q.docTitle} ${cisloNabidky}</title>
 <style>
+  /* Arch si velikost stránky řídí sám (generatePdf jede s preferCSSPageSize). */
+  @page { size: A4; margin: 0; }
 
-body{
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial;
-background:#f4f6f8;
-margin:0;
-padding:20px;
-color:#1a1a1a;
-}
+  *, *::before, *::after { box-sizing: border-box; }
 
-.container{
-max-width:900px;
-margin:auto;
-background:white;
-padding:40px;
-border-radius:10px;
-box-shadow:0 2px 8px rgba(0,0,0,0.08);
-}
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    color: #111;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 9.5pt;
+    line-height: 1.5;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 
-.header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:40px;
-}
+  a { color: #ec5500; text-decoration: none; }
 
-.logo{
-height:70px;
-}
+  /* ---------- arch ---------- */
+  /* 296.8mm místo plných 297mm: arch přesně na výšku stránky by Chromu občas
+     vyrobil prázdnou stránku navíc. */
+  .sheet {
+    position: relative;
+    width: 210mm;
+    height: 296.8mm;
+    overflow: hidden;
+    break-after: page;
+    page-break-after: always;
+  }
+  .sheet.last { break-after: auto; page-break-after: auto; }
 
-.title{
-font-size:32px;
-font-weight:700;
-}
+  /* Záhlaví je vyšší kvůli většímu logu — součet head+body+foot musí zůstat 296.8mm. */
+  .sheet-head { height: 32mm; padding: 9mm 14mm 0; }
+  .sheet-body { height: 248.8mm; padding: 6mm 14mm 0; overflow: hidden; }
+  .sheet-foot { height: 16mm; }
 
-.section{
-margin-top:40px;
-}
+  /* ---------- záhlaví ---------- */
+  .head { display: flex; align-items: center; justify-content: space-between; }
+  .head img { height: 20mm; width: auto; }
+  .head-right { text-align: right; }
+  .head-title {
+    font-size: 15pt;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+  .head-meta { margin-top: 1.5mm; font-size: 7.5pt; color: #6b6b6b; letter-spacing: .02em; }
+  .head-meta b { color: #111; font-weight: 600; }
+  /* Dělicí linka pod hlavičkou — oranžový náběh je jediný barevný prvek nahoře. */
+  .rule { display: flex; margin-top: 4mm; height: 1.2mm; }
+  .rule i { display: block; width: 18mm; background: #ec5500; }
+  .rule u { display: block; flex: 1; background: #111; }
 
-.images{
-page-break-inside:avoid;
-}
+  /* ---------- zápatí ---------- */
+  .foot {
+    height: 16mm;
+    background: #111;
+    color: #cfcfcf;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14mm;
+    font-size: 7pt;
+    letter-spacing: .02em;
+  }
+  .foot b { color: #fff; font-weight: 600; }
+  .foot a { color: #cfcfcf; }
+  .foot-left { display: flex; flex-direction: column; gap: .8mm; }
+  .foot-right { display: flex; align-items: center; gap: 2.4mm; }
+  .soc {
+    width: 5mm;
+    height: 5mm;
+    border-radius: .8mm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .soc svg { width: 3.2mm; height: 3.2mm; display: block; }
+  .pageno {
+    margin-left: 2mm;
+    padding-left: 2.6mm;
+    border-left: .3mm solid #3a3a3a;
+    color: #ec5500;
+    font-weight: 700;
+    font-size: 7.5pt;
+    white-space: nowrap;
+  }
 
-.section h2{
-font-size:20px;
-margin-bottom:10px;
-border-bottom:2px solid #eee;
-padding-bottom:6px;
-}
+  /* ---------- bloky obsahu ---------- */
+  #src { display: none; }
+  .block { margin: 0 0 6mm; }
+  .block:last-child { margin-bottom: 0; }
 
-.customer{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:40px;
-font-size:16px;
-line-height:1.6;
-margin-top:10px;
-}
+  h2 {
+    margin: 0 0 2.5mm;
+    font-size: 9.5pt;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    padding-left: 2.5mm;
+    border-left: 1mm solid #ec5500;
+    line-height: 1.3;
+  }
 
-.customer h3{
-margin:0 0 10px 0;
-font-size:18px;
-}
+  /* meta pruh (číslo nabídky, data) */
+  .meta { display: flex; gap: 3mm; }
+  .meta div {
+    flex: 1;
+    border: .3mm solid #e2e2e2;
+    border-top: 1mm solid #ec5500;
+    padding: 2mm 3mm;
+  }
+  .meta span { display: block; font-size: 6.8pt; text-transform: uppercase; letter-spacing: .08em; color: #7a7a7a; }
+  .meta strong { display: block; font-size: 10pt; font-weight: 700; margin-top: .6mm; }
 
-.images{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:16px;
-margin-top:20px;
-}
+  /* dodavatel / odběratel */
+  .parties { display: flex; gap: 5mm; }
+  .party { flex: 1; border: .3mm solid #e2e2e2; }
+  .party-h {
+    background: #111;
+    color: #fff;
+    font-size: 7pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    padding: 1.6mm 3mm;
+    border-left: 1mm solid #ec5500;
+  }
+  .party-b { padding: 3mm; font-size: 8.5pt; line-height: 1.65; }
+  .party-b .nm { font-size: 10pt; font-weight: 700; display: block; margin-bottom: 1mm; }
+  .party-b .k { display: inline-block; min-width: 17mm; color: #7a7a7a; }
 
-.images img{
-width:100%;
-height:220px;
-object-fit:cover;
-border-radius:8px;
-border:1px solid #ddd;
-}
+  /* fotky konfigurace — pevná výška, aby měření stránkování nezáviselo na načtení */
+  .photos { display: flex; gap: 3mm; }
+  .photos figure { flex: 1; margin: 0; }
+  .photos img {
+    display: block;
+    width: 100%;
+    height: 38mm;
+    object-fit: cover;
+    border: .3mm solid #e2e2e2;
+  }
 
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:20px;
-}
+  /* ---------- tabulka položek ---------- */
+  /* Světle šedý vnější rámeček — jen aby byl obrys tabulky vidět; spolu se
+     souhrnem pod ní tvoří jeden ohraničený blok. */
+  table.items { width: 100%; border-collapse: collapse; table-layout: fixed; border: .4mm solid #c4c4c4; }
+  table.items th {
+    background: #111;
+    color: #fff;
+    font-size: 7pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    text-align: left;
+    padding: 2mm 2.5mm;
+    border: 0 !important;
+  }
+  table.items th:first-child { border-left: 1mm solid #ec5500 !important; }
+  table.items th + th { text-align: right; }
+  table.items td {
+    padding: 1.8mm 2.5mm !important;
+    border: 0 !important;
+    border-bottom: .25mm solid #ededed !important;
+    font-size: 8pt;
+    vertical-align: top;
+    /* Popisy položek chodí s "\\n" mezi názvem a rozměrem — ať se zalomí. */
+    white-space: pre-line;
+    word-break: break-word;
+  }
+  table.items td + td { text-align: right; white-space: nowrap; }
+  table.items tbody tr:nth-child(even) td { background: #fafafa; }
+  table.items col.c-item { width: 43%; }
+  table.items col.c-qty { width: 10%; }
+  table.items col.c-num { width: 15.66%; }
+  /* Oddělovač mezi produkty (tableHrRow) — jemná oranžová linka místo prázdné buňky. */
+  table.items tr.sep td {
+    padding: 0 !important;
+    height: 1mm;
+    background: #fff !important;
+    border-bottom: .5mm solid #ec5500 !important;
+  }
+  /* Souhrnný řádek (Celkem) — běžný řádek tabulky, jen inverzní a o 1.2× větší. */
+  table.items tr.total td {
+    background: #111 !important;
+    color: #fff;
+    font-size: 9.6pt;
+    font-weight: 700;
+    padding: 2.2mm 2.5mm !important;
+    border-bottom: 0 !important;
+  }
+  table.items tr.total td:first-child { border-left: 1mm solid #ec5500 !important; }
+  .cont { font-size: 7pt; color: #7a7a7a; margin: 0 0 1.5mm; letter-spacing: .05em; text-transform: uppercase; }
 
-th{
-background:#f5f5f5;
-text-align:left;
-padding:10px;
-border:1px solid #ddd;
-}
+  /* ---------- specifikace ---------- */
+  .specs { display: flex; flex-wrap: wrap; gap: 2mm; }
+  .specs div { border: .3mm solid #e2e2e2; border-left: 1mm solid #ec5500; padding: 1.6mm 3mm; }
+  .specs span { display: block; font-size: 6.8pt; text-transform: uppercase; letter-spacing: .08em; color: #7a7a7a; }
+  .specs strong { font-size: 9pt; font-weight: 700; }
 
-td{
-padding:10px;
-border:1px solid #ddd;
-}
+  /* ---------- textové sekce ---------- */
+  .cards { display: flex; gap: 5mm; }
+  .card { flex: 1; border: .3mm solid #e2e2e2; padding: 3mm; }
+  .card h3 {
+    margin: 0 0 1.5mm;
+    font-size: 8pt;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+  .card p { margin: 0; font-size: 8pt; line-height: 1.55; color: #3a3a3a; }
+  .card strong { color: #111; }
 
-.conditions{
-font-size:18px;
-line-height:1.7;
-}
+  /* Termín realizace a záloha — jediné dvě karty, které nesou oranžový akcent. */
+  .card.accent {
+    border: .3mm solid #f5cbb0;
+    border-top: 1.4mm solid #ec5500;
+    background: #fff7f2;
+  }
+  .card.accent h3 {
+    color: #ec5500;
+    padding-left: 2.4mm;
+    border-left: .8mm solid #ec5500;
+  }
+  .card.accent .badge {
+    display: inline-block;
+    background: #ec5500;
+    color: #fff;
+    font-size: 8.5pt;
+    font-weight: 800;
+    letter-spacing: .04em;
+    padding: .9mm 2.4mm;
+    margin: 0 0 2mm;
+  }
+  .card.accent p strong { color: #ec5500; }
 
-ul{
-margin:10px 0;
-padding-left:20px;
-}
+  .terms { display: flex; gap: 5mm; }
+  .terms > div { flex: 1; }
+  .terms h3 {
+    margin: 0 0 1.5mm;
+    font-size: 8pt;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    padding-left: 2mm;
+    border-left: .8mm solid #ec5500;
+  }
+  .terms ul { margin: 0 0 2mm; padding: 0; list-style: none; }
+  .terms li {
+    font-size: 8pt;
+    padding: 1.2mm 0 1.2mm 4mm;
+    border-bottom: .25mm solid #f0f0f0;
+    position: relative;
+    color: #3a3a3a;
+  }
+  .terms li::before { content: ""; position: absolute; left: 0; top: 3mm; width: 1.6mm; height: 1.6mm; background: #ec5500; }
+  .terms li b { color: #111; font-weight: 600; }
+  .terms p { margin: 2mm 0 0; font-size: 7.5pt; color: #6b6b6b; line-height: 1.55; }
 
-.footer{
-text-align:center;
-margin-top:50px;
-font-size:12px;
-color:#777;
-}
+  .note { border: .3mm solid #e2e2e2; border-left: 1mm solid #ec5500; padding: 3mm; }
+  .note span { display: block; font-size: 6.8pt; text-transform: uppercase; letter-spacing: .08em; color: #7a7a7a; margin-bottom: 1mm; }
+  .note p { margin: 0; font-size: 8.5pt; }
 
+  .disclaimer { font-size: 7pt; color: #8a8a8a; line-height: 1.5; }
 </style>
 </head>
-
 <body>
 
-<div class="container">
+<!-- Šablony záhlaví a zápatí — skript je klonuje na každý arch. -->
+<template id="tpl-head">
+  <div class="head">
+    <img src="https://cdn.sanity.io/files/a3wdqcta/production/28aefe7de25e70f91a0f788514e80d75bfd41b40.svg" alt="Konstanta HP"/>
+    <div class="head-right">
+      <div class="head-title">${q.docTitle}</div>
+      <div class="head-meta">${q.numberPrefix} <b>${cisloNabidky}</b> &nbsp;·&nbsp; ${dat(now)}</div>
+    </div>
+  </div>
+  <div class="rule"><i></i><u></u></div>
+</template>
 
-<div class="header">
+<template id="tpl-foot">
+  <div class="foot">
+    <div class="foot-left">
+      <div><b>Konstanta HP</b> &nbsp;·&nbsp; Maleč 36, 582 76 Maleč &nbsp;·&nbsp; IČO 21827150</div>
+      <div>+420 770 169 411 &nbsp;·&nbsp; <a href="mailto:info@konstantahp.cz">info@konstantahp.cz</a> &nbsp;·&nbsp; <a href="https://www.konstantahp.cz">konstantahp.cz</a></div>
+    </div>
+    <div class="foot-right">
+      ${socialHtml}
+      <span class="pageno"></span>
+    </div>
+  </div>
+</template>
 
-<img class="logo"
-src="https://cdn.sanity.io/files/a3wdqcta/production/28aefe7de25e70f91a0f788514e80d75bfd41b40.svg"/>
+<!-- Zdrojový obsah. Skript ho po blocích přesype do archů v #pages. -->
+<div id="src">
 
-<div class="title">
-Cenová nabídka
-</div>
+  <section class="block">
+    <div class="meta">
+      <div><span>${q.metaNumber}</span><strong>${cisloNabidky}</strong></div>
+      <div><span>${q.metaIssued}</span><strong>${dat(now)}</strong></div>
+      <div><span>${q.metaValid}</span><strong>${dat(platnostDo)}</strong></div>
+    </div>
+  </section>
 
-</div>
+  <section class="block">
+    <div class="parties">
+      <div class="party">
+        <div class="party-h">${q.supplier}</div>
+        <div class="party-b">
+          <span class="nm">Konstanta HP</span>
+          Maleč 36, 582 76 Maleč<br>
+          ${q.country}<br>
+          <span class="k">${q.ico}</span> 21827150<br>
+          <span class="k">${q.phone}</span> +420 770 169 411<br>
+          <span class="k">${q.email}</span> <a href="mailto:info@konstantahp.cz">info@konstantahp.cz</a><br>
+          <span class="k">${q.web}</span> <a href="https://www.konstantahp.cz">www.konstantahp.cz</a>
+        </div>
+      </div>
+      <div class="party">
+        <div class="party-h">${q.customer}</div>
+        <div class="party-b">
+          <span class="nm">${esc(userName)}</span>
+          ${firma && firma.trim().length > 0 ? `<span class="k">${q.company}</span> ${esc(firma)}<br>` : ""}
+          ${esc(address)}<br>
+          ${esc(city)}<br>
+          <span class="k">${q.phone}</span> ${esc(tel)}<br>
+          <span class="k">${q.email}</span> <a href="mailto:${esc(userEmail)}">${esc(userEmail)}</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  ${photos.length
+    ? `<section class="block">
+    <h2>${q.configHeading}</h2>
+    <div class="photos">
+      ${photos.map((p) => `<figure><img src="${esc(p)}" alt=""></figure>`).join("")}
+    </div>
+  </section>`
+    : ""}
 
-<div class="section">
+  <section class="block" id="b-items">
+    <h2>${q.itemsHeading}</h2>
+    <table class="items">
+      <colgroup>
+        <col class="c-item"><col class="c-qty"><col class="c-num"><col class="c-num"><col class="c-num">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>${q.thItem}</th>
+          <th>${q.thQty}</th>
+          <th>${q.thNoVat}</th>
+          <th>${q.thVat} ${sazbaDph * 100} %</th>
+          <th>${q.thWithVat}</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${productRows}
+      </tbody>
+    </table>
+  </section>
 
-<h2>Zákazník</h2>
+  <!-- Specifikaci plní skript z dvoubuňkových řádků tabulky (viz hydrate). -->
+  <section class="block" id="b-specs"><h2>${q.specsHeading}</h2><div class="specs"></div></section>
 
-<div class="customer">
+  ${poznamka && poznamka.trim()
+    ? `<section class="block"><div class="note"><span>${q.noteHeading}</span><p>${esc(poznamka)}</p></div></section>`
+    : ""}
 
-<div>
+  <section class="block">
+    <div class="cards">
+      <div class="card accent">
+        <h3>${q.termHeading}</h3>
+        <span class="badge">${q.termBadge}</span>
+        <p>${q.termText}</p>
+      </div>
+      <div class="card accent">
+        <h3>${q.depositHeading}</h3>
+        <span class="badge">${q.depositBadge}</span>
+        <p>${q.depositText}</p>
+      </div>
+    </div>
+  </section>
 
-<h3 style="margin-top:0;">Prodávající</h3>
+  <section class="block">
+    <h2>${q.termsHeading}</h2>
+    <div class="terms">
+      <div>
+        <h3>${q.termsPersonal}</h3>
+        <ul>
+          ${q.termsPersonalItems.map((i) => `<li>${i}</li>`).join("")}
+        </ul>
+        <p>${q.termsPersonalNote}</p>
+      </div>
+      <div>
+        <h3>${q.termsCompany}</h3>
+        <ul>
+          ${q.termsCompanyItems.map((i) => `<li>${i}</li>`).join("")}
+        </ul>
+        <p>${q.termsCompanyNote}</p>
+      </div>
+    </div>
+  </section>
 
-<strong>Konstanta HP</strong><br>
-Maleč 36<br>
-582 76 Maleč<br>
-Česká republika<br>
-<br>
-IČO: 21827150<br>
-Telefon: +420 770 169 411<br>
-Email:
-<a href="mailto:Sleekfence@seznam.cz">Sleekfence@seznam.cz</a><br>
-Web:
-<a href="https://www.konstantahp.cz">www.konstantahp.cz</a>
-
-</div>
-
-
-<div>
-
-<h3 style="margin-top:0;">Zákazník</h3>
-
-<strong>Jméno:</strong> ${userName}<br>
-<strong>Email:</strong> ${userEmail}<br>
-<strong>Telefon:</strong> ${tel}<br>
-<br>
-<strong>Adresa:</strong><br>
-${address}<br>
-${city}<br>
-${company ?? ""}
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="section">
-
-<h2>Konfigurace</h2>
-
-<div class="images">
-<img src="${photo1}">
-<img src="${photo2}">
-<img src="${photo3}">
-</div>
-
-</div>
-
-
-<div class="section">
-
-<h2>Cenová nabídka</h2>
-
-<table>
-
-<thead>
-<tr>
-<th>Produkt</th>
-<th>Množství</th>
-<th>Cena bez DPH</th>
-<th>DPH ${sazbaDph*100}%</th>
-<th>Cena s DPH</th>
-</tr>
-</thead>
-
-<tbody>
-${productRows}
-</tbody>
-
-</table>
-
-</div>
-
-
-<div class="section">
-
-<h2>Termín realizace</h2>
-
-<p>
-Realizace zakázky proběhne v rozmezí <strong>8–14 týdnů</strong>
-od podpisu smlouvy a uhrazení zálohy.
-</p>
-
-</div>
-
-
-<div class="section">
-
-<h2>Záloha</h2>
-
-<p>
-Před zahájením realizace je požadována záloha ve výši
-<strong>70 % z celkové ceny zakázky</strong>.
-Doplatek bude uhrazen v den montáže po předání díla.
-</p>
-
-</div>
-
-
-<div class="section conditions page-break">
-
-<h2>Obchodní podmínky pro fyzické osoby</h2>
-
-<ul>
-<li>Záruka na materiál: 10 let</li>
-<li>Záruka na pohon: 3 roky</li>
-<li>Záruka na montážní práce: 2 roky</li>
-</ul>
-
-<p>
-Záruka se vztahuje na vady materiálu, funkčnost pohonu a kvalitu provedených
-montážních prací.
-</p>
-
-<h2>Obchodní podmínky pro firmy</h2>
-
-<ul>
-<li>Splatnost faktur: 30 dnů</li>
-<li>Pozastávky: 10% / 8% / 2%</li>
-<li>Zařízení staveniště: 0%</li>
-<li>Vícepráce v ceně / čase: 0% / 0%</li>
-<li>Záruka výrobků: 55 měsíců</li>
-<li>Záruka pohonů: 36 měsíců</li>
-<li>Záruka montáže: 24 měsíců</li>
-</ul>
-
-<p>
-Realizace zakázky proběhne v dohodnutý termín s objednatelem.
-</p>
+  <section class="block">
+    <p class="disclaimer">
+      ${q.disclaimer} ${q.validUntil} ${dat(platnostDo)}.
+    </p>
+  </section>
 
 </div>
 
+<div id="pages"></div>
 
-<div class="footer">
+<script>
+(function () {
+  var src = document.getElementById('src');
+  var pages = document.getElementById('pages');
+  var headTpl = document.getElementById('tpl-head').innerHTML;
+  var footTpl = document.getElementById('tpl-foot').innerHTML;
+  var body = null;
 
-© ${year} Konstanta HP
+  /**
+   * Roztřídí řádky tabulky:
+   *  - jednobuňkové (tableHrRow) → oddělovač mezi produkty,
+   *  - dvoubuňkové (buildProductRowsString) → chipy "Specifikace",
+   *  - řádek "Celkem" → zůstává v tabulce, jen dostane inverzní styl.
+   * V tabulce tak zůstane jen to, co má cenu, a createXlsx se nemusí měnit.
+   */
+  function hydrate() {
+    var table = document.querySelector('#b-items table');
+    var tbody = table.tBodies[0];
+    var specsBox = document.querySelector('#b-specs .specs');
+    var specCount = 0;
 
-</div>
+    Array.prototype.slice.call(tbody.rows).forEach(function (tr) {
+      var cells = tr.cells;
+      if (cells.length === 1) { tr.className = 'sep'; return; }
+      if (cells.length === 2) {
+        var d = document.createElement('div');
+        d.innerHTML = '<span></span><strong></strong>';
+        d.querySelector('span').textContent = cells[0].textContent.trim();
+        d.querySelector('strong').textContent = cells[1].textContent.trim();
+        specsBox.appendChild(d);
+        specCount++;
+        tr.parentNode.removeChild(tr);
+        return;
+      }
+      if (cells[0].textContent.trim().toLowerCase().indexOf('${totalMarker}') === 0) {
+        tr.className = 'total';
+      }
+    });
 
-</div>
+    // Oddělovač na konci tabulky by visel pod posledním řádkem.
+    while (tbody.rows.length && tbody.rows[tbody.rows.length - 1].className === 'sep') {
+      tbody.deleteRow(tbody.rows.length - 1);
+    }
+
+    if (!specCount) { var bs = document.getElementById('b-specs'); bs.parentNode.removeChild(bs); }
+  }
+
+  function newSheet() {
+    var s = document.createElement('div');
+    s.className = 'sheet';
+    s.innerHTML =
+      '<div class="sheet-head">' + headTpl + '</div>' +
+      '<div class="sheet-body"></div>' +
+      '<div class="sheet-foot">' + footTpl + '</div>';
+    pages.appendChild(s);
+    body = s.querySelector('.sheet-body');
+  }
+
+  /** Vejde se aktuální obsah archu do jeho plochy? */
+  function fits() {
+    return body.scrollHeight <= body.clientHeight;
+  }
+
+  /**
+   * Rozdělí přetékající tabulku po skupinách řádků. Skupina = řádky jedné položky
+   * až po oddělovač (tr.sep), takže se brána nikdy neutrhne od svých příplatků.
+   * Skupina delší než celý arch se v krajním případě láme po jednotlivých řádcích.
+   */
+  function splitTable(block, table) {
+    var theadHtml = table.tHead.outerHTML;
+    var colsHtml = table.querySelector('colgroup').outerHTML;
+    var tbody = table.tBodies[0];
+
+    var groups = [];
+    var cur = [];
+    Array.prototype.slice.call(tbody.rows).forEach(function (tr) {
+      cur.push(tr);
+      if (tr.className === 'sep') { groups.push(cur); cur = []; }
+    });
+    if (cur.length) groups.push(cur);
+    // Souhrnný řádek stojí za posledním oddělovačem, takže by tvořil vlastní
+    // skupinu a mohl osiřet na dalším archu — přilepit ho k předchozí.
+    if (groups.length > 1) {
+      var last = groups[groups.length - 1];
+      if (last.length === 1 && last[0].className === 'total') {
+        groups[groups.length - 2] = groups[groups.length - 2].concat(groups.pop());
+      }
+    }
+    groups.forEach(function (g) { g.forEach(function (tr) { tr.parentNode.removeChild(tr); }); });
+
+    // Prázdná tabulka (nadpis + hlavička) se musí vejít, jinak jde celý blok na nový arch.
+    if (!fits() && body.children.length > 1) {
+      body.removeChild(block);
+      newSheet();
+      body.appendChild(block);
+    }
+
+    var curTable = table;
+    /** Oddělovač na konci archu vypadá jako utržená linka — pryč s ním. */
+    function trimTrailingSep(t) {
+      var b = t.tBodies[0];
+      while (b.rows.length && b.rows[b.rows.length - 1].className === 'sep') {
+        b.deleteRow(b.rows.length - 1);
+      }
+    }
+    function startFragment() {
+      trimTrailingSep(curTable);
+      var cont = document.createElement('section');
+      cont.className = 'block';
+      cont.innerHTML =
+        '<div class="cont">${q.itemsCont}</div>' +
+        '<table class="items">' + colsHtml + theadHtml + '<tbody></tbody></table>';
+      newSheet();
+      body.appendChild(cont);
+      curTable = cont.querySelector('table');
+    }
+    function push(rows) {
+      var target = curTable.tBodies[0];
+      rows.forEach(function (tr) { target.appendChild(tr); });
+      if (fits()) return true;
+      rows.forEach(function (tr) { tr.parentNode.removeChild(tr); });
+      return false;
+    }
+
+    groups.forEach(function (g) {
+      if (push(g)) return;
+      if (curTable.tBodies[0].rows.length > 0) startFragment();
+      if (push(g)) return;
+      g.forEach(function (tr) {
+        if (push([tr])) return;
+        startFragment();
+        push([tr]);
+      });
+    });
+
+    trimTrailingSep(curTable);
+  }
+
+  hydrate();
+  newSheet();
+
+  Array.prototype.slice.call(src.children).forEach(function (block) {
+    body.appendChild(block);
+    if (fits()) return;
+    var table = block.querySelector('table');
+    if (table) { splitTable(block, table); return; }
+    // Ostatní bloky se nelámou — pokud na archu nejsou samy, zkusí se na dalším.
+    if (body.children.length > 1) {
+      body.removeChild(block);
+      newSheet();
+      body.appendChild(block);
+    }
+  });
+
+  var sheets = pages.querySelectorAll('.sheet');
+  sheets[sheets.length - 1].className = 'sheet last';
+  for (var i = 0; i < sheets.length; i++) {
+    var no = sheets[i].querySelectorAll('.pageno');
+    for (var j = 0; j < no.length; j++) no[j].textContent = (i + 1) + ' / ' + sheets.length;
+  }
+})();
+</script>
 
 </body>
-</html>
-`;
+</html>`;
 }
 
+/**
+ * Ceník doplňků přidaných do konfigurátoru (výztužná tyč křídla, kování branky).
+ * Ceny jsou bez DPH za kus; drženy tady u sebe, ať jdou upravit na jednom místě.
+ * Popisy k nim se berou z `quoteItemsContent`, aby šly přeložit bez zásahu do ceníku.
+ */
+const TYC_CENA = 1500;
+
+const KOVANI_CENIK: Record<string, number> = {
+  "kliky-mt": 1500,
+  "madlo-300": 2200,
+  "madlo-225": 1900,
+  "madlo-1250": 4500,
+};
+
+/** Neznámé/nevyplněné kování spadne zpět na původní nerez kliky za 1 500 Kč. */
+const kovaniPolozka = (lang: Lang, kovani?: string) => {
+  const ti = quoteItemsContent[lang] ?? quoteItemsContent.cs;
+  const key = kovani ?? "";
+  return key in KOVANI_CENIK
+    ? { popis: ti.kovani[key], cena: KOVANI_CENIK[key] }
+    : { popis: ti.kovaniFallback, cena: 1500 };
+};
+
+/**
+ * `id` je klíč z `gateProducts` / `gateLabels` — jede podle něj cenová hladina
+ * i překlad názvu, takže se ceník nerozbije změnou textu.
+ */
 function calculateBrana(
-  name: string,
+  id: string,
+  lang: Lang,
   sazbaDph: number,
   ws:exceljs.Worksheet,
   brana?: {
@@ -486,58 +907,68 @@ function calculateBrana(
     pohon?: boolean | undefined;
     tahoma?: boolean | undefined;
     ovladac?: boolean | undefined;
+    tyc?: boolean | undefined;
 }[] | undefined,
 ): {bezDPH: number, html: String}{
+const ti = quoteItemsContent[lang] ?? quoteItemsContent.cs;
+const money = moneyFormatter(lang);
+const name = (gateLabels[lang] ?? gateLabels.cs)[id] ?? gateLabels.cs[id] ?? id;
 let bezDPH: number =0;
   let html = "";
   if(brana  && brana.length > 0){
   brana.forEach((r) => {
     if(r.delka && r.pocet && r.vyska){
       let vzor = 0;
-    switch(name){
-      case "Brána teleskopická samonosná":
-      case "Brána atypická":
-      case "Brána sekční":
+    switch(id){
+      case "telSam":
+      case "atypicka":
+      case "sekcni":
         vzor = 12000;
         break;
-      case "Brána teleskopická pojízdná":
-      case "Samonosná brána":
-      case "Brána skládací":
+      case "telPoj":
+      case "samonosna":
+      case "skladaci":
         vzor = 10000;
         break;
-      case "Dvoukřídlá brána":
-      case "Jenokřídlá brána":
-      case "Brána posuvná po kolejnici":
+      case "dvoukridla":
+      case "jednokridla":
+      case "posuvna":
         vzor = 7000;
         break;
     }
     const plocha = (r.delka / 1000) * (r.vyska / 1000);
     const zaklad = ((plocha * vzor) * r.pocet);
-    const pohonCena = r.pohon ? (name === "Dvoukřídlá brána" || name === "Brána skládací" ? 20000 : 10000) : 1500;
+    const pohonCena = r.pohon ? (id === "dvoukridla" || id === "skladaci" ? 20000 : 10000) : 1500;
     const tahomaCena = r.tahoma ? r.pocet *5000 : 0;
     const ovladacCena = r.ovladac ? r.pocet *1000 : 0;
+    // Výztužná tyč křídla — jen u křídlových bran, cena za kus brány.
+    const tycCena = r.tyc ? r.pocet * TYC_CENA : 0;
     const montazCena = r.pocet * 4500;
-    bezDPH += zaklad+pohonCena+tahomaCena+ovladacCena+montazCena
-    const headerRow = ws.addRow([`Produkt`,"Množství","Cena bez DPH", "DPH", "Cena s DPH"])
-    ws.addRow([`${name}: ${r.delka}x${r.vyska} mm`,r.pocet,zaklad.toFixed(0)+ " Kč",(zaklad*sazbaDph).toFixed(0)+ " Kč", (zaklad*(1+sazbaDph)).toFixed(0)+ " Kč" ]);
-    html +=(buildProductRows( name + " \n" + `${r.delka}x${r.vyska} mm`,r.pocet,zaklad,zaklad*sazbaDph, Number((zaklad*(1+sazbaDph)).toFixed(0)) ))
+    bezDPH += zaklad+pohonCena+tahomaCena+ovladacCena+tycCena+montazCena
+    const headerRow = ws.addRow([ti.header.produkt, ti.header.mnozstvi, ti.header.bezDph, ti.header.dph, ti.header.sDph])
+    ws.addRow([`${name}: ${r.delka}x${r.vyska} mm`,r.pocet,money(zaklad),money(zaklad*sazbaDph), money(zaklad*(1+sazbaDph)) ]);
+    html +=(buildProductRows(money, name + " \n" + `${r.delka}x${r.vyska} mm`,r.pocet,zaklad,zaklad*sazbaDph, Number((zaklad*(1+sazbaDph)).toFixed(0)) ))
     if(r.pohon){
-       ws.addRow(["1x Somfy Elixo500 3S io - pohon s řídicí jednotkou a rádiovým přijímačem, 1x Somfy Master Pro Bitech - bezpečnostní fotobuňky (1 pár) dosah 10 m, 2x Odblokovací klíč (použití při výpadku proudu):", 1,pohonCena.toFixed(0)+ " Kč", (pohonCena*sazbaDph).toFixed(0)+ " Kč", (pohonCena*(1+sazbaDph)).toFixed(0)+ " Kč"]);
-      html +=(buildProductRows("1x Somfy Elixo500 3S io - pohon s řídicí jednotkou a rádiovým přijímačem, 1x Somfy Master Pro Bitech - bezpečnostní fotobuňky (1 pár) dosah 10 m, 2x Odblokovací klíč (použití při výpadku proudu):", 1,pohonCena, pohonCena*sazbaDph, Number((pohonCena*(1+sazbaDph)).toFixed(0))))
+       ws.addRow([`${ti.pohon}:`, 1,money(pohonCena), money(pohonCena*sazbaDph), money(pohonCena*(1+sazbaDph))]);
+      html +=(buildProductRows(money, `${ti.pohon}:`, 1,pohonCena, pohonCena*sazbaDph, Number((pohonCena*(1+sazbaDph)).toFixed(0))))
       }else{
-        ws.addRow(["Zástrč brány:", 1,pohonCena.toFixed(0)+ " Kč", (pohonCena*sazbaDph).toFixed(0)+ " Kč", (pohonCena*(1+sazbaDph)).toFixed(0)+ " Kč"]);
-        html +=(buildProductRows("Zástrč brány:", 1,pohonCena, pohonCena*sazbaDph, Number((pohonCena*(1+sazbaDph)).toFixed(0))))
+        ws.addRow([`${ti.zastrc}:`, 1,money(pohonCena), money(pohonCena*sazbaDph), money(pohonCena*(1+sazbaDph))]);
+        html +=(buildProductRows(money, `${ti.zastrc}:`, 1,pohonCena, pohonCena*sazbaDph, Number((pohonCena*(1+sazbaDph)).toFixed(0))))
       }
     if(r.tahoma) {
-      ws.addRow(["Somfy TaHoma switch je centrální jednotka pro chytrou domácnost, která umožňuje ovládat a automatizovat různá zařízení v domě, jako jsou rolety, žaluzie, brány, osvětlení, topení a další",1,tahomaCena.toFixed(0)+ " Kč",(tahomaCena*sazbaDph).toFixed(0)+ " Kč",(tahomaCena*(1+sazbaDph)).toFixed(0)+ " Kč"]);
-      html +=(buildProductRows("Somfy TaHoma switch je centrální jednotka pro chytrou domácnost, která umožňuje ovládat a automatizovat různá zařízení v domě, jako jsou rolety, žaluzie, brány, osvětlení, topení a další",1,tahomaCena,tahomaCena*sazbaDph,tahomaCena*(1+sazbaDph)))
+      ws.addRow([ti.tahoma,1,money(tahomaCena),money(tahomaCena*sazbaDph),money(tahomaCena*(1+sazbaDph))]);
+      html +=(buildProductRows(money, ti.tahoma,1,tahomaCena,tahomaCena*sazbaDph,tahomaCena*(1+sazbaDph)))
     }
     if (r.ovladac){
-       ws.addRow(["1x Somfy Keygo io - dálkový ovladač",1, ovladacCena.toFixed(0)+ " Kč", (ovladacCena*sazbaDph).toFixed(0)+ " Kč", (ovladacCena*(1+sazbaDph)).toFixed(0)+ " Kč"]);
-      html +=(buildProductRows( "1x Somfy Keygo io - dálkový ovladač", 1,ovladacCena, ovladacCena*sazbaDph, Number((ovladacCena*(1+sazbaDph)).toFixed(0))))
+       ws.addRow([ti.ovladac,1, money(ovladacCena), money(ovladacCena*sazbaDph), money(ovladacCena*(1+sazbaDph))]);
+      html +=(buildProductRows(money, ti.ovladac, 1,ovladacCena, ovladacCena*sazbaDph, Number((ovladacCena*(1+sazbaDph)).toFixed(0))))
       }
-    ws.addRow(["Montáž brány:",1, montazCena.toFixed(0)+ " Kč", (montazCena*sazbaDph).toFixed(0)+ " Kč", (montazCena*(1+sazbaDph)).toFixed(0)+ " Kč"]);
-    html +=(buildProductRows( "Montáž brány:",1, montazCena, montazCena*sazbaDph, Number((montazCena*(1+sazbaDph)).toFixed(0))))
+    if (r.tyc){
+      ws.addRow([ti.tyc, r.pocet, money(tycCena), money(tycCena*sazbaDph), money(tycCena*(1+sazbaDph))]);
+      html +=(buildProductRows(money, ti.tyc, r.pocet, tycCena, tycCena*sazbaDph, Number((tycCena*(1+sazbaDph)).toFixed(0))))
+      }
+    ws.addRow([`${ti.montazBrany}:`,1, money(montazCena), money(montazCena*sazbaDph), money(montazCena*(1+sazbaDph))]);
+    html +=(buildProductRows(money, `${ti.montazBrany}:`,1, montazCena, montazCena*sazbaDph, Number((montazCena*(1+sazbaDph)).toFixed(0))))
     html += tableHrRow();
     colorRow(ws, headerRow.number)
   }});
@@ -546,31 +977,35 @@ let bezDPH: number =0;
  }
  return {bezDPH, html}
 }
-async function createXlsx(data: ConfiguratorType, isCompany: boolean,photo1:string,photo2:string,photo3:string,) {
+async function createXlsx(data: ConfiguratorType, isCompany: boolean,photo1:string,photo2:string,photo3:string, lang: Lang = "cs") {
 let celkem:number=0;
 let celkovyPocetDilcu: number =0;
 const sazbaDph = isCompany ? 0.21 : 0.12
 let rows = "";
 console.log(celkem)
+// Texty řádků a formát částek podle jazyka konfigurátoru — ceny se nepřepočítávají.
+const ti = quoteItemsContent[lang] ?? quoteItemsContent.cs;
+const money = moneyFormatter(lang);
 //Excel workbook
 const wb = new exceljs.Workbook();
-const ws = wb.addWorksheet("Kalkulace");
+const ws = wb.addWorksheet(ti.sheetName);
 
 if(!data.brana){
+  // `id` odpovídá klíčům v `gateLabels` — název řádku se z nich přeloží.
   const brany = [
-    { name: "Dvoukřídlá brána", data: data.rozmery2KBran },
-    { name: "Jenokřídlá brána", data: data.rozmeryKBran },
-    { name: "Brána posuvná po kolejnici", data: data.rozmeryPBran },
-    { name: "Samonosná brána", data: data.rozmerySBran },
-    { name: "Brána teleskopická samonosná", data: data.rozmeryTSBran },
-    { name: "Brána teleskopická pojízdná", data: data.rozmeryTPBran },
-    { name: "Brána atypická", data: data.rozmeryABran },
-    { name: "Brána sekční", data: data.rozmerySekBran },
-    { name: "Brána skládací", data: data.rozmerySklBran },
+    { id: "dvoukridla", data: data.rozmery2KBran },
+    { id: "jednokridla", data: data.rozmeryKBran },
+    { id: "posuvna", data: data.rozmeryPBran },
+    { id: "samonosna", data: data.rozmerySBran },
+    { id: "telSam", data: data.rozmeryTSBran },
+    { id: "telPoj", data: data.rozmeryTPBran },
+    { id: "atypicka", data: data.rozmeryABran },
+    { id: "sekcni", data: data.rozmerySekBran },
+    { id: "skladaci", data: data.rozmerySklBran },
   ];
 
   brany.forEach((b) => {
-    const result = calculateBrana(b.name, sazbaDph, ws, b.data);
+    const result = calculateBrana(b.id, lang, sazbaDph, ws, b.data);
     celkem += result.bezDPH;
     rows+=(result.html);
   });
@@ -585,28 +1020,29 @@ if(data.branka && data.rozmeryBranek  && data.rozmeryBranek.length > 0){
     const schrankaCena = r.schranka ? 5000 : 0;
     const zvonekCena = r.zvonek ? 18000 : 0;
     const montazCena = r.pocet * 1500;
-    const klikaCena = 1500;
+    const kovani = kovaniPolozka(lang, r.kovani);
+    const klikaCena = kovani.cena;
     const bezDPH = zaklad + zamekCena + schrankaCena + zvonekCena + montazCena + klikaCena;
     celkem += bezDPH;
 
-    ws.addRow([`Branka: ${r.delka}x${r.vyska} mm`, r.pocet,zaklad.toFixed(0) + " Kč", (zaklad*sazbaDph).toFixed(0)+ " Kč", (zaklad*(1+sazbaDph)).toFixed(0)+ " Kč"]);
-    rows+=(buildProductRows(`Branka`+ " \n"+`${r.delka}x${r.vyska} mm`,r.pocet,zaklad, zaklad*sazbaDph, zaklad*(1+sazbaDph)))
+    ws.addRow([`${ti.branka}: ${r.delka}x${r.vyska} mm`, r.pocet,money(zaklad), money(zaklad*sazbaDph), money(zaklad*(1+sazbaDph))]);
+    rows+=(buildProductRows(money, ti.branka+ " \n"+`${r.delka}x${r.vyska} mm`,r.pocet,zaklad, zaklad*sazbaDph, zaklad*(1+sazbaDph)))
     if(r.zamek) {
-      ws.addRow(["El.zámek napětí 9 - 12 V AC/DC, s posuvnou zarážkou a mechanickým odblokováním.", 1,zamekCena.toFixed(0)+ " Kč", (zamekCena*sazbaDph).toFixed(0)+ " Kč", (zamekCena*(1+sazbaDph)).toFixed(0)+ " Kč"]);
-      rows+=(buildProductRows("El.zámek napětí 9 - 12 V AC/DC, s posuvnou zarážkou a mechanickým odblokováním.",1, zamekCena, zamekCena*sazbaDph, zamekCena*(1+sazbaDph)))
+      ws.addRow([ti.zamek, 1,money(zamekCena), money(zamekCena*sazbaDph), money(zamekCena*(1+sazbaDph))]);
+      rows+=(buildProductRows(money, ti.zamek,1, zamekCena, zamekCena*sazbaDph, zamekCena*(1+sazbaDph)))
     }
     if(r.schranka){
-      ws.addRow(["Poštovní schránka zapuštěna do lamely",1,schrankaCena.toFixed(0)+ " Kč",(schrankaCena*sazbaDph).toFixed(0)+ " Kč",(schrankaCena*(1+sazbaDph)).toFixed(0)+ " Kč"])
-      rows+=(buildProductRows("Poštovní schránka zapuštěna do lamely",1,schrankaCena,schrankaCena*sazbaDph,schrankaCena*(1+sazbaDph)))
+      ws.addRow([ti.schranka,1,money(schrankaCena),money(schrankaCena*sazbaDph),money(schrankaCena*(1+sazbaDph))])
+      rows+=(buildProductRows(money, ti.schranka,1,schrankaCena,schrankaCena*sazbaDph,schrankaCena*(1+sazbaDph)))
     };
     if(r.zvonek){
-      ws.addRow(["Domovní videotelefon Somfy V500 PRO io",1, zvonekCena.toFixed(0)+ " Kč", (zvonekCena*sazbaDph).toFixed(0)+ " Kč", (zvonekCena*(1+sazbaDph)).toFixed(0)+ " Kč"])
-      rows+=(buildProductRows("Domovní videotelefon Somfy V500 PRO io",1, zvonekCena, zvonekCena*sazbaDph, zvonekCena*(1+sazbaDph)))
+      ws.addRow([ti.zvonek,1, money(zvonekCena), money(zvonekCena*sazbaDph), money(zvonekCena*(1+sazbaDph))])
+      rows+=(buildProductRows(money, ti.zvonek,1, zvonekCena, zvonekCena*sazbaDph, zvonekCena*(1+sazbaDph)))
     };
-    ws.addRow(["Kovani brány nerez (klika/klika - koule/klika)",1, klikaCena.toFixed(0)+ " Kč", (klikaCena*sazbaDph).toFixed(0)+ " Kč", (klikaCena*(1+sazbaDph)).toFixed(0)+ " Kč"]);
-    rows+=(buildProductRows("Kovani brány nerez (klika/klika - koule/klika)",1, klikaCena, klikaCena*sazbaDph,klikaCena*(1+sazbaDph)))
-    ws.addRow(["Montáž branky:",1, montazCena.toFixed(0)+ " Kč", (montazCena*sazbaDph).toFixed(0)+ " Kč", (montazCena*(1+sazbaDph)).toFixed(0)]);
-    rows+=(buildProductRows("Montáž branky:",1, montazCena, montazCena*sazbaDph, montazCena*(1+sazbaDph)))
+    ws.addRow([kovani.popis,1, money(klikaCena), money(klikaCena*sazbaDph), money(klikaCena*(1+sazbaDph))]);
+    rows+=(buildProductRows(money, kovani.popis,1, klikaCena, klikaCena*sazbaDph,klikaCena*(1+sazbaDph)))
+    ws.addRow([`${ti.montazBranky}:`,1, money(montazCena), money(montazCena*sazbaDph), money(montazCena*(1+sazbaDph))]);
+    rows+=(buildProductRows(money, `${ti.montazBranky}:`,1, montazCena, montazCena*sazbaDph, montazCena*(1+sazbaDph)))
     rows+= tableHrRow()
   }});
  }
@@ -639,42 +1075,54 @@ if(data.dilce && data.rozmeryDilcu  && data.rozmeryDilcu.length > 0){
     const vypln = r.pocet * 500;
     const bezDPH = zaklad+vypln;
     celkem+=bezDPH
-    ws.addRow([`Plotové dílce: ${r.delka}x${r.vyska} mm`,r.pocet, zaklad.toFixed(0)+ " Kč", (zaklad*sazbaDph).toFixed(0)+ " Kč",(zaklad*(1+sazbaDph)).toFixed(2)+ " Kč"]);
-    rows+=(buildProductRows("Plotové dílce"+"\n"+`${r.delka}x${r.vyska} mm`,r.pocet, zaklad, zaklad*sazbaDph,zaklad*(1+sazbaDph)))
+    ws.addRow([`${ti.dilce}: ${r.delka}x${r.vyska} mm`,r.pocet, money(zaklad), money(zaklad*sazbaDph),money(zaklad*(1+sazbaDph))]);
+    rows+=(buildProductRows(money, ti.dilce+"\n"+`${r.delka}x${r.vyska} mm`,r.pocet, zaklad, zaklad*sazbaDph,zaklad*(1+sazbaDph)))
   }});
-  ws.addRow(["Montáž dílců:",celkovyPocetDilcu,(celkovyPocetDilcu*500).toFixed(0)+ " Kč",((celkovyPocetDilcu*500)*sazbaDph).toFixed(0)+ " Kč",((celkovyPocetDilcu*500)*(1+sazbaDph)).toFixed(0)+ " Kč"]);
-  rows+=(buildProductRows("Montáž dílců:",celkovyPocetDilcu, (celkovyPocetDilcu*500),((celkovyPocetDilcu*500)*sazbaDph),((celkovyPocetDilcu*500)*(1+sazbaDph))))
+  ws.addRow([`${ti.montazDilcu}:`,celkovyPocetDilcu,money(celkovyPocetDilcu*500),money((celkovyPocetDilcu*500)*sazbaDph),money((celkovyPocetDilcu*500)*(1+sazbaDph))]);
+  rows+=(buildProductRows(money, `${ti.montazDilcu}:`,celkovyPocetDilcu, (celkovyPocetDilcu*500),((celkovyPocetDilcu*500)*sazbaDph),((celkovyPocetDilcu*500)*(1+sazbaDph))))
   rows += tableHrRow()
  }
 
 
  celkovyPocetDilcu = celkovyPocetDilcu * 2;
+ // Hodnoty z konfigurátoru chodí jako CS klíče — do nabídky se překládají stejnými
+ // slovníky, jaké používá UI. Co ve slovníku není, projde beze změny.
+ const sloupky = sloupkyLabels[lang] ?? sloupkyLabels.cs;
+ const povrchy = povrchLabels[lang] ?? povrchLabels.cs;
+ const barvy = colorLabels[lang] ?? colorLabels.cs;
+ const motivy = motivLabels[lang] ?? motivLabels.cs;
+ const typSloupkuLabel = sloupky[data.typSloupku] ?? data.typSloupku;
+
  if(data.typSloupku !== "vlastni"){
-    ws.addRow([`Typ sloupků`, data.typSloupku]);
-    rows+=(buildProductRowsString(`Typ sloupků`, data.typSloupku));
+    ws.addRow([ti.typSloupku, typSloupkuLabel]);
+    rows+=(buildProductRowsString(ti.typSloupku, typSloupkuLabel));
     if(data.typSloupku === "hliníkové"){
       celkem += 1300*celkovyPocetDilcu
-      ws.addRow(["Cena za bm",celkovyPocetDilcu*2,1000*celkovyPocetDilcu+ " Kč" ,((1000*celkovyPocetDilcu)*sazbaDph).toFixed(0)+ " Kč", (1000*celkovyPocetDilcu*(1+sazbaDph)).toFixed(0)+ " Kč"]);
-      ws.addRow(["Cena čepičky za kus",celkovyPocetDilcu,300*celkovyPocetDilcu+ " Kč", ((300*celkovyPocetDilcu)*sazbaDph).toFixed(0)+ " Kč", (300*celkovyPocetDilcu*(1+sazbaDph)).toFixed(0)+ " Kč"]);
-      rows+=(buildProductRows("Cena za bm",celkovyPocetDilcu*2,1000*celkovyPocetDilcu ,((1000*celkovyPocetDilcu)*sazbaDph), 1000*celkovyPocetDilcu*(1+sazbaDph)));
-      rows+=(buildProductRows("Cena čepičky za kus",celkovyPocetDilcu,300*celkovyPocetDilcu, ((300*celkovyPocetDilcu)*sazbaDph), 300*celkovyPocetDilcu*(1+sazbaDph)));
+      ws.addRow([ti.cenaBm,celkovyPocetDilcu*2,money(1000*celkovyPocetDilcu) ,money((1000*celkovyPocetDilcu)*sazbaDph), money(1000*celkovyPocetDilcu*(1+sazbaDph))]);
+      ws.addRow([ti.cenaCepicky,celkovyPocetDilcu,money(300*celkovyPocetDilcu), money((300*celkovyPocetDilcu)*sazbaDph), money(300*celkovyPocetDilcu*(1+sazbaDph))]);
+      rows+=(buildProductRows(money, ti.cenaBm,celkovyPocetDilcu*2,1000*celkovyPocetDilcu ,((1000*celkovyPocetDilcu)*sazbaDph), 1000*celkovyPocetDilcu*(1+sazbaDph)));
+      rows+=(buildProductRows(money, ti.cenaCepicky,celkovyPocetDilcu,300*celkovyPocetDilcu, ((300*celkovyPocetDilcu)*sazbaDph), 300*celkovyPocetDilcu*(1+sazbaDph)));
     }else{
-    ws.addRow([`Povrch tvárnice`, data.povrchTvarnice]);
-    ws.addRow([`Barva tvárnice`, data.barvaTvarnice]);
-    rows+=(buildProductRowsString(`Povrch tvárnice`,String(data.povrchTvarnice)));
-    rows+=(buildProductRowsString("Barva tvárnice", String(data.barvaTvarnice)));
+    const povrchLabel = povrchy[String(data.povrchTvarnice)] ?? String(data.povrchTvarnice);
+    const barvaTvarniceLabel = barvy[String(data.barvaTvarnice)] ?? String(data.barvaTvarnice);
+    ws.addRow([ti.povrchTvarnice, povrchLabel]);
+    ws.addRow([ti.barvaTvarnice, barvaTvarniceLabel]);
+    rows+=(buildProductRowsString(ti.povrchTvarnice, povrchLabel));
+    rows+=(buildProductRowsString(ti.barvaTvarnice, barvaTvarniceLabel));
   }
  }else{
-  ws.addRow([`Typ sloupků`, data.typSloupku]);
-  rows+=(buildProductRowsString(`Typ sloupků`, data.typSloupku));
+  ws.addRow([ti.typSloupku, typSloupkuLabel]);
+  rows+=(buildProductRowsString(ti.typSloupku, typSloupkuLabel));
  }
- ws.addRow([`Barva dílců`, data.barva]);
- ws.addRow([`Motiv`, data.motiv]);
- ws.addRow(["Celkem:", " ", celkem+ " Kč", (celkem * sazbaDph).toFixed(0)+ " Kč", (celkem *(1+sazbaDph)).toFixed(0)+ " Kč"])
+ const barvaDilcuLabel = barvy[data.barva] ?? data.barva;
+ const motivLabel = motivy[data.motiv] ?? data.motiv;
+ ws.addRow([ti.barvaDilcu, barvaDilcuLabel]);
+ ws.addRow([ti.motiv, motivLabel]);
+ ws.addRow([ti.celkem, " ", money(celkem), money(celkem * sazbaDph), money(celkem *(1+sazbaDph))])
 
- rows+=(buildProductRowsString(`Barva dílců`, data.barva));
- rows+=(buildProductRowsString(`Motiv`, data.motiv));
- rows+=(buildProductRows("Celkem:", " ", celkem, (celkem * sazbaDph), celkem *(1+sazbaDph)))
+ rows+=(buildProductRowsString(ti.barvaDilcu, barvaDilcuLabel));
+ rows+=(buildProductRowsString(ti.motiv, motivLabel));
+ rows+=(buildProductRows(money, ti.celkem, " ", celkem, (celkem * sazbaDph), celkem *(1+sazbaDph)))
 
  ws.columns.forEach((col, index) => {
   if(index == 0){
@@ -684,7 +1132,7 @@ if(data.dilce && data.rozmeryDilcu  && data.rozmeryDilcu.length > 0){
   if(index > 0 && index < 5) col.width = 30
   if(index > 0 && index <= 3)col.alignment ={horizontal: "right"}
  })
- const fullHtml = htmlToPdf(data.fullname,data.email, data.phoneNumber, data.address, data.obec, photo1, photo2, photo3, rows, sazbaDph,data.message)
+ const fullHtml = htmlToPdf(data.fullname,data.email, data.phoneNumber, data.address, data.obec,photo1, photo2, photo3, rows, sazbaDph,data.message, data.company, lang)
  const tmpDir = os.tmpdir();
  const filePath = path.join(tmpDir, "kalkulace.xlsx");
  const pdfFile = path.join(tmpDir, "kalkulace.pdf");
@@ -750,17 +1198,21 @@ export async function getProducts(start: number, end: number){
 }
 
 export async function sendPergConf(
-  values: PergolaConfType
+  values: PergolaConfType,
+  /** Jazyk konfigurátoru (`?lang=`) — jde do potvrzovacího e-mailu i do hlášek. */
+  langValue?: string
 ): Promise<ActionResponse<PergolaConfType>> {
   let revalidate = false;
   let uploadFile: SanityImageAssetDocument| null=null;
   const transporter = smtp();
+  const lang = getLang(langValue);
+  const m = contactActionMessages[lang];
   try {
     const validatedData = pergolaSchema.safeParse(values);
     if (!validatedData.success) {
       return {
         success: false,
-        message: "Některá pole jste nevyplnili dobře",
+        message: m.invalid,
         errors: validatedData.error.flatten().fieldErrors,
         inputs: values,
       };
@@ -805,9 +1257,9 @@ if (data.file && data.file.length > 0) {
         const mailOptions: any//eslint-disable-line @typescript-eslint/no-explicit-any
          = {
           from: process.env.FROM_EMAIL,
-          to: ["adam.hitzger@icloud.com"],
+          to: "martin@centralmedia.cz",
           subject: `Nová poptávka z konfigurátoru - ${data.fullname}`,
-          html: await render(PergMail(data, pergs))
+          html: await render(PergMail(data, pergs, lang))
         }
         console.log(urls)
         if(urls.length > 0) {
@@ -821,14 +1273,14 @@ if (data.file && data.file.length > 0) {
         revalidate = false;
         return {
           success: false,
-          message: "Nepodařilo se odeslat e-mail. Zkuste to znovu",
+          message: m.mailFailed,
         };
       } else {
         revalidate = true;
 
         return {
           success: true,
-          message: "Děkujeme za záslání! Co nevidět se Vám ozveme.",
+          message: m.success,
         };
       }
     }
@@ -836,7 +1288,7 @@ if (data.file && data.file.length > 0) {
     console.error(error);
     return {
       success: false,
-      message: "Nepovedlo se odeslat Vaše údaje",
+      message: m.failed,
     };
   } finally {
     if (revalidate) {
@@ -846,17 +1298,21 @@ if (data.file && data.file.length > 0) {
 }
 
 export async function sendConf(
-  values: ConfiguratorType
+  values: ConfiguratorType,
+  /** Jazyk konfigurátoru (`?lang=`) — jde do e-mailu, PDF nabídky i XLSX kalkulace. */
+  langValue?: string
 ): Promise<ActionResponse<ConfiguratorType>> {
   let revalidate = false
   let uploadFile: SanityImageAssetDocument| null=null;
   const transporter = smtp();
+  const lang = getLang(langValue);
+  const m = contactActionMessages[lang];
   try {
     const validatedData = confSchema.safeParse(values);
     if (!validatedData.success) {
       return {
         success: false,
-        message: "Některá pole jste nevyplnili dobře",
+        message: m.invalid,
         errors: validatedData.error.flatten().fieldErrors,
         inputs: values,
       };
@@ -865,13 +1321,13 @@ export async function sendConf(
 
       const data = validatedData.data;
       const isCompany = data.company && data.company.length>0 ? true : false
-      const filePath2 = await createXlsx(data, isCompany,photos.branka[0], photos.dvoukridla[0], photos.bioklimaticka[0]
+      const filePath2 = await createXlsx(data, isCompany,photos.branka[0], photos.dvoukridla[0], photos.bioklimaticka[0], lang
         )
 if (!filePath2) {
   console.error("Chyba: createXlsx nevrátil platnou cestu k souboru.");
   return {
     success: false,
-    message: "Nepodařilo se vytvořit soubor s kalkulací.",
+    message: m.calcFailed,
   };
 }
       console.log(data.file?.[0])
@@ -910,12 +1366,12 @@ if (data.file && data.file.length > 0) {
   }
 }
 const html = await render(ConfMail({userName: data.fullname,
-          userEmail: data.email, tel: data.phoneNumber, address: data.address, city: data.obec, msg: data.message,zip: data.zip,  company: data.company, photos: photos, data: data}))
+          userEmail: data.email, tel: data.phoneNumber, address: data.address, city: data.obec, msg: data.message,zip: data.zip,  company: data.company, photos: photos, data: data, lang}))
       const mailOptions: any //eslint-disable-line @typescript-eslint/no-explicit-any
       = {
         from: process.env.FROM_EMAIL,
      //to: "nabidky@konstantahp.cz",
-      to: "adam.hitzger@icloud.com",
+      to: "martin@centralmedia.cz",
         subject: `Nová poptávka z konfigurátoru - ${data.fullname}`,
         html,
         attachments: [
@@ -968,14 +1424,14 @@ const html = await render(ConfMail({userName: data.fullname,
         console.log("Odpoved z SMTP: ",sendMail.response)
         return {
           success: true,
-          message: "Děkujeme za záslání! Co nevidět se Vám ozveme.",
+          message: m.success,
         };
       }else {
         revalidate = false;
 
         return {
           success: false,
-          message: "Nepodařilo se odeslat e-mail. Zkuste to znovu",
+          message: m.mailFailed,
         };
       }
     }
@@ -984,7 +1440,7 @@ const html = await render(ConfMail({userName: data.fullname,
     console.error(error);
     return {
       success: false,
-      message: "Nepovedlo se odeslat Vaše údaje",
+      message: m.failed,
     };
   } finally {
     if (revalidate) {

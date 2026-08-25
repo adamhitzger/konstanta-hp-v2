@@ -22,6 +22,24 @@ export const InlineCheckbox = forwardRef<HTMLInputElement, { label: string } & C
 )
 InlineCheckbox.displayName = "InlineCheckbox"
 
+/**
+ * Nativní radio ve stejném vizuálu jako `InlineCheckbox`, jen kulaté — pro doplňkové
+ * volby, ze kterých jde vybrat právě jednu (kování branky). Nativní `<input type="radio">`
+ * si vzájemnou výlučnost řeší sám podle `name`, takže stačí `register(...)` z RHF.
+ */
+export const InlineRadio = forwardRef<HTMLInputElement, { label: string } & ComponentPropsWithoutRef<"input">>(
+  ({ label, className, id, ...props }, ref) => (
+    <label htmlFor={id} className={cn("flex cursor-pointer items-center gap-2 text-sm text-foreground/80", className)}>
+      <span className="relative flex size-4 shrink-0 items-center justify-center rounded-full border border-black/40 transition-colors has-[:checked]:border-brand has-[:checked]:bg-brand">
+        <input ref={ref} id={id} type="radio" className="peer absolute inset-0 size-full cursor-pointer opacity-0" {...props} />
+        <span className="pointer-events-none size-1.5 rounded-full bg-brand-foreground opacity-0 peer-checked:opacity-100" />
+      </span>
+      {label}
+    </label>
+  ),
+)
+InlineRadio.displayName = "InlineRadio"
+
 /** Karta pro rychlé odmítnutí produktu ("Nechci bránu/branku") — vlastní vzhled, ne z formuláře. */
 export function DeclineCard({
   label,

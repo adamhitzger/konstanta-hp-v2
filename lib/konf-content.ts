@@ -32,6 +32,11 @@ export type GateProductConfig = {
   arrayField: GateFieldKey
   /** Klíč v `ConfPhotos` (Sanity) se skutečnými fotkami realizací tohoto typu. */
   photosKey: keyof ConfPhotos
+  /**
+   * Křídlová brána — jen u ní se v kroku „Brána“ nabízí výztužná tyč (`tyc`).
+   * U posuvných, teleskopických a sekčních bran se křídlo nevyztužuje.
+   */
+  kridlova?: true
 }
 
 // Devět typů vjezdových bran — přesně názvy polí ze stávajícího confSchema,
@@ -45,6 +50,7 @@ export const gateProducts: GateProductConfig[] = [
     countField: "celkem2K",
     arrayField: "rozmery2KBran",
     photosKey: "dvoukridla",
+    kridlova: true,
   },
   {
     id: "jednokridla",
@@ -54,6 +60,7 @@ export const gateProducts: GateProductConfig[] = [
     countField: "celkemK",
     arrayField: "rozmeryKBran",
     photosKey: "jednokridla",
+    kridlova: true,
   },
   {
     id: "samonosna",
@@ -119,6 +126,18 @@ export const gateProducts: GateProductConfig[] = [
     photosKey: "sekcni",
   },
 ]
+
+/**
+ * Kování branky — vzájemně se vylučující volby, v konfigurátoru se proto vykreslují
+ * jako radio, ne jako checkboxy. Hodnota se ukládá do `rozmeryBranek[i].kovani`.
+ * `madlo` je držadlo v dané délce v mm.
+ */
+export const brankaKovaniOptions = [
+  { value: "kliky-mt", label: "Kliky M&T" },
+  { value: "madlo-300", label: "Madlo 300 mm" },
+  { value: "madlo-225", label: "Madlo 225 mm" },
+  { value: "madlo-1250", label: "Madlo 1250 mm" },
+] as const
 
 export const sloupkyOptions = [
   { value: "vlastni", label: "Mám své", image: null },
@@ -187,7 +206,7 @@ export const motivy: { src: string; motiv: string; imgSrc: string | null }[] = [
   { src: "tahokov", motiv: "Tahokov", imgSrc: "tahokov" },
   // Šikmá (žaluziová) lamela z profilu RP-51038, krycí výška 105,5 mm.
   { src: "lamela-105", motiv: "Lamela Z", imgSrc: "lamela-105" },
-  { src: "vypaleni", motiv: "Vypálení plochy", imgSrc: null },
+  { src: "vypaleni", motiv: "Vypálení plochy", imgSrc: "vypaleni" },
 ]
 
 /** Cesta k modelu motivu, nebo `null` u motivů bez fotky. */

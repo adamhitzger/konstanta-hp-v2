@@ -86,7 +86,10 @@ const branaRozmery = z.object({
     pocet: z.number().optional(),
     pohon: z.boolean().optional(),
     tahoma: z.boolean().optional(),
-    ovladac: z.boolean().optional()
+    ovladac: z.boolean().optional(),
+    // Výztužná tyč křídla — nabízí se jen u křídlových bran (dvoukřídlá, jednokřídlá),
+    // u posuvných a teleskopických nemá konstrukčně smysl.
+    tyc: z.boolean().optional(),
 })
 
 export const confSchema = z.object({
@@ -126,6 +129,9 @@ export const confSchema = z.object({
         zamek: z.boolean().optional(),
         schranka: z.boolean().optional(),
         zvonek: z.boolean().optional(),
+        // Kování branky — jedna volba z `brankaKovaniOptions` (kliky M&T nebo madlo
+        // 300/225/1250 mm). Ukládá se jako string, aby šly volby přidávat bez migrace.
+        kovani: z.string().optional(),
     }).array().optional(),
     celkemBranek: z.number().optional(),
     sloupky: z.boolean().optional(),

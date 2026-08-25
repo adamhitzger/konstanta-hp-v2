@@ -1135,16 +1135,52 @@ export const gateLabels: Record<Lang, Record<string, string>> = {
   },
 }
 
-export const gateExtrasLabels: Record<Lang, { pohon: string; tahoma: string; ovladac: string }> = {
-  cs: { pohon: "Automatický pohon", tahoma: "Tahoma Switch", ovladac: "Ovladač" },
-  sk: { pohon: "Automatický pohon", tahoma: "Tahoma Switch", ovladac: "Ovládač" },
-  de: { pohon: "Automatischer Antrieb", tahoma: "Tahoma Switch", ovladac: "Fernbedienung" },
+// `tyc` (výztužná tyč křídla) se přidává jen ke křídlovým bránám — viz `kridlova`
+// v `gateProducts` a `step-brana.tsx`.
+export const gateExtrasLabels: Record<Lang, { pohon: string; tahoma: string; ovladac: string; tyc: string }> = {
+  cs: { pohon: "Automatický pohon", tahoma: "Tahoma Switch", ovladac: "Ovladač", tyc: "Tyč pro zpevnění křídla" },
+  sk: { pohon: "Automatický pohon", tahoma: "Tahoma Switch", ovladac: "Ovládač", tyc: "Tyč na spevnenie krídla" },
+  de: { pohon: "Automatischer Antrieb", tahoma: "Tahoma Switch", ovladac: "Fernbedienung", tyc: "Verstärkungsstange für Torflügel" },
 }
 
 export const brankaExtrasLabels: Record<Lang, { zamek: string; schranka: string; zvonek: string }> = {
   cs: { zamek: "El. zámek", schranka: "Integrovaná schránka", zvonek: "Videozvonek" },
   sk: { zamek: "El. zámok", schranka: "Integrovaná schránka", zvonek: "Videozvonok" },
   de: { zamek: "Elektroschloss", schranka: "Integrierter Briefkasten", zvonek: "Video-Türklingel" },
+}
+
+/**
+ * Kování branky. `title` je popisek skupiny, `options` jsou klíčované hodnotami
+ * z `brankaKovaniOptions` — vybrat lze vždy jen jednu (radio).
+ */
+export const brankaKovaniLabels: Record<Lang, { title: string; options: Record<string, string> }> = {
+  cs: {
+    title: "Kování",
+    options: {
+      "kliky-mt": "Kliky M&T",
+      "madlo-300": "Madlo 300 mm",
+      "madlo-225": "Madlo 225 mm",
+      "madlo-1250": "Madlo 1250 mm",
+    },
+  },
+  sk: {
+    title: "Kovanie",
+    options: {
+      "kliky-mt": "Kľučky M&T",
+      "madlo-300": "Madlo 300 mm",
+      "madlo-225": "Madlo 225 mm",
+      "madlo-1250": "Madlo 1250 mm",
+    },
+  },
+  de: {
+    title: "Beschlag",
+    options: {
+      "kliky-mt": "Drückergarnitur M&T",
+      "madlo-300": "Stoßgriff 300 mm",
+      "madlo-225": "Stoßgriff 225 mm",
+      "madlo-1250": "Stoßgriff 1250 mm",
+    },
+  },
 }
 
 // barvy — sdílený slovník napříč konfigurátory, klíčovaný podle CS názvu (kanonický klíč)
@@ -1925,4 +1961,579 @@ export const pergStepUpevneniContent = {
   cs: { titlePre: "Jak chcete upevnit ", titleAccent: "pergolu", titlePost: "?", desc: "Vyberte jeden nebo víc způsobů uchycení a doplňte rozměry." },
   sk: { titlePre: "Ako chcete ", titleAccent: "pergolu", titlePost: " upevniť?", desc: "Vyberte jeden alebo viac spôsobov uchytenia a doplňte rozmery." },
   de: { titlePre: "Wie möchten Sie die ", titleAccent: "Pergola", titlePost: " befestigen?", desc: "Wählen Sie eine oder mehrere Befestigungsarten und ergänzen Sie die Maße." },
+}
+
+// ---------------------------------------------------------------------------
+// POTVRZOVACÍ E-MAILY, PDF NABÍDKA A XLSX KALKULACE
+// (components/ConfMail.tsx, components/PergMail.tsx, lib/actions.ts)
+//
+// Jazyk se sem dostává jako druhý argument server actions `sendConf` /
+// `sendPergConf` — konfigurátor ho posílá ze stejné prop `lang`, jakou dostal
+// z `?lang=`. Hodnotové slovníky (barvy, motivy, typy bran, kování, stínění…)
+// se nedublují — bere se to, co už používá UI konfigurátoru.
+// ---------------------------------------------------------------------------
+
+/** Datum a čísla se formátují podle jazyka příjemce. Měna zůstává CZK. */
+export const localeTags: Record<Lang, string> = { cs: "cs-CZ", sk: "sk-SK", de: "de-DE" }
+
+/**
+ * Společný „obal" obou potvrzovacích e-mailů (hlavička, patička, blok
+ * s údaji zákazníka). ConfMail i PergMail z něj berou úplně stejné texty.
+ */
+export type MailChromeContent = {
+  preview: string
+  logoAlt: string
+  /** Mono „kicker" nad nadpisem v hlavičce e-mailu. */
+  eyebrow: string
+  /** Velký kondenzovaný nadpis v hlavičce e-mailu. */
+  headline: string
+  /** Nadpis sekce s fotkami vybraných produktů. */
+  productsHeading: string
+  /** Oslovení bez jména — komponenta skládá `${salutation} ${jméno},`. */
+  salutation: string
+  intro: string
+  intro2: string
+  companyHeading: string
+  country: string
+  ico: string
+  phone: string
+  email: string
+  web: string
+  yourInfoHeading: string
+  fullName: string
+  emailLabel: string
+  phoneLabel: string
+  addressLabel: string
+  companyLabel: string
+  messageLabel: string
+  dateLabel: string
+  support: string
+  rights: string
+}
+
+export const mailContent: Record<Lang, MailChromeContent> = {
+  cs: {
+    preview: "Děkujeme za vytvoření konfigurace s Konstanta HP",
+    logoAlt: "Konstanta HP — hliníkové ploty",
+    eyebrow: "Nová poptávka z konfigurátoru",
+    headline: "Konfigurace oplocení",
+    productsHeading: "Vybrané produkty",
+    salutation: "Vážený/á",
+    intro:
+      "Děkujeme, že jste si vybrali Konstanta HP pro vytvoření vaší konfigurace! Jsme potěšeni, že vás můžeme přivítat mezi našimi váženými zákazníky. Vaše důvěra v naše produkty a služby pro nás znamená vše a zavazujeme se poskytnout vám zážitek nejvyšší kvality.",
+    intro2:
+      "Vaše konfigurace byla přijata a je zpracovávána s maximální péčí. Cenovou kalkulaci naleznete v přiloženém souboru. Vážíme si vašeho zájmu a těšíme se na další spolupráci.",
+    companyHeading: "Informace o společnosti",
+    country: "Česká republika",
+    ico: "IČO",
+    phone: "Telefon",
+    email: "E-mail",
+    web: "Web",
+    yourInfoHeading: "Vaše informace",
+    fullName: "Celé jméno zákazníka",
+    emailLabel: "E-mail",
+    phoneLabel: "Telefonní číslo",
+    addressLabel: "Adresa",
+    companyLabel: "Firma",
+    messageLabel: "Zpráva",
+    dateLabel: "Datum",
+    support:
+      "Pokud máte jakékoli dotazy nebo připomínky, neváhejte kontaktovat náš tým zákaznické podpory. Jsme tu, abychom vám pomohli!",
+    rights: "Všechna práva vyhrazena.",
+  },
+  sk: {
+    preview: "Ďakujeme za vytvorenie konfigurácie s Konstanta HP",
+    logoAlt: "Konstanta HP — hliníkové ploty",
+    eyebrow: "Nová poptávka z konfigurátora",
+    headline: "Konfigurácia oplotenia",
+    productsHeading: "Vybrané produkty",
+    salutation: "Vážený/á",
+    intro:
+      "Ďakujeme, že ste si vybrali Konstanta HP na vytvorenie vašej konfigurácie! Teší nás, že vás môžeme privítať medzi našimi váženými zákazníkmi. Vaša dôvera v naše produkty a služby pre nás znamená všetko a zaväzujeme sa poskytnúť vám zážitok najvyššej kvality.",
+    intro2:
+      "Vaša konfigurácia bola prijatá a spracúva sa s maximálnou starostlivosťou. Cenovú kalkuláciu nájdete v priloženom súbore. Vážime si váš záujem a tešíme sa na ďalšiu spoluprácu.",
+    companyHeading: "Informácie o spoločnosti",
+    country: "Česká republika",
+    ico: "IČO",
+    phone: "Telefón",
+    email: "E-mail",
+    web: "Web",
+    yourInfoHeading: "Vaše informácie",
+    fullName: "Celé meno zákazníka",
+    emailLabel: "E-mail",
+    phoneLabel: "Telefónne číslo",
+    addressLabel: "Adresa",
+    companyLabel: "Firma",
+    messageLabel: "Správa",
+    dateLabel: "Dátum",
+    support:
+      "Ak máte akékoľvek otázky alebo pripomienky, neváhajte kontaktovať náš tím zákazníckej podpory. Sme tu, aby sme vám pomohli!",
+    rights: "Všetky práva vyhradené.",
+  },
+  de: {
+    preview: "Vielen Dank für Ihre Konfiguration bei Konstanta HP",
+    logoAlt: "Konstanta HP — Aluminiumzäune",
+    eyebrow: "Neue Anfrage aus dem Konfigurator",
+    headline: "Zaunkonfiguration",
+    productsHeading: "Ausgewählte Produkte",
+    salutation: "Guten Tag",
+    intro:
+      "vielen Dank, dass Sie sich für Konstanta HP entschieden haben! Wir freuen uns, Sie unter unseren geschätzten Kunden begrüßen zu dürfen. Ihr Vertrauen in unsere Produkte und Leistungen bedeutet uns alles und wir verpflichten uns, Ihnen ein Erlebnis von höchster Qualität zu bieten.",
+    intro2:
+      "Ihre Konfiguration ist bei uns eingegangen und wird mit größter Sorgfalt bearbeitet. Die Preiskalkulation finden Sie in der angehängten Datei. Wir schätzen Ihr Interesse und freuen uns auf die weitere Zusammenarbeit.",
+    companyHeading: "Angaben zum Unternehmen",
+    country: "Tschechische Republik",
+    ico: "Firmennummer",
+    phone: "Telefon",
+    email: "E-Mail",
+    web: "Web",
+    yourInfoHeading: "Ihre Angaben",
+    fullName: "Vollständiger Name",
+    emailLabel: "E-Mail",
+    phoneLabel: "Telefonnummer",
+    addressLabel: "Adresse",
+    companyLabel: "Firma",
+    messageLabel: "Nachricht",
+    dateLabel: "Datum",
+    support:
+      "Wenn Sie Fragen oder Anmerkungen haben, wenden Sie sich bitte jederzeit an unseren Kundenservice. Wir sind gerne für Sie da!",
+    rights: "Alle Rechte vorbehalten.",
+  },
+}
+
+/** Tabulka konfigurace pergoly v PergMail — typy a hodnoty berou `mountLabels`, `stineniLabels` atd. */
+export type PergMailContent = {
+  /** Velký kondenzovaný nadpis v hlavičce e-mailu (obdoba `MailChromeContent.headline`). */
+  headline: string
+  /** Nadpis sekce s rozměry a parametry pergoly. */
+  configHeading: string
+  typeHeading: string
+  pergolaLabel: string
+  notSpecified: string
+  width: string
+  length: string
+  depth: string
+  cornerA: string
+  cornerB: string
+  cornerC: string
+  moreHeading: string
+  shading: string
+  sidesAlt: string
+  sides: string
+  material: string
+  color: string
+  autoGenerated: string
+}
+
+export const pergMailContent: Record<Lang, PergMailContent> = {
+  cs: {
+    headline: "Konfigurace pergoly",
+    configHeading: "Parametry pergoly",
+    typeHeading: "Typ pergoly",
+    pergolaLabel: "Pergola",
+    notSpecified: "Neuvedeno",
+    width: "Šířka",
+    length: "Délka",
+    depth: "Hloubka",
+    cornerA: "A – Délka",
+    cornerB: "B – Hloubka",
+    cornerC: "C – Výška",
+    moreHeading: "Další informace",
+    shading: "Stínění",
+    sidesAlt: "Strany stínění",
+    sides: "Strany",
+    material: "Materiál",
+    color: "Barva",
+    autoGenerated: "Tento e-mail byl automaticky vygenerován.",
+  },
+  sk: {
+    headline: "Konfigurácia pergoly",
+    configHeading: "Parametre pergoly",
+    typeHeading: "Typ pergoly",
+    pergolaLabel: "Pergola",
+    notSpecified: "Neuvedené",
+    width: "Šírka",
+    length: "Dĺžka",
+    depth: "Hĺbka",
+    cornerA: "A – Dĺžka",
+    cornerB: "B – Hĺbka",
+    cornerC: "C – Výška",
+    moreHeading: "Ďalšie informácie",
+    shading: "Tienenie",
+    sidesAlt: "Strany tienenia",
+    sides: "Strany",
+    material: "Materiál",
+    color: "Farba",
+    autoGenerated: "Tento e-mail bol automaticky vygenerovaný.",
+  },
+  de: {
+    headline: "Pergola-Konfiguration",
+    configHeading: "Pergola-Parameter",
+    typeHeading: "Pergola-Typ",
+    pergolaLabel: "Pergola",
+    notSpecified: "Nicht angegeben",
+    width: "Breite",
+    length: "Länge",
+    depth: "Tiefe",
+    cornerA: "A – Länge",
+    cornerB: "B – Tiefe",
+    cornerC: "C – Höhe",
+    moreHeading: "Weitere Angaben",
+    shading: "Beschattung",
+    sidesAlt: "Beschattete Seiten",
+    sides: "Seiten",
+    material: "Material",
+    color: "Farbe",
+    autoGenerated: "Diese E-Mail wurde automatisch generiert.",
+  },
+}
+
+/**
+ * Texty PDF cenové nabídky (`htmlToPdf` v lib/actions.ts). Položky v `termsPersonalItems`
+ * a `termsCompanyItems` a texty `termText` / `depositText` obsahují inline HTML
+ * (`<b>`, `<strong>`) — vkládají se do šablony bez escapování.
+ */
+export type QuoteContent = {
+  docTitle: string
+  numberPrefix: string
+  metaNumber: string
+  metaIssued: string
+  metaValid: string
+  supplier: string
+  customer: string
+  country: string
+  ico: string
+  phone: string
+  email: string
+  web: string
+  company: string
+  configHeading: string
+  itemsHeading: string
+  itemsCont: string
+  thItem: string
+  thQty: string
+  thNoVat: string
+  thVat: string
+  thWithVat: string
+  specsHeading: string
+  noteHeading: string
+  termHeading: string
+  termBadge: string
+  termText: string
+  depositHeading: string
+  depositBadge: string
+  depositText: string
+  termsHeading: string
+  termsPersonal: string
+  termsPersonalItems: string[]
+  termsPersonalNote: string
+  termsCompany: string
+  termsCompanyItems: string[]
+  termsCompanyNote: string
+  disclaimer: string
+  validUntil: string
+}
+
+export const quoteContent: Record<Lang, QuoteContent> = {
+  cs: {
+    docTitle: "Cenová nabídka",
+    numberPrefix: "č.",
+    metaNumber: "Nabídka č.",
+    metaIssued: "Datum vystavení",
+    metaValid: "Platnost nabídky do",
+    supplier: "Dodavatel",
+    customer: "Odběratel",
+    country: "Česká republika",
+    ico: "IČO",
+    phone: "Telefon",
+    email: "E-mail",
+    web: "Web",
+    company: "Firma",
+    configHeading: "Konfigurace",
+    itemsHeading: "Položky nabídky",
+    itemsCont: "Položky nabídky — pokračování",
+    thItem: "Položka",
+    thQty: "Množství",
+    thNoVat: "Cena bez DPH",
+    thVat: "DPH",
+    thWithVat: "Cena s DPH",
+    specsHeading: "Specifikace",
+    noteHeading: "Poznámka zákazníka",
+    termHeading: "Termín realizace",
+    termBadge: "8–14 týdnů",
+    termText:
+      "Realizace zakázky proběhne v rozmezí <strong>8–14 týdnů</strong> od podpisu smlouvy a uhrazení zálohy.",
+    depositHeading: "Záloha",
+    depositBadge: "70 %",
+    depositText:
+      "Před zahájením realizace je požadována záloha ve výši <strong>70 % z celkové ceny zakázky</strong>. Doplatek bude uhrazen v den montáže po předání díla.",
+    termsHeading: "Obchodní podmínky",
+    termsPersonal: "Fyzické osoby",
+    termsPersonalItems: [
+      "Záruka na materiál: <b>10 let</b>",
+      "Záruka na pohon: <b>3 roky</b>",
+      "Záruka na montážní práce: <b>2 roky</b>",
+    ],
+    termsPersonalNote:
+      "Záruka se vztahuje na vady materiálu, funkčnost pohonu a kvalitu provedených montážních prací.",
+    termsCompany: "Firmy",
+    termsCompanyItems: [
+      "Splatnost faktur: <b>30 dnů</b>",
+      "Pozastávky: <b>10 % / 8 % / 2 %</b>",
+      "Zařízení staveniště / vícepráce: <b>0 %</b>",
+      "Záruka výrobků / pohonů / montáže: <b>55 / 36 / 24 měsíců</b>",
+    ],
+    termsCompanyNote: "Realizace zakázky proběhne v dohodnutý termín s objednatelem.",
+    disclaimer:
+      "Nabídka je nezávazná a vychází z údajů zadaných v konfigurátoru na konstantahp.cz. Konečná cena bude potvrzena po zaměření na místě.",
+    validUntil: "Platnost nabídky do",
+  },
+  sk: {
+    docTitle: "Cenová ponuka",
+    numberPrefix: "č.",
+    metaNumber: "Ponuka č.",
+    metaIssued: "Dátum vystavenia",
+    metaValid: "Platnosť ponuky do",
+    supplier: "Dodávateľ",
+    customer: "Odberateľ",
+    country: "Česká republika",
+    ico: "IČO",
+    phone: "Telefón",
+    email: "E-mail",
+    web: "Web",
+    company: "Firma",
+    configHeading: "Konfigurácia",
+    itemsHeading: "Položky ponuky",
+    itemsCont: "Položky ponuky — pokračovanie",
+    thItem: "Položka",
+    thQty: "Množstvo",
+    thNoVat: "Cena bez DPH",
+    thVat: "DPH",
+    thWithVat: "Cena s DPH",
+    specsHeading: "Špecifikácia",
+    noteHeading: "Poznámka zákazníka",
+    termHeading: "Termín realizácie",
+    termBadge: "8–14 týždňov",
+    termText:
+      "Realizácia zákazky prebehne v rozmedzí <strong>8–14 týždňov</strong> od podpisu zmluvy a uhradenia zálohy.",
+    depositHeading: "Záloha",
+    depositBadge: "70 %",
+    depositText:
+      "Pred začatím realizácie je požadovaná záloha vo výške <strong>70 % z celkovej ceny zákazky</strong>. Doplatok bude uhradený v deň montáže po odovzdaní diela.",
+    termsHeading: "Obchodné podmienky",
+    termsPersonal: "Fyzické osoby",
+    termsPersonalItems: [
+      "Záruka na materiál: <b>10 rokov</b>",
+      "Záruka na pohon: <b>3 roky</b>",
+      "Záruka na montážne práce: <b>2 roky</b>",
+    ],
+    termsPersonalNote:
+      "Záruka sa vzťahuje na vady materiálu, funkčnosť pohonu a kvalitu vykonaných montážnych prác.",
+    termsCompany: "Firmy",
+    termsCompanyItems: [
+      "Splatnosť faktúr: <b>30 dní</b>",
+      "Zádržné: <b>10 % / 8 % / 2 %</b>",
+      "Zariadenie staveniska / práce navyše: <b>0 %</b>",
+      "Záruka na výrobky / pohony / montáž: <b>55 / 36 / 24 mesiacov</b>",
+    ],
+    termsCompanyNote: "Realizácia zákazky prebehne v dohodnutom termíne s objednávateľom.",
+    disclaimer:
+      "Ponuka je nezáväzná a vychádza z údajov zadaných v konfigurátore na konstantahp.cz. Konečná cena bude potvrdená po zameraní na mieste.",
+    validUntil: "Platnosť ponuky do",
+  },
+  de: {
+    docTitle: "Preisangebot",
+    numberPrefix: "Nr.",
+    metaNumber: "Angebot Nr.",
+    metaIssued: "Ausstellungsdatum",
+    metaValid: "Angebot gültig bis",
+    supplier: "Lieferant",
+    customer: "Kunde",
+    country: "Tschechische Republik",
+    ico: "Firmennummer",
+    phone: "Telefon",
+    email: "E-Mail",
+    web: "Web",
+    company: "Firma",
+    configHeading: "Konfiguration",
+    itemsHeading: "Angebotspositionen",
+    itemsCont: "Angebotspositionen — Fortsetzung",
+    thItem: "Position",
+    thQty: "Menge",
+    thNoVat: "Preis netto",
+    thVat: "MwSt.",
+    thWithVat: "Preis brutto",
+    specsHeading: "Spezifikation",
+    noteHeading: "Anmerkung des Kunden",
+    termHeading: "Realisierungstermin",
+    termBadge: "8–14 Wochen",
+    termText:
+      "Die Ausführung des Auftrags erfolgt innerhalb von <strong>8–14 Wochen</strong> nach Vertragsunterzeichnung und Zahlung der Anzahlung.",
+    depositHeading: "Anzahlung",
+    depositBadge: "70 %",
+    depositText:
+      "Vor Beginn der Ausführung wird eine Anzahlung in Höhe von <strong>70 % des Gesamtauftragswerts</strong> verlangt. Die Restzahlung erfolgt am Montagetag nach Übergabe des Werks.",
+    termsHeading: "Geschäftsbedingungen",
+    termsPersonal: "Privatpersonen",
+    termsPersonalItems: [
+      "Garantie auf Material: <b>10 Jahre</b>",
+      "Garantie auf den Antrieb: <b>3 Jahre</b>",
+      "Garantie auf Montagearbeiten: <b>2 Jahre</b>",
+    ],
+    termsPersonalNote:
+      "Die Garantie gilt für Materialfehler, die Funktion des Antriebs und die Qualität der ausgeführten Montagearbeiten.",
+    termsCompany: "Firmen",
+    termsCompanyItems: [
+      "Zahlungsziel der Rechnungen: <b>30 Tage</b>",
+      "Einbehalte: <b>10 % / 8 % / 2 %</b>",
+      "Baustelleneinrichtung / Mehrleistungen: <b>0 %</b>",
+      "Garantie auf Produkte / Antriebe / Montage: <b>55 / 36 / 24 Monate</b>",
+    ],
+    termsCompanyNote: "Die Ausführung des Auftrags erfolgt zum mit dem Auftraggeber vereinbarten Termin.",
+    disclaimer:
+      "Das Angebot ist unverbindlich und basiert auf den im Konfigurator auf konstantahp.cz eingegebenen Angaben. Der endgültige Preis wird nach dem Aufmaß vor Ort bestätigt.",
+    validUntil: "Angebot gültig bis",
+  },
+}
+
+/**
+ * Názvy řádků kalkulace — sdílí je XLSX (`createXlsx`) i tabulka v PDF, aby
+ * obě přílohy mluvily stejně. Ceny se nepřepočítávají, měna zůstává Kč.
+ */
+export type QuoteItemsContent = {
+  sheetName: string
+  currency: string
+  header: { produkt: string; mnozstvi: string; bezDph: string; dph: string; sDph: string }
+  tyc: string
+  pohon: string
+  zastrc: string
+  tahoma: string
+  ovladac: string
+  montazBrany: string
+  branka: string
+  zamek: string
+  schranka: string
+  zvonek: string
+  /** Klíče odpovídají `brankaKovaniOptions`; `fallback` pro nevyplněnou volbu. */
+  kovani: Record<string, string>
+  kovaniFallback: string
+  montazBranky: string
+  dilce: string
+  montazDilcu: string
+  typSloupku: string
+  cenaBm: string
+  cenaCepicky: string
+  povrchTvarnice: string
+  barvaTvarnice: string
+  barvaDilcu: string
+  motiv: string
+  celkem: string
+}
+
+export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
+  cs: {
+    sheetName: "Kalkulace",
+    currency: "Kč",
+    header: { produkt: "Produkt", mnozstvi: "Množství", bezDph: "Cena bez DPH", dph: "DPH", sDph: "Cena s DPH" },
+    tyc: "Tyč pro zpevnění křídla brány",
+    pohon:
+      "1x Somfy Elixo500 3S io – pohon s řídicí jednotkou a rádiovým přijímačem, 1x Somfy Master Pro Bitech – bezpečnostní fotobuňky (1 pár) dosah 10 m, 2x Odblokovací klíč (použití při výpadku proudu)",
+    zastrc: "Zástrč brány",
+    tahoma:
+      "Somfy TaHoma switch je centrální jednotka pro chytrou domácnost, která umožňuje ovládat a automatizovat různá zařízení v domě, jako jsou rolety, žaluzie, brány, osvětlení, topení a další",
+    ovladac: "1x Somfy Keygo io – dálkový ovladač",
+    montazBrany: "Montáž brány",
+    branka: "Branka",
+    zamek: "El. zámek napětí 9 – 12 V AC/DC, s posuvnou zarážkou a mechanickým odblokováním",
+    schranka: "Poštovní schránka zapuštěná do lamely",
+    zvonek: "Domovní videotelefon Somfy V500 PRO io",
+    kovani: {
+      "kliky-mt": "Kování branky nerez — kliky M&T (klika/klika – koule/klika)",
+      "madlo-300": "Kování branky nerez — madlo 300 mm",
+      "madlo-225": "Kování branky nerez — madlo 225 mm",
+      "madlo-1250": "Kování branky nerez — madlo 1250 mm",
+    },
+    kovaniFallback: "Kování branky nerez (klika/klika – koule/klika)",
+    montazBranky: "Montáž branky",
+    dilce: "Plotové dílce",
+    montazDilcu: "Montáž dílců",
+    typSloupku: "Typ sloupků",
+    cenaBm: "Cena za bm",
+    cenaCepicky: "Cena čepičky za kus",
+    povrchTvarnice: "Povrch tvárnice",
+    barvaTvarnice: "Barva tvárnice",
+    barvaDilcu: "Barva dílců",
+    motiv: "Motiv",
+    celkem: "Celkem:",
+  },
+  sk: {
+    sheetName: "Kalkulácia",
+    currency: "Kč",
+    header: { produkt: "Produkt", mnozstvi: "Množstvo", bezDph: "Cena bez DPH", dph: "DPH", sDph: "Cena s DPH" },
+    tyc: "Tyč na spevnenie krídla brány",
+    pohon:
+      "1x Somfy Elixo500 3S io – pohon s riadiacou jednotkou a rádiovým prijímačom, 1x Somfy Master Pro Bitech – bezpečnostné fotobunky (1 pár) dosah 10 m, 2x Odblokovací kľúč (použitie pri výpadku prúdu)",
+    zastrc: "Zástrč brány",
+    tahoma:
+      "Somfy TaHoma switch je centrálna jednotka pre inteligentnú domácnosť, ktorá umožňuje ovládať a automatizovať rôzne zariadenia v dome, ako sú rolety, žalúzie, brány, osvetlenie, kúrenie a ďalšie",
+    ovladac: "1x Somfy Keygo io – diaľkový ovládač",
+    montazBrany: "Montáž brány",
+    branka: "Bránka",
+    zamek: "El. zámok napätie 9 – 12 V AC/DC, s posuvnou zarážkou a mechanickým odblokovaním",
+    schranka: "Poštová schránka zapustená do lamely",
+    zvonek: "Domový videotelefón Somfy V500 PRO io",
+    kovani: {
+      "kliky-mt": "Kovanie bránky nerez — kľučky M&T (kľučka/kľučka – guľa/kľučka)",
+      "madlo-300": "Kovanie bránky nerez — madlo 300 mm",
+      "madlo-225": "Kovanie bránky nerez — madlo 225 mm",
+      "madlo-1250": "Kovanie bránky nerez — madlo 1250 mm",
+    },
+    kovaniFallback: "Kovanie bránky nerez (kľučka/kľučka – guľa/kľučka)",
+    montazBranky: "Montáž bránky",
+    dilce: "Plotové dielce",
+    montazDilcu: "Montáž dielcov",
+    typSloupku: "Typ stĺpikov",
+    cenaBm: "Cena za bm",
+    cenaCepicky: "Cena čiapočky za kus",
+    povrchTvarnice: "Povrch tvárnice",
+    barvaTvarnice: "Farba tvárnice",
+    barvaDilcu: "Farba dielcov",
+    motiv: "Motív",
+    celkem: "Spolu:",
+  },
+  de: {
+    sheetName: "Kalkulation",
+    currency: "CZK",
+    header: { produkt: "Produkt", mnozstvi: "Menge", bezDph: "Preis netto", dph: "MwSt.", sDph: "Preis brutto" },
+    tyc: "Verstärkungsstange für den Torflügel",
+    pohon:
+      "1x Somfy Elixo500 3S io – Antrieb mit Steuereinheit und Funkempfänger, 1x Somfy Master Pro Bitech – Sicherheitslichtschranke (1 Paar), Reichweite 10 m, 2x Entriegelungsschlüssel (bei Stromausfall)",
+    zastrc: "Torriegel",
+    tahoma:
+      "Somfy TaHoma Switch ist die Zentraleinheit für das Smart Home und ermöglicht die Steuerung und Automatisierung verschiedener Geräte im Haus wie Rollläden, Jalousien, Tore, Beleuchtung, Heizung und weitere",
+    ovladac: "1x Somfy Keygo io – Handsender",
+    montazBrany: "Montage des Tors",
+    branka: "Gartentür",
+    zamek: "Elektroschloss 9 – 12 V AC/DC, mit Schiebefalle und mechanischer Entriegelung",
+    schranka: "In die Lamelle eingelassener Briefkasten",
+    zvonek: "Video-Türsprechanlage Somfy V500 PRO io",
+    kovani: {
+      "kliky-mt": "Beschlag Gartentür Edelstahl — Drückergarnitur M&T (Drücker/Drücker – Knauf/Drücker)",
+      "madlo-300": "Beschlag Gartentür Edelstahl — Stoßgriff 300 mm",
+      "madlo-225": "Beschlag Gartentür Edelstahl — Stoßgriff 225 mm",
+      "madlo-1250": "Beschlag Gartentür Edelstahl — Stoßgriff 1250 mm",
+    },
+    kovaniFallback: "Beschlag Gartentür Edelstahl (Drücker/Drücker – Knauf/Drücker)",
+    montazBranky: "Montage der Gartentür",
+    dilce: "Zaunelemente",
+    montazDilcu: "Montage der Zaunelemente",
+    typSloupku: "Pfostentyp",
+    cenaBm: "Preis pro lfm",
+    cenaCepicky: "Preis der Abdeckkappe pro Stück",
+    povrchTvarnice: "Oberfläche der Zaunsteine",
+    barvaTvarnice: "Farbe der Zaunsteine",
+    barvaDilcu: "Farbe der Elemente",
+    motiv: "Motiv",
+    celkem: "Gesamt:",
+  },
 }
