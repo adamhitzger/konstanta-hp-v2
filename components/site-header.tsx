@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Phone, Mail, ChevronDown, X } from "lucide-react"
 import { getNavItems, hasChildren, HEADER_OFFSET, type NavLeaf } from "@/components/nav/nav-data"
 import { LangSwitcher } from "@/components/nav/lang-switcher"
+import { FixedIcons } from "@/components/fixed-icons"
 import { navContent, withLang, type Lang } from "@/lib/translations"
 
 type LenisLike = {
@@ -207,14 +208,14 @@ export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
     return () => drawer.removeEventListener("keydown", onKey)
   }, [mobileOpen])
 
-  const topLinkClass =
-    "flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-foreground/45 transition-colors duration-200 hover:text-brand focus-visible:text-foreground focus-visible:outline-none"
+  const topLinkClass = "flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-foreground/45 transition-colors duration-200 hover:text-brand focus-visible:text-foreground focus-visible:outline-none"
 
   return (
     <header className="sticky top-0 z-50 w-full border-b-2 border-brand bg-background">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 xl:px-8">
-        {/* Logo — kotva vlevo. Výška se vejde do `h-20` hlavičky, jinak by logo bylo
-            tak široké, že by na velkých obrazovkách doléhalo na seznam stránek. */}
+      <div className="w-full flex flex-row justify-between items-center h-20  gap-4 px-4 sm:px-6 xl:gap-8 xl:px-8 2xl:gap-12">
+        {/* `justify-between` na liště rozdělí volné místo rovnoměrně mezi logo, menu
+            a kontakty. Žádné `mr-auto` na logu — to by všechen volný prostor spolklo
+            hned za logem a menu by se přilepilo ke kontaktům. */}
         <Link href={withLang("/", lang)} className="flex shrink-0 items-center" aria-label="Konstanta HP">
           <Image src="/logo-konstanta.svg" alt="Konstanta HP" width={300} height={104} priority className="h-12 w-auto xl:h-14" />
         </Link>
@@ -303,24 +304,12 @@ export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
             </a>
           </div>
           <LangSwitcher lang={lang} />
-          <a
-            href={withLang("/#kontakt", lang)}
-            onClick={(e) => handleAnchorClick(e, withLang("/#kontakt", lang))}
-            className="group inline-flex items-center gap-2 rounded-full border-2 border-foreground bg-foreground px-5 py-2.5 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-background transition-all duration-300 hover:border-brand hover:bg-brand hover:text-brand-foreground"
-          >
-            {t.cta}
-          </a>
         </div>
 
         {/* ---- Mobile controls ---- */}
+        {/* Poptávka je i tady na plovoucí liště (`FixedIcons`), v hlavičce zbyl jen
+            přepínač jazyka a hamburger — na úzkém displeji se tlačítko o místo prát nemusí. */}
         <div className="flex items-center gap-3 xl:hidden">
-          <a
-            href={withLang("/#kontakt", lang)}
-            onClick={(e) => handleAnchorClick(e, withLang("/#kontakt", lang))}
-            className="rounded-full border border-foreground bg-foreground px-3 py-2 font-mono text-[10px] font-medium uppercase tracking-[0.1em] text-background"
-          >
-            {t.ctaShort}
-          </a>
           <button
             ref={hamburgerRef}
             type="button"
@@ -336,6 +325,10 @@ export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
           </button>
         </div>
       </div>
+
+      {/* Plovoucí lišta poptávky — nahrazuje bývalé CTA „Poptat řešení" v hlavičce.
+          Stojí před overlayem mobilního menu, aby ji otevřená zásuvka překryla. */}
+      <FixedIcons lang={lang} />
 
       {/* ---- Mobile overlay ---- */}
       <div
@@ -420,18 +413,15 @@ export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
             )}
           </ul>
 
-          {/* contact + CTA */}
+          {/* Kontakt — CTA „Poptat řešení" nahradila plovoucí lišta (`FixedIcons`),
+              v zásuvce zůstává přímé spojení telefonem a e-mailem. */}
           <div className="mt-6 flex flex-col gap-3">
             <LangSwitcher lang={lang} />
             <a href="tel:+420770169411" className="flex items-center gap-2 font-mono text-xs text-foreground/60">
               <Phone className="h-3.5 w-3.5" /> +420 770 169 411
             </a>
-            <a
-              href={withLang("/#kontakt", lang)}
-              onClick={(e) => handleAnchorClick(e, withLang("/#kontakt", lang), closeMobile)}
-              className="rounded-full border-2 border-foreground bg-foreground px-4 py-3 text-center font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-background transition-colors hover:border-brand hover:bg-brand hover:text-brand-foreground"
-            >
-              {t.cta}
+            <a href="mailto:obchod@konstantahp.cz" className="flex items-center gap-2 font-mono text-xs text-foreground/60">
+              <Mail className="h-3.5 w-3.5" /> obchod@konstantahp.cz
             </a>
           </div>
         </nav>

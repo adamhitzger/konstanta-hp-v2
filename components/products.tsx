@@ -1,17 +1,25 @@
 import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 import { Reveal, AnimatedText } from "@/components/reveal"
-import { productsContent, type Lang } from "@/lib/translations"
+import { productsContent, withLang, type Lang } from "@/lib/translations"
 
 const images = ["/produkt-plot.png", "/produkt-brana.png", "/produkt-branka.png", "/produkt-pergola.png"]
 const codes = ["HP-01", "HP-02", "HP-03", "HP-04"]
+/** Pořadí sedí s `productsContent.items`: plot, brána, branka, pergola. Brány a branky
+ * sdílí jednu záložku galerie, proto dvakrát `filter=brany`. */
+const hrefs = [
+  "/realizace?filter=ploty",
+  "/realizace?filter=brany",
+  "/realizace?filter=brany",
+  "/realizace?filter=pergoly",
+]
 
 /* Alternating asymmetry — row 1: narrow | wide, row 2: wide | narrow */
 const colSpans = ["lg:col-span-5", "lg:col-span-7", "lg:col-span-7", "lg:col-span-5"]
 
 export function Products({ lang = "cs" }: { lang?: Lang }) {
   const t = productsContent[lang] ?? productsContent.cs
-  const products = t.items.map((p, i) => ({ ...p, image: images[i], code: codes[i] }))
+  const products = t.items.map((p, i) => ({ ...p, image: images[i], code: codes[i], href: hrefs[i] }))
 
   return (
     <section id="produkty" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
@@ -50,7 +58,7 @@ export function Products({ lang = "cs" }: { lang?: Lang }) {
                 {/* Content gradient footer */}
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/95 via-foreground/50 to-transparent p-5 pt-16">
                   <h3 className="font-heading text-xl font-bold uppercase text-background">{p.title}</h3>
-                  <p className="mt-1.5 text-base leading-relaxed text-background/90 max-w-[280px]">{p.text}</p>
+                  <p className="mt-1.5 text-sm leading-relaxed text-background/90 max-w-[360px]">{p.text}</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {p.tags.map((t) => (
                       <span
@@ -62,7 +70,7 @@ export function Products({ lang = "cs" }: { lang?: Lang }) {
                     ))}
                   </div>
                   <a
-                    href="#kontakt"
+                    href={withLang(p.href, lang)}
                     className="mt-4 inline-flex items-center gap-2 font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-background/70 transition-all duration-300 group-hover:gap-3 group-hover:text-brand"
                   >
                     {t.cta} <ArrowRight className="h-3 w-3 text-brand" />

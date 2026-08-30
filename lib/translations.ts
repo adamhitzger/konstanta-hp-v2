@@ -33,6 +33,18 @@ export function withLang(href: string, lang: Lang): string {
   return `${path}${separator}lang=${lang}${hash}`
 }
 
+/**
+ * Rok založení firmy. Drží se na jednom místě, protože se z něj počítá délka
+ * působení v hero badge — číslo se tak přetáčí samo každý rok a nemůže se
+ * rozejít s textem „rodinná firma od roku 2022" na /o-nas.
+ */
+export const FOUNDED_YEAR = 2022
+
+/** Kolik let firma funguje. Minimálně 1, ať badge nikdy neukazuje 0 nebo minus. */
+export function yearsInBusiness(now: Date = new Date()): number {
+  return Math.max(1, now.getFullYear() - FOUNDED_YEAR)
+}
+
 export const langNames: Record<Lang, { label: string; short: string }> = {
   cs: { label: "Čeština", short: "CZ" },
   sk: { label: "Slovenčina", short: "SK" },
@@ -161,6 +173,29 @@ export const navContent: Record<Lang, NavContent> = {
 }
 
 // ---------------------------------------------------------------------------
+// PLOVOUCÍ LIŠTA POPTÁVKY (fixed-icons.tsx)
+// ---------------------------------------------------------------------------
+
+/** Popisky bočních plovoucích tlačítek — vlevo kontakt, vpravo svislá kalkulace. */
+export const fixedIconsContent = {
+  cs: {
+    calc: "Kalkulace zdarma",
+    call: "Zavolejte nám",
+    write: "Napište nám",
+  },
+  sk: {
+    calc: "Kalkulácia zdarma",
+    call: "Zavolajte nám",
+    write: "Napíšte nám",
+  },
+  de: {
+    calc: "Kostenlose Kalkulation",
+    call: "Rufen Sie uns an",
+    write: "Schreiben Sie uns",
+  },
+} as const
+
+// ---------------------------------------------------------------------------
 // FOOTER (site-footer.tsx)
 // ---------------------------------------------------------------------------
 
@@ -256,7 +291,7 @@ export const footerContent = {
 export const heroContent = {
   cs: {
     metaLeft: "Konstanta HP · IČO 21827150 · CZ",
-    metaRight: "Hliníkové oplocení na míru · Est. 2010",
+    metaRight: `Hliníkové oplocení na míru · Est. ${FOUNDED_YEAR}`,
     titleLines: ["Ploty,", "které", "vydrží."],
     subtitle:
       "Navrhujeme, vyrábíme a montujeme moderní hliníkové oplocení, brány, branky a pergoly přesně na míru vašemu domu. Bez kompromisů.",
@@ -266,8 +301,10 @@ export const heroContent = {
     prevAlt: "Předchozí fotka",
     nextAlt: "Další fotka",
     goToAlt: (n: number) => `Přejít na fotku ${n}`,
-    badgeNumber: "15+",
-    badgeText: "let zkušeností",
+    /** Číslo i tvar slova se počítají z FOUNDED_YEAR — badge se přetáčí sám. */
+    badgeNumber: (years: number) => String(years),
+    badgeText: (years: number) =>
+      `${years === 1 ? "rok" : years < 5 ? "roky" : "let"} zkušeností`,
     slideAlts: [
       "Moderní hliníkový plot před rodinným domem",
       "Hliníková posuvná brána u moderního domu",
@@ -276,7 +313,7 @@ export const heroContent = {
   },
   sk: {
     metaLeft: "Konstanta HP · IČO 21827150 · CZ",
-    metaRight: "Hliníkové oplotenie na mieru · Est. 2010",
+    metaRight: `Hliníkové oplotenie na mieru · Est. ${FOUNDED_YEAR}`,
     titleLines: ["Ploty,", "ktoré", "vydržia."],
     subtitle:
       "Navrhujeme, vyrábame a montujeme moderné hliníkové oplotenie, brány, bránky a pergoly presne na mieru vášmu domu. Bez kompromisov.",
@@ -286,8 +323,9 @@ export const heroContent = {
     prevAlt: "Predchádzajúca fotka",
     nextAlt: "Ďalšia fotka",
     goToAlt: (n: number) => `Prejsť na fotku ${n}`,
-    badgeNumber: "15+",
-    badgeText: "rokov skúseností",
+    badgeNumber: (years: number) => String(years),
+    badgeText: (years: number) =>
+      `${years === 1 ? "rok" : years < 5 ? "roky" : "rokov"} skúseností`,
     slideAlts: [
       "Moderný hliníkový plot pred rodinným domom",
       "Hliníková posuvná brána pri modernom dome",
@@ -296,7 +334,7 @@ export const heroContent = {
   },
   de: {
     metaLeft: "Konstanta HP · IČO 21827150 · CZ",
-    metaRight: "Maßgefertigte Aluminiumzäune · Seit 2010",
+    metaRight: `Maßgefertigte Aluminiumzäune · Seit ${FOUNDED_YEAR}`,
     titleLines: ["Zäune,", "die", "halten."],
     subtitle:
       "Wir entwerfen, fertigen und montieren moderne Aluminiumzäune, Tore, Türen und Pergolen exakt nach Maß für Ihr Zuhause. Ohne Kompromisse.",
@@ -306,8 +344,8 @@ export const heroContent = {
     prevAlt: "Vorheriges Bild",
     nextAlt: "Nächstes Bild",
     goToAlt: (n: number) => `Zu Bild ${n} wechseln`,
-    badgeNumber: "15+",
-    badgeText: "Jahre Erfahrung",
+    badgeNumber: (years: number) => String(years),
+    badgeText: (years: number) => (years === 1 ? "Jahr Erfahrung" : "Jahre Erfahrung"),
     slideAlts: [
       "Moderner Aluminiumzaun vor einem Einfamilienhaus",
       "Aluminium-Schiebetor an einem modernen Haus",
@@ -372,10 +410,10 @@ export const productsContent = {
     badge: "4 produktové řady",
     cta: "Poptat",
     items: [
-      { title: "Hliníkové ploty", tags: ["Bezúdržbové", "Moderní vzhled", "Odolnost"], text: "Horizontální i vertikální profily v široké škále barev RAL." },
-      { title: "Brány", tags: ["Posuvné", "Křídlové", "S pohonem"], text: "Posuvné i křídlové brány s elektrickým pohonem na dálkové ovládání." },
-      { title: "Branky", tags: ["Na míru", "Elektrozámek", "Design"], text: "Vstupní branky sladěné s plotem i bránou do jednoho celku." },
-      { title: "Pergoly", tags: ["Bioklimatické", "Lamely", "Stínění"], text: "Hliníkové pergoly s nastavitelnými lamelami pro příjemný stín." },
+      { title: "Hliníkové ploty", tags: ["Bezúdržbové", "Moderní vzhled", "Odolnost"], text: "Moderní bezúdržbové oplocení, které ochrání vaše soukromí a dodá domu reprezentativní vzhled. Vlastní patentovaný systém profilů drží pevnost i odolnost bez další péče." },
+      { title: "Brány", tags: ["Posuvné", "Křídlové", "S pohonem"], text: "Vjezdové brány navrhujeme přesně na míru vašemu plotu i stavební připravenosti. Posuvná i křídlová řešení s tichými prověřenými pohony na dálkové ovládání." },
+      { title: "Branky", tags: ["Na míru", "Elektrozámek", "Design"], text: "Vstupní branky sladěné s plotem i bránou do jednoho celku. Doplníme je o elektrozámek, videotelefon nebo chytrou správu přístupu." },
+      { title: "Pergoly", tags: ["Bioklimatické", "Lamely", "Stínění"], text: "Bioklimatické pergoly s otočnými lamelami. Plně ovládáte stínění, proudění vzduchu i ochranu před deštěm — komfort pro celoroční pobyt venku." },
     ],
   },
   sk: {
@@ -383,10 +421,10 @@ export const productsContent = {
     badge: "4 produktové rady",
     cta: "Dopytovať",
     items: [
-      { title: "Hliníkové ploty", tags: ["Bezúdržbové", "Moderný vzhľad", "Odolnosť"], text: "Horizontálne aj vertikálne profily v širokej škále farieb RAL." },
-      { title: "Brány", tags: ["Posuvné", "Krídlové", "S pohonom"], text: "Posuvné aj krídlové brány s elektrickým pohonom na diaľkové ovládanie." },
-      { title: "Bránky", tags: ["Na mieru", "Elektrozámok", "Dizajn"], text: "Vstupné bránky zladené s plotom aj bránou do jedného celku." },
-      { title: "Pergoly", tags: ["Bioklimatické", "Lamely", "Tienenie"], text: "Hliníkové pergoly s nastaviteľnými lamelami pre príjemný tieň." },
+      { title: "Hliníkové ploty", tags: ["Bezúdržbové", "Moderný vzhľad", "Odolnosť"], text: "Moderné bezúdržbové oplotenie, ktoré ochráni vaše súkromie a dodá domu reprezentatívny vzhľad. Vlastný patentovaný systém profilov drží pevnosť aj odolnosť bez ďalšej starostlivosti." },
+      { title: "Brány", tags: ["Posuvné", "Krídlové", "S pohonom"], text: "Vjazdové brány navrhujeme presne na mieru vášmu plotu aj stavebnej pripravenosti. Posuvné aj krídlové riešenia s tichými overenými pohonmi na diaľkové ovládanie." },
+      { title: "Bránky", tags: ["Na mieru", "Elektrozámok", "Dizajn"], text: "Vstupné bránky zladené s plotom aj bránou do jedného celku. Doplníme ich o elektrozámok, videotelefón alebo inteligentnú správu prístupu." },
+      { title: "Pergoly", tags: ["Bioklimatické", "Lamely", "Tienenie"], text: "Bioklimatické pergoly s otočnými lamelami. Plne ovládate tienenie, prúdenie vzduchu aj ochranu pred dažďom — komfort pre celoročný pobyt vonku." },
     ],
   },
   de: {
@@ -394,10 +432,10 @@ export const productsContent = {
     badge: "4 Produktreihen",
     cta: "Anfragen",
     items: [
-      { title: "Aluminiumzäune", tags: ["Wartungsfrei", "Modernes Design", "Langlebig"], text: "Horizontale und vertikale Profile in einer breiten Palette an RAL-Farben." },
-      { title: "Tore", tags: ["Schiebetore", "Flügeltore", "Mit Antrieb"], text: "Schiebe- und Flügeltore mit elektrischem Antrieb und Fernbedienung." },
-      { title: "Türen", tags: ["Nach Maß", "Elektroschloss", "Design"], text: "Eingangstüren, die perfekt auf Zaun und Tor abgestimmt sind." },
-      { title: "Pergolen", tags: ["Bioklimatisch", "Lamellen", "Beschattung"], text: "Aluminiumpergolen mit verstellbaren Lamellen für angenehmen Schatten." },
+      { title: "Aluminiumzäune", tags: ["Wartungsfrei", "Modernes Design", "Langlebig"], text: "Moderne, wartungsfreie Einfriedung, die Ihre Privatsphäre schützt und dem Haus ein repräsentatives Aussehen gibt. Unser patentiertes Profilsystem sichert Festigkeit und Widerstandsfähigkeit ganz ohne Pflege." },
+      { title: "Tore", tags: ["Schiebetore", "Flügeltore", "Mit Antrieb"], text: "Einfahrtstore planen wir exakt nach Ihrem Zaun und der baulichen Vorbereitung. Schiebe- und Flügellösungen mit leisen, bewährten Antrieben und Fernbedienung." },
+      { title: "Türen", tags: ["Nach Maß", "Elektroschloss", "Design"], text: "Eingangstüren, die mit Zaun und Tor eine Einheit bilden. Auf Wunsch mit Elektroschloss, Video-Türsprechanlage oder smarter Zutrittsverwaltung." },
+      { title: "Pergolen", tags: ["Bioklimatisch", "Lamellen", "Beschattung"], text: "Bioklimatische Pergolen mit drehbaren Lamellen. Sie steuern Beschattung, Luftstrom und Regenschutz vollständig — Komfort für das ganze Jahr im Freien." },
     ],
   },
 }
@@ -520,6 +558,125 @@ export const realizaceContent = {
 }
 
 // ---------------------------------------------------------------------------
+// REALIZACE — samostatná stránka /realizace (app/realizace/page.tsx)
+// `cats` je klíčované stejnými id jako REALIZACE_CATS v lib/realizace.ts.
+// ---------------------------------------------------------------------------
+
+export const realizacePageContent = {
+  cs: {
+    kicker: "Realizace",
+    heading: "Realizace, které stojí za podívanou",
+    subtitle:
+      "Reálné zakázky, ne vizualizace. Projděte si ploty, brány, pergoly i zábradlí podle motivu a výplně — a představte si, jak by to vypadalo u vás.",
+    photoCount: (n: number) => `${n} ${n === 1 ? "fotka" : n < 5 ? "fotky" : "fotek"}`,
+    openGallery: "Otevřít galerii",
+    loadMore: (n: number) => `Zobrazit další fotky (${n})`,
+    empty: "Fotky téhle kategorie právě doplňujeme.",
+    emptyAll: "Fotky realizací právě doplňujeme. Ozvěte se nám, rádi vám je pošleme.",
+    cats: {
+      ploty: {
+        tab: "Ploty",
+        heading: "Realizace plotů",
+        text: "Hliníkové ploty na míru představují moderní bezúdržbová řešení, které dokonale ochrání vaše soukromí a dodají nemovitosti reprezentativní vzhled. Díky vlastnímu patentovanému systému profilů vynikají maximální pevností, stabilitou a odolností vůči všem povětrnostním vlivům bez nutnosti jakékoliv další péče.",
+      },
+      brany: {
+        tab: "Brány a branky",
+        heading: "Realizace bran a branek",
+        text: "Vjezdové brány a vstupní branky navrhujeme přesně na míru vašemu plotu i stavební připravenosti. Nabízíme spolehlivá posuvná i křídlová řešení, a to včetně tichých a prověřených pohonů s dálkovým ovládáním či chytrou správou přístupu.",
+      },
+      pergoly: {
+        tab: "Pergoly",
+        heading: "Realizace pergol",
+        text: "Bioklimatické pergoly s otočnými lamelami vám umožní plně kontrolovat stínění, proudění vzduchu i ochranu před deštěm na vaší terase. Spojují v sobě špičkový design, prvotřídní hliníkovou konstrukci a maximální komfort pro celoroční pobyt venku.",
+      },
+      zabradli: {
+        tab: "Zábradlí",
+        heading: "Realizace zábradlí",
+        text: "Hliníková a skleněná zábradlí k terase, balkonu i schodišti navrhujeme tak, aby chránila, ale nebrala výhled. Kotvení, výplň i barvu ladíme s plotem a pergolou do jednoho celku — výsledkem je čistá linie bez rzi, nátěrů a každoroční údržby.",
+      },
+    },
+    ctaHeading: "Líbí se vám některá realizace?",
+    ctaText: "Pošlete nám, co se vám líbí, a my navrhneme obdobu přesně pro váš pozemek. Zaměření i kalkulace jsou zdarma.",
+    cta: "Poptat řešení",
+    ctaCall: "Zavolat",
+  },
+  sk: {
+    kicker: "Realizácie",
+    heading: "Realizácie, ktoré stoja za pozretie",
+    subtitle:
+      "Reálne zákazky, nie vizualizácie. Prejdite si ploty, brány, pergoly aj zábradlia podľa motívu a výplne — a predstavte si, ako by to vyzeralo u vás.",
+    photoCount: (n: number) => `${n} ${n === 1 ? "fotka" : n < 5 ? "fotky" : "fotiek"}`,
+    openGallery: "Otvoriť galériu",
+    loadMore: (n: number) => `Zobraziť ďalšie fotky (${n})`,
+    empty: "Fotky tejto kategórie práve dopĺňame.",
+    emptyAll: "Fotky realizácií práve dopĺňame. Ozvite sa nám, radi vám ich pošleme.",
+    cats: {
+      ploty: {
+        tab: "Ploty",
+        heading: "Realizácie plotov",
+        text: "Hliníkové ploty na mieru predstavujú moderné bezúdržbové riešenie, ktoré dokonale ochráni vaše súkromie a dodá nehnuteľnosti reprezentatívny vzhľad. Vďaka vlastnému patentovanému systému profilov vynikajú maximálnou pevnosťou, stabilitou a odolnosťou voči všetkým poveternostným vplyvom bez nutnosti akejkoľvek ďalšej starostlivosti.",
+      },
+      brany: {
+        tab: "Brány a bránky",
+        heading: "Realizácie brán a bránok",
+        text: "Vjazdové brány a vstupné bránky navrhujeme presne na mieru vášmu plotu aj stavebnej pripravenosti. Ponúkame spoľahlivé posuvné aj krídlové riešenia, a to vrátane tichých a overených pohonov s diaľkovým ovládaním či inteligentnou správou prístupu.",
+      },
+      pergoly: {
+        tab: "Pergoly",
+        heading: "Realizácie pergol",
+        text: "Bioklimatické pergoly s otočnými lamelami vám umožnia plne kontrolovať tienenie, prúdenie vzduchu aj ochranu pred dažďom na vašej terase. Spájajú v sebe špičkový dizajn, prvotriednu hliníkovú konštrukciu a maximálny komfort pre celoročný pobyt vonku.",
+      },
+      zabradli: {
+        tab: "Zábradlia",
+        heading: "Realizácie zábradlí",
+        text: "Hliníkové a sklenené zábradlia k terase, balkónu aj schodisku navrhujeme tak, aby chránili, ale nebrali výhľad. Kotvenie, výplň aj farbu ladíme s plotom a pergolou do jedného celku — výsledkom je čistá línia bez hrdze, náterov a každoročnej údržby.",
+      },
+    },
+    ctaHeading: "Páči sa vám niektorá realizácia?",
+    ctaText: "Pošlite nám, čo sa vám páči, a my navrhneme obdobu presne pre váš pozemok. Zameranie aj kalkulácia sú zadarmo.",
+    cta: "Dopytovať riešenie",
+    ctaCall: "Zavolať",
+  },
+  de: {
+    kicker: "Referenzen",
+    heading: "Referenzen, die sich sehen lassen",
+    subtitle:
+      "Echte Aufträge, keine Visualisierungen. Sehen Sie sich Zäune, Tore, Pergolen und Geländer nach Motiv und Füllung an — und stellen Sie sich vor, wie es bei Ihnen aussehen könnte.",
+    photoCount: (n: number) => `${n} ${n === 1 ? "Foto" : "Fotos"}`,
+    openGallery: "Galerie öffnen",
+    loadMore: (n: number) => `Weitere Fotos anzeigen (${n})`,
+    empty: "Die Fotos dieser Kategorie ergänzen wir gerade.",
+    emptyAll: "Die Referenzfotos ergänzen wir gerade. Melden Sie sich, wir senden sie Ihnen gerne zu.",
+    cats: {
+      ploty: {
+        tab: "Zäune",
+        heading: "Umgesetzte Zäune",
+        text: "Maßgefertigte Aluminiumzäune sind eine moderne, wartungsfreie Lösung, die Ihre Privatsphäre zuverlässig schützt und der Immobilie ein repräsentatives Aussehen verleiht. Dank unseres eigenen patentierten Profilsystems überzeugen sie mit höchster Festigkeit, Stabilität und Widerstandsfähigkeit gegen alle Witterungseinflüsse — ganz ohne weitere Pflege.",
+      },
+      brany: {
+        tab: "Tore und Türen",
+        heading: "Umgesetzte Tore und Türen",
+        text: "Einfahrtstore und Eingangstüren planen wir exakt nach Ihrem Zaun und der baulichen Vorbereitung. Wir bieten zuverlässige Schiebe- und Flügellösungen, einschließlich leiser, bewährter Antriebe mit Fernbedienung oder smarter Zutrittsverwaltung.",
+      },
+      pergoly: {
+        tab: "Pergolen",
+        heading: "Umgesetzte Pergolen",
+        text: "Bioklimatische Pergolen mit drehbaren Lamellen lassen Sie Beschattung, Luftstrom und Regenschutz auf Ihrer Terrasse vollständig steuern. Sie vereinen erstklassiges Design, hochwertige Aluminiumkonstruktion und maximalen Komfort für das ganze Jahr im Freien.",
+      },
+      zabradli: {
+        tab: "Geländer",
+        heading: "Umgesetzte Geländer",
+        text: "Geländer aus Aluminium und Glas für Terrasse, Balkon und Treppe planen wir so, dass sie schützen, ohne die Aussicht zu nehmen. Befestigung, Füllung und Farbe stimmen wir mit Zaun und Pergola zu einer Einheit ab — das Ergebnis ist eine klare Linie ohne Rost, Anstrich und jährliche Wartung.",
+      },
+    },
+    ctaHeading: "Gefällt Ihnen eine der Umsetzungen?",
+    ctaText: "Schicken Sie uns, was Ihnen gefällt, und wir entwerfen eine Entsprechung genau für Ihr Grundstück. Aufmaß und Kalkulation sind kostenlos.",
+    cta: "Angebot anfragen",
+    ctaCall: "Anrufen",
+  },
+}
+
+// ---------------------------------------------------------------------------
 // TESTIMONIALS (testimonials.tsx) — jména necháváme, překládá se jen text
 // ---------------------------------------------------------------------------
 
@@ -560,6 +717,7 @@ export const socialContent = {
     subtitle: "Podívejte se na naše nejnovější realizace, novinky a inspiraci na hliníkové ploty, brány a pergoly.",
     emailLabel: "E-mail",
     igAriaPrefix: "Otevřít příspěvek na Instagramu:",
+    igPostAlt: "Příspěvek Konstanta HP na Instagramu",
     galleryAlts: [
       "Hliníkový plot s vodorovnými lamelami",
       "Posuvná hliníková brána",
@@ -577,6 +735,7 @@ export const socialContent = {
     subtitle: "Pozrite si naše najnovšie realizácie, novinky a inšpiráciu na hliníkové ploty, brány a pergoly.",
     emailLabel: "E-mail",
     igAriaPrefix: "Otvoriť príspevok na Instagrame:",
+    igPostAlt: "Príspevok Konstanta HP na Instagrame",
     galleryAlts: [
       "Hliníkový plot s vodorovnými lamelami",
       "Posuvná hliníková brána",
@@ -595,6 +754,7 @@ export const socialContent = {
       "Entdecken Sie unsere neuesten Projekte, Neuigkeiten und Inspiration rund um Aluminiumzäune, Tore und Pergolen.",
     emailLabel: "E-Mail",
     igAriaPrefix: "Instagram-Beitrag öffnen:",
+    igPostAlt: "Instagram-Beitrag von Konstanta HP",
     galleryAlts: [
       "Aluminiumzaun mit horizontalen Lamellen",
       "Aluminium-Schiebetor",
@@ -818,30 +978,30 @@ export const coOceniteContent = {
     kicker: "Co oceníte",
     heading: "Nejdůležitější v kostce",
     benefits: [
-      { title: "Montáž do 24 h", text: "Většinu zakázek dokončíme během jednoho dne." },
-      { title: "Patentovaný komorový systém", text: "Vlastní konstrukce pro vyšší pevnost a stabilitu." },
-      { title: "Španělský hliník bez kompromisů", text: "Ověřený dodavatel, žádné levné náhražky." },
-      { title: "Servis i po letech", text: "Rozebíratelné konstrukce, opravitelné po částech." },
+      { title: "Zakázka v rekordním čase", text: "Vše vyřízeno obvykle do 4 týdnů." },
+      { title: "Finální realizace do 24 hodin", text: "Montáž dílců a bran za jeden den." },
+      { title: "Komplexní řešení bez starostí", text: "Zajistíme vše od návrhu až po montáž." },
+      { title: "Vlastní patentovaný systém", text: "Vyšší pevnost, stabilita a odolnost." },
     ],
   },
   sk: {
     kicker: "Čo oceníte",
     heading: "Najdôležitejšie v skratke",
     benefits: [
-      { title: "Montáž do 24 h", text: "Väčšinu zákaziek dokončíme počas jedného dňa." },
-      { title: "Patentovaný komorový systém", text: "Vlastná konštrukcia pre vyššiu pevnosť a stabilitu." },
-      { title: "Španielsky hliník bez kompromisov", text: "Overený dodávateľ, žiadne lacné náhrady." },
-      { title: "Servis aj po rokoch", text: "Rozoberateľné konštrukcie, opraviteľné po častiach." },
+      { title: "Zákazka v rekordnom čase", text: "Všetko vybavené obvykle do 4 týždňov." },
+      { title: "Finálna realizácia do 24 hodín", text: "Montáž dielcov a brán za jeden deň." },
+      { title: "Komplexné riešenie bez starostí", text: "Zabezpečíme všetko od návrhu až po montáž." },
+      { title: "Vlastný patentovaný systém", text: "Vyššia pevnosť, stabilita a odolnosť." },
     ],
   },
   de: {
     kicker: "Das schätzen Sie",
     heading: "Das Wichtigste auf einen Blick",
     benefits: [
-      { title: "Montage innerhalb von 24 h", text: "Die meisten Aufträge schließen wir innerhalb eines Tages ab." },
-      { title: "Patentiertes Kammersystem", text: "Eigene Konstruktion für höhere Festigkeit und Stabilität." },
-      { title: "Spanisches Aluminium ohne Kompromisse", text: "Bewährter Lieferant, keine billigen Ersatzstoffe." },
-      { title: "Service auch nach Jahren", text: "Zerlegbare Konstruktionen, teilweise reparierbar." },
+      { title: "Auftrag in Rekordzeit", text: "Alles in der Regel innerhalb von 4 Wochen erledigt." },
+      { title: "Endmontage innerhalb von 24 Stunden", text: "Elemente und Tore an einem Tag montiert." },
+      { title: "Komplettlösung ohne Aufwand für Sie", text: "Wir übernehmen alles vom Entwurf bis zur Montage." },
+      { title: "Eigenes patentiertes System", text: "Höhere Festigkeit, Stabilität und Widerstandsfähigkeit." },
     ],
   },
 }
@@ -891,33 +1051,24 @@ export const procesFlowContent = {
 export const certifikatyContent = {
   cs: {
     kicker: "Certifikáty a patenty",
-    heading: "Za kvalitou stojíme papírově",
-    items: [
-      { title: "Patentovaný komorový systém", note: "Vlastní chráněná konstrukce" },
-      { title: "Certifikovaný hliník EN-AW", note: "Ověřený španělský dodavatel" },
-      { title: "Firma roku", note: "Ocenění za odvedenou práci" },
-      { title: "Záruka a doklady", note: "Vše písemně a bez hvězdiček" },
-    ],
+    heading: "Kvalitu máme podloženou úředně",
+    intro: "Certifikáty, patenty a doklady k materiálům, se kterými pracujeme. Vše ke stažení, bez hvězdiček.",
+    download: "Stáhnout",
+    empty: "Doklady právě doplňujeme. Napište si o ně a pošleme vám je.",
   },
   sk: {
     kicker: "Certifikáty a patenty",
-    heading: "Za kvalitou si stojíme aj papierovo",
-    items: [
-      { title: "Patentovaný komorový systém", note: "Vlastná chránená konštrukcia" },
-      { title: "Certifikovaný hliník EN-AW", note: "Overený španielsky dodávateľ" },
-      { title: "Firma roka", note: "Ocenenie za odvedenú prácu" },
-      { title: "Záruka a doklady", note: "Všetko písomne a bez hviezdičiek" },
-    ],
+    heading: "Kvalitu máme podloženú úradne",
+    intro: "Certifikáty, patenty a doklady k materiálom, s ktorými pracujeme. Všetko na stiahnutie, bez hviezdičiek.",
+    download: "Stiahnuť",
+    empty: "Doklady práve dopĺňame. Napíšte si o ne a pošleme vám ich.",
   },
   de: {
     kicker: "Zertifikate und Patente",
-    heading: "Unsere Qualität ist auch schriftlich belegt",
-    items: [
-      { title: "Patentiertes Kammersystem", note: "Eigene geschützte Konstruktion" },
-      { title: "Zertifiziertes Aluminium EN-AW", note: "Bewährter spanischer Lieferant" },
-      { title: "Firma des Jahres", note: "Auszeichnung für geleistete Arbeit" },
-      { title: "Garantie und Unterlagen", note: "Alles schriftlich, ohne Kleingedrucktes" },
-    ],
+    heading: "Unsere Qualität ist amtlich belegt",
+    intro: "Zertifikate, Patente und Nachweise zu den Materialien, mit denen wir arbeiten. Alles zum Download, ohne Kleingedrucktes.",
+    download: "Herunterladen",
+    empty: "Die Unterlagen ergänzen wir gerade. Schreiben Sie uns, wir senden sie Ihnen zu.",
   },
 }
 
@@ -985,40 +1136,677 @@ export const zaverCtaContent = {
 }
 
 // ---------------------------------------------------------------------------
+// CHYTRÁ ŘEŠENÍ (app/chytra-reseni/page.tsx)
+// Pořadí `items` je svázané s polem ikon v app/chytra-reseni/page.tsx.
+// ---------------------------------------------------------------------------
+
+export const chytraReseniContent = {
+  cs: {
+    kicker: "Chytrá řešení",
+    heading: "Detaily, které dělají rozdíl",
+    subtitle:
+      "Posuňte svůj domov a exteriér o krok dál pomocí moderních technologií a automatizace. Chytrá řešení propojují ovládání bran, osvětlení a stínění do jednoho intuitivního systému, který vám ušetří čas a zajistí maximální bezpečí i pohodlí.",
+    items: [
+      { title: "Integrovaná schránka", text: "Máme rádi čistý design, proto schránku integrujeme přímo do plotu. Splyne s ním tak přirozeně, že na první pohled ani nepoznáte, kde končí plot a začíná prostor pro poštu." },
+      { title: "Elektrozámek", text: "Znáte to – jdete v dešti k brance, hledáte klíče, chvátáte a jako naschvál je nemůžete najít. S elektrozámkem tohle odpadá. Branku si z pohodlí domova nebo pomocí čipu otevřete během vteřiny. Maximální bezpečí a komfort." },
+      { title: "Dvířka HUP", text: "Plynoměry a elektroměry nejsou zrovna ozdobou domu. Proto dvířka HUP vyrobíme ve stejném stylu, jako je váš plot. Schováme je tak, že o nich nebudete ani vědět." },
+      { title: "Kované číslo popisné", text: "Číslo popisné je jako podpis vašeho domova. Když ladí s celým plotem, působí to jako drobnost, která ale dává celému vstupu na dům úplně jiný šmrnc." },
+      { title: "Ovládání přes aplikaci TaHoma", text: "Dnes máme telefon pořád v ruce, tak proč ho nevyužít? Inteligentní správa vstupu ve vašem telefonu. Otevírejte, zavírejte a kontrolujte bránu odkudkoliv na světě. Je to svoboda, na kterou si rychle zvyknete." },
+      { title: "Výstražný maják", text: "Vizuální garance bezpečnosti. Výstražný maják vás i vaše okolí včas upozorní na pohyb brány, hlavně za ztížených světelných podmínek. Kvalitní doplněk pro bezstarostný provoz." },
+      { title: "Kódová klávesnice", text: "Klíče a ovladače se rády ztrácejí – svoboda pohybu bez nich je paráda. Vstup pro hosty nebo dodavatele řízený číselným kódem: prostě jim pošlete kód a víc neřešíte. Celý systém navíc propojíme bezdrátově, instalace je díky tomu čistá, rychlá a bez stavebních zásahů do hotového pozemku." },
+      { title: "Poštovní panel", text: "Není to jen díra na poštu, ale detail, který dělá celek. Náš poštovní panel spojuje vysokou užitnou hodnotu s precizním řemeslným zpracováním. Zabudovat do něj můžeme box na balíky, číslo popisné i videotelefon – vše sladěné s architekturou vašeho oplocení." },
+      { title: "Točna na popelnici", text: "Chytrá manipulace bez námahy. S naším otočným mechanismem se manipulace s těžkými popelnicemi stává snadnou záležitostí. Vzhledné řešení, které nenarušuje celkový design brány." },
+      { title: "Videotelefon", text: "Pocit bezpečí je k nezaplacení. S videotelefonem přesně vidíte, kdo u vás zvoní nebo se okolo pohybuje, ať už jste v obýváku, nebo zrovna v práci. Díky propojení s aplikací v mobilu máte dokonalý přehled a klid v každé situaci." },
+    ],
+    tags: ["iOS", "Android"],
+    ctaHeading: "Nevíte, co se k vašemu vstupu hodí?",
+    ctaText: "Projdeme to s vámi na místě a doporučíme jen to, co dává smysl. Nic navíc.",
+    cta: "Poptat řešení",
+  },
+  sk: {
+    kicker: "Inteligentné riešenia",
+    heading: "Detaily, ktoré robia rozdiel",
+    subtitle:
+      "Posuňte svoj domov a exteriér o krok ďalej pomocou moderných technológií a automatizácie. Inteligentné riešenia prepájajú ovládanie brán, osvetlenia a tienenia do jedného intuitívneho systému, ktorý vám ušetrí čas a zaistí maximálnu bezpečnosť aj pohodlie.",
+    items: [
+      { title: "Integrovaná schránka", text: "Máme radi čistý dizajn, preto schránku integrujeme priamo do plota. Splynie s ním tak prirodzene, že na prvý pohľad ani nespoznáte, kde končí plot a začína priestor pre poštu." },
+      { title: "Elektrozámok", text: "Poznáte to – idete v daždi k bránke, hľadáte kľúče, ponáhľate sa a ako naschvál ich neviete nájsť. S elektrozámkom toto odpadá. Bránku si z pohodlia domova alebo pomocou čipu otvoríte za sekundu. Maximálna bezpečnosť a komfort." },
+      { title: "Dvierka HUP", text: "Plynomery a elektromery nie sú práve ozdobou domu. Preto dvierka HUP vyrobíme v rovnakom štýle ako váš plot. Schováme ich tak, že o nich ani nebudete vedieť." },
+      { title: "Kované súpisné číslo", text: "Súpisné číslo je ako podpis vášho domova. Keď ladí s celým plotom, pôsobí to ako drobnosť, ktorá ale dáva celému vstupu na dom úplne iný šmrnc." },
+      { title: "Ovládanie cez aplikáciu TaHoma", text: "Dnes máme telefón stále v ruke, tak prečo ho nevyužiť? Inteligentná správa vstupu vo vašom telefóne. Otvárajte, zatvárajte a kontrolujte bránu odkiaľkoľvek na svete. Je to sloboda, na ktorú si rýchlo zvyknete." },
+      { title: "Výstražný maják", text: "Vizuálna garancia bezpečnosti. Výstražný maják vás aj vaše okolie včas upozorní na pohyb brány, hlavne za zhoršených svetelných podmienok. Kvalitný doplnok pre bezstarostnú prevádzku." },
+      { title: "Kódová klávesnica", text: "Kľúče a ovládače sa radi strácajú – sloboda pohybu bez nich je paráda. Vstup pre hostí alebo dodávateľov riadený číselným kódom: jednoducho im pošlete kód a viac neriešite. Celý systém navyše prepojíme bezdrôtovo, inštalácia je vďaka tomu čistá, rýchla a bez stavebných zásahov do hotového pozemku." },
+      { title: "Poštový panel", text: "Nie je to len diera na poštu, ale detail, ktorý robí celok. Náš poštový panel spája vysokú úžitkovú hodnotu s precíznym remeselným spracovaním. Zabudovať doň môžeme box na balíky, súpisné číslo aj videotelefón – všetko zladené s architektúrou vášho oplotenia." },
+      { title: "Točňa na smetnú nádobu", text: "Inteligentná manipulácia bez námahy. S naším otočným mechanizmom sa manipulácia s ťažkými smetnými nádobami stáva jednoduchou záležitosťou. Vzhľadné riešenie, ktoré nenarúša celkový dizajn brány." },
+      { title: "Videotelefón", text: "Pocit bezpečia je na nezaplatenie. S videotelefónom presne vidíte, kto u vás zvoní alebo sa okolo pohybuje, či už ste v obývačke, alebo práve v práci. Vďaka prepojeniu s aplikáciou v mobile máte dokonalý prehľad a pokoj v každej situácii." },
+    ],
+    tags: ["iOS", "Android"],
+    ctaHeading: "Neviete, čo sa k vášmu vstupu hodí?",
+    ctaText: "Prejdeme to s vami na mieste a odporučíme len to, čo dáva zmysel. Nič navyše.",
+    cta: "Dopytovať riešenie",
+  },
+  de: {
+    kicker: "Smarte Lösungen",
+    heading: "Details, die den Unterschied machen",
+    subtitle:
+      "Bringen Sie Ihr Zuhause und Ihren Außenbereich mit moderner Technik und Automatisierung einen Schritt weiter. Smarte Lösungen verbinden die Steuerung von Toren, Beleuchtung und Beschattung zu einem intuitiven System, das Ihnen Zeit spart und höchste Sicherheit und Bequemlichkeit bietet.",
+    items: [
+      { title: "Integrierter Briefkasten", text: "Wir mögen klares Design, deshalb integrieren wir den Briefkasten direkt in den Zaun. Er fügt sich so natürlich ein, dass man auf den ersten Blick nicht erkennt, wo der Zaun endet und die Post beginnt." },
+      { title: "Elektroschloss", text: "Sie kennen das – Sie gehen im Regen zur Gartentür, suchen die Schlüssel, haben es eilig und finden sie wie zum Trotz nicht. Mit dem Elektroschloss entfällt das. Die Tür öffnen Sie bequem von zu Hause oder per Chip in Sekunden. Höchste Sicherheit und Komfort." },
+      { title: "HUP-Klappe", text: "Gas- und Stromzähler sind nicht gerade eine Zierde des Hauses. Deshalb fertigen wir die HUP-Klappe im gleichen Stil wie Ihren Zaun. Wir verstecken sie so, dass Sie gar nichts davon merken." },
+      { title: "Geschmiedete Hausnummer", text: "Die Hausnummer ist wie die Unterschrift Ihres Zuhauses. Passt sie zum gesamten Zaun, wirkt es wie eine Kleinigkeit, die dem ganzen Eingang einen völlig anderen Charakter gibt." },
+      { title: "Steuerung über die TaHoma-App", text: "Heute haben wir das Handy ohnehin ständig in der Hand – warum es also nicht nutzen? Intelligente Zutrittsverwaltung auf Ihrem Telefon. Öffnen, schließen und kontrollieren Sie das Tor von überall auf der Welt. Eine Freiheit, an die man sich schnell gewöhnt." },
+      { title: "Warnleuchte", text: "Sichtbare Sicherheitsgarantie. Die Warnleuchte macht Sie und Ihre Umgebung rechtzeitig auf die Torbewegung aufmerksam, besonders bei schlechten Lichtverhältnissen. Ein hochwertiges Zubehör für den sorgenfreien Betrieb." },
+      { title: "Codetastatur", text: "Schlüssel und Handsender gehen gerne verloren – Bewegungsfreiheit ohne sie ist großartig. Zutritt für Gäste oder Lieferanten per Zahlencode: Sie schicken einfach den Code und müssen sich um nichts weiter kümmern. Das System verbinden wir zudem drahtlos, die Installation bleibt dadurch sauber, schnell und ohne bauliche Eingriffe in Ihr fertiges Grundstück." },
+      { title: "Postpaneel", text: "Es ist nicht nur ein Loch für die Post, sondern das Detail, das das Ganze ausmacht. Unser Postpaneel verbindet hohen Nutzwert mit präziser handwerklicher Verarbeitung. Wir können eine Paketbox, die Hausnummer und die Video-Türsprechanlage einbauen – alles abgestimmt auf die Architektur Ihrer Einfriedung." },
+      { title: "Mülltonnen-Drehteller", text: "Clevere Handhabung ohne Kraftaufwand. Mit unserem Drehmechanismus wird der Umgang mit schweren Mülltonnen zur einfachen Sache. Eine ansehnliche Lösung, die das Gesamtdesign des Tores nicht stört." },
+      { title: "Video-Türsprechanlage", text: "Ein Gefühl von Sicherheit ist unbezahlbar. Mit der Video-Türsprechanlage sehen Sie genau, wer klingelt oder sich draußen bewegt – ob Sie im Wohnzimmer sitzen oder gerade auf der Arbeit sind. Dank der Verbindung mit der Handy-App haben Sie den vollen Überblick und Ruhe in jeder Situation." },
+    ],
+    tags: ["iOS", "Android"],
+    ctaHeading: "Sie wissen nicht, was zu Ihrem Eingang passt?",
+    ctaText: "Wir gehen es vor Ort mit Ihnen durch und empfehlen nur, was wirklich Sinn ergibt. Nichts darüber hinaus.",
+    cta: "Angebot anfragen",
+  },
+}
+
+// ---------------------------------------------------------------------------
+// PŘÍPRAVNÉ PRÁCE (app/pripravne-prace/page.tsx)
+// `services` = přehled navazujících prací, `phases` = detailní stavební příprava.
+// ---------------------------------------------------------------------------
+
+export const pripravneContent = {
+  cs: {
+    kicker: "Přípravné práce",
+    heading: "Pevné základy pro celý projekt",
+    subtitle:
+      "Kvalitní a dlouhodobě stabilní plot či pergola vyžadují pevné základy. Kompletní přípravné práce, jako jsou výkopy, betonáž základů a realizace podezdívek, zajistíme profesionálně od A do Z, aby na sebe vše dokonale navazovalo.",
+    intro:
+      "Nezajišťujeme pouze vlastní výrobu a montáž. Postaráme se také o všechny navazující práce a koordinaci potřebných profesí. Nemusíte hledat další dodavatele ani řešit termíny jednotlivých řemeslníků.",
+    servicesTitle: "Podle rozsahu zakázky pro vás zajistíme například:",
+    services: [
+      "Úpravy terénu před i po dokončení montáže",
+      "Zemní a výkopové práce",
+      "Hutnění a srovnání terénu",
+      "Stavební a zednické práce",
+      "Betonování základů a patek",
+      "Přípravu základů pro posuvné brány",
+      "Protažení kabelových rozvodů",
+      "Elektroinstalaci pro pohony bran, osvětlení a videotelefony",
+      "Odvoz zeminy a suti po dokončení prací",
+      "Koordinaci všech navazujících profesí",
+    ],
+    outro:
+      "Díky tomu máte po celou dobu realizace pouze jednoho partnera a jeden kontakt – KONSTANTU. O vše se postaráme my.",
+    phasesKicker: "Stavební příprava krok za krokem",
+    phasesHeading: "Co všechno se stihne, než přijde hliník",
+    phases: [
+      {
+        title: "Zaměření a trasování",
+        lead: "Než se kopne do země, je potřeba terén dokonale připravit a zkontrolovat.",
+        items: [
+          { t: "Laserové vytyčení tras a výšek", d: "Přesné určení linie plotu a nulové výšky, aby byl plot v rovině i v mírném svahu." },
+          { t: "Detekce inženýrských sítí", d: "Ověříme, případně ručními sondami zkontrolujeme, zda v místě výkopu nevedou staré kabely, plyn nebo vodovod." },
+          { t: "Demontáž a likvidace starého oplocení", d: "Odstraníme původní pletivo, dřevěná plotová pole i staré ocelové sloupky včetně jejich ekologické likvidace." },
+        ],
+      },
+      {
+        title: "Výkopové a zemní práce",
+        lead: "Tady se definuje pevný základ celého plotu.",
+        items: [
+          { t: "Strojní vrtání děr pro sloupky", d: "Zemním vrtákem vyvrtáme čisté díry do nezámrzné hloubky, standardně 70–80 cm." },
+          { t: "Výkop průběžného základového pásu", d: "Rýha pro betonový základ pod podezdívku nebo pod samonosnou bránu, kde je potřeba masivní betonový blok." },
+          { t: "Terénní úpravy a odvoz zeminy", d: "Srovnáme terén v linii plotu a přebytečnou zeminu i kamení naložíme a odvezeme na skládku." },
+        ],
+      },
+      {
+        title: "Betonářské a zednické práce",
+        lead: "Příprava podkladů, na které se pak montuje hliník.",
+        items: [
+          { t: "Armování", d: "Ocelové armovací koše a dráty do betonu, aby základ v zimě nepopraskal a udržel váhu těžké brány." },
+          { t: "Betonáž základů", d: "Lití a hutnění betonu do vyvrtaných děr nebo do základových pasů." },
+          { t: "Zdění a betonáž KB bloků a ztraceného bednění", d: "Pokud nechcete sloupky přímo do země, ale zděnou podezdívku nebo betonové sloupky, tvárnice založíme, vystavíme a vylijeme betonem." },
+          { t: "Betonování hliníkových sloupků", d: "S kompletním hliníkovým motivem získáte sladěný plot, bránu i sloupky v jednotném designu. Hliník nerezaví, nehnije a nemusí se natírat – sloupky odborně zabetonujeme a vy přebíráte hotové dílo." },
+          { t: "Osazení betonových podhrabových desek", d: "Montáž držáků a usazení desek mezi sloupky – ideální řešení místo podezdívky, které chrání hliníkový dílec při sekání trávy." },
+        ],
+      },
+      {
+        title: "Elektro příprava",
+        lead: "Hliníkový plot bývá spojený s automatizací a chytrou domácností. Bez kabelů to nepůjde.",
+        items: [
+          { t: "Výkopové rýhy pro chráničky", d: "Trasy pro kabely pod zemí – mezi domem a bránou i mezi sloupky brány navzájem." },
+          { t: "Pokládka husích krků a chrániček", d: "Plastové chráničky, kterými se následně protáhnou kabely, aby byly chráněné před vlhkostí a tlakem země." },
+          { t: "Příprava kabeláže pro periferie", d: "Motor brány (silový kabel 230 V), bezpečnostní fotobuňky na obě strany průjezdu, výstražný LED maják, venkovní klika s kódovou klávesnicí nebo čtečkou čipů a videotelefon u branky." },
+        ],
+      },
+      {
+        title: "Začištění a předání díla",
+        lead: "Aby po odjezdu firmy zahrada nevypadala jako po výbuchu.",
+        items: [
+          { t: "Obsyp a hutnění", d: "Zásyp prostorů kolem betonových základů okrasným kačírkem, štěrkem nebo původní zeminou." },
+          { t: "Hrubé urovnání terénu", d: "Okolí plotu uvedeme do stavu, kdy můžete rovnou zasít trávu." },
+          { t: "Zaškolení a předvedení", d: "Při předání vám vše názorně ukážeme a vysvětlíme. Budete přesně vědět, jak plotový systém používat, abyste předešli jeho poškození a zajistili bezproblémový chod na desítky let." },
+        ],
+      },
+    ],
+    ctaHeading: "Nemáte hotové základy ani podezdívku?",
+    ctaText: "Vyřešíme to postupně. Popište nám situaci a přiložte fotku nebo nákres – ozveme se, zaměříme a naceníme.",
+    cta: "Poptat stavební přípravu",
+  },
+  sk: {
+    kicker: "Prípravné práce",
+    heading: "Pevné základy pre celý projekt",
+    subtitle:
+      "Kvalitný a dlhodobo stabilný plot či pergola vyžadujú pevné základy. Kompletné prípravné práce, ako sú výkopy, betonáž základov a realizácia podmuroviek, zabezpečíme profesionálne od A po Z, aby na seba všetko dokonale nadväzovalo.",
+    intro:
+      "Nezabezpečujeme len vlastnú výrobu a montáž. Postaráme sa aj o všetky nadväzujúce práce a koordináciu potrebných profesií. Nemusíte hľadať ďalších dodávateľov ani riešiť termíny jednotlivých remeselníkov.",
+    servicesTitle: "Podľa rozsahu zákazky pre vás zabezpečíme napríklad:",
+    services: [
+      "Úpravy terénu pred aj po dokončení montáže",
+      "Zemné a výkopové práce",
+      "Hutnenie a zrovnanie terénu",
+      "Stavebné a murárske práce",
+      "Betónovanie základov a pätiek",
+      "Prípravu základov pre posuvné brány",
+      "Pretiahnutie káblových rozvodov",
+      "Elektroinštaláciu pre pohony brán, osvetlenie a videotelefóny",
+      "Odvoz zeminy a sute po dokončení prác",
+      "Koordináciu všetkých nadväzujúcich profesií",
+    ],
+    outro:
+      "Vďaka tomu máte počas celej realizácie iba jedného partnera a jeden kontakt – KONSTANTU. O všetko sa postaráme my.",
+    phasesKicker: "Stavebná príprava krok za krokom",
+    phasesHeading: "Čo všetko sa stihne, kým príde hliník",
+    phases: [
+      {
+        title: "Zameranie a trasovanie",
+        lead: "Skôr než sa kopne do zeme, treba terén dokonale pripraviť a skontrolovať.",
+        items: [
+          { t: "Laserové vytýčenie trás a výšok", d: "Presné určenie línie plota a nulovej výšky, aby bol plot v rovine aj v miernom svahu." },
+          { t: "Detekcia inžinierskych sietí", d: "Overíme, prípadne ručnými sondami skontrolujeme, či v mieste výkopu nevedú staré káble, plyn alebo vodovod." },
+          { t: "Demontáž a likvidácia starého oplotenia", d: "Odstránime pôvodné pletivo, drevené plotové polia aj staré oceľové stĺpiky vrátane ich ekologickej likvidácie." },
+        ],
+      },
+      {
+        title: "Výkopové a zemné práce",
+        lead: "Tu sa definuje pevný základ celého plota.",
+        items: [
+          { t: "Strojné vŕtanie dier pre stĺpiky", d: "Zemným vrtákom vyvŕtame čisté diery do nezámrznej hĺbky, štandardne 70–80 cm." },
+          { t: "Výkop priebežného základového pásu", d: "Ryha pre betónový základ pod podmurovku alebo pod samonosnú bránu, kde je potrebný masívny betónový blok." },
+          { t: "Terénne úpravy a odvoz zeminy", d: "Zrovnáme terén v línii plota a prebytočnú zeminu aj kamene naložíme a odvezieme na skládku." },
+        ],
+      },
+      {
+        title: "Betonárske a murárske práce",
+        lead: "Príprava podkladov, na ktoré sa potom montuje hliník.",
+        items: [
+          { t: "Armovanie", d: "Oceľové armovacie koše a drôty do betónu, aby základ v zime nepopraskal a udržal váhu ťažkej brány." },
+          { t: "Betonáž základov", d: "Liatie a hutnenie betónu do vyvŕtaných dier alebo do základových pásov." },
+          { t: "Murovanie a betonáž KB blokov a strateného debnenia", d: "Ak nechcete stĺpiky priamo do zeme, ale murovanú podmurovku alebo betónové stĺpiky, tvárnice založíme, vystaviame a vylejeme betónom." },
+          { t: "Betónovanie hliníkových stĺpikov", d: "S kompletným hliníkovým motívom získate zladený plot, bránu aj stĺpiky v jednotnom dizajne. Hliník nehrdzavie, nehnije a netreba ho natierať – stĺpiky odborne zabetónujeme a vy preberáte hotové dielo." },
+          { t: "Osadenie betónových podhrabových dosiek", d: "Montáž držiakov a usadenie dosiek medzi stĺpiky – ideálne riešenie namiesto podmurovky, ktoré chráni hliníkový dielec pri kosení trávy." },
+        ],
+      },
+      {
+        title: "Elektro príprava",
+        lead: "Hliníkový plot býva spojený s automatizáciou a inteligentnou domácnosťou. Bez káblov to nepôjde.",
+        items: [
+          { t: "Výkopové ryhy pre chráničky", d: "Trasy pre káble pod zemou – medzi domom a bránou aj medzi stĺpikmi brány navzájom." },
+          { t: "Pokládka husích krkov a chráničiek", d: "Plastové chráničky, ktorými sa následne pretiahnu káble, aby boli chránené pred vlhkosťou a tlakom zeme." },
+          { t: "Príprava kabeláže pre periférie", d: "Motor brány (silový kábel 230 V), bezpečnostné fotobunky na obe strany prejazdu, výstražný LED maják, vonkajšia kľučka s kódovou klávesnicou alebo čítačkou čipov a videotelefón pri bránke." },
+        ],
+      },
+      {
+        title: "Začistenie a odovzdanie diela",
+        lead: "Aby po odchode firmy záhrada nevyzerala ako po výbuchu.",
+        items: [
+          { t: "Obsyp a hutnenie", d: "Zásyp priestorov okolo betónových základov okrasným kačírkom, štrkom alebo pôvodnou zeminou." },
+          { t: "Hrubé urovnanie terénu", d: "Okolie plota uvedieme do stavu, keď môžete rovno zasiať trávu." },
+          { t: "Zaškolenie a predvedenie", d: "Pri odovzdaní vám všetko názorne ukážeme a vysvetlíme. Budete presne vedieť, ako plotový systém používať, aby ste predišli jeho poškodeniu a zaistili bezproblémový chod na desiatky rokov." },
+        ],
+      },
+    ],
+    ctaHeading: "Nemáte hotové základy ani podmurovku?",
+    ctaText: "Vyriešime to postupne. Opíšte nám situáciu a priložte fotku alebo nákres – ozveme sa, zameriame a naceníme.",
+    cta: "Dopytovať stavebnú prípravu",
+  },
+  de: {
+    kicker: "Vorbereitende Arbeiten",
+    heading: "Ein festes Fundament für das ganze Projekt",
+    subtitle:
+      "Ein hochwertiger, dauerhaft stabiler Zaun oder eine Pergola brauchen ein festes Fundament. Die kompletten vorbereitenden Arbeiten – Aushub, Betonieren der Fundamente und Sockelmauern – übernehmen wir professionell von A bis Z, damit alles perfekt ineinandergreift.",
+    intro:
+      "Wir kümmern uns nicht nur um Fertigung und Montage, sondern auch um alle anschließenden Arbeiten und die Koordination der nötigen Gewerke. Sie müssen keine weiteren Lieferanten suchen und keine Termine einzelner Handwerker abstimmen.",
+    servicesTitle: "Je nach Auftragsumfang übernehmen wir für Sie zum Beispiel:",
+    services: [
+      "Geländeanpassungen vor und nach der Montage",
+      "Erd- und Aushubarbeiten",
+      "Verdichten und Einebnen des Geländes",
+      "Bau- und Maurerarbeiten",
+      "Betonieren von Fundamenten und Punktfundamenten",
+      "Vorbereitung der Fundamente für Schiebetore",
+      "Verlegen der Kabelleitungen",
+      "Elektroinstallation für Torantriebe, Beleuchtung und Video-Türsprechanlagen",
+      "Abtransport von Erde und Bauschutt nach Abschluss der Arbeiten",
+      "Koordination aller beteiligten Gewerke",
+    ],
+    outro:
+      "So haben Sie während der gesamten Umsetzung nur einen Partner und einen Ansprechpartner – KONSTANTA. Um alles Weitere kümmern wir uns.",
+    phasesKicker: "Bauvorbereitung Schritt für Schritt",
+    phasesHeading: "Was alles passiert, bevor das Aluminium kommt",
+    phases: [
+      {
+        title: "Aufmaß und Absteckung",
+        lead: "Bevor der erste Spatenstich erfolgt, muss das Gelände gründlich vorbereitet und geprüft werden.",
+        items: [
+          { t: "Laserabsteckung von Trassen und Höhen", d: "Genaue Festlegung der Zaunlinie und der Nullhöhe, damit der Zaun auch am leichten Hang in Waage steht." },
+          { t: "Ortung von Versorgungsleitungen", d: "Wir prüfen, gegebenenfalls mit Handsondierungen, ob im Aushubbereich alte Kabel, Gas- oder Wasserleitungen verlaufen." },
+          { t: "Demontage und Entsorgung des alten Zauns", d: "Wir entfernen altes Drahtgeflecht, Holzzaunfelder und alte Stahlpfosten inklusive fachgerechter Entsorgung." },
+        ],
+      },
+      {
+        title: "Aushub- und Erdarbeiten",
+        lead: "Hier entsteht das feste Fundament des gesamten Zauns.",
+        items: [
+          { t: "Maschinelles Bohren der Pfostenlöcher", d: "Mit dem Erdbohrer bohren wir saubere Löcher bis in frostfreie Tiefe, standardmäßig 70–80 cm." },
+          { t: "Aushub des durchgehenden Streifenfundaments", d: "Graben für das Betonfundament unter der Sockelmauer oder unter einem freitragenden Tor, wo ein massiver Betonblock nötig ist." },
+          { t: "Geländearbeiten und Abtransport der Erde", d: "Wir ebnen das Gelände entlang der Zaunlinie ein und fahren überschüssige Erde und Steine zur Deponie ab." },
+        ],
+      },
+      {
+        title: "Beton- und Maurerarbeiten",
+        lead: "Vorbereitung der Untergründe, auf die anschließend das Aluminium montiert wird.",
+        items: [
+          { t: "Bewehrung", d: "Stahlbewehrungskörbe und -drähte im Beton, damit das Fundament im Winter nicht reißt und das Gewicht eines schweren Tors trägt." },
+          { t: "Betonieren der Fundamente", d: "Einbringen und Verdichten des Betons in den gebohrten Löchern oder Streifenfundamenten." },
+          { t: "Mauern und Betonieren von KB-Steinen und Schalungssteinen", d: "Wenn Sie keine Pfosten direkt im Boden, sondern eine gemauerte Sockelmauer oder Betonpfeiler wünschen, setzen, mauern und verfüllen wir die Steine mit Beton." },
+          { t: "Einbetonieren der Aluminiumpfosten", d: "Mit dem durchgängigen Aluminiummotiv erhalten Sie Zaun, Tor und Pfosten in einheitlichem Design. Aluminium rostet nicht, verrottet nicht und muss nicht gestrichen werden – die Pfosten betonieren wir fachgerecht ein, Sie übernehmen das fertige Werk." },
+          { t: "Einbau von Betonunterbauplatten", d: "Montage der Halter und Einsetzen der Platten zwischen die Pfosten – die ideale Alternative zur Sockelmauer, die das Aluminiumelement beim Rasenmähen schützt." },
+        ],
+      },
+      {
+        title: "Elektrovorbereitung",
+        lead: "Ein Aluminiumzaun ist meist mit Automatisierung und Smart Home verbunden. Ohne Kabel geht das nicht.",
+        items: [
+          { t: "Gräben für Leerrohre", d: "Kabeltrassen unter der Erde – zwischen Haus und Tor sowie zwischen den Torpfosten." },
+          { t: "Verlegen von Wellrohren und Leerrohren", d: "Kunststoffrohre, durch die anschließend die Kabel gezogen werden, damit sie vor Feuchtigkeit und Erddruck geschützt sind." },
+          { t: "Vorbereitung der Verkabelung für die Peripherie", d: "Torantrieb (230-V-Leitung), Sicherheitslichtschranken auf beiden Seiten der Durchfahrt, LED-Warnleuchte, Außendrücker mit Codetastatur oder Chipleser und Video-Türsprechanlage an der Gartentür." },
+        ],
+      },
+      {
+        title: "Endarbeiten und Übergabe",
+        lead: "Damit der Garten nach unserer Abfahrt nicht aussieht wie nach einer Explosion.",
+        items: [
+          { t: "Verfüllen und Verdichten", d: "Verfüllen der Bereiche um die Betonfundamente mit Zierkies, Schotter oder dem ursprünglichen Erdreich." },
+          { t: "Grobes Einebnen des Geländes", d: "Wir bringen die Umgebung des Zauns in einen Zustand, in dem Sie direkt Rasen säen können." },
+          { t: "Einweisung und Vorführung", d: "Bei der Übergabe zeigen und erklären wir Ihnen alles anschaulich. Sie wissen dann genau, wie das Zaunsystem zu bedienen ist, um Schäden zu vermeiden und einen störungsfreien Betrieb über Jahrzehnte zu sichern." },
+        ],
+      },
+    ],
+    ctaHeading: "Sie haben noch kein Fundament und keine Sockelmauer?",
+    ctaText: "Wir lösen das Schritt für Schritt. Beschreiben Sie uns die Situation und fügen Sie ein Foto oder eine Skizze bei – wir melden uns, messen auf und kalkulieren.",
+    cta: "Bauvorbereitung anfragen",
+  },
+}
+
+// ---------------------------------------------------------------------------
+// PRO FIRMY (app/pro-firmy/page.tsx)
+// Pořadí `segments` je svázané s polem ikon v app/pro-firmy/page.tsx.
+// ---------------------------------------------------------------------------
+
+export const proFirmyContent = {
+  cs: {
+    kicker: "Pro firmy",
+    heading: "Pro firmy, developery a projektové partnery",
+    subtitle:
+      "Pomáháme převést návrh do reality tak, aby se během realizace neobjevovaly zbytečné problémy. Od prvního technického řešení až po montáž máme celý proces pod kontrolou.",
+    claimLabel: "KONSTANTA",
+    segments: [
+      {
+        title: "Architekti",
+        lead: "Dobrý návrh nekončí u výkresu. Musí fungovat i po technické stránce.",
+        text: "Konzultujeme řešení ještě před realizací a pomáháme najít detaily, které mohou později komplikovat montáž nebo provoz. Díky tomu není potřeba složitě hledat kompromisy mezi návrhem a skutečným provedením.",
+        claim: "Aby váš návrh vypadal a fungoval dobře i po dokončení stavby.",
+      },
+      {
+        title: "Developeři",
+        lead: "Na stavbě rozhodují termíny, koordinace a schopnost věci dotáhnout bez komplikací.",
+        text: "Dodáváme ploty, brány i související prvky jako jeden celek. Nemusíte koordinovat několik dodavatelů ani řešit, kdo za co odpovídá. Díky tomu se realizace zjednoduší a je pod větší kontrolou.",
+        claim: "Méně koordinace, méně rizik, plynulejší průběh stavby.",
+      },
+      {
+        title: "Výrobní firmy a průmyslové areály",
+        lead: "V provozu není prostor pro časté opravy nebo zbytečné odstávky.",
+        text: "Navrhujeme řešení, která zvládnou každodenní zatížení a nevyžadují neustálou pozornost. Pokud nastane problém, umíme reagovat rychle a servis řešit přímo na místě.",
+        claim: "Zařízení, které slouží, funguje, a navíc je hezké.",
+      },
+      {
+        title: "Obce a veřejné projekty",
+        lead: "Investice by měla dávat smysl nejen při převzetí, ale i za několik let.",
+        text: "Dodáváme řešení s potřebnou dokumentací, certifikací a jasně definovanými parametry. Důraz klademe na dlouhou životnost a rozumné náklady na provoz i údržbu.",
+        claim: "Řešení, která fungují dlouhodobě a bez zbytečných výdajů navíc.",
+      },
+      {
+        title: "Generální dodavatelé",
+        lead: "Každá část projektu musí navazovat na další.",
+        text: "Umíme se přizpůsobit harmonogramu stavby, koordinovat návaznosti s ostatními profesemi a dodat řešení v dohodnutém termínu i kvalitě.",
+        claim: "Spolehlivá součást každého dobře řízeného projektu.",
+      },
+    ],
+    subdodavkyTitle: "Subdodávky",
+    subdodavkyText:
+      "Pro firemní zákazníky, stavební firmy a partnery zajišťujeme spolehlivé subdodávky hliníkových profilů, systémů a komponentů. Zakládáme si na precizním zpracování, dodržování termínů a produktech, na které se můžete ve svých projektech plně spolehnout.",
+    qualityKicker: "Konstanta — sázíme na kvalitu",
+    qualityHeading: "Na čem si zakládáme",
+    qualityPoints: [
+      "Konzultujeme řešení už ve fázi návrhu",
+      "Dodáváme kompletní řešení od výroby po montáž",
+      "Umíme si poradit i se složitými a atypickými podmínkami na stavbě",
+      "Dodržujeme domluvené termíny a postupy",
+      "Myslíme na dlouhodobé fungování, nejen na předání díla",
+    ],
+    ctaHeading: "Chcete jistotu?",
+    ctaText: "Potřebujete konzultovat projekt nebo připravit řešení pro konkrétní stavbu? Kontaktujte nás.",
+    cta: "Kontaktovat",
+    ctaCall: "Zavolat",
+  },
+  sk: {
+    kicker: "Pre firmy",
+    heading: "Pre firmy, developerov a projektových partnerov",
+    subtitle:
+      "Pomáhame previesť návrh do reality tak, aby sa počas realizácie neobjavovali zbytočné problémy. Od prvého technického riešenia až po montáž máme celý proces pod kontrolou.",
+    claimLabel: "KONSTANTA",
+    segments: [
+      {
+        title: "Architekti",
+        lead: "Dobrý návrh nekončí pri výkrese. Musí fungovať aj po technickej stránke.",
+        text: "Konzultujeme riešenie ešte pred realizáciou a pomáhame nájsť detaily, ktoré môžu neskôr komplikovať montáž alebo prevádzku. Vďaka tomu netreba zložito hľadať kompromisy medzi návrhom a skutočným prevedením.",
+        claim: "Aby váš návrh vyzeral a fungoval dobre aj po dokončení stavby.",
+      },
+      {
+        title: "Developeri",
+        lead: "Na stavbe rozhodujú termíny, koordinácia a schopnosť veci dotiahnuť bez komplikácií.",
+        text: "Dodávame ploty, brány aj súvisiace prvky ako jeden celok. Nemusíte koordinovať niekoľko dodávateľov ani riešiť, kto za čo zodpovedá. Vďaka tomu sa realizácia zjednoduší a je pod väčšou kontrolou.",
+        claim: "Menej koordinácie, menej rizík, plynulejší priebeh stavby.",
+      },
+      {
+        title: "Výrobné firmy a priemyselné areály",
+        lead: "V prevádzke nie je priestor na časté opravy alebo zbytočné odstávky.",
+        text: "Navrhujeme riešenia, ktoré zvládnu každodenné zaťaženie a nevyžadujú neustálu pozornosť. Ak nastane problém, vieme reagovať rýchlo a servis riešiť priamo na mieste.",
+        claim: "Zariadenie, ktoré slúži, funguje a navyše je pekné.",
+      },
+      {
+        title: "Obce a verejné projekty",
+        lead: "Investícia by mala dávať zmysel nielen pri prevzatí, ale aj o niekoľko rokov.",
+        text: "Dodávame riešenia s potrebnou dokumentáciou, certifikáciou a jasne definovanými parametrami. Dôraz kladieme na dlhú životnosť a rozumné náklady na prevádzku aj údržbu.",
+        claim: "Riešenia, ktoré fungujú dlhodobo a bez zbytočných výdavkov navyše.",
+      },
+      {
+        title: "Generálni dodávatelia",
+        lead: "Každá časť projektu musí nadväzovať na ďalšiu.",
+        text: "Vieme sa prispôsobiť harmonogramu stavby, koordinovať nadväznosti s ostatnými profesiami a dodať riešenie v dohodnutom termíne aj kvalite.",
+        claim: "Spoľahlivá súčasť každého dobre riadeného projektu.",
+      },
+    ],
+    subdodavkyTitle: "Subdodávky",
+    subdodavkyText:
+      "Pre firemných zákazníkov, stavebné firmy a partnerov zabezpečujeme spoľahlivé subdodávky hliníkových profilov, systémov a komponentov. Zakladáme si na precíznom spracovaní, dodržiavaní termínov a produktoch, na ktoré sa môžete vo svojich projektoch plne spoľahnúť.",
+    qualityKicker: "Konstanta — stavíme na kvalite",
+    qualityHeading: "Na čom si zakladáme",
+    qualityPoints: [
+      "Konzultujeme riešenie už vo fáze návrhu",
+      "Dodávame kompletné riešenie od výroby po montáž",
+      "Vieme si poradiť aj so zložitými a atypickými podmienkami na stavbe",
+      "Dodržiavame dohodnuté termíny a postupy",
+      "Myslíme na dlhodobé fungovanie, nielen na odovzdanie diela",
+    ],
+    ctaHeading: "Chcete istotu?",
+    ctaText: "Potrebujete konzultovať projekt alebo pripraviť riešenie pre konkrétnu stavbu? Kontaktujte nás.",
+    cta: "Kontaktovať",
+    ctaCall: "Zavolať",
+  },
+  de: {
+    kicker: "Für Firmen",
+    heading: "Für Firmen, Bauträger und Projektpartner",
+    subtitle:
+      "Wir helfen, den Entwurf so in die Realität zu überführen, dass während der Umsetzung keine unnötigen Probleme auftreten. Von der ersten technischen Lösung bis zur Montage haben wir den gesamten Prozess im Griff.",
+    claimLabel: "KONSTANTA",
+    segments: [
+      {
+        title: "Architekten",
+        lead: "Ein guter Entwurf endet nicht bei der Zeichnung. Er muss auch technisch funktionieren.",
+        text: "Wir beraten zur Lösung schon vor der Umsetzung und helfen, Details zu finden, die später Montage oder Betrieb erschweren könnten. So müssen Sie keine mühsamen Kompromisse zwischen Entwurf und tatsächlicher Ausführung suchen.",
+        claim: "Damit Ihr Entwurf auch nach Fertigstellung gut aussieht und gut funktioniert.",
+      },
+      {
+        title: "Bauträger",
+        lead: "Auf der Baustelle entscheiden Termine, Koordination und die Fähigkeit, Dinge ohne Komplikationen zu Ende zu bringen.",
+        text: "Wir liefern Zäune, Tore und zugehörige Elemente als ein Gesamtpaket. Sie müssen weder mehrere Lieferanten koordinieren noch klären, wer wofür verantwortlich ist. Das vereinfacht die Umsetzung und macht sie besser steuerbar.",
+        claim: "Weniger Koordination, weniger Risiken, ein reibungsloserer Bauablauf.",
+      },
+      {
+        title: "Produktionsbetriebe und Industrieareale",
+        lead: "Im laufenden Betrieb ist kein Platz für häufige Reparaturen oder unnötige Stillstände.",
+        text: "Wir entwickeln Lösungen, die der täglichen Belastung standhalten und keine ständige Aufmerksamkeit erfordern. Tritt ein Problem auf, reagieren wir schnell und lösen den Service direkt vor Ort.",
+        claim: "Anlagen, die dienen, funktionieren – und dazu noch gut aussehen.",
+      },
+      {
+        title: "Gemeinden und öffentliche Projekte",
+        lead: "Eine Investition sollte nicht nur bei der Übernahme Sinn ergeben, sondern auch nach einigen Jahren.",
+        text: "Wir liefern Lösungen mit der nötigen Dokumentation, Zertifizierung und klar definierten Parametern. Unser Fokus liegt auf langer Lebensdauer und vernünftigen Betriebs- und Wartungskosten.",
+        claim: "Lösungen, die langfristig funktionieren – ohne unnötige Zusatzkosten.",
+      },
+      {
+        title: "Generalunternehmer",
+        lead: "Jeder Projektabschnitt muss an den nächsten anschließen.",
+        text: "Wir passen uns dem Bauzeitenplan an, koordinieren die Schnittstellen mit den anderen Gewerken und liefern die Lösung im vereinbarten Termin und in vereinbarter Qualität.",
+        claim: "Ein verlässlicher Baustein jedes gut geführten Projekts.",
+      },
+    ],
+    subdodavkyTitle: "Zulieferungen",
+    subdodavkyText:
+      "Für Firmenkunden, Bauunternehmen und Partner liefern wir zuverlässig Aluminiumprofile, Systeme und Komponenten zu. Wir legen Wert auf präzise Verarbeitung, eingehaltene Termine und Produkte, auf die Sie sich in Ihren Projekten voll verlassen können.",
+    qualityKicker: "Konstanta — wir setzen auf Qualität",
+    qualityHeading: "Worauf wir Wert legen",
+    qualityPoints: [
+      "Wir beraten zur Lösung bereits in der Entwurfsphase",
+      "Wir liefern die Komplettlösung von der Fertigung bis zur Montage",
+      "Wir kommen auch mit schwierigen und untypischen Bedingungen auf der Baustelle zurecht",
+      "Wir halten vereinbarte Termine und Abläufe ein",
+      "Wir denken an den langfristigen Betrieb, nicht nur an die Übergabe",
+    ],
+    ctaHeading: "Wollen Sie Sicherheit?",
+    ctaText: "Sie möchten ein Projekt besprechen oder eine Lösung für ein konkretes Bauvorhaben vorbereiten? Kontaktieren Sie uns.",
+    cta: "Kontakt aufnehmen",
+    ctaCall: "Anrufen",
+  },
+}
+
+// ---------------------------------------------------------------------------
+// ZÁKLADY A PŘÍPRAVA (app/konf/zaklady/page.tsx)
+// Samostatná větev konfigurátoru pro zákazníky bez hotových základů —
+// místo kroků se sbírá popis situace a příloha (foto / nákres).
+// ---------------------------------------------------------------------------
+
+export const zakladyContent = {
+  cs: {
+    eyebrow: "Konfigurátor zdarma",
+    heading: "Základy a příprava",
+    subtitle: "Příprava terénu, podezdívky a stavební práce před montáží.",
+    paragraphs: [
+      "Nemáte ještě hotové základy nebo podezdívku? Nevadí, vyřešíme to postupně. Než si začnete vybírat konkrétní podobu plotu v konfigurátoru, je potřeba mít připravený pevný základ. Pokud váš pozemek ještě nemá vyzděné sloupky, podezdívku nebo potřebuje kompletní stavební přípravu, zastavte se na chvíli tady.",
+      "Napište nám v kostce, co vás čeká, popište situaci do formuláře nebo přiložte fotku místa či nákres pro lepší představu. My se vám ozveme, domluvíme osobní schůzku, vše na místě zaměříme, navrhneme ideální stavební řešení a naceníme — vše do posledního detailu a bez jakéhokoliv navýšení ceny po dokončení realizace.",
+    ],
+    highlightTitle: "Kompletní realizace od A do Z",
+    highlightText:
+      "Když si vyberete nás, získáte plný servis pod jednou střechou. Zabezpečíme pro vás kompletní stavbu oplocení — od návrhu přes dodávku materiálu až po samotnou stavbu. Nemusíte ztrácet čas hledáním dalších profesí nebo koordinací různých řemeslníků. My neseme odpovědnost za celý projekt, vy jen převezmete hotové dílo.",
+    formHeading: "Chci poptat stavební přípravu a základy",
+    formIntro: "Popište nám situaci vlastními slovy. Čím víc detailů, tím přesnější odhad vám připravíme.",
+    labels: {
+      name: "Jméno a příjmení",
+      email: "E-mail",
+      phone: "Telefon",
+      misto: "Místo realizace",
+      sluzby: "Co pro vás máme zajistit?",
+      message: "Popis situace",
+      files: "Fotky nebo nákres",
+    },
+    placeholders: {
+      name: "Jan Novák",
+      email: "jan@email.cz",
+      phone: "+420 777 123 456",
+      misto: "Obec nebo adresa pozemku",
+      message: "Např. pozemek ve svahu, staré pletivo na odstranění, chybí podezdívka po celé délce cca 40 m…",
+    },
+    filesHint: "Až 5 souborů (JPG, PNG, PDF), max. 5 MB každý.",
+    /** Klíče musí sedět se `ZAKLADY_SLUZBY` v lib/schemas.tsx — chodí do FormData i do e-mailu. */
+    sluzbyHint: "Zaškrtněte vše, co u vás připadá v úvahu. Upřesníme to na místě.",
+    sluzby: [
+      { id: "zamereni", label: "Zaměření", desc: "Vytyčíme trasu, výšky a zkontrolujeme sítě." },
+      { id: "zaklady", label: "Příprava základů", desc: "Výkopy, vrtání pro sloupky a betonáž." },
+      { id: "zdeni", label: "Zdění", desc: "Podezdívka, KB bloky nebo ztracené bednění." },
+      { id: "montaz", label: "Montáž", desc: "Osazení plotu, brány a branky na hotový základ." },
+    ],
+    filesButton: "Vybrat soubory",
+    filesEmpty: "Zatím nic nevybráno",
+    filesRemove: "Odebrat",
+    submit: "Odeslat poptávku",
+    consent: "Odesláním souhlasíte se zpracováním osobních údajů pro účely vyřízení poptávky.",
+    successTitle: "Poptávka odeslána",
+    successText: "Ozveme se vám co nevidět a domluvíme termín zaměření.",
+    backToPicker: "Zpět na výběr konfigurátoru",
+  },
+  sk: {
+    eyebrow: "Konfigurátor zadarmo",
+    heading: "Základy a príprava",
+    subtitle: "Príprava terénu, podmurovky a stavebné práce pred montážou.",
+    paragraphs: [
+      "Nemáte ešte hotové základy alebo podmurovku? Nevadí, vyriešime to postupne. Skôr než si začnete vyberať konkrétnu podobu plota v konfigurátore, je potrebné mať pripravený pevný základ. Ak váš pozemok ešte nemá vymurované stĺpiky, podmurovku alebo potrebuje kompletnú stavebnú prípravu, zastavte sa na chvíľu tu.",
+      "Napíšte nám v skratke, čo vás čaká, opíšte situáciu do formulára alebo priložte fotku miesta či nákres pre lepšiu predstavu. My sa vám ozveme, dohodneme osobné stretnutie, všetko na mieste zameriame, navrhneme ideálne stavebné riešenie a naceníme — všetko do posledného detailu a bez akéhokoľvek navýšenia ceny po dokončení realizácie.",
+    ],
+    highlightTitle: "Kompletná realizácia od A po Z",
+    highlightText:
+      "Keď si vyberiete nás, získate plný servis pod jednou strechou. Zabezpečíme pre vás kompletnú stavbu oplotenia — od návrhu cez dodávku materiálu až po samotnú stavbu. Nemusíte strácať čas hľadaním ďalších profesií alebo koordináciou rôznych remeselníkov. My nesieme zodpovednosť za celý projekt, vy len preberiete hotové dielo.",
+    formHeading: "Chcem dopytovať stavebnú prípravu a základy",
+    formIntro: "Opíšte nám situáciu vlastnými slovami. Čím viac detailov, tým presnejší odhad vám pripravíme.",
+    labels: {
+      name: "Meno a priezvisko",
+      email: "E-mail",
+      phone: "Telefón",
+      misto: "Miesto realizácie",
+      sluzby: "Čo pre vás máme zabezpečiť?",
+      message: "Opis situácie",
+      files: "Fotky alebo nákres",
+    },
+    placeholders: {
+      name: "Ján Novák",
+      email: "jan@email.sk",
+      phone: "+421 900 123 456",
+      misto: "Obec alebo adresa pozemku",
+      message: "Napr. pozemok vo svahu, staré pletivo na odstránenie, chýba podmurovka po celej dĺžke cca 40 m…",
+    },
+    filesHint: "Až 5 súborov (JPG, PNG, PDF), max. 5 MB každý.",
+    sluzbyHint: "Zaškrtnite všetko, čo u vás prichádza do úvahy. Upresníme to na mieste.",
+    sluzby: [
+      { id: "zamereni", label: "Zameranie", desc: "Vytýčime trasu, výšky a skontrolujeme siete." },
+      { id: "zaklady", label: "Príprava základov", desc: "Výkopy, vŕtanie pre stĺpiky a betonáž." },
+      { id: "zdeni", label: "Murovanie", desc: "Podmurovka, KB bloky alebo stratené debnenie." },
+      { id: "montaz", label: "Montáž", desc: "Osadenie plota, brány a bránky na hotový základ." },
+    ],
+    filesButton: "Vybrať súbory",
+    filesEmpty: "Zatiaľ nič nevybrané",
+    filesRemove: "Odobrať",
+    submit: "Odoslať dopyt",
+    consent: "Odoslaním súhlasíte so spracovaním osobných údajov na účely vybavenia dopytu.",
+    successTitle: "Dopyt odoslaný",
+    successText: "Ozveme sa vám čoskoro a dohodneme termín zamerania.",
+    backToPicker: "Späť na výber konfigurátora",
+  },
+  de: {
+    eyebrow: "Kostenloser Konfigurator",
+    heading: "Fundament und Vorbereitung",
+    subtitle: "Geländevorbereitung, Sockelmauern und Bauarbeiten vor der Montage.",
+    paragraphs: [
+      "Sie haben noch kein Fundament und keine Sockelmauer? Kein Problem, wir lösen das Schritt für Schritt. Bevor Sie im Konfigurator die konkrete Zaunform auswählen, muss ein festes Fundament vorbereitet sein. Wenn Ihr Grundstück noch keine gemauerten Pfeiler oder Sockelmauer hat oder eine komplette Bauvorbereitung braucht, halten Sie hier kurz an.",
+      "Schreiben Sie uns kurz, was ansteht, beschreiben Sie die Situation im Formular oder fügen Sie ein Foto des Ortes oder eine Skizze bei. Wir melden uns, vereinbaren einen persönlichen Termin, messen alles vor Ort auf, entwerfen die ideale bauliche Lösung und kalkulieren sie — bis ins letzte Detail und ohne jede Preiserhöhung nach Abschluss der Arbeiten.",
+    ],
+    highlightTitle: "Komplette Umsetzung von A bis Z",
+    highlightText:
+      "Wenn Sie sich für uns entscheiden, erhalten Sie den vollen Service aus einer Hand. Wir übernehmen den kompletten Zaunbau — vom Entwurf über die Materiallieferung bis zur eigentlichen Ausführung. Sie müssen keine Zeit mit der Suche nach weiteren Gewerken oder der Koordination verschiedener Handwerker verlieren. Wir tragen die Verantwortung für das gesamte Projekt, Sie übernehmen nur das fertige Werk.",
+    formHeading: "Ich möchte Bauvorbereitung und Fundament anfragen",
+    formIntro: "Beschreiben Sie uns die Situation in eigenen Worten. Je mehr Details, desto genauer wird unsere Einschätzung.",
+    labels: {
+      name: "Vor- und Nachname",
+      email: "E-Mail",
+      phone: "Telefon",
+      misto: "Ort der Umsetzung",
+      sluzby: "Was sollen wir für Sie übernehmen?",
+      message: "Beschreibung der Situation",
+      files: "Fotos oder Skizze",
+    },
+    placeholders: {
+      name: "Max Mustermann",
+      email: "max@email.de",
+      phone: "+420 777 123 456",
+      misto: "Gemeinde oder Adresse des Grundstücks",
+      message: "Z. B. Grundstück in Hanglage, altes Drahtgeflecht zu entfernen, Sockelmauer fehlt auf ganzer Länge von ca. 40 m…",
+    },
+    filesHint: "Bis zu 5 Dateien (JPG, PNG, PDF), max. 5 MB pro Datei.",
+    sluzbyHint: "Kreuzen Sie alles an, was für Sie infrage kommt. Details klären wir vor Ort.",
+    sluzby: [
+      { id: "zamereni", label: "Aufmaß", desc: "Wir stecken Verlauf und Höhen ab und prüfen Leitungen." },
+      { id: "zaklady", label: "Fundamentvorbereitung", desc: "Aushub, Bohrungen für Pfosten und Betonage." },
+      { id: "zdeni", label: "Mauerarbeiten", desc: "Sockelmauer, KB-Steine oder verlorene Schalung." },
+      { id: "montaz", label: "Montage", desc: "Zaun, Tor und Tür auf dem fertigen Fundament setzen." },
+    ],
+    filesButton: "Dateien auswählen",
+    filesEmpty: "Noch nichts ausgewählt",
+    filesRemove: "Entfernen",
+    submit: "Anfrage senden",
+    consent: "Mit dem Absenden stimmen Sie der Verarbeitung Ihrer personenbezogenen Daten zur Bearbeitung der Anfrage zu.",
+    successTitle: "Anfrage gesendet",
+    successText: "Wir melden uns in Kürze und vereinbaren einen Aufmaßtermin.",
+    backToPicker: "Zurück zur Konfiguratorauswahl",
+  },
+}
+
+// ---------------------------------------------------------------------------
 // KONFIGURÁTOR — picker (app/konf/page.tsx)
 // ---------------------------------------------------------------------------
 
 export const konfPickerContent = {
   cs: {
     eyebrow: "Konfigurátor zdarma",
-    heading: "Co si nakonfigurujeme?",
-    subtitle: "Vyberte si oplocení, pergolu nebo zábradlí — projdete pár kroků a na konci vám pošleme nezávaznou kalkulaci.",
+    heading: "Váš design, vaše pravidla",
+    subtitle: "Zvolte si oplocení, pergolu nebo zábradlí a poskládejte si ideální řešení, které odráží vaši představivost. Na konci vám pošleme kalkulaci.",
     cards: [
       { title: "Oplocení", description: "Brána, branka, sloupky, dílce a motiv na míru vašemu pozemku." },
       { title: "Pergoly", description: "Bioklimatická pergola, zimní zahrada nebo přístřešek se stíněním." },
       { title: "Zábradlí", description: "Skleněné nebo hliníkové zábradlí k terase, balkonu i schodišti." },
+      { title: "Základy", description: "Příprava terénu, podezdívky a stavební práce před montáží." },
     ],
     cta: "Spustit konfigurátor",
   },
   sk: {
     eyebrow: "Konfigurátor zadarmo",
-    heading: "Čo si nakonfigurujeme?",
-    subtitle: "Vyberte si oplotenie, pergolu alebo zábradlie — prejdete pár krokmi a na konci vám pošleme nezáväznú kalkuláciu.",
+    heading: "Váš dizajn, vaše pravidlá",
+    subtitle: "Zvoľte si oplotenie, pergolu alebo zábradlie a poskladajte si ideálne riešenie, ktoré odráža vašu predstavivosť. Na konci vám pošleme kalkuláciu.",
     cards: [
       { title: "Oplotenie", description: "Brána, bránka, stĺpiky, dielce a motív na mieru vášmu pozemku." },
       { title: "Pergoly", description: "Bioklimatická pergola, zimná záhrada alebo prístrešok so tienením." },
       { title: "Zábradlie", description: "Sklenené alebo hliníkové zábradlie k terase, balkónu aj schodisku." },
+      { title: "Základy", description: "Príprava terénu, podmurovky a stavebné práce pred montážou." },
     ],
     cta: "Spustiť konfigurátor",
   },
   de: {
     eyebrow: "Kostenloser Konfigurator",
-    heading: "Was möchten Sie konfigurieren?",
-    subtitle: "Wählen Sie Zaun, Pergola oder Geländer — durchlaufen Sie ein paar Schritte, und am Ende senden wir Ihnen eine unverbindliche Kalkulation.",
+    heading: "Ihr Design, Ihre Regeln",
+    subtitle: "Wählen Sie Zaun, Pergola oder Geländer und stellen Sie sich die ideale Lösung zusammen, die Ihre Vorstellung widerspiegelt. Am Ende senden wir Ihnen eine Kalkulation.",
     cards: [
       { title: "Zaun", description: "Tor, Tür, Pfosten, Elemente und Motiv nach Maß für Ihr Grundstück." },
       { title: "Pergolen", description: "Bioklimatische Pergola, Wintergarten oder überdachter Unterstand mit Beschattung." },
       { title: "Geländer", description: "Glas- oder Aluminiumgeländer für Terrasse, Balkon und Treppe." },
+      { title: "Fundament", description: "Geländevorbereitung, Sockelmauern und Bauarbeiten vor der Montage." },
     ],
     cta: "Konfigurator starten",
   },
@@ -1031,68 +1819,62 @@ export const konfPickerContent = {
 export const konfContent = {
   cs: {
     heading: "Nakonfigurujte si své oplocení",
-    subheading: "Projděte pár kroků a sestavte si bránu, branku, sloupky i motiv plotu přesně podle sebe. Na konci vám pošleme nezávaznou kalkulaci.",
+    subheading: "Projděte pár kroků a sestavte si bránu, branku, plotové dílce i motiv plotu přesně podle sebe. Na konci vám pošleme nezávaznou kalkulaci.",
     next: "Další krok",
     back: "Zpět",
     sendText: "Odeslat poptávku",
     dimensionLabels: { vyska: "Výška (mm)", delka: "Šířka průjezdu (mm)", pocet: "Počet (ks)" },
-    steps: ["Brána", "Branka", "Sloupky", "Dílce a motiv", "Barva", "Kontakt"],
+    steps: ["Brána", "Branka", "Dílce", "Motiv", "Barva", "Kontakt"],
     validation: {
       brana: "Zvolte typ brány, nebo zaškrtněte, že vjezdovou bránu nechcete.",
       branka: "Zvolte, zda chcete v plotu branku, nebo zaškrtněte, že ji nechcete.",
       /** `{product}` se nahradí názvem vybraného produktu s nevyplněnými rozměry. */
       rozmery: "Vyplňte prosím všechny rozměry u produktu: {product}",
-      sloupky: "Vyberte, zda máte vlastní sloupky, nebo je chcete od nás.",
       dilce: "Zvolte, zda chcete plotové dílce, nebo zaškrtněte, že je nechcete.",
       motiv: "Vyberte motiv oplocení.",
       barva: "Vyberte barvu oplocení.",
       invalidBarva: "Nezadali jste barvu oplocení",
       invalidMotiv: "Nevybrali jste motiv oplocení",
-      invalidSloupky: "Nevybrali jste, zda máte vlastní sloupky, nebo je chcete od nás",
       invalidContact: "Zkontrolujte prosím kontaktní údaje",
     },
   },
   sk: {
     heading: "Nakonfigurujte si svoje oplotenie",
-    subheading: "Prejdite pár krokmi a zostavte si bránu, bránku, stĺpiky aj motív plota presne podľa seba. Na konci vám pošleme nezáväznú kalkuláciu.",
+    subheading: "Prejdite pár krokmi a zostavte si bránu, bránku, plotové dielce aj motív plota presne podľa seba. Na konci vám pošleme nezáväznú kalkuláciu.",
     next: "Ďalší krok",
     back: "Späť",
     sendText: "Odoslať dopyt",
     dimensionLabels: { vyska: "Výška (mm)", delka: "Šírka prejazdu (mm)", pocet: "Počet (ks)" },
-    steps: ["Brána", "Bránka", "Stĺpiky", "Dielce a motív", "Farba", "Kontakt"],
+    steps: ["Brána", "Bránka", "Dielce", "Motív", "Farba", "Kontakt"],
     validation: {
       brana: "Zvoľte typ brány, alebo zaškrtnite, že vjazdovú bránu nechcete.",
       branka: "Zvoľte, či chcete v plote bránku, alebo zaškrtnite, že ju nechcete.",
       rozmery: "Vyplňte, prosím, všetky rozmery pri produkte: {product}",
-      sloupky: "Vyberte, či máte vlastné stĺpiky, alebo ich chcete od nás.",
       dilce: "Zvoľte, či chcete plotové dielce, alebo zaškrtnite, že ich nechcete.",
       motiv: "Vyberte motív oplotenia.",
       barva: "Vyberte farbu oplotenia.",
       invalidBarva: "Nezadali ste farbu oplotenia",
       invalidMotiv: "Nevybrali ste motív oplotenia",
-      invalidSloupky: "Nevybrali ste, či máte vlastné stĺpiky, alebo ich chcete od nás",
       invalidContact: "Skontrolujte, prosím, kontaktné údaje",
     },
   },
   de: {
     heading: "Konfigurieren Sie Ihren Zaun",
-    subheading: "Durchlaufen Sie ein paar Schritte und stellen Sie sich Tor, Tür, Pfosten und Zaunmotiv genau nach Ihren Wünschen zusammen. Am Ende senden wir Ihnen eine unverbindliche Kalkulation.",
+    subheading: "Durchlaufen Sie ein paar Schritte und stellen Sie sich Tor, Tür, Zaunelemente und Zaunmotiv genau nach Ihren Wünschen zusammen. Am Ende senden wir Ihnen eine unverbindliche Kalkulation.",
     next: "Nächster Schritt",
     back: "Zurück",
     sendText: "Anfrage senden",
     dimensionLabels: { vyska: "Höhe (mm)", delka: "Durchfahrtsbreite (mm)", pocet: "Anzahl (Stk.)" },
-    steps: ["Tor", "Tür", "Pfosten", "Elemente und Motiv", "Farbe", "Kontakt"],
+    steps: ["Tor", "Tür", "Elemente", "Motiv", "Farbe", "Kontakt"],
     validation: {
       brana: "Wählen Sie einen Tortyp oder markieren Sie, dass Sie kein Einfahrtstor möchten.",
       branka: "Wählen Sie, ob Sie eine Tür im Zaun möchten, oder markieren Sie, dass Sie keine möchten.",
       rozmery: "Bitte füllen Sie alle Maße beim Produkt aus: {product}",
-      sloupky: "Wählen Sie, ob Sie eigene Pfosten haben oder sie von uns möchten.",
       dilce: "Wählen Sie, ob Sie Zaunelemente möchten, oder markieren Sie, dass Sie keine möchten.",
       motiv: "Wählen Sie das Zaunmotiv.",
       barva: "Wählen Sie die Zaunfarbe.",
       invalidBarva: "Sie haben keine Zaunfarbe angegeben",
       invalidMotiv: "Sie haben kein Zaunmotiv ausgewählt",
-      invalidSloupky: "Sie haben nicht angegeben, ob Sie eigene Pfosten haben oder sie von uns möchten",
       invalidContact: "Bitte überprüfen Sie Ihre Kontaktdaten",
     },
   },
@@ -1137,10 +1919,10 @@ export const gateLabels: Record<Lang, Record<string, string>> = {
 
 // `tyc` (výztužná tyč křídla) se přidává jen ke křídlovým bránám — viz `kridlova`
 // v `gateProducts` a `step-brana.tsx`.
-export const gateExtrasLabels: Record<Lang, { pohon: string; tahoma: string; ovladac: string; tyc: string }> = {
-  cs: { pohon: "Automatický pohon", tahoma: "Tahoma Switch", ovladac: "Ovladač", tyc: "Tyč pro zpevnění křídla" },
-  sk: { pohon: "Automatický pohon", tahoma: "Tahoma Switch", ovladac: "Ovládač", tyc: "Tyč na spevnenie krídla" },
-  de: { pohon: "Automatischer Antrieb", tahoma: "Tahoma Switch", ovladac: "Fernbedienung", tyc: "Verstärkungsstange für Torflügel" },
+export const gateExtrasLabels: Record<Lang, { pohon: string; tahoma: string; tyc: string }> = {
+  cs: { pohon: "Automatický pohon", tahoma: "Tahoma Switch", tyc: "Tyč pro zpevnění křídla" },
+  sk: { pohon: "Automatický pohon", tahoma: "Tahoma Switch", tyc: "Tyč na spevnenie krídla" },
+  de: { pohon: "Automatischer Antrieb", tahoma: "Tahoma Switch", tyc: "Verstärkungsstange für Torflügel" },
 }
 
 export const brankaExtrasLabels: Record<Lang, { zamek: string; schranka: string; zvonek: string }> = {
@@ -1260,6 +2042,7 @@ export const motivLabels: Record<Lang, Record<string, string>> = {
     vypaleni: "Vypálení plochy",
     "vlastní kombinace": "Vlastní kombinace",
     drevodekor: "Dřevodekor",
+    sklo: "Sklo",
   },
   sk: {
     "o-standart": "Okenica štandard",
@@ -1275,6 +2058,7 @@ export const motivLabels: Record<Lang, Record<string, string>> = {
     vypaleni: "Vypálenie plochy",
     "vlastní kombinace": "Vlastná kombinácia",
     drevodekor: "Drevodekor",
+    sklo: "Sklo",
   },
   de: {
     "o-standart": "Fensterladen Standard",
@@ -1290,6 +2074,7 @@ export const motivLabels: Record<Lang, Record<string, string>> = {
     vypaleni: "Flächenausschnitt",
     "vlastní kombinace": "Eigene Kombination",
     drevodekor: "Holzdekor",
+    sklo: "Glas",
   },
 }
 
@@ -1410,18 +2195,6 @@ export const productSelectContent: Record<
   },
 }
 
-export const sloupkyLabels: Record<Lang, Record<string, string>> = {
-  cs: { vlastni: "Mám své", "hliníkové": "Hliníkové", "betonové": "Betonové" },
-  sk: { vlastni: "Mám vlastné", "hliníkové": "Hliníkové", "betonové": "Betónové" },
-  de: { vlastni: "Ich habe eigene", "hliníkové": "Aluminium", "betonové": "Beton" },
-}
-
-export const povrchLabels: Record<Lang, Record<string, string>> = {
-  cs: { standard: "Standard", stipany: "Štípaný" },
-  sk: { standard: "Štandard", stipany: "Štiepaný" },
-  de: { standard: "Standard", stipany: "Gespalten" },
-}
-
 export const formControlsContent = {
   cs: { customSolution: "Vlastní řešení", noPreview: "Náhled připravujeme" },
   sk: { customSolution: "Vlastné riešenie", noPreview: "Náhľad pripravujeme" },
@@ -1450,93 +2223,18 @@ export const stepBrankaContent = {
   de: { titlePre: "Möchten Sie eine ", titleAccent: "Tür im Zaun", titlePost: "?", desc: "Tür für den Fußgängerzugang zum Grundstück, unabhängig vom Einfahrtstor.", decline: "Ich möchte keine Tür im Zaun", productTitle: "Tür im Zaun", dimensionLabels: { vyska: "Türhöhe (mm)", delka: "Türbreite (mm)", pocet: "Anzahl Türen (Stk.)" } },
 }
 
-export const stepSloupkyContent = {
-  cs: {
-    titlePre: "Chcete ",
-    titleAccent: "sloupky",
-    titlePost: "?",
-    desc: "Vlastní, hliníkové, nebo betonovou tvárnici s výběrem barvy a povrchu.",
-    povrchLabel: "Povrch tvárnice",
-    barvaLabel: "Barva tvárnice",
-    uchyceniTitlePre: "Spodní ",
-    uchyceniTitleAccent: "uchycení sloupků",
-    uchyceniTitlePost: "",
-    uchyceniDesc: "Způsob, jakým se sloupky ukotví do země. Zaměření je vždy na nás.",
-    provedeniLabel: "Provedení",
-    rozmerLabel: "Rozměr sloupku",
-  },
-  sk: {
-    titlePre: "Chcete ",
-    titleAccent: "stĺpiky",
-    titlePost: "?",
-    desc: "Vlastné, hliníkové, alebo betónovú tvárnicu s výberom farby a povrchu.",
-    povrchLabel: "Povrch tvárnice",
-    barvaLabel: "Farba tvárnice",
-    uchyceniTitlePre: "Spodné ",
-    uchyceniTitleAccent: "uchytenie stĺpikov",
-    uchyceniTitlePost: "",
-    uchyceniDesc: "Spôsob, akým sa stĺpiky ukotvia do zeme. Zameranie je vždy na nás.",
-    provedeniLabel: "Prevedenie",
-    rozmerLabel: "Rozmer stĺpika",
-  },
-  de: {
-    titlePre: "Möchten Sie ",
-    titleAccent: "Pfosten",
-    titlePost: "?",
-    desc: "Eigene, Aluminium- oder Betonpfosten mit Auswahl von Farbe und Oberfläche.",
-    povrchLabel: "Oberfläche des Pfostens",
-    barvaLabel: "Farbe des Pfostens",
-    uchyceniTitlePre: "Untere ",
-    uchyceniTitleAccent: "Pfostenbefestigung",
-    uchyceniTitlePost: "",
-    uchyceniDesc: "Art der Verankerung der Pfosten im Boden. Das Aufmaß übernehmen immer wir.",
-    provedeniLabel: "Ausführung",
-    rozmerLabel: "Pfostenmaß",
-  },
+/** 4. krok — plotové dílce a jejich rozměry. Motiv se vybírá až v dalším kroku. */
+export const stepDilceContent = {
+  cs: { titlePre: "Chcete ", titleAccent: "plotové dílce", titlePost: "?", desc: "Vyplňte rozměry dílců, pokud je chcete objednat spolu s bránou.", decline: "Nechci plotové dílce", productTitle: "Plotové dílce", dimensionLabels: { vyska: "Výška dílců (mm)", delka: "Délka dílců (mm)", pocet: "Počet dílců (ks)" } },
+  sk: { titlePre: "Chcete ", titleAccent: "plotové dielce", titlePost: "?", desc: "Vyplňte rozmery dielcov, ak ich chcete objednať spolu s bránou.", decline: "Nechcem plotové dielce", productTitle: "Plotové dielce", dimensionLabels: { vyska: "Výška dielcov (mm)", delka: "Dĺžka dielcov (mm)", pocet: "Počet dielcov (ks)" } },
+  de: { titlePre: "Möchten Sie ", titleAccent: "Zaunelemente", titlePost: "?", desc: "Geben Sie die Maße der Elemente an, wenn Sie sie zusammen mit dem Tor bestellen möchten.", decline: "Ich möchte keine Zaunelemente", productTitle: "Zaunelemente", dimensionLabels: { vyska: "Höhe der Elemente (mm)", delka: "Länge der Elemente (mm)", pocet: "Anzahl Elemente (Stk.)" } },
 }
 
-/** Popisky tří způsobů spodního uchycení sloupků (`uchyceniSloupkuOptions`). */
-export const uchyceniSloupkuLabels: Record<Lang, Record<string, { label: string; desc: string }>> = {
-  cs: {
-    nabetonovani: { label: "Nabetonování sloupku", desc: "Sloupek se osadí a zabetonuje přímo do země." },
-    patka: { label: "Sloupek na patce", desc: "Sloupek se přišroubuje na kotevní patku — na hotovou betonovou plochu." },
-    zdena: { label: "Kompletně zděná část plotů včetně sloupků", desc: "Zděná podezdívka i sloupky, včetně zaměření." },
-  },
-  sk: {
-    nabetonovani: { label: "Nabetónovanie stĺpika", desc: "Stĺpik sa osadí a zabetónuje priamo do zeme." },
-    patka: { label: "Stĺpik na pätke", desc: "Stĺpik sa priskrutkuje na kotviacu pätku — na hotovú betónovú plochu." },
-    zdena: { label: "Kompletne murovaná časť plotov vrátane stĺpikov", desc: "Murovaná podmurovka aj stĺpiky, vrátane zamerania." },
-  },
-  de: {
-    nabetonovani: { label: "Einbetonieren des Pfostens", desc: "Der Pfosten wird gesetzt und direkt im Boden einbetoniert." },
-    patka: { label: "Pfosten auf Fußplatte", desc: "Der Pfosten wird auf eine Ankerplatte geschraubt — auf fertige Betonfläche." },
-    zdena: { label: "Komplett gemauerter Zaunsockel inklusive Pfosten", desc: "Gemauerter Sockel und Pfosten, inklusive Aufmaß." },
-  },
-}
-
-/**
- * Přepínač „uděláme my / svépomocí“. Sloveso se liší podle volby — u nabetonování
- * jde o betonování, u zděné části o zdění — proto dvě sady popisků, ne jedna.
- */
-export const provedeniLabels: Record<Lang, Record<string, { vcetne: string; svepomoci: string }>> = {
-  cs: {
-    nabetonovani: { vcetne: "Včetně betonování", svepomoci: "Betonování svépomocí" },
-    zdena: { vcetne: "Včetně zdění", svepomoci: "Zdění svépomocí" },
-  },
-  sk: {
-    nabetonovani: { vcetne: "Vrátane betónovania", svepomoci: "Betónovanie svojpomocne" },
-    zdena: { vcetne: "Vrátane murovania", svepomoci: "Murovanie svojpomocne" },
-  },
-  de: {
-    nabetonovani: { vcetne: "Inklusive Betonieren", svepomoci: "Betonieren in Eigenleistung" },
-    zdena: { vcetne: "Inklusive Mauern", svepomoci: "Mauern in Eigenleistung" },
-  },
-}
-
-export const stepDilceMotivContent = {
-  cs: { title1Pre: "Chcete ", title1Accent: "plotové dílce", title1Post: "?", desc1: "Vyplňte rozměry dílců, pokud je chcete objednat spolu s bránou.", decline: "Nechci plotové dílce", productTitle: "Plotové dílce", dimensionLabels: { vyska: "Výška dílců (mm)", delka: "Délka dílců (mm)", pocet: "Počet dílců (ks)" }, title2Pre: "Zvolte ", title2Accent: "motiv oplocení", title2Post: "", desc2: "Motiv určuje tvar výplně plotových dílců." },
-  sk: { title1Pre: "Chcete ", title1Accent: "plotové dielce", title1Post: "?", desc1: "Vyplňte rozmery dielcov, ak ich chcete objednať spolu s bránou.", decline: "Nechcem plotové dielce", productTitle: "Plotové dielce", dimensionLabels: { vyska: "Výška dielcov (mm)", delka: "Dĺžka dielcov (mm)", pocet: "Počet dielcov (ks)" }, title2Pre: "Zvoľte ", title2Accent: "motív oplotenia", title2Post: "", desc2: "Motív určuje tvar výplne plotových dielcov." },
-  de: { title1Pre: "Möchten Sie ", title1Accent: "Zaunelemente", title1Post: "?", desc1: "Geben Sie die Maße der Elemente an, wenn Sie sie zusammen mit dem Tor bestellen möchten.", decline: "Ich möchte keine Zaunelemente", productTitle: "Zaunelemente", dimensionLabels: { vyska: "Höhe der Elemente (mm)", delka: "Länge der Elemente (mm)", pocet: "Anzahl Elemente (Stk.)" }, title2Pre: "Wählen Sie das ", title2Accent: "Zaunmotiv", title2Post: "", desc2: "Das Motiv bestimmt die Form der Füllung der Zaunelemente." },
+/** 5. krok — motiv výplně, samostatná stránka konfigurátoru. */
+export const stepMotivContent = {
+  cs: { titlePre: "Zvolte ", titleAccent: "motiv oplocení", titlePost: "", desc: "Motiv určuje tvar výplně plotových dílců." },
+  sk: { titlePre: "Zvoľte ", titleAccent: "motív oplotenia", titlePost: "", desc: "Motív určuje tvar výplne plotových dielcov." },
+  de: { titlePre: "Wählen Sie das ", titleAccent: "Zaunmotiv", titlePost: "", desc: "Das Motiv bestimmt die Form der Füllung der Zaunelemente." },
 }
 
 export const stepBarvaContent = {
@@ -1611,6 +2309,32 @@ export const zabradliSkloLabels: Record<Lang, Record<string, string>> = {
  * Záměrně bez rozpisu dalších kroků („poptávka přijata → zpracování → …"):
  * poptávky nikde neukládáme, takže bychom stav nemohli nijak posouvat.
  */
+/**
+ * Mezikrok mezi odesláním a potvrzením — zabere celou kartu konfigurátoru po dobu,
+ * kdy běží server action (nahrání příloh do Sanity + odeslání e-mailu trvá pár vteřin).
+ * Bez něj by uživatel koukal na nezměněný formulář a klikal na „Odeslat" znovu.
+ */
+export const konfPendingContent = {
+  cs: {
+    eyebrow: "Odesíláme",
+    heading: "Zpracováváme vaši poptávku",
+    desc: "Ukládáme vaši konfiguraci a posíláme ji našim specialistům. Chvilku to potrvá — nezavírejte prosím stránku.",
+    note: "Nemusíte nikam klikat, jakmile bude hotovo, přepneme vás dál sami.",
+  },
+  sk: {
+    eyebrow: "Odosielame",
+    heading: "Spracovávame váš dopyt",
+    desc: "Ukladáme vašu konfiguráciu a posielame ju našim špecialistom. Chvíľu to potrvá — nezatvárajte, prosím, stránku.",
+    note: "Nemusíte nikam klikať, hneď ako bude hotovo, prepneme vás ďalej sami.",
+  },
+  de: {
+    eyebrow: "Wird gesendet",
+    heading: "Wir verarbeiten Ihre Anfrage",
+    desc: "Wir speichern Ihre Konfiguration und leiten sie an unsere Spezialisten weiter. Das dauert einen Moment — bitte schließen Sie die Seite nicht.",
+    note: "Sie müssen nichts weiter tun, sobald es fertig ist, leiten wir Sie automatisch weiter.",
+  },
+}
+
 export const konfSuccessContent = {
   cs: {
     eyebrow: "Máme to",
@@ -1652,8 +2376,6 @@ export const zabradliConfContent = {
     back: "Zpět",
     sendText: "Odeslat poptávku",
     steps: ["Zábradlí", "Motiv", "Kontakt"],
-    /** Dokud není hotová server action, odeslání jen vypíše data do konzole. */
-    submitPlaceholder: "Konfigurace zatím jen do konzole — odesílání se teprve dodělává.",
     stepDesc: "Vyplňte rozměry zábradlí a vyberte výplň.",
     motivTitlePre: "Zvolte ",
     motivTitleAccent: "motiv výplně",
@@ -1683,7 +2405,6 @@ export const zabradliConfContent = {
     back: "Späť",
     sendText: "Odoslať dopyt",
     steps: ["Zábradlie", "Motív", "Kontakt"],
-    submitPlaceholder: "Konfigurácia zatiaľ len do konzoly — odosielanie sa ešte dorába.",
     stepDesc: "Vyplňte rozmery zábradlia a vyberte výplň.",
     motivTitlePre: "Zvoľte ",
     motivTitleAccent: "motív výplne",
@@ -1713,7 +2434,6 @@ export const zabradliConfContent = {
     back: "Zurück",
     sendText: "Anfrage senden",
     steps: ["Geländer", "Motiv", "Kontakt"],
-    submitPlaceholder: "Konfiguration vorerst nur in der Konsole — der Versand wird noch fertiggestellt.",
     stepDesc: "Geben Sie die Maße des Geländers an und wählen Sie die Füllung.",
     motivTitlePre: "Wählen Sie das ",
     motivTitleAccent: "Motiv der Füllung",
@@ -2125,6 +2845,78 @@ export type PergMailContent = {
   autoGenerated: string
 }
 
+/** Tabulka konfigurace zábradlí v ZabMail — hodnoty berou `zabradliMaterialLabels`, `zabradliSkloLabels`, `motivLabels`. */
+export type ZabMailContent = {
+  /** Velký kondenzovaný nadpis v hlavičce e-mailu (obdoba `MailChromeContent.headline`). */
+  headline: string
+  /** Nadpis sekce s rozměry a výplní zábradlí. */
+  configHeading: string
+  zabradliLabel: string
+  notSpecified: string
+  /** Popisek jedné sady rozměrů, když jich zákazník zadal víc — „Sada rozměrů 2". */
+  sizeLabel: string
+  height: string
+  width: string
+  count: string
+  pieces: string
+  moreHeading: string
+  material: string
+  glass: string
+  motiv: string
+  autoGenerated: string
+}
+
+export const zabMailContent: Record<Lang, ZabMailContent> = {
+  cs: {
+    headline: "Konfigurace zábradlí",
+    configHeading: "Parametry zábradlí",
+    zabradliLabel: "Zábradlí",
+    notSpecified: "Neuvedeno",
+    sizeLabel: "Sada rozměrů",
+    height: "Výška",
+    width: "Šířka",
+    count: "Počet",
+    pieces: "ks",
+    moreHeading: "Výplň zábradlí",
+    material: "Materiál výplně",
+    glass: "Odstín skla",
+    motiv: "Motiv výplně",
+    autoGenerated: "Tento e-mail byl automaticky vygenerován.",
+  },
+  sk: {
+    headline: "Konfigurácia zábradlia",
+    configHeading: "Parametre zábradlia",
+    zabradliLabel: "Zábradlie",
+    notSpecified: "Neuvedené",
+    sizeLabel: "Sada rozmerov",
+    height: "Výška",
+    width: "Šírka",
+    count: "Počet",
+    pieces: "ks",
+    moreHeading: "Výplň zábradlia",
+    material: "Materiál výplne",
+    glass: "Odtieň skla",
+    motiv: "Motív výplne",
+    autoGenerated: "Tento e-mail bol automaticky vygenerovaný.",
+  },
+  de: {
+    headline: "Geländer-Konfiguration",
+    configHeading: "Geländer-Parameter",
+    zabradliLabel: "Geländer",
+    notSpecified: "Nicht angegeben",
+    sizeLabel: "Maßsatz",
+    height: "Höhe",
+    width: "Breite",
+    count: "Anzahl",
+    pieces: "Stk.",
+    moreHeading: "Geländerfüllung",
+    material: "Material der Füllung",
+    glass: "Glaston",
+    motiv: "Motiv der Füllung",
+    autoGenerated: "Diese E-Mail wurde automatisch generiert.",
+  },
+}
+
 export const pergMailContent: Record<Lang, PergMailContent> = {
   cs: {
     headline: "Konfigurace pergoly",
@@ -2232,6 +3024,78 @@ export type QuoteContent = {
   termsCompanyNote: string
   disclaimer: string
   validUntil: string
+}
+
+/**
+ * Texty e-mailu poptávky stavební přípravy (components/ZakladyMail.tsx). Chrome
+ * e-mailu (oslovení, firemní karta, patička) se bere z `mailContent`, tady jsou
+ * jen části specifické pro tuhle poptávku.
+ */
+export const zakladyMailContent: Record<
+  Lang,
+  {
+    preview: string
+    eyebrow: string
+    headline: string
+    intro: string
+    intro2: string
+    scopeHeading: string
+    scopeLabel: string
+    situationHeading: string
+    placeLabel: string
+    attachmentsLabel: string
+    notSpecified: string
+    autoGenerated: string
+  }
+> = {
+  cs: {
+    preview: "Nová poptávka stavební přípravy a základů",
+    eyebrow: "Nová poptávka z webu",
+    headline: "Stavební příprava a základy",
+    intro:
+      "Děkujeme za poptávku. Beze zbytku ji máme a pustíme se do ní — ozveme se vám a domluvíme termín osobní schůzky přímo na pozemku.",
+    intro2:
+      "Na místě vše zaměříme, navrhneme ideální stavební řešení a naceníme do posledního detailu. Cena po dokončení realizace už neroste.",
+    scopeHeading: "Co máme zajistit",
+    scopeLabel: "Rozsah prací",
+    situationHeading: "Popis situace",
+    placeLabel: "Místo realizace",
+    attachmentsLabel: "Počet příloh",
+    notSpecified: "Neuvedeno",
+    autoGenerated: "Tento přehled byl vygenerován automaticky z formuláře na webu.",
+  },
+  sk: {
+    preview: "Nový dopyt na stavebnú prípravu a základy",
+    eyebrow: "Nový dopyt z webu",
+    headline: "Stavebná príprava a základy",
+    intro:
+      "Ďakujeme za dopyt. Máme ho kompletný a pustíme sa doň — ozveme sa vám a dohodneme termín osobného stretnutia priamo na pozemku.",
+    intro2:
+      "Na mieste všetko zameriame, navrhneme ideálne stavebné riešenie a naceníme do posledného detailu. Cena po dokončení realizácie už nerastie.",
+    scopeHeading: "Čo máme zabezpečiť",
+    scopeLabel: "Rozsah prác",
+    situationHeading: "Opis situácie",
+    placeLabel: "Miesto realizácie",
+    attachmentsLabel: "Počet príloh",
+    notSpecified: "Neuvedené",
+    autoGenerated: "Tento prehľad bol vygenerovaný automaticky z formulára na webe.",
+  },
+  de: {
+    preview: "Neue Anfrage zu Bauvorbereitung und Fundament",
+    eyebrow: "Neue Anfrage über die Website",
+    headline: "Bauvorbereitung und Fundament",
+    intro:
+      "Vielen Dank für Ihre Anfrage. Sie ist vollständig bei uns eingegangen — wir melden uns und vereinbaren einen Termin direkt auf dem Grundstück.",
+    intro2:
+      "Vor Ort messen wir alles auf, entwerfen die passende bauliche Lösung und kalkulieren sie bis ins letzte Detail. Nach Abschluss der Arbeiten steigt der Preis nicht mehr.",
+    scopeHeading: "Was wir übernehmen sollen",
+    scopeLabel: "Leistungsumfang",
+    situationHeading: "Beschreibung der Situation",
+    placeLabel: "Ort der Umsetzung",
+    attachmentsLabel: "Anzahl der Anhänge",
+    notSpecified: "Nicht angegeben",
+    autoGenerated: "Diese Übersicht wurde automatisch aus dem Formular auf der Website erzeugt.",
+  },
 }
 
 export const quoteContent: Record<Lang, QuoteContent> = {
@@ -2405,10 +3269,14 @@ export type QuoteItemsContent = {
   currency: string
   header: { produkt: string; mnozstvi: string; bezDph: string; dph: string; sDph: string }
   tyc: string
-  pohon: string
+  /** Pohon křídlových bran (dvoukridla / skladaci) — Somfy Ixengo L. */
+  pohonKridlova: string
+  /** Pohon posuvných bran (zbytek variant) — Somfy Elixo 500. */
+  pohonPosuvna: string
+  /** Hydraulická brzda — přidává se k posuvným bránám ve svahu. */
+  brzda: string
   zastrc: string
   tahoma: string
-  ovladac: string
   montazBrany: string
   branka: string
   zamek: string
@@ -2420,11 +3288,6 @@ export type QuoteItemsContent = {
   montazBranky: string
   dilce: string
   montazDilcu: string
-  typSloupku: string
-  cenaBm: string
-  cenaCepicky: string
-  povrchTvarnice: string
-  barvaTvarnice: string
   barvaDilcu: string
   motiv: string
   celkem: string
@@ -2436,12 +3299,13 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     currency: "Kč",
     header: { produkt: "Produkt", mnozstvi: "Množství", bezDph: "Cena bez DPH", dph: "DPH", sDph: "Cena s DPH" },
     tyc: "Tyč pro zpevnění křídla brány",
-    pohon:
-      "1x Somfy Elixo500 3S io – pohon s řídicí jednotkou a rádiovým přijímačem, 1x Somfy Master Pro Bitech – bezpečnostní fotobuňky (1 pár) dosah 10 m, 2x Odblokovací klíč (použití při výpadku proudu)",
+    pohonKridlova: "Pohon křídlové brány IXENGO L 24 V 3 S io komfort set",
+    pohonPosuvna:
+      "Pohon posuvné brány ELIXO 500 3 S M io komfort set – pohon s řídicí jednotkou a rádiovým přijímačem, 1x Somfy Master Pro Bitech – bezpečnostní fotobuňky (1 pár) dosah 10 m, 2x Odblokovací klíč (použití při výpadku proudu)",
+    brzda: "Hydraulická brzda pro posuvné brány ve svahu",
     zastrc: "Zástrč brány",
     tahoma:
       "Somfy TaHoma switch je centrální jednotka pro chytrou domácnost, která umožňuje ovládat a automatizovat různá zařízení v domě, jako jsou rolety, žaluzie, brány, osvětlení, topení a další",
-    ovladac: "1x Somfy Keygo io – dálkový ovladač",
     montazBrany: "Montáž brány",
     branka: "Branka",
     zamek: "El. zámek napětí 9 – 12 V AC/DC, s posuvnou zarážkou a mechanickým odblokováním",
@@ -2457,11 +3321,6 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     montazBranky: "Montáž branky",
     dilce: "Plotové dílce",
     montazDilcu: "Montáž dílců",
-    typSloupku: "Typ sloupků",
-    cenaBm: "Cena za bm",
-    cenaCepicky: "Cena čepičky za kus",
-    povrchTvarnice: "Povrch tvárnice",
-    barvaTvarnice: "Barva tvárnice",
     barvaDilcu: "Barva dílců",
     motiv: "Motiv",
     celkem: "Celkem:",
@@ -2471,12 +3330,13 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     currency: "Kč",
     header: { produkt: "Produkt", mnozstvi: "Množstvo", bezDph: "Cena bez DPH", dph: "DPH", sDph: "Cena s DPH" },
     tyc: "Tyč na spevnenie krídla brány",
-    pohon:
-      "1x Somfy Elixo500 3S io – pohon s riadiacou jednotkou a rádiovým prijímačom, 1x Somfy Master Pro Bitech – bezpečnostné fotobunky (1 pár) dosah 10 m, 2x Odblokovací kľúč (použitie pri výpadku prúdu)",
+    pohonKridlova: "Pohon krídlovej brány IXENGO L 24 V 3 S io komfort set",
+    pohonPosuvna:
+      "Pohon posuvnej brány ELIXO 500 3 S M io komfort set – pohon s riadiacou jednotkou a rádiovým prijímačom, 1x Somfy Master Pro Bitech – bezpečnostné fotobunky (1 pár) dosah 10 m, 2x Odblokovací kľúč (použitie pri výpadku prúdu)",
+    brzda: "Hydraulická brzda pre posuvné brány vo svahu",
     zastrc: "Zástrč brány",
     tahoma:
       "Somfy TaHoma switch je centrálna jednotka pre inteligentnú domácnosť, ktorá umožňuje ovládať a automatizovať rôzne zariadenia v dome, ako sú rolety, žalúzie, brány, osvetlenie, kúrenie a ďalšie",
-    ovladac: "1x Somfy Keygo io – diaľkový ovládač",
     montazBrany: "Montáž brány",
     branka: "Bránka",
     zamek: "El. zámok napätie 9 – 12 V AC/DC, s posuvnou zarážkou a mechanickým odblokovaním",
@@ -2492,11 +3352,6 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     montazBranky: "Montáž bránky",
     dilce: "Plotové dielce",
     montazDilcu: "Montáž dielcov",
-    typSloupku: "Typ stĺpikov",
-    cenaBm: "Cena za bm",
-    cenaCepicky: "Cena čiapočky za kus",
-    povrchTvarnice: "Povrch tvárnice",
-    barvaTvarnice: "Farba tvárnice",
     barvaDilcu: "Farba dielcov",
     motiv: "Motív",
     celkem: "Spolu:",
@@ -2506,12 +3361,13 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     currency: "CZK",
     header: { produkt: "Produkt", mnozstvi: "Menge", bezDph: "Preis netto", dph: "MwSt.", sDph: "Preis brutto" },
     tyc: "Verstärkungsstange für den Torflügel",
-    pohon:
-      "1x Somfy Elixo500 3S io – Antrieb mit Steuereinheit und Funkempfänger, 1x Somfy Master Pro Bitech – Sicherheitslichtschranke (1 Paar), Reichweite 10 m, 2x Entriegelungsschlüssel (bei Stromausfall)",
+    pohonKridlova: "Antrieb für Drehflügeltore IXENGO L 24 V 3 S io Komfort-Set",
+    pohonPosuvna:
+      "Antrieb für Schiebetore ELIXO 500 3 S M io Komfort-Set – Antrieb mit Steuereinheit und Funkempfänger, 1x Somfy Master Pro Bitech – Sicherheitslichtschranke (1 Paar), Reichweite 10 m, 2x Entriegelungsschlüssel (bei Stromausfall)",
+    brzda: "Hydraulische Bremse für Schiebetore in Hanglage",
     zastrc: "Torriegel",
     tahoma:
       "Somfy TaHoma Switch ist die Zentraleinheit für das Smart Home und ermöglicht die Steuerung und Automatisierung verschiedener Geräte im Haus wie Rollläden, Jalousien, Tore, Beleuchtung, Heizung und weitere",
-    ovladac: "1x Somfy Keygo io – Handsender",
     montazBrany: "Montage des Tors",
     branka: "Gartentür",
     zamek: "Elektroschloss 9 – 12 V AC/DC, mit Schiebefalle und mechanischer Entriegelung",
@@ -2527,11 +3383,6 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     montazBranky: "Montage der Gartentür",
     dilce: "Zaunelemente",
     montazDilcu: "Montage der Zaunelemente",
-    typSloupku: "Pfostentyp",
-    cenaBm: "Preis pro lfm",
-    cenaCepicky: "Preis der Abdeckkappe pro Stück",
-    povrchTvarnice: "Oberfläche der Zaunsteine",
-    barvaTvarnice: "Farbe der Zaunsteine",
     barvaDilcu: "Farbe der Elemente",
     motiv: "Motiv",
     celkem: "Gesamt:",

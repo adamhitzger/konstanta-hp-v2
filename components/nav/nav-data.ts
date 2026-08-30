@@ -36,18 +36,17 @@ export function getNavItems(lang: Lang): NavTop[] {
     {
       label: t.coNabizime,
       children: [
-        { ...t.coNabizimeChildren[0], href: l("/#produkty"), type: "anchor" },
-        { ...t.coNabizimeChildren[1], href: l("/#produkty"), type: "anchor" },
-        { ...t.coNabizimeChildren[2], href: l("/#produkty"), type: "anchor" },
-        { ...t.coNabizimeChildren[3], href: l("/#produkty"), type: "anchor" },
-        { ...t.coNabizimeChildren[4], href: l("/#produkty"), type: "anchor" },
-        { ...t.coNabizimeChildren[5], href: l("/#produkty"), type: "anchor" },
+        { ...t.coNabizimeChildren[0], href: l("/realizace?filter=ploty"), type: "page" },
+        { ...t.coNabizimeChildren[1], href: l("/realizace?filter=brany"), type: "page" },
+        { ...t.coNabizimeChildren[2], href: l("/realizace?filter=pergoly"), type: "page" },
+        { ...t.coNabizimeChildren[3], href: l("/pripravne-prace"), type: "page" },
+        { ...t.coNabizimeChildren[4], href: l("/chytra-reseni"), type: "page" },
+        { ...t.coNabizimeChildren[5], href: l("/pro-firmy#subdodavky"), type: "page" },
       ],
     },
-    { label: t.realizace, href: l("/#realizace"), type: "anchor" },
+    { label: t.realizace, href: l("/realizace"), type: "page" },
     { label: t.konfigurator, href: l("/konf"), type: "page" },
-    // TODO: až vznikne, přesměrovat na dedikovanou routu /pro-firmy (type: "page")
-    { label: t.proFirmy, href: l("/#kontakt"), type: "anchor" },
+    { label: t.proFirmy, href: l("/pro-firmy"), type: "page" },
     { label: t.kontakty, href: l("/#kontakt"), type: "anchor" },
   ]
 }

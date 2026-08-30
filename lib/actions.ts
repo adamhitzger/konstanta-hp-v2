@@ -4,7 +4,7 @@ import { client, sanityFetch } from "@/sanity/lib/client";
 import { ProductPhoto, Produkty, EmailRows } from "@/types";
 import { PRODUCTS, COUNT_ALL_PRODUCTS, PRODUCT_PHOTOS_BY_CAT} from "@/sanity/lib/queries"
 import { ActionResponse, Contact } from "@/types";
-import { contactSchema, confSchema, productSchema, ConfiguratorType, PergolaConfType, pergolaSchema } from "./schemas";
+import { contactSchema, confSchema, productSchema, ConfiguratorType, PergolaConfType, pergolaSchema, ZabradliConfType, zabradliSchema, zakladySchema, ZakladyType } from "./schemas";
 import { revalidatePath } from "next/cache";
 import nodemailer from "nodemailer"
 import { InquireProduct } from "@/types";
@@ -14,10 +14,12 @@ import ConfMail from "@/components/ConfMail";
 import exceljs from "exceljs"
 import path from "path";
 import PergMail from "@/components/PergMail";
+import ZabMail from "@/components/ZabMail";
+import ZakladyMail from "@/components/ZakladyMail";
 import os from 'os';
 import  fs  from 'fs';
 import { ConfPhotos } from "@/types";
-import { CONF_IMGS_QUERY, PERG_IMGS_QUERY } from "@/sanity/lib/queries";
+import { CONF_IMGS_QUERY, PERG_IMGS_QUERY, ZAB_IMGS_QUERY } from "@/sanity/lib/queries";
 import {
   type Lang,
   colorLabels,
@@ -25,10 +27,9 @@ import {
   getLang,
   localeTags,
   motivLabels,
-  povrchLabels,
   quoteContent,
   quoteItemsContent,
-  sloupkyLabels,
+  zakladyContent,
 } from "@/lib/translations";
 
 // Zprávy vracené uživateli (toast) — lokalizované podle jazyka formuláře:
@@ -55,6 +56,43 @@ const contactActionMessages = {
     success: "Vielen Dank für Ihre Nachricht! Wir melden uns in Kürze bei Ihnen.",
     failed: "Ihre Daten konnten nicht gesendet werden",
     calcFailed: "Die Kalkulationsdatei konnte nicht erstellt werden.",
+  },
+} as const
+
+/** Limity příloh u formuláře „Základy a příprava". Drží se textů v `zakladyContent.filesHint`. */
+const MAX_FILES = 5
+const MAX_FILE_BYTES = 5 * 1024 * 1024
+const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/webp", "application/pdf"]
+
+// Formulář „Základy a příprava" (app/konf/zaklady) — kromě běžných hlášek řeší
+// i chyby příloh, které `zakladySchema` nekontroluje.
+const zakladyActionMessages = {
+  cs: {
+    invalid: "Některá pole jste nevyplnili dobře",
+    mailFailed: "Nepodařilo se odeslat e-mail. Zkuste to znovu",
+    success: "Děkujeme za poptávku! Co nevidět se Vám ozveme.",
+    failed: "Nepovedlo se odeslat Vaše údaje",
+    tooManyFiles: `Přiložit můžete nejvýše ${MAX_FILES} souborů`,
+    fileTooLarge: "Některý soubor je větší než 5 MB",
+    badFileType: "Přiložte prosím jen JPG, PNG nebo PDF",
+  },
+  sk: {
+    invalid: "Niektoré polia ste nevyplnili správne",
+    mailFailed: "Nepodarilo sa odoslať e-mail. Skúste to znova",
+    success: "Ďakujeme za dopyt! Čoskoro sa vám ozveme.",
+    failed: "Nepodarilo sa odoslať vaše údaje",
+    tooManyFiles: `Priložiť môžete najviac ${MAX_FILES} súborov`,
+    fileTooLarge: "Niektorý súbor je väčší než 5 MB",
+    badFileType: "Priložte, prosím, len JPG, PNG alebo PDF",
+  },
+  de: {
+    invalid: "Einige Felder wurden nicht korrekt ausgefüllt",
+    mailFailed: "Die E-Mail konnte nicht gesendet werden. Versuchen Sie es erneut",
+    success: "Vielen Dank für Ihre Anfrage! Wir melden uns in Kürze bei Ihnen.",
+    failed: "Ihre Daten konnten nicht gesendet werden",
+    tooManyFiles: `Sie können höchstens ${MAX_FILES} Dateien anhängen`,
+    fileTooLarge: "Eine der Dateien ist größer als 5 MB",
+    badFileType: "Bitte hängen Sie nur JPG, PNG oder PDF an",
   },
 } as const
 
@@ -873,13 +911,13 @@ function htmlToPdf(
  * Ceny jsou bez DPH za kus; drženy tady u sebe, ať jdou upravit na jednom místě.
  * Popisy k nim se berou z `quoteItemsContent`, aby šly přeložit bez zásahu do ceníku.
  */
-const TYC_CENA = 1500;
+const TYC_CENA = 5000;
 
 const KOVANI_CENIK: Record<string, number> = {
-  "kliky-mt": 1500,
-  "madlo-300": 2200,
-  "madlo-225": 1900,
-  "madlo-1250": 4500,
+  "kliky-mt": 8720,
+  "madlo-300": 2000,
+  "madlo-225": 2000,
+  "madlo-1250": 5000,
 };
 
 /** Neznámé/nevyplněné kování spadne zpět na původní nerez kliky za 1 500 Kč. */
@@ -888,7 +926,7 @@ const kovaniPolozka = (lang: Lang, kovani?: string) => {
   const key = kovani ?? "";
   return key in KOVANI_CENIK
     ? { popis: ti.kovani[key], cena: KOVANI_CENIK[key] }
-    : { popis: ti.kovaniFallback, cena: 1500 };
+    : { popis: ti.kovaniFallback, cena: 2000 };
 };
 
 /**
@@ -906,7 +944,6 @@ function calculateBrana(
     pocet?: number | undefined;
     pohon?: boolean | undefined;
     tahoma?: boolean | undefined;
-    ovladac?: boolean | undefined;
     tyc?: boolean | undefined;
 }[] | undefined,
 ): {bezDPH: number, html: String}{
@@ -922,35 +959,43 @@ let bezDPH: number =0;
     switch(id){
       case "telSam":
       case "atypicka":
+        vzor = 13000;
+        break;    
       case "sekcni":
-        vzor = 12000;
+      case "skladaci":
+        vzor = 16000;
         break;
       case "telPoj":
       case "samonosna":
-      case "skladaci":
-        vzor = 10000;
+        vzor = 11000;
         break;
       case "dvoukridla":
       case "jednokridla":
       case "posuvna":
-        vzor = 7000;
+        vzor = 8000;
         break;
     }
     const plocha = (r.delka / 1000) * (r.vyska / 1000);
     const zaklad = ((plocha * vzor) * r.pocet);
-    const pohonCena = r.pohon ? (id === "dvoukridla" || id === "skladaci" ? 20000 : 10000) : 1500;
+    const pohonCena = r.pohon ? (id === "dvoukridla" || id === "skladaci" ? 23000 : 15000) : 1500;
     const tahomaCena = r.tahoma ? r.pocet *5000 : 0;
-    const ovladacCena = r.ovladac ? r.pocet *1000 : 0;
-    // Výztužná tyč křídla — jen u křídlových bran, cena za kus brány.
+    const brzdaCena = (id === "atypicka") ? 8000 : 0
     const tycCena = r.tyc ? r.pocet * TYC_CENA : 0;
     const montazCena = r.pocet * 4500;
-    bezDPH += zaklad+pohonCena+tahomaCena+ovladacCena+tycCena+montazCena
+    
+    bezDPH += zaklad+pohonCena+tahomaCena+tycCena+montazCena+brzdaCena
+    
     const headerRow = ws.addRow([ti.header.produkt, ti.header.mnozstvi, ti.header.bezDph, ti.header.dph, ti.header.sDph])
     ws.addRow([`${name}: ${r.delka}x${r.vyska} mm`,r.pocet,money(zaklad),money(zaklad*sazbaDph), money(zaklad*(1+sazbaDph)) ]);
+    
     html +=(buildProductRows(money, name + " \n" + `${r.delka}x${r.vyska} mm`,r.pocet,zaklad,zaklad*sazbaDph, Number((zaklad*(1+sazbaDph)).toFixed(0)) ))
+    
     if(r.pohon){
-       ws.addRow([`${ti.pohon}:`, 1,money(pohonCena), money(pohonCena*sazbaDph), money(pohonCena*(1+sazbaDph))]);
-      html +=(buildProductRows(money, `${ti.pohon}:`, 1,pohonCena, pohonCena*sazbaDph, Number((pohonCena*(1+sazbaDph)).toFixed(0))))
+      // Název pohonu jde podle typu brány: křídlové (dvoukřídlá, skládací) mají
+      // Ixengo L, všechny ostatní (posuvné varianty) Elixo 500.
+      const pohonNazev = (id === "dvoukridla" || id === "skladaci") ? ti.pohonKridlova : ti.pohonPosuvna;
+      ws.addRow([`${pohonNazev}:`, 1,money(pohonCena), money(pohonCena*sazbaDph), money(pohonCena*(1+sazbaDph))]);
+      html +=(buildProductRows(money, `${pohonNazev}:`, 1,pohonCena, pohonCena*sazbaDph, Number((pohonCena*(1+sazbaDph)).toFixed(0))))
       }else{
         ws.addRow([`${ti.zastrc}:`, 1,money(pohonCena), money(pohonCena*sazbaDph), money(pohonCena*(1+sazbaDph))]);
         html +=(buildProductRows(money, `${ti.zastrc}:`, 1,pohonCena, pohonCena*sazbaDph, Number((pohonCena*(1+sazbaDph)).toFixed(0))))
@@ -959,14 +1004,14 @@ let bezDPH: number =0;
       ws.addRow([ti.tahoma,1,money(tahomaCena),money(tahomaCena*sazbaDph),money(tahomaCena*(1+sazbaDph))]);
       html +=(buildProductRows(money, ti.tahoma,1,tahomaCena,tahomaCena*sazbaDph,tahomaCena*(1+sazbaDph)))
     }
-    if (r.ovladac){
-       ws.addRow([ti.ovladac,1, money(ovladacCena), money(ovladacCena*sazbaDph), money(ovladacCena*(1+sazbaDph))]);
-      html +=(buildProductRows(money, ti.ovladac, 1,ovladacCena, ovladacCena*sazbaDph, Number((ovladacCena*(1+sazbaDph)).toFixed(0))))
-      }
     if (r.tyc){
       ws.addRow([ti.tyc, r.pocet, money(tycCena), money(tycCena*sazbaDph), money(tycCena*(1+sazbaDph))]);
       html +=(buildProductRows(money, ti.tyc, r.pocet, tycCena, tycCena*sazbaDph, Number((tycCena*(1+sazbaDph)).toFixed(0))))
-      }
+    }
+    if(id === "atypicka"){
+      ws.addRow([`${ti.brzda}:`, r.pocet, money(brzdaCena), money(brzdaCena*sazbaDph), money(brzdaCena*(1+sazbaDph))]);
+      html +=(buildProductRows(money, `${ti.brzda}:`, r.pocet, brzdaCena, brzdaCena*sazbaDph, Number((brzdaCena*(1+sazbaDph)).toFixed(0))))
+    }
     ws.addRow([`${ti.montazBrany}:`,1, money(montazCena), money(montazCena*sazbaDph), money(montazCena*(1+sazbaDph))]);
     html +=(buildProductRows(money, `${ti.montazBrany}:`,1, montazCena, montazCena*sazbaDph, Number((montazCena*(1+sazbaDph)).toFixed(0))))
     html += tableHrRow();
@@ -1013,7 +1058,7 @@ if(!data.brana){
 if(data.branka && data.rozmeryBranek  && data.rozmeryBranek.length > 0){
   data.rozmeryBranek.forEach((r) => {
     if(r.delka && r.pocet && r.vyska){
-    const vzor = 7000;
+    const vzor = 8000;
     const plocha = (r.delka / 1000) * (r.vyska / 1000);
     const zaklad = (vzor * plocha) * r.pocet;
     const zamekCena = r.zamek ? 1500 : 0;
@@ -1056,17 +1101,19 @@ if(data.dilce && data.rozmeryDilcu  && data.rozmeryDilcu.length > 0){
           case "planka-60":
         case "plaka-90":
         case "planka-120":
-        case "planka-150":
-        case "tycka":
-          vzor = 3000;
+        case "planka-150":     
+          vzor = 3500;
           break;
-        case "kapka":
+        case "tycka":
         case "vlastní kombinace":
-          vzor = 4000;
+          vzor = 4500;
           break;
         case "kapka-mini":
         case "tahokov":
-          vzor = 5000;
+        case "kapka":
+        case "vypaleni":
+        case "lamela-105":
+          vzor = 5500;
           break;
     }
     celkovyPocetDilcu += r.pocet;
@@ -1084,36 +1131,10 @@ if(data.dilce && data.rozmeryDilcu  && data.rozmeryDilcu.length > 0){
  }
 
 
- celkovyPocetDilcu = celkovyPocetDilcu * 2;
  // Hodnoty z konfigurátoru chodí jako CS klíče — do nabídky se překládají stejnými
  // slovníky, jaké používá UI. Co ve slovníku není, projde beze změny.
- const sloupky = sloupkyLabels[lang] ?? sloupkyLabels.cs;
- const povrchy = povrchLabels[lang] ?? povrchLabels.cs;
  const barvy = colorLabels[lang] ?? colorLabels.cs;
  const motivy = motivLabels[lang] ?? motivLabels.cs;
- const typSloupkuLabel = sloupky[data.typSloupku] ?? data.typSloupku;
-
- if(data.typSloupku !== "vlastni"){
-    ws.addRow([ti.typSloupku, typSloupkuLabel]);
-    rows+=(buildProductRowsString(ti.typSloupku, typSloupkuLabel));
-    if(data.typSloupku === "hliníkové"){
-      celkem += 1300*celkovyPocetDilcu
-      ws.addRow([ti.cenaBm,celkovyPocetDilcu*2,money(1000*celkovyPocetDilcu) ,money((1000*celkovyPocetDilcu)*sazbaDph), money(1000*celkovyPocetDilcu*(1+sazbaDph))]);
-      ws.addRow([ti.cenaCepicky,celkovyPocetDilcu,money(300*celkovyPocetDilcu), money((300*celkovyPocetDilcu)*sazbaDph), money(300*celkovyPocetDilcu*(1+sazbaDph))]);
-      rows+=(buildProductRows(money, ti.cenaBm,celkovyPocetDilcu*2,1000*celkovyPocetDilcu ,((1000*celkovyPocetDilcu)*sazbaDph), 1000*celkovyPocetDilcu*(1+sazbaDph)));
-      rows+=(buildProductRows(money, ti.cenaCepicky,celkovyPocetDilcu,300*celkovyPocetDilcu, ((300*celkovyPocetDilcu)*sazbaDph), 300*celkovyPocetDilcu*(1+sazbaDph)));
-    }else{
-    const povrchLabel = povrchy[String(data.povrchTvarnice)] ?? String(data.povrchTvarnice);
-    const barvaTvarniceLabel = barvy[String(data.barvaTvarnice)] ?? String(data.barvaTvarnice);
-    ws.addRow([ti.povrchTvarnice, povrchLabel]);
-    ws.addRow([ti.barvaTvarnice, barvaTvarniceLabel]);
-    rows+=(buildProductRowsString(ti.povrchTvarnice, povrchLabel));
-    rows+=(buildProductRowsString(ti.barvaTvarnice, barvaTvarniceLabel));
-  }
- }else{
-  ws.addRow([ti.typSloupku, typSloupkuLabel]);
-  rows+=(buildProductRowsString(ti.typSloupku, typSloupkuLabel));
- }
  const barvaDilcuLabel = barvy[data.barva] ?? data.barva;
  const motivLabel = motivy[data.motiv] ?? data.motiv;
  ws.addRow([ti.barvaDilcu, barvaDilcuLabel]);
@@ -1197,18 +1218,18 @@ export async function getProducts(start: number, end: number){
   }
 }
 
-export async function sendPergConf(
-  values: PergolaConfType,
+export async function sendZabradliConf(
+  values: ZabradliConfType,
   /** Jazyk konfigurátoru (`?lang=`) — jde do potvrzovacího e-mailu i do hlášek. */
   langValue?: string
-): Promise<ActionResponse<PergolaConfType>> {
+): Promise<ActionResponse<ZabradliConfType>> {
   let revalidate = false;
   let uploadFile: SanityImageAssetDocument| null=null;
   const transporter = smtp();
   const lang = getLang(langValue);
   const m = contactActionMessages[lang];
   try {
-    const validatedData = pergolaSchema.safeParse(values);
+    const validatedData = zabradliSchema.safeParse(values);
     if (!validatedData.success) {
       return {
         success: false,
@@ -1253,11 +1274,111 @@ if (data.file && data.file.length > 0) {
     }
   }
 }
+      const imgs = await sanityFetch<ConfPhotos>({query: ZAB_IMGS_QUERY})
+        const mailOptions: any//eslint-disable-line @typescript-eslint/no-explicit-any
+         = {
+          from: process.env.FROM_EMAIL,
+          to: "adam.hitzger@icloud.com",
+          subject: `Nová poptávka z konfigurátoru zábradlí - ${data.fullname}`,
+          html: await render(ZabMail(data, imgs, lang))
+        }
+        console.log(urls)
+        if(urls.length > 0) {
+          mailOptions.attachments = mailOptions.attachments ?? [];
+          urls.forEach((url:string,i:number) =>{
+            mailOptions.attachments?.push({filename: `obrazek-${i}.jpg`, path: url})
+          })
+        }
+      const sendMail = await transporter.sendMail(mailOptions);
+      if (!sendMail.accepted) {
+        revalidate = false;
+        return {
+          success: false,
+          message: m.mailFailed,
+        };
+      } else {
+        revalidate = true;
+
+        return {
+          success: true,
+          message: m.success,
+        };
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: m.failed,
+    };
+  } finally {
+    if (revalidate) {
+      revalidatePath("/");
+    }
+  }
+}
+
+export async function sendPergConf(
+  values: PergolaConfType,
+  /** Jazyk konfigurátoru (`?lang=`) — jde do potvrzovacího e-mailu i do hlášek. */
+  langValue?: string
+): Promise<ActionResponse<PergolaConfType>> {
+  let revalidate = false;
+  let uploadFile: SanityImageAssetDocument| null=null;
+  const transporter = smtp();
+  const lang = getLang(langValue);
+  const m = contactActionMessages[lang];
+  try {
+    const validatedData = pergolaSchema.safeParse(values);
+    if (!validatedData.success) {
+      return {
+        success: false,
+        message: m.invalid,
+        errors: validatedData.error.flatten().fieldErrors,
+        inputs: values,
+      };
+    } else {
+      const data = validatedData.data;
+      const urls: string[]= []
+      console.log(data.file)
+      console.log("Data File:", data.file);
+      console.log("File Count:", data.file?.length);
+
+if (data.file && data.file.length > 0) {
+  for (let i = 0; i < data.file.length; i++) {
+    const file = data.file[i];
+    console.log("Processing File:", file.name);
+
+    const filename = `obrazek-${i}.jpg`;
+    const arrBuffer = await file.arrayBuffer();
+    console.log("ArrayBuffer Size:", arrBuffer.byteLength);
+
+    const buffer = Buffer.from(arrBuffer);
+
+    try {
+       uploadFile = await client.assets.upload("image", buffer, {
+        filename,
+        contentType: "image/jpg",
+      });
+
+      console.log("Upload Response:", uploadFile);
+
+      if (uploadFile?.url) {
+        urls.push(uploadFile.url);
+        console.log("Uploaded URL:", uploadFile.url);
+      } else {
+        console.log("Upload failed for:", filename);
+      }
+    } catch (error) {
+      console.error("Upload Error:", error);
+    }
+  }
+}
       const pergs = await sanityFetch<ConfPhotos>({query: PERG_IMGS_QUERY})
         const mailOptions: any//eslint-disable-line @typescript-eslint/no-explicit-any
          = {
           from: process.env.FROM_EMAIL,
-          to: "martin@centralmedia.cz",
+          to: "adam.hitzger@icloud.com",
           subject: `Nová poptávka z konfigurátoru - ${data.fullname}`,
           html: await render(PergMail(data, pergs, lang))
         }
@@ -1371,7 +1492,7 @@ const html = await render(ConfMail({userName: data.fullname,
       = {
         from: process.env.FROM_EMAIL,
      //to: "nabidky@konstantahp.cz",
-      to: "martin@centralmedia.cz",
+        to: "adam.hitzger@icloud.com",
         subject: `Nová poptávka z konfigurátoru - ${data.fullname}`,
         html,
         attachments: [
@@ -1507,6 +1628,102 @@ export async function sendContact(
       if (revalidate) {
         revalidatePath("/");
       }
+    }
+}
+
+/**
+ * Poptávka stavební přípravy a základů z app/konf/zaklady.
+ * Na rozdíl od `sendContact` bere i přílohy (foto místa / nákres) — ty jdou
+ * rovnou do e-mailu jako nodemailer attachments, nikam se neukládají.
+ */
+export async function sendZaklady(
+    prevState: ActionResponse<ZakladyType>,
+    formData: FormData
+  ): Promise<ActionResponse<ZakladyType>> {
+    const transporter = smtp();
+    const lang = getLang(formData.get("lang") as string | undefined);
+    const m = zakladyActionMessages[lang];
+    try {
+      const poptavka: ZakladyType = {
+        name: formData.get("name") as string,
+        email: formData.get("email") as string,
+        tel: formData.get("tel") as string,
+        misto: formData.get("misto") as string,
+        // Všechny čtyři checkboxy sdílí `name="sluzby"`, takže chodí jako pole.
+        sluzby: formData.getAll("sluzby") as ZakladyType["sluzby"],
+        msg: formData.get("msg") as string,
+      };
+
+      const validatedData = zakladySchema.safeParse(poptavka);
+      if (!validatedData.success) {
+        return {
+          success: false,
+          message: m.invalid,
+          errors: validatedData.error.flatten().fieldErrors,
+          inputs: poptavka,
+        };
+      }
+
+      // Přílohy — prázdný file input posílá i soubor s nulovou velikostí, ten zahodíme.
+      const files = formData
+        .getAll("files")
+        .filter((f): f is File => f instanceof File && f.size > 0);
+
+      if (files.length > MAX_FILES) {
+        return { success: false, message: m.tooManyFiles, inputs: poptavka };
+      }
+      if (files.some((f) => f.size > MAX_FILE_BYTES)) {
+        return { success: false, message: m.fileTooLarge, inputs: poptavka };
+      }
+      if (files.some((f) => !ALLOWED_FILE_TYPES.includes(f.type))) {
+        return { success: false, message: m.badFileType, inputs: poptavka };
+      }
+
+      const attachments = await Promise.all(
+        files.map(async (f) => ({
+          filename: f.name,
+          content: Buffer.from(await f.arrayBuffer()),
+          contentType: f.type,
+        })),
+      );
+
+      const data = validatedData.data;
+      /** Lidské názvy zaškrtnutých prací do předmětu a textové varianty e-mailu. */
+      const sluzbyLabels = data.sluzby.map(
+        (id) => zakladyContent.cs.sluzby.find((s) => s.id === id)?.label ?? id,
+      );
+
+      const sendMail = await transporter.sendMail({
+        from: process.env.FROM_EMAIL,
+        to: "nabidky@konstantahp.cz",
+        replyTo: data.email,
+        subject: `Poptávka: stavební příprava a základy — ${data.misto}`,
+        // Textová varianta zůstává kvůli klientům bez HTML a spam skóre.
+        text: [
+          `Celé jméno: ${data.name}`,
+          `Email: ${data.email}`,
+          `Tel. číslo: ${data.tel}`,
+          `Místo realizace: ${data.misto}`,
+          `Jazyk formuláře: ${lang}`,
+          "",
+          `Rozsah prací: ${sluzbyLabels.join(", ")}`,
+          "",
+          "Popis situace:",
+          data.msg,
+          "",
+          `Příloh: ${attachments.length}`,
+        ].join("\n"),
+        html: await render(ZakladyMail(data, lang, attachments.length)),
+        attachments,
+      });
+
+      if (!sendMail.accepted) {
+        return { success: false, message: m.mailFailed, inputs: poptavka };
+      }
+      return { success: true, message: m.success };
+    } catch (error) {
+      console.error(error);
+      return { success: false, message: m.failed };
     }
 }
 

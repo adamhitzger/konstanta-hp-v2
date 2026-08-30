@@ -154,6 +154,16 @@ export const confPhotosType = defineType({
 
                 }
             ]
+        }),
+        defineField({
+            name: "zabradli",
+            title: "Zabradlí - fotky:",
+            type: "array",
+            of:[
+                {type: "image",
+
+                }
+            ]
         })
     ]
 })

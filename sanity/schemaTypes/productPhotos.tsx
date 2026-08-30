@@ -54,7 +54,7 @@ export const productPhotosType = defineType({
             name: "cat",
             type: "string",
             options: {
-                list: ["brany", "pergoly", "ploty", "branky"],
+                list: ["brany", "pergoly", "ploty", "branky", "zabradli"],
                 layout:"radio", 
             }
         }),
@@ -141,6 +141,30 @@ export const productPhotosType = defineType({
           defineField({
             title: "Fotky tahokovu",
             name: "tahokov",
+            type: "array",
+            of: [
+                {type: "image"}
+            ]
+        }),
+          defineField({
+            title: "Fotky Lamely",
+            name: "lamela",
+            type: "array",
+            of: [
+                {type: "image"}
+            ]
+        }),
+          defineField({
+            title: "Fotky Vypalovaní",
+            name: "vypalovani",
+            type: "array",
+            of: [
+                {type: "image"}
+            ]
+        }),
+          defineField({
+            title: "Fotky skla",
+            name: "sklo",
             type: "array",
             of: [
                 {type: "image"}

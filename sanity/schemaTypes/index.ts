@@ -9,7 +9,8 @@ import { sectionsType } from './sections'
 import { reviews } from './reviewsType'
 import { igFeed } from './igFeed'
 import { blogSchema } from './blog'
+import { certificate } from './certificates'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [bannerPhotosType,  productType, igFeed, productPhotosType, emailPhotosType, confPhotosType, stepsType, sectionsType, reviews, blogSchema],
+  types: [certificate ,bannerPhotosType,  productType, igFeed, productPhotosType, emailPhotosType, confPhotosType, stepsType, sectionsType, reviews, blogSchema],
 }

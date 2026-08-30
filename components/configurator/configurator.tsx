@@ -14,15 +14,16 @@ import type { ConfPhotosWithMotiv, ConfProductInfo } from "@/types"
 import { Button } from "@/components/ui/button"
 import { KonfProgress } from "./konf-progress"
 import { KonfSuccess } from "./konf-success"
-import { GateIcon, WicketIcon, PostsIcon, PanelMotifIcon, PaintIcon, ContactIcon } from "./konf-icons"
+import { KonfPending } from "./konf-pending"
+import { GateIcon, WicketIcon, PanelIcon, PanelMotifIcon, PaintIcon, ContactIcon } from "./konf-icons"
 import { Slide } from "./slide"
 import { StepBrana } from "./step-brana"
 import { StepBranka } from "./step-branka"
-import { StepSloupky } from "./step-sloupky"
-import { StepDilceMotiv } from "./step-dilce-motiv"
+import { StepDilce } from "./step-dilce"
+import { StepMotiv } from "./step-motiv"
 import { StepBarva } from "./step-barva"
 import { StepKontakt } from "./step-kontakt"
-import { konfContent, gateLabels, stepBrankaContent, stepDilceMotivContent, type Lang } from "@/lib/translations"
+import { konfContent, gateLabels, stepBrankaContent, stepDilceContent, type Lang } from "@/lib/translations"
 
 const LAST_STEP = konfContent.cs.steps.length - 1
 
@@ -45,8 +46,8 @@ const hasCompleteSizes = (count: number, rows: unknown): boolean => {
   return true
 }
 
-// Pořadí musí odpovídat `konfContent.<lang>.steps` (Brána, Branka, Sloupky, Dílce a motiv, Barva, Kontakt).
-const stepIcons = [GateIcon, WicketIcon, PostsIcon, PanelMotifIcon, PaintIcon, ContactIcon]
+// Pořadí musí odpovídat `konfContent.<lang>.steps` (Brána, Branka, Dílce, Motiv, Barva, Kontakt).
+const stepIcons = [GateIcon, WicketIcon, PanelIcon, PanelMotifIcon, PaintIcon, ContactIcon]
 
 const emptyPhotos: ConfPhotosWithMotiv = {
   jednokridla: [],
@@ -125,16 +126,15 @@ export function Configurator({
         return null
       }
       case 2: {
-        if (values.typSloupku) return null
-        return t.validation.sloupky
-      }
-      case 3: {
         if (values.dilce === undefined) return t.validation.dilce
         if (!hasCompleteSizes(Number(values.celkemDilcu ?? 0), values.rozmeryDilcu)) {
-          return missingSizes((stepDilceMotivContent[lang] ?? stepDilceMotivContent.cs).productTitle)
+          return missingSizes((stepDilceContent[lang] ?? stepDilceContent.cs).productTitle)
         }
-        if (!values.motiv) return t.validation.motiv
         return null
+      }
+      case 3: {
+        if (values.motiv) return null
+        return t.validation.motiv
       }
       case 4: {
         if (values.barva) return null
@@ -192,10 +192,17 @@ export function Configurator({
   const onInvalid = (errors: Record<string, { message?: string } | undefined>) => {
     if (errors.barva) toast.error(t.validation.invalidBarva)
     if (errors.motiv) toast.error(t.validation.invalidMotiv)
-    if (errors.typSloupku) toast.error(t.validation.invalidSloupky)
     if (errors.fullname || errors.email || errors.phoneNumber || errors.zip || errors.address || errors.obec) {
       toast.error(t.validation.invalidContact)
     }
+  }
+
+  if (isPending) {
+    return (
+      <section id="konf" ref={topRef} className="mx-auto max-w-8xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
+        <KonfPending lang={lang} />
+      </section>
+    )
   }
 
   if (sent) {
@@ -220,7 +227,7 @@ export function Configurator({
 
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onValid, onInvalid)} className="flex min-w-0 flex-col gap-10 p-5 sm:p-8">
-            <div className="relative overflow-hidden py-8">
+            <div className="relative overflow-hidden">
               <AnimatePresence mode="wait" custom={direction} initial={false}>
                 {step === 0 && (
                   <Slide key="brana" direction={direction}>
@@ -233,13 +240,13 @@ export function Configurator({
                   </Slide>
                 )}
                 {step === 2 && (
-                  <Slide key="sloupky" direction={direction}>
-                    <StepSloupky lang={lang} />
+                  <Slide key="dilce" direction={direction}>
+                    <StepDilce photos={photos} info={info} onNext={goNext} lang={lang} />
                   </Slide>
                 )}
                 {step === 3 && (
-                  <Slide key="dilce" direction={direction}>
-                    <StepDilceMotiv photos={photos} info={info} onNext={goNext} lang={lang} />
+                  <Slide key="motiv" direction={direction}>
+                    <StepMotiv onNext={goNext} lang={lang} />
                   </Slide>
                 )}
                 {step === 4 && (

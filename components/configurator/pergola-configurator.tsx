@@ -13,6 +13,7 @@ import type { ConfPhotosWithMotiv, ConfProductInfo } from "@/types"
 import { Button } from "@/components/ui/button"
 import { KonfProgress } from "./konf-progress"
 import { KonfSuccess } from "./konf-success"
+import { KonfPending } from "./konf-pending"
 import { PergolaTypeIcon, MountIcon, PaintIcon, ContactIcon } from "./konf-icons"
 import { Slide } from "./slide"
 import { PergStepTyp } from "./perg-step-typ"
@@ -149,6 +150,14 @@ export function PergolaConfigurator({
     if (errors.fullname || errors.email || errors.phoneNumber || errors.zip || errors.address || errors.obec) {
       toast.error(t.validation.invalidContact)
     }
+  }
+
+  if (isPending) {
+    return (
+      <section id="pergkonf" ref={topRef} className="mx-auto max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
+        <KonfPending lang={lang} />
+      </section>
+    )
   }
 
   if (sent) {

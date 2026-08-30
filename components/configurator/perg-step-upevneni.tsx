@@ -61,16 +61,16 @@ function MountOption({
           <label
             className={cn(
               "flex w-full max-w-sm cursor-pointer items-center justify-center gap-2.5 rounded-xl border px-4 py-3 text-sm font-semibold text-brand-foreground transition-colors",
-              checked ? "border-brand bg-brand hover:bg-brand/90" : "bg-black",
+              checked ? "border-brand bg-brand" : "bg-black",
             )}
           >
             <span
               className={cn(
                 "flex size-5 shrink-0 items-center justify-center rounded-[6px] border transition-colors",
-                checked ? "border-brand-foreground bg-brand-foreground text-brand" : "border-brand-foreground/60 bg-brand-foreground/15",
+                checked ? "border-brand-foreground bg-brand-foreground text-brand" : "border-brand-foreground/60 bg-brand-foreground",
               )}
             >
-              {checked ? <Check className="size-3.5" /> : null}
+              {checked ? <Check className="size-3.5 text-brand" /> : null}
             </span>
             <input
               type="checkbox"
@@ -85,19 +85,19 @@ function MountOption({
       </div>
 
       {checked ? (
-        <div className="flex flex-col gap-4 border-t border-brand/25 bg-brand/10 p-5">
+        <div className="flex flex-col gap-4 border-t border-brand/25 bg-brand/25 p-5">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             <div className="flex flex-col gap-1.5">
               <Label>{dimensionLabels.sirka}</Label>
-              <Input type="number" min={0} className="border-brand/20 bg-background text-foreground" {...register(`${rozmeryField}.sirka`, { valueAsNumber: true })} />
+              <Input type="number" min={0} className="border-brand/20 bg-white text-foreground" {...register(`${rozmeryField}.sirka`, { valueAsNumber: true })} />
             </div>
             <div className="flex flex-col gap-1.5">
               <Label>{dimensionLabels.hloubka}</Label>
-              <Input type="number" min={0} className="border-brand/20 bg-background text-foreground" {...register(`${rozmeryField}.hloubka`, { valueAsNumber: true })} />
+              <Input type="number" min={0} className="border-brand/20 bg-white text-foreground" {...register(`${rozmeryField}.hloubka`, { valueAsNumber: true })} />
             </div>
             <div className="flex flex-col gap-1.5">
               <Label>{dimensionLabels.delka}</Label>
-              <Input type="number" min={0} className="border-brand/20 bg-background text-foreground" {...register(`${rozmeryField}.delka`, { valueAsNumber: true })} />
+              <Input type="number" min={0} className="border-brand/20 bg-white text-foreground" {...register(`${rozmeryField}.delka`, { valueAsNumber: true })} />
             </div>
           </div>
 

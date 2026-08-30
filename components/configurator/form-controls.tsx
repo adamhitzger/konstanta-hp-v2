@@ -12,7 +12,7 @@ import { formControlsContent, type Lang } from "@/lib/translations"
 export const InlineCheckbox = forwardRef<HTMLInputElement, { label: string } & ComponentPropsWithoutRef<"input">>(
   ({ label, className, id, ...props }, ref) => (
     <label htmlFor={id} className={cn("flex cursor-pointer items-center gap-2 text-sm text-foreground/80", className)}>
-      <span className="relative flex size-4 shrink-0 items-center justify-center rounded-[5px] border border-black/40 transition-colors has-[:checked]:border-brand has-[:checked]:bg-brand">
+      <span className="relative flex size-4 shrink-0 items-center justify-center rounded-[5px] border border-black/40 bg-white transition-colors has-[:checked]:border-brand has-[:checked]:bg-brand">
         <input ref={ref} id={id} type="checkbox" className="peer absolute inset-0 size-full cursor-pointer opacity-0" {...props} />
         <Check className="pointer-events-none size-3 text-brand-foreground opacity-0 peer-checked:opacity-100" />
       </span>
@@ -30,7 +30,7 @@ InlineCheckbox.displayName = "InlineCheckbox"
 export const InlineRadio = forwardRef<HTMLInputElement, { label: string } & ComponentPropsWithoutRef<"input">>(
   ({ label, className, id, ...props }, ref) => (
     <label htmlFor={id} className={cn("flex cursor-pointer items-center gap-2 text-sm text-foreground/80", className)}>
-      <span className="relative flex size-4 shrink-0 items-center justify-center rounded-full border border-black/40 transition-colors has-[:checked]:border-brand has-[:checked]:bg-brand">
+      <span className="relative flex size-4 shrink-0 items-center justify-center rounded-full border border-black/40 bg-white transition-colors has-[:checked]:border-brand has-[:checked]:bg-brand">
         <input ref={ref} id={id} type="radio" className="peer absolute inset-0 size-full cursor-pointer opacity-0" {...props} />
         <span className="pointer-events-none size-1.5 rounded-full bg-brand-foreground opacity-0 peer-checked:opacity-100" />
       </span>
@@ -39,6 +39,34 @@ export const InlineRadio = forwardRef<HTMLInputElement, { label: string } & Comp
   ),
 )
 InlineRadio.displayName = "InlineRadio"
+
+/**
+ * Karta zaškrtávací volby — stejný vzhled jako `RadioCardGroup`, jen pro volby,
+ * ze kterých jde vybrat víc najednou (strany stínění pergoly). Drží se `has-[:checked]`
+ * místo React stavu, takže se dá napojit přímo přes `register(...)` z react-hook-form.
+ */
+export const CheckboxCard = forwardRef<
+  HTMLInputElement,
+  { label: string; desc?: string } & ComponentPropsWithoutRef<"input">
+>(({ label, desc, className, id, ...props }, ref) => (
+  <label
+    htmlFor={id}
+    className={cn(
+      "flex cursor-pointer flex-col gap-1.5 rounded-2xl border-2 border-border bg-card p-4 transition-colors hover:border-brand/40 has-[:checked]:border-brand",
+      className,
+    )}
+  >
+    <span className="flex items-start gap-2 text-sm font-semibold">
+      <span className="relative mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-[5px] border border-black/40 bg-white transition-colors has-[:checked]:border-brand has-[:checked]:bg-brand">
+        <input ref={ref} id={id} type="checkbox" className="peer absolute inset-0 size-full cursor-pointer opacity-0" {...props} />
+        <Check className="pointer-events-none size-3 text-brand-foreground opacity-0 peer-checked:opacity-100" />
+      </span>
+      {label}
+    </span>
+    {desc ? <span className="text-xs text-muted-foreground">{desc}</span> : null}
+  </label>
+))
+CheckboxCard.displayName = "CheckboxCard"
 
 /** Karta pro rychlé odmítnutí produktu ("Nechci bránu/branku") — vlastní vzhled, ne z formuláře. */
 export function DeclineCard({

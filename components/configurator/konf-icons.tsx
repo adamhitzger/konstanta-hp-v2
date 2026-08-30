@@ -2,7 +2,7 @@ import type { SVGProps } from "react"
 
 /**
  * Vlastní sada ikon pro kroky konfigurátoru (žádná externí ikonová knihovna
- * nemá "bránu" nebo "sloupky" — kreslíme si je sami jako jednoduché liniové SVG,
+ * nemá "bránu" nebo "plotový dílec" — kreslíme si je sami jako jednoduché liniové SVG,
  * ve stejném duchu jako zbytek monochromatického + oranžového designu.
  */
 type IconProps = SVGProps<SVGSVGElement>
@@ -58,19 +58,23 @@ export function WicketIcon(props: IconProps) {
   )
 }
 
-/** Sloupky — tři pilíře různé výšky v řadě. */
-export function PostsIcon(props: IconProps) {
+/** Dílce — plotový díl mezi dvěma sloupky, se svislými plaňkami. */
+export function PanelIcon(props: IconProps) {
   return (
     <svg {...base} {...props}>
-      <path d="M4 21V9a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12" />
-      <path d="M10 21V6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v15" />
-      <path d="M16 21v-9a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v9" />
-      <path d="M3 21h18" />
+      {/* sloupky po stranách */}
+      <path d="M4 20V5M20 20V5" />
+      {/* rám dílce */}
+      <path d="M4 8h16M4 17h16" />
+      {/* plaňky */}
+      <path d="M8 8v9M12 8v9M16 8v9" />
+      {/* terén */}
+      <path d="M2 20h20" />
     </svg>
   )
 }
 
-/** Dílce a motiv — plotový panel s vodorovnými lamelami. */
+/** Motiv — vzor výplně, panel s vodorovnými lamelami. */
 export function PanelMotifIcon(props: IconProps) {
   return (
     <svg {...base} {...props}>

@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
+import { Check, ThumbsUp } from "lucide-react"
 import { useFormContext } from "react-hook-form"
 import type { PergolaConfType } from "@/lib/schemas"
 import type { ConfPhotoItem, ConfPhotosWithMotiv, ConfProductInfo, ProductInfo } from "@/types"
@@ -9,8 +10,8 @@ import { pergolaTypeOptions, stineniOptions, stranyOptions, strechaMaterialOptio
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { PhotoLightbox, PhotoThumbs } from "./photo-lightbox"
 import { ProductInfoLink } from "./product-info-dialog"
-import { InlineCheckbox } from "./form-controls"
-import { pergolaTypeLabels, stineniLabels, stranyLabels, strechaMaterialLabels, pergStepTypContent, photoGalleryContent, type Lang } from "@/lib/translations"
+import { CheckboxCard } from "./form-controls"
+import { pergolaTypeLabels, stineniLabels, stranyLabels, strechaMaterialLabels, pergStepTypContent, photoGalleryContent, productSelectContent, type Lang } from "@/lib/translations"
 import { StepTitle } from "./step-title"
 import { cn } from "@/lib/utils"
 
@@ -46,17 +47,21 @@ function PergolaTypeTile({
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const photos = galleryPhotos?.filter((p) => p.url) ?? []
   const gt = photoGalleryContent[lang] ?? photoGalleryContent.cs
+  const st = productSelectContent[lang] ?? productSelectContent.cs
 
   return (
     <div
       onClick={onSelect}
       className={cn(
         // Shodné s `ProductSection`: karta zůstává bílá, výběr nese jen oranžový rámeček.
-        "flex cursor-pointer flex-col gap-6 rounded-2xl border-2 bg-card p-5 text-left transition-colors",
+        "flex cursor-pointer flex-col rounded-2xl border-2 bg-card p-5 text-left transition-colors",
         active ? "border-brand" : "border-border",
       )}
     >
-      <div className="flex flex-col items-center gap-4">
+      {/* Stejná skladba jako produktová karta v `product-section.tsx`: model a fotky
+          nahoře roztažené přes `flex-1`, dole název a tlačítko výběru — dlaždice v řadě
+          tak končí ve stejné rovině i s různým počtem fotek realizací. */}
+      <div className="flex w-full flex-1 flex-col items-center justify-center gap-4">
         <Image
           src={image}
           alt={label}
@@ -67,14 +72,37 @@ function PergolaTypeTile({
         />
 
         <PhotoThumbs photos={photos} title={label} label={gt.viewPhotosOf} onOpen={() => setLightboxOpen(true)} lang={lang} />
+      </div>
 
+      <div className="mt-4 flex w-full flex-col items-center gap-4">
         <div className="flex flex-col items-center gap-1">
-          <span className="flex items-center gap-1.5 text-center font-heading text-lg font-bold sm:text-xl">
-            <RadioGroupItem value={value} onClick={(e) => e.stopPropagation()} tabIndex={-1} />
-            {label}
-          </span>
+          <span className="text-center font-heading text-lg font-bold sm:text-xl">{label}</span>
           <ProductInfoLink info={info} fallbackTitle={label} lang={lang} />
         </div>
+
+        {/* Výběr typu je výlučný (radio), ale vizuálně je to totéž tlačítko jako u
+            produktových karet oplocení/zábradlí: černé dokud zvoleno není, po výběru
+            brand oranžové s bílým zaškrtávátkem. Samotné `RadioGroupItem` je `sr-only` —
+            drží stav skupiny a přístupnost, kreslí se ručně, aby na černé ploše nebyl
+            oranžový puntík z výchozího vzhledu. */}
+        <span
+          className={cn(
+            "flex w-full max-w-sm items-center justify-center gap-2.5 rounded-xl border px-4 py-3 text-sm font-semibold text-brand-foreground transition-colors",
+            active ? "bg-brand" : "bg-black",
+          )}
+        >
+          <span
+            className={cn(
+              "flex size-5 shrink-0 items-center justify-center rounded-[6px] border transition-colors",
+              active ? "border-brand-foreground bg-brand-foreground text-brand" : "border-brand-foreground/60 bg-brand-foreground",
+            )}
+          >
+            {active ? <Check className="size-3.5 text-brand" /> : null}
+          </span>
+          <RadioGroupItem value={value} className="sr-only" onClick={(e) => e.stopPropagation()} tabIndex={-1} />
+          {active ? <ThumbsUp className="size-4 shrink-0 text-white" /> : null}
+          {active ? st.selected : st.select}
+        </span>
       </div>
 
       {photos.length > 0 ? (
@@ -180,9 +208,11 @@ export function PergStepTyp({
           <div>
             <h2 className="font-heading text-xl font-bold">{t.sidesTitle}</h2>
             <p className="mt-1 mb-3 text-muted-foreground">{t.sidesDesc}</p>
-            <div className="flex flex-wrap gap-x-6 gap-y-2">
+            {/* Karty, ne drobné inline zaškrtávátko — strany stínění jsou plnohodnotná
+                volba kroku a mají vypadat jako ostatní výběry v konfigurátoru. */}
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               {stranyOptions.map((s) => (
-                <InlineCheckbox key={s.name} label={stranyT[s.name] ?? s.label} {...register(s.name)} />
+                <CheckboxCard key={s.name} id={`perg-strana-${s.name}`} label={stranyT[s.name] ?? s.label} {...register(s.name)} />
               ))}
             </div>
           </div>

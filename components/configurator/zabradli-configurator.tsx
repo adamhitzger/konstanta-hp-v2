@@ -1,22 +1,25 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useRef, useState, useTransition } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AnimatePresence } from "framer-motion"
-import { MoveRight, MoveLeft } from "lucide-react"
+import { Loader2, MoveRight, MoveLeft } from "lucide-react"
 import toast from "react-hot-toast"
 import { zabradliSchema, type ZabradliConfType } from "@/lib/schemas"
 import type { ConfPhotosWithMotiv, ConfProductInfo } from "@/types"
 import { Button } from "@/components/ui/button"
 import { KonfProgress } from "./konf-progress"
 import { KonfSuccess } from "./konf-success"
+import { KonfPending } from "./konf-pending"
 import { RailingIcon, PanelMotifIcon, ContactIcon } from "./konf-icons"
 import { Slide } from "./slide"
 import { ZabStepZabradli } from "./zab-step-zabradli"
 import { ZabStepMotiv } from "./zab-step-motiv"
 import { StepKontakt } from "./step-kontakt"
 import { zabradliConfContent, type Lang } from "@/lib/translations"
+import { sendZabradliConf } from "@/lib/actions"
+import { sendGTMEvent } from "@next/third-parties/google"
 
 const LAST_STEP = zabradliConfContent.cs.steps.length - 1
 
@@ -74,6 +77,7 @@ export function ZabradliConfigurator({
   const [step, setStep] = useState(0)
   const [direction, setDirection] = useState(1)
   const [sent, setSent] = useState(false)
+  const [isPending, startTransition] = useTransition()
   const topRef = useRef<HTMLDivElement>(null)
 
   const methods = useForm<ZabradliConfType>({
@@ -124,12 +128,22 @@ export function ZabradliConfigurator({
     scrollToTop()
   }
 
-  // TODO: až budou ceny, nahradit server action + react-email šablonou (jako `sendConf`).
   const onValid = (data: ZabradliConfType) => {
-    console.log(data)
-    toast.success(t.submitPlaceholder)
-    setSent(true)
-    scrollToTop()
+    startTransition(async () => {
+      const res = await sendZabradliConf(data, lang)
+      if (!res.success) {
+        toast.error(res.message)
+        return
+      }
+      toast.success(res.message)
+      sendGTMEvent({
+        event: "generate_lead",
+        form_type: "kalkulace",
+        inquired_product: "zábradlí",
+      })
+      setSent(true)
+      scrollToTop()
+    })
   }
 
   /** Návrat z potvrzení na prázdný formulář — „Odeslat další poptávku". */
@@ -148,6 +162,14 @@ export function ZabradliConfigurator({
     if (errors.fullname || errors.email || errors.phoneNumber || errors.zip || errors.address || errors.obec) {
       toast.error(t.validation.invalidContact)
     }
+  }
+
+  if (isPending) {
+    return (
+      <section id="zabkonf" ref={topRef} className="mx-auto max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
+        <KonfPending lang={lang} />
+      </section>
+    )
   }
 
   if (sent) {
@@ -198,9 +220,8 @@ export function ZabradliConfigurator({
                   <MoveRight />
                 </Button>
               ) : (
-                <Button type="submit">
-                  {t.sendText}
-                  <MoveRight />
+                <Button type="submit" disabled={isPending}>
+                  {isPending ? <Loader2 className="animate-spin" /> : <>{t.sendText}<MoveRight /></>}
                 </Button>
               )}
               {step > 0 ? (

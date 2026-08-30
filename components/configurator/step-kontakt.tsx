@@ -3,6 +3,7 @@
 import { useFormContext } from "react-hook-form"
 import type { ConfiguratorType } from "@/lib/schemas"
 import { Input } from "@/components/ui/input"
+import { PhoneInput } from "@/components/ui/phone-input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { kontaktStepContent, type Lang } from "@/lib/translations"
@@ -21,7 +22,7 @@ export function StepKontakt({ lang = "cs" }: { lang?: Lang }) {
   const t = kontaktStepContent[lang] ?? kontaktStepContent.cs
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col pl-1 gap-6">
       <div>
         <StepTitle pre={t.titlePre} accent={t.titleAccent} post={t.titlePost} />
         <p className="mt-1 text-muted-foreground">{t.desc}</p>
@@ -40,7 +41,7 @@ export function StepKontakt({ lang = "cs" }: { lang?: Lang }) {
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="phoneNumber">{t.phone}</Label>
-          <Input id="phoneNumber" type="tel" {...register("phoneNumber")} placeholder={t.phonePlaceholder} required />
+          <PhoneInput id="phoneNumber" {...register("phoneNumber")} placeholder={t.phonePlaceholder} required />
           <FieldError message={errors.phoneNumber?.message} />
         </div>
         <div className="flex flex-col gap-1.5">

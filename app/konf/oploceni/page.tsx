@@ -12,7 +12,7 @@ import { buildGalleryPhotos, buildProductInfo } from "@/lib/product-photos"
 export const metadata: Metadata = {
   title: "Konfigurátor oplocení | KONSTANTA – hliníkové ploty, brány a pergoly",
   description:
-    "Nakonfigurujte si bránu, branku, sloupky i motiv hliníkového oplocení na míru a vyžádejte si nezávaznou kalkulaci zdarma.",
+    "Nakonfigurujte si bránu, branku, plotové dílce i motiv hliníkového oplocení na míru a vyžádejte si nezávaznou kalkulaci zdarma.",
   alternates: { canonical: "/konf/oploceni" },
 }
 

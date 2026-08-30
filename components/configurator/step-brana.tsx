@@ -19,7 +19,6 @@ export function StepBrana({ onNext, photos, info = {}, lang = "cs" }: { onNext: 
   const gateExtras = [
     { name: "pohon", label: extrasT.pohon },
     { name: "tahoma", label: extrasT.tahoma },
-    { name: "ovladac", label: extrasT.ovladac },
   ]
   // Výztužná tyč se nabízí jen u křídlových bran — u posuvných a teleskopických
   // se křídlo nevyztužuje, viz `kridlova` v `gateProducts`.

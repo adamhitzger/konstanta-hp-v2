@@ -5,7 +5,14 @@ import { LangSwitcher } from "@/components/nav/lang-switcher"
 import { footerContent, withLang, type Lang } from "@/lib/translations"
 
 // Odkazy zrcadlí hlavní menu v hlavičce (components/nav/nav-data.ts).
-const productHrefs = ["/#produkty", "/#produkty", "/#produkty", "/#produkty", "/#produkty", "/#produkty"]
+const productHrefs = [
+  "/realizace?filter=ploty",
+  "/realizace?filter=brany",
+  "/realizace?filter=pergoly",
+  "/pripravne-prace",
+  "/chytra-reseni",
+  "/pro-firmy#subdodavky",
+]
 
 const companyHrefs = [
   "/o-nas#jsme-konstanta",
@@ -14,7 +21,7 @@ const companyHrefs = [
   "/o-nas#jak-to-probiha",
   "/o-nas#certifikaty",
   "/o-nas#faq",
-  "/#realizace",
+  "/realizace",
   "/#kontakt",
   "/#kontakt",
 ]
@@ -32,7 +39,7 @@ export function SiteFooter({ lang = "cs" }: { lang?: Lang }) {
     <footer className="border-t border-border bg-background">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 lg:grid-cols-5 lg:px-8">
         <div className="flex flex-col gap-4 md:col-span-2 lg:col-span-1">
-          <a href={l("/#uvod")} className="flex items-center" aria-label="Konstanta HP">
+          <a href={l("/")} className="flex items-center" aria-label="Konstanta HP">
             <Image src="/logo-konstanta.svg" alt="Konstanta HP" width={240} height={64} className="h-14 w-auto" />
           </a>
           <p className="max-w-sm text-base leading-relaxed text-muted-foreground">{t.tagline}</p>

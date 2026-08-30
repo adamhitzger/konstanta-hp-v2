@@ -5,6 +5,7 @@ import { useActionState, useEffect, useState } from "react"
 import { Phone, Mail, CheckCircle2, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { PhoneInput } from "@/components/ui/phone-input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Reveal, AnimatedText } from "@/components/reveal"
@@ -108,7 +109,7 @@ export function Contact({ lang = "cs" }: { lang?: Lang }) {
                     </div>
                     <div className="flex flex-col gap-2">
                       <Label htmlFor="phone">{t.labels.phone}</Label>
-                      <Input id="phone" name="tel" type="tel" required placeholder={t.placeholders.phone} />
+                      <PhoneInput id="phone" name="tel" required placeholder={t.placeholders.phone} />
                     </div>
                   </div>
                    <div data-f className="grid gap-5 sm:grid-cols-2">

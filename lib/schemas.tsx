@@ -10,6 +10,31 @@ export const contactSchema = z.object({
     msg: z.string().max(100, {message: "Zpráva je moc dlouhá"}),
 })
 
+/**
+ * Poptávka stavební přípravy a základů (app/konf/zaklady). Oproti `contactSchema`
+ * je `msg` povinná a delší — je to hlavní obsah poptávky. Přílohy se nevalidují
+ * zodem, ale v `sendZaklady` (počet, velikost, typ).
+ */
+/**
+ * Rozsah prací, který si zákazník naklikne na /konf/zaklady. Id jsou stabilní
+ * (chodí ve `FormData` i do e-mailu), lokalizované popisky žijí v
+ * `zakladyContent.sluzby` v lib/translations.ts — obojí musí zůstat v páru.
+ */
+export const ZAKLADY_SLUZBY = ["zamereni", "zaklady", "zdeni", "montaz"] as const
+export type ZakladySluzba = (typeof ZAKLADY_SLUZBY)[number]
+
+export const zakladySchema = z.object({
+    name: z.string().min(3, {message: "Jméno je moc krátké"}),
+    email: z.string().email(),
+    tel: z.string().min(1,{message: "Pole je povinné"}).regex(phoneRegex, {message: "Zadali jste číslo ve špatném formátu"}),
+    misto: z.string().min(2, {message: "Uveďte místo realizace"}),
+    // Aspoň jedna služba — bez ní poptávka neříká, co po nás zákazník vlastně chce.
+    sluzby: z.array(z.enum(ZAKLADY_SLUZBY)).min(1, {message: "Vyberte alespoň jednu položku"}),
+    msg: z.string().min(10, {message: "Popište prosím stručně situaci"}).max(2000, {message: "Popis je moc dlouhý"}),
+})
+
+export type ZakladyType = z.infer<typeof zakladySchema>
+
 export const productSchema = z.object({
     name: z.string().min(3, {message: "Jméno je moc krátké"}),
     email: z.string().email(),
@@ -86,7 +111,6 @@ const branaRozmery = z.object({
     pocet: z.number().optional(),
     pohon: z.boolean().optional(),
     tahoma: z.boolean().optional(),
-    ovladac: z.boolean().optional(),
     // Výztužná tyč křídla — nabízí se jen u křídlových bran (dvoukřídlá, jednokřídlá),
     // u posuvných a teleskopických nemá konstrukčně smysl.
     tyc: z.boolean().optional(),
@@ -134,17 +158,7 @@ export const confSchema = z.object({
         kovani: z.string().optional(),
     }).array().optional(),
     celkemBranek: z.number().optional(),
-    sloupky: z.boolean().optional(),
-    typSloupku: z.string(),
-    barvaTvarnice: z.string().optional(),
-    povrchTvarnice: z.string().optional(),
-    tvarnice: z.string().optional(),
-    // Spodní uchycení sloupků — jen u hliníkových. `uchyceniSvepomoci` rozlišuje,
-    // jestli betonování/zdění děláme my, nebo si ho zákazník udělá sám;
-    // `rozmerSloupku` (100×100 / 150×150) dává smysl jen u nabetonování a patky.
-    uchyceniSloupku: z.string().optional(),
-    uchyceniSvepomoci: z.boolean().optional(),
-    rozmerSloupku: z.string().optional(),
+    // Sloupky se v konfigurátoru neřeší — nabízejí se až při zaměření na místě.
     dilce: z.boolean().optional(),
     celkemDilcu: z.number().optional(),
     rozmeryDilcu: z.object({

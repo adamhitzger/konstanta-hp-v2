@@ -2,7 +2,8 @@
 
 import { groq } from "next-sanity";
 
-export const IG_FEED = groq`*[_type == 'igFeed']{
+export const IG_FEED = groq`*[_type == 'igFeed' && defined(img.asset)] | order(_createdAt desc){
+    _id,
     url,
     "img":img.asset->url,
 }`
@@ -146,7 +147,12 @@ export const FINISHED_WORK = groq`*[_type == 'finishedWork']{
   "sekcni": sekcni[].asset->url,
   "branka": branka[].asset->url,
   "ploty": ploty[].asset->url,
-  "bioklimaticka": bioklimaticka[].asset->url
+}`;
+
+  // Zábradlí sdílí ilustrační fotky s plotovými dílci (`ploty`) — vlastní pole
+  // v `confPhotos` nemá a e-mail z něj bere jen jednu úvodní fotku.
+  export const ZAB_IMGS_QUERY = groq`*[_type == "confPhotos"][0]{
+  "zabradli": ploty[].asset->url,
 }`;
 
    export const PERG_IMGS_QUERY = groq`*[_type == "confPhotos"][0]{
@@ -184,6 +190,49 @@ export const PRODUCT_PHOTOS_QUERY = groq`*[_type == "productPhotos"]{
   "tahokov": tahokov[0..4].asset->url
 }`;
 
+/**
+ * Fotky realizací pro /realizace. Oproti PRODUCT_PHOTOS_QUERY (galerie v konfigurátoru)
+ * bere víc fotek na motiv — stránka realizací je právě ta, kde je má smysl ukázat všechny —
+ * a navíc pole, která konfigurátor nepotřebuje: `sklo` a `lamela` (zábradlí, pergoly)
+ * a `vypalovani`. Filtrování na kategorie a slepení do skupin řeší lib/realizace.ts.
+ */
+export const REALIZACE_QUERY = groq`*[_type == "productPhotos" && defined(cat)]{
+  _id,
+  cat,
+  nameCs,
+  nameSk,
+  nameDe,
+  "banner": photo.asset->url,
+  "okS": okS[].asset->url,
+  "okK": okK[].asset->url,
+  "okKM": okKM[].asset->url,
+  "p60": p60[].asset->url,
+  "p90": p90[].asset->url,
+  "p120": p120[].asset->url,
+  "p150": p150[].asset->url,
+  "tycka": tycka[].asset->url,
+  "vlKom": vlKom[].asset->url,
+  "drevodekor": drevodekor[].asset->url,
+  "tahokov": tahokov[].asset->url,
+  "lamela": lamela[].asset->url,
+  "vypalovani": vypalovani[].asset->url,
+  "sklo": sklo[].asset->url
+}`
+
+/**
+ * Lehká varianta REALIZACE_QUERY pro upoutávku na homepage — jen úvodní fotka
+ * (`photo`) a kategorie, žádné motivy. Celý REALIZACE_QUERY by na homepage tahal
+ * 170+ URL, ze kterých se zobrazí tři.
+ */
+export const REALIZACE_BANNERS_QUERY = groq`*[_type == "productPhotos" && defined(cat) && defined(photo.asset)]{
+  _id,
+  cat,
+  nameCs,
+  nameSk,
+  nameDe,
+  "banner": photo.asset->url
+}`
+
    export const STEPS_QUERY = groq`*[_type == "steps"][0]{
   steps[]{
     "photos": photos[].asset->url,
@@ -202,6 +251,26 @@ export const PRODUCT_PHOTOS_QUERY = groq`*[_type == "productPhotos"]{
       "ploty": ploty.asset->url,
        "pergoly": pergoly.asset->url,
 }`;
+
+/**
+ * Certifikáty a patenty pro /o-nas. `cert` je Sanity `file`, takže se rozbaluje
+ * přes `cert.asset->` — z assetu potřebujeme URL ke stažení a `originalFilename`
+ * jako záložní název, když v dokumentu není vyplněný `titleCs`.
+ * `size` je v bajtech, převod na MB řeší frontend.
+ */
+export const CERTIFICATES_QUERY = groq`*[_type == "certificate" && defined(cert.asset)] | order(coalesce(poradi, 999) asc, _createdAt asc){
+  _id,
+  titleCs,
+  titleSk,
+  titleDe,
+  noteCs,
+  noteSk,
+  noteDe,
+  "url": cert.asset->url,
+  "fileName": cert.asset->originalFilename,
+  "ext": cert.asset->extension,
+  "size": cert.asset->size
+}`
 
 export const REVIEWS_QUERY = groq`*[_type == "reviews"]{
     author_name,

@@ -6,7 +6,7 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
-import { heroContent, type Lang } from "@/lib/translations"
+import { heroContent, withLang, yearsInBusiness, type Lang } from "@/lib/translations"
 
 const slideSrcs = ["/hero-plot.png", "/hero-plot-2.png", "/hero-plot-3.png"]
 
@@ -15,6 +15,8 @@ gsap.registerPlugin(ScrollTrigger, useGSAP)
 export function Hero({ lang = "cs" }: { lang?: Lang }) {
   const t = heroContent[lang] ?? heroContent.cs
   const highlights = t.highlights
+  /** Počítá se z FOUNDED_YEAR, ne z ručně zapsaného čísla — viz lib/translations.ts. */
+  const years = yearsInBusiness()
   const slides = slideSrcs.map((src, i) => ({ src, alt: t.slideAlts[i] }))
   const [current, setCurrent] = useState(0)
   const root = useRef<HTMLDivElement>(null)
@@ -125,7 +127,7 @@ export function Hero({ lang = "cs" }: { lang?: Lang }) {
             </a>
             <a
               data-h-cta
-              href="#produkty"
+              href={withLang("/realizace?filter=ploty", lang)}
               className="flex items-center justify-center rounded-full border border-background/25 px-5 py-3.5 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-background/55 transition-all duration-300 hover:border-background/55 hover:text-background"
             >
               {t.ctaSecondary}
@@ -187,9 +189,9 @@ export function Hero({ lang = "cs" }: { lang?: Lang }) {
             data-h-badge-float
             className="absolute -bottom-5 -left-4 hidden rounded-2xl border border-border bg-background px-5 py-4 shadow-sm sm:block"
           >
-            <p className="font-heading text-4xl font-extrabold uppercase leading-none text-foreground">{t.badgeNumber}</p>
+            <p className="font-heading text-4xl font-extrabold uppercase leading-none text-foreground">{t.badgeNumber(years)}</p>
             <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-              {t.badgeText}
+              {t.badgeText(years)}
             </p>
           </div>
         </div>

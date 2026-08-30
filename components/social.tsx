@@ -3,6 +3,7 @@ import Image from "next/image"
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from "@/components/social-icons"
 import { Reveal, SectionHeading } from "@/components/reveal"
 import { socialContent, type Lang } from "@/lib/translations"
+import type { IgPost } from "@/types"
 
 const socialIcons = [InstagramIcon, FacebookIcon, YoutubeIcon, Mail]
 const socialMeta = [
@@ -13,12 +14,36 @@ const socialMeta = [
 ]
 
 const igUrl = "https://www.instagram.com/konstantaploty/"
+
+/** Záložní mřížka, když v Sanity ještě není nahraný žádný `igFeed` příspěvek. */
 const gallerySrcs = ["/ig-1.png", "/ig-2.png", "/ig-3.png", "/ig-4.png", "/ig-5.png", "/ig-6.png", "/ig-7.png", "/ig-8.png", "/ig-9.png"]
 
-export function Social({ lang = "cs" }: { lang?: Lang }) {
+/** Mřížka je 3×3, víc příspěvků by rozbilo rytmus sekce. */
+const IG_LIMIT = 9
+
+export function Social({ posts = [], lang = "cs" }: { posts?: IgPost[]; lang?: Lang }) {
   const t = socialContent[lang] ?? socialContent.cs
   const socials = socialMeta.map((s, i) => ({ ...s, name: i === 3 ? t.emailLabel : s.name, Icon: socialIcons[i] }))
-  const gallery = gallerySrcs.map((src, i) => ({ src, alt: t.galleryAlts[i] }))
+
+  /* Příspěvky ze Sanity mají vlastní odkaz na konkrétní post; fallback vede na profil.
+     `galleryAlts` popisuje statické fotky, u reálných příspěvků by seděl jen náhodou —
+     proto se u nich sází obecný alt. */
+  const gallery =
+    posts.length > 0
+      ? posts.slice(0, IG_LIMIT).map((p) => ({
+          key: p._id,
+          src: p.img,
+          href: p.url || igUrl,
+          alt: t.igPostAlt,
+          fromSanity: true,
+        }))
+      : gallerySrcs.map((src, i) => ({
+          key: src,
+          src,
+          href: igUrl,
+          alt: t.galleryAlts[i],
+          fromSanity: false,
+        }))
 
   return (
     <section id="site" className="bg-background py-20">
@@ -60,11 +85,11 @@ export function Social({ lang = "cs" }: { lang?: Lang }) {
           stagger={0.08}
           className="mt-8 grid grid-cols-3 gap-2 sm:gap-3 md:grid-cols-3 lg:grid-cols-3"
         >
-          {gallery.map((img, i) => (
+          {gallery.map((img) => (
             <a
               data-ig
-              key={img.src}
-              href={igUrl}
+              key={img.key}
+              href={img.href}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${t.igAriaPrefix} ${img.alt}`}
@@ -76,6 +101,7 @@ export function Social({ lang = "cs" }: { lang?: Lang }) {
                 fill
                 sizes="(max-width: 768px) 33vw, 25vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-110"
+                unoptimized={img.fromSanity}
               />
               <div className="absolute inset-0 flex items-center justify-center bg-foreground/0 opacity-0 transition-all duration-300 group-hover:bg-foreground/40 group-hover:opacity-100">
                 <InstagramIcon className="h-8 w-8 text-background" />

@@ -42,6 +42,7 @@ export interface ConfPhotos {
   pristresek: string[];
   bioklimaticka: string[];
   zahrada: string[];
+  zabradli: string[];
 }
 
 /** Jedna reálná fotka realizace + `motiv` (výplň), odvozený z toho, ve kterém poli
@@ -98,7 +99,7 @@ export type ConfProductInfo = Partial<Record<keyof ConfPhotosWithMotiv, ProductI
 /** Raw tvar jednoho `productPhotos` dokumentu z PRODUCT_PHOTOS_QUERY — jeden dokument
  * na konkrétní produkt (rozlišený `nameCs`), fotky rozdělené po jednotlivých motivech. */
 export interface ProductPhotosDoc {
-  cat?: "brany" | "branky" | "ploty" | "pergoly";
+  cat?: "brany" | "branky" | "ploty" | "pergoly" | "zabradli";
   nameCs?: string;
   nameSk?: string;
   nameDe?: string;
@@ -117,6 +118,59 @@ export interface ProductPhotosDoc {
   vlKom: string[];
   drevodekor: string[];
   tahokov: string[];
+  vypalovani: string[];
+  lamela: string[];
+  sklo?: string[];
+}
+
+/** Kategorie na stránce /realizace. `brany` a `branky` ze Sanity spadají do jedné
+ * záložky „Brány a branky", ostatní kategorie mapují 1:1. */
+export type RealizaceCat = "ploty" | "brany" | "pergoly" | "zabradli";
+
+/** Jedna záložka na /realizace — fotky slepené ze všech `productPhotos` dokumentů
+ * dané kategorie, každá s `motiv` pro boční filtr v lightboxu. */
+export interface RealizaceGroup {
+  cat: RealizaceCat;
+  photos: ConfPhotoItem[];
+}
+
+/** Jeden příspěvek z Instagramu nahraný ručně v Sanity (`igFeed`, IG_FEED query). */
+export interface IgPost {
+  _id: string;
+  url?: string;
+  img: string;
+}
+
+/** Úvodní fotka jedné produktové kategorie pro upoutávku realizací na homepage
+ * (REALIZACE_BANNERS_QUERY → lib/realizace.ts). */
+export interface RealizaceTeaser {
+  cat: RealizaceCat;
+  banner: string;
+}
+
+/** Jeden dokument `certificate` ze Sanity (CERTIFICATES_QUERY). `url` míří rovnou
+ * na soubor v Sanity CDN, `fileName` je záložní název, když není vyplněný `titleCs`. */
+export interface CertificateDoc {
+  _id: string;
+  titleCs?: string;
+  titleSk?: string;
+  titleDe?: string;
+  noteCs?: string;
+  noteSk?: string;
+  noteDe?: string;
+  url?: string;
+  fileName?: string;
+  ext?: string;
+  size?: number;
+}
+
+/** Certifikát už přeložený a připravený k vykreslení (lib/certificates.ts). */
+export interface CertificateItem {
+  id: string;
+  title: string;
+  note: string;
+  url: string;
+  ext: string;
 }
 
 export interface ProductPhoto {

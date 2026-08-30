@@ -1,11 +1,11 @@
 "use client"
 
-import { Timer, BoxSelect, Gem, LifeBuoy } from "lucide-react"
+import { CalendarCheck, Timer, PackageCheck, ShieldCheck } from "lucide-react"
 import { Reveal } from "@/components/reveal"
 import { TiltCard } from "./tilt-card"
 import { coOceniteContent, type Lang } from "@/lib/translations"
 
-const icons = [Timer, BoxSelect, Gem, LifeBuoy]
+const icons = [CalendarCheck, Timer, PackageCheck, ShieldCheck]
 
 /** Compact benefit strip — 3–4 highlights pulled from the 10 points. Tilt cards. */
 export function CoOcenite({ lang = "cs" }: { lang?: Lang }) {
