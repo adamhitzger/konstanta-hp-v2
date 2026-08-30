@@ -1278,7 +1278,7 @@ if (data.file && data.file.length > 0) {
         const mailOptions: any//eslint-disable-line @typescript-eslint/no-explicit-any
          = {
           from: process.env.FROM_EMAIL,
-          to: "adam.hitzger@icloud.com",
+          to: data.email,
           subject: `Nová poptávka z konfigurátoru zábradlí - ${data.fullname}`,
           html: await render(ZabMail(data, imgs, lang))
         }
@@ -1378,7 +1378,7 @@ if (data.file && data.file.length > 0) {
         const mailOptions: any//eslint-disable-line @typescript-eslint/no-explicit-any
          = {
           from: process.env.FROM_EMAIL,
-          to: "adam.hitzger@icloud.com",
+          to: data.email,
           subject: `Nová poptávka z konfigurátoru - ${data.fullname}`,
           html: await render(PergMail(data, pergs, lang))
         }
@@ -1492,7 +1492,7 @@ const html = await render(ConfMail({userName: data.fullname,
       = {
         from: process.env.FROM_EMAIL,
      //to: "nabidky@konstantahp.cz",
-        to: "adam.hitzger@icloud.com",
+        to: data.email,
         subject: `Nová poptávka z konfigurátoru - ${data.fullname}`,
         html,
         attachments: [
@@ -1598,7 +1598,7 @@ export async function sendContact(
         const data = validatedData.data;
         const sendMail = await transporter.sendMail({
           from: process.env.FROM_EMAIL,
-          to: "nabidky@konstantahp.cz",
+          to: data.email,
           //to: "adam.hitzger@icloud.com",
           subject: "Nový kontakt",
           text: `Celé jméno: ${data.name}, Email: ${data.email}, Tel. číslo: ${data.tel}, Firma: ${data.company}, Zpráva: ${data.msg}`,
@@ -1695,8 +1695,7 @@ export async function sendZaklady(
 
       const sendMail = await transporter.sendMail({
         from: process.env.FROM_EMAIL,
-        to: "nabidky@konstantahp.cz",
-        replyTo: data.email,
+        to: data.email,
         subject: `Poptávka: stavební příprava a základy — ${data.misto}`,
         // Textová varianta zůstává kvůli klientům bez HTML a spam skóre.
         text: [
@@ -1761,7 +1760,7 @@ export async function sendProduct(
         const data = validatedData.data;
         const sendMail = await transporter.sendMail({
           from: process.env.FROM_EMAIL,
-          to: "nabidky@konstantahp.cz",
+          to: data.email,
           subject: `Nová poptávka na produkt ${data.produkt}`,
           text: `Celé jméno: ${data.name}, Email: ${data.email}, Tel. číslo: ${data.tel}, Firma: ${data.company}, Délka: ${data.delka}, Barva: ${data.barva}, Počet ks.: ${data.pocet}, Adresa: ${data.obec} ${data.address} ${data.zip}, Zpráva: ${data.msg}`,
         });
