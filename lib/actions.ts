@@ -1442,7 +1442,7 @@ export async function sendConf(
 
       const data = validatedData.data;
       const isCompany = data.company && data.company.length>0 ? true : false
-      const filePath2 = await createXlsx(data, isCompany,photos.branka[0], photos.dvoukridla[0], photos.bioklimaticka[0], lang
+      const filePath2 = await createXlsx(data, isCompany,photos.branka[0], photos.dvoukridla[0], photos.ploty[0], lang
         )
 if (!filePath2) {
   console.error("Chyba: createXlsx nevrátil platnou cestu k souboru.");
