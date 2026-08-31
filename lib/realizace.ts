@@ -7,16 +7,17 @@ import type {
 } from "@/types"
 
 /** Pořadí záložek na /realizace. Zároveň klíčuje texty v `realizaceContent`. */
-export const REALIZACE_CATS: RealizaceCat[] = ["ploty", "brany", "pergoly", "zabradli"]
+export const REALIZACE_CATS: RealizaceCat[] = ["ploty", "brany", "branky", "pergoly", "zabradli"]
 
 /**
- * `cat` ze Sanity → záložka. Brány a branky mají v Studiu vlastní kategorii, na webu
- * ale sedí pod jedním nadpisem („Brány a branky"), protože se navrhují jako jeden celek.
+ * `cat` ze Sanity → záložka. Branky mají ve Studiu vlastní kategorii `productPhotos`,
+ * takže dostávají i vlastní záložku — dřív se slévaly do „Brány a branky" a vjezdové
+ * brány pak v galerii přebíjely fotky vstupních branek.
  */
 const CAT_MAP: Record<string, RealizaceCat> = {
   ploty: "ploty",
   brany: "brany",
-  branky: "brany",
+  branky: "branky",
   pergoly: "pergoly",
   zabradli: "zabradli",
 }
@@ -84,8 +85,15 @@ export function buildRealizace(docs: ProductPhotosDoc[] | null | undefined): Rea
 }
 
 /**
+ * Pořadí dlaždic v upoutávce na homepage. Vlastní seznam, ne `REALIZACE_CATS` —
+ * ta má od rozdělení branek pět položek a branky by z trojice na homepage vytlačily
+ * pergoly. Na homepage se drží tři nosné produkty, branky mají svou záložku v galerii.
+ */
+const TEASER_CATS: RealizaceCat[] = ["ploty", "brany", "pergoly", "zabradli"]
+
+/**
  * Upoutávka realizací na homepage — jedna úvodní fotka na kategorii, v pořadí
- * `REALIZACE_CATS`. Kategorie bez nahrané úvodní fotky se přeskočí, takže sekce
+ * `TEASER_CATS`. Kategorie bez nahrané úvodní fotky se přeskočí, takže sekce
  * nikdy nevykreslí prázdnou dlaždici.
  */
 export function buildRealizaceTeaser(
@@ -93,7 +101,7 @@ export function buildRealizaceTeaser(
   limit = 3,
 ): RealizaceTeaser[] {
   const out: RealizaceTeaser[] = []
-  for (const cat of REALIZACE_CATS) {
+  for (const cat of TEASER_CATS) {
     const doc = (docs ?? []).find((d) => d.cat && CAT_MAP[d.cat] === cat && d.banner)
     if (doc?.banner) out.push({ cat, banner: doc.banner })
     if (out.length === limit) break

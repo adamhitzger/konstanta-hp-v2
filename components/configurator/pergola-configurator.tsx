@@ -7,6 +7,7 @@ import { AnimatePresence } from "framer-motion"
 import { Loader2, MoveRight, MoveLeft } from "lucide-react"
 import toast from "react-hot-toast"
 import { sendGTMEvent } from "@next/third-parties/google"
+import { sendKonfStep, sendUserDataToGTM } from "@/lib/gtm"
 import { pergolaSchema, type PergolaConfType, type PergolaFormInput } from "@/lib/schemas"
 import { sendPergConf } from "@/lib/actions"
 import type { ConfPhotosWithMotiv, ConfProductInfo } from "@/types"
@@ -21,12 +22,24 @@ import { PergStepUpevneni } from "./perg-step-upevneni"
 import { PergStepStineni } from "./perg-step-stineni"
 import { PergStepBarva } from "./perg-step-barva"
 import { PergStepKontakt } from "./perg-step-kontakt"
-import { pergContent, type Lang } from "@/lib/translations"
+import { mountOptions } from "@/lib/perg-content"
+import { mountLabels, pergContent, type Lang } from "@/lib/translations"
 
 const LAST_STEP = pergContent.cs.steps.length - 1
 
+/** Názvy kroků do GTM — vždy česky, ať se události netříští podle `?lang=`. */
+const GTM_FORM = "Pergoly" as const
+const GTM_STEPS = pergContent.cs.steps
+
 // Pořadí musí odpovídat `pergContent.<lang>.steps` (Typ, Upevnění, Stínění, Barva, Kontakt).
 const stepIcons = [PergolaTypeIcon, MountIcon, ShadeIcon, PaintIcon, ContactIcon]
+
+/** Zvolený způsob upevnění musí mít vyplněnou šířku, hloubku i délku — jinak poptávka nic neříká. */
+const hasCompleteRozmery = (rozmery: unknown): boolean => {
+  const r = rozmery as { sirka?: number; hloubka?: number; delka?: number } | undefined
+  if (!r) return false
+  return Number(r.sirka) > 0 && Number(r.hloubka) > 0 && Number(r.delka) > 0
+}
 
 const emptyPhotos: ConfPhotosWithMotiv = {
   jednokridla: [],
@@ -89,10 +102,20 @@ export function PergolaConfigurator({
     switch (currentStep) {
       case 0: {
         if (!values.pergola) return t.validation.pergola
+        if (values.pergola === "bioklimaticka" && values.ledSvetla && !(Number(values.ledPocet) > 0)) {
+          return t.validation.ledPocet
+        }
         return null
       }
       case 1: {
         if (!values.stojici && !values.keStene && !values.kRohu) return t.validation.upevneni
+        const mountT = mountLabels[lang] ?? mountLabels.cs
+        for (const opt of mountOptions) {
+          if (!values[opt.field]) continue
+          if (!hasCompleteRozmery(values[opt.rozmeryField])) {
+            return t.validation.rozmery.replace("{product}", mountT[opt.field] ?? opt.label)
+          }
+        }
         return null
       }
       case 2: {
@@ -119,6 +142,7 @@ export function PergolaConfigurator({
       toast.error(problem)
       return
     }
+    sendKonfStep(GTM_FORM, step, GTM_STEPS[step])
     setDirection(1)
     setStep((prev) => Math.min(LAST_STEP, prev + 1))
     scrollToTop()
@@ -138,6 +162,15 @@ export function PergolaConfigurator({
         return
       }
       toast.success(res.message)
+      sendUserDataToGTM({
+        email: data.email,
+        phone: data.phoneNumber,
+        fullName: data.fullname,
+        city: data.obec,
+        zip: data.zip,
+        state: lang,
+      })
+      sendKonfStep(GTM_FORM, LAST_STEP, GTM_STEPS[LAST_STEP])
       sendGTMEvent({
         event: "generate_lead",
         form_type: "poptávka",

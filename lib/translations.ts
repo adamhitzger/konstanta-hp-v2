@@ -580,9 +580,14 @@ export const realizacePageContent = {
         text: "Hliníkové ploty na míru představují moderní bezúdržbová řešení, které dokonale ochrání vaše soukromí a dodají nemovitosti reprezentativní vzhled. Díky vlastnímu patentovanému systému profilů vynikají maximální pevností, stabilitou a odolností vůči všem povětrnostním vlivům bez nutnosti jakékoliv další péče.",
       },
       brany: {
-        tab: "Brány a branky",
-        heading: "Realizace bran a branek",
-        text: "Vjezdové brány a vstupní branky navrhujeme přesně na míru vašemu plotu i stavební připravenosti. Nabízíme spolehlivá posuvná i křídlová řešení, a to včetně tichých a prověřených pohonů s dálkovým ovládáním či chytrou správou přístupu.",
+        tab: "Brány",
+        heading: "Realizace bran",
+        text: "Vjezdové brány navrhujeme přesně na míru vašemu plotu i stavební připravenosti. Nabízíme spolehlivá posuvná i křídlová řešení, a to včetně tichých a prověřených pohonů s dálkovým ovládáním či chytrou správou přístupu.",
+      },
+      branky: {
+        tab: "Branky",
+        heading: "Realizace branek",
+        text: "Vstupní branky ladíme s plotem i bránou do jednoho celku — stejná výplň, stejný motiv, stejná barva. Doplníme je elektrickým zámkem, videozvonkem nebo čtečkou čipů, ať se dostanete dovnitř bez klíče a bez kompromisu ve vzhledu.",
       },
       pergoly: {
         tab: "Pergoly",
@@ -617,9 +622,14 @@ export const realizacePageContent = {
         text: "Hliníkové ploty na mieru predstavujú moderné bezúdržbové riešenie, ktoré dokonale ochráni vaše súkromie a dodá nehnuteľnosti reprezentatívny vzhľad. Vďaka vlastnému patentovanému systému profilov vynikajú maximálnou pevnosťou, stabilitou a odolnosťou voči všetkým poveternostným vplyvom bez nutnosti akejkoľvek ďalšej starostlivosti.",
       },
       brany: {
-        tab: "Brány a bránky",
-        heading: "Realizácie brán a bránok",
-        text: "Vjazdové brány a vstupné bránky navrhujeme presne na mieru vášmu plotu aj stavebnej pripravenosti. Ponúkame spoľahlivé posuvné aj krídlové riešenia, a to vrátane tichých a overených pohonov s diaľkovým ovládaním či inteligentnou správou prístupu.",
+        tab: "Brány",
+        heading: "Realizácie brán",
+        text: "Vjazdové brány navrhujeme presne na mieru vášmu plotu aj stavebnej pripravenosti. Ponúkame spoľahlivé posuvné aj krídlové riešenia, a to vrátane tichých a overených pohonov s diaľkovým ovládaním či inteligentnou správou prístupu.",
+      },
+      branky: {
+        tab: "Bránky",
+        heading: "Realizácie bránok",
+        text: "Vstupné bránky ladíme s plotom aj bránou do jedného celku — rovnaká výplň, rovnaký motív, rovnaká farba. Doplníme ich elektrickým zámkom, videozvončekom alebo čítačkou čipov, aby ste sa dostali dnu bez kľúča a bez kompromisu vo vzhľade.",
       },
       pergoly: {
         tab: "Pergoly",
@@ -654,9 +664,14 @@ export const realizacePageContent = {
         text: "Maßgefertigte Aluminiumzäune sind eine moderne, wartungsfreie Lösung, die Ihre Privatsphäre zuverlässig schützt und der Immobilie ein repräsentatives Aussehen verleiht. Dank unseres eigenen patentierten Profilsystems überzeugen sie mit höchster Festigkeit, Stabilität und Widerstandsfähigkeit gegen alle Witterungseinflüsse — ganz ohne weitere Pflege.",
       },
       brany: {
-        tab: "Tore und Türen",
-        heading: "Umgesetzte Tore und Türen",
-        text: "Einfahrtstore und Eingangstüren planen wir exakt nach Ihrem Zaun und der baulichen Vorbereitung. Wir bieten zuverlässige Schiebe- und Flügellösungen, einschließlich leiser, bewährter Antriebe mit Fernbedienung oder smarter Zutrittsverwaltung.",
+        tab: "Tore",
+        heading: "Umgesetzte Tore",
+        text: "Einfahrtstore planen wir exakt nach Ihrem Zaun und der baulichen Vorbereitung. Wir bieten zuverlässige Schiebe- und Flügellösungen, einschließlich leiser, bewährter Antriebe mit Fernbedienung oder smarter Zutrittsverwaltung.",
+      },
+      branky: {
+        tab: "Türen",
+        heading: "Umgesetzte Eingangstüren",
+        text: "Eingangstüren stimmen wir mit Zaun und Tor zu einer Einheit ab — gleiche Füllung, gleiches Motiv, gleiche Farbe. Auf Wunsch ergänzen wir Elektroschloss, Videosprechanlage oder Chipleser, damit Sie ohne Schlüssel hineinkommen, ohne Abstriche beim Aussehen.",
       },
       pergoly: {
         tab: "Pergolen",
@@ -2553,6 +2568,8 @@ export const pergContent = {
       material: "Vyberte střešní krytinu přístřešku.",
       stineni: "Vyberte, jaké stínění chcete (nebo zvolte Žádné).",
       upevneni: "Vyberte alespoň jeden způsob upevnění pergoly.",
+      rozmery: "Doplňte rozměry — {product}.",
+      ledPocet: "Zadejte počet LED světel.",
       barva: "Vyberte barvu pergoly.",
       invalidBarva: "Nezadali jste barvu",
       invalidContact: "Zkontrolujte prosím kontaktní údaje",
@@ -2571,6 +2588,8 @@ export const pergContent = {
       material: "Vyberte strešnú krytinu prístrešku.",
       stineni: "Vyberte, aké tienenie chcete (alebo zvoľte Žiadne).",
       upevneni: "Vyberte aspoň jeden spôsob upevnenia pergoly.",
+      rozmery: "Doplňte rozmery — {product}.",
+      ledPocet: "Zadajte počet LED svetiel.",
       barva: "Vyberte farbu pergoly.",
       invalidBarva: "Nezadali ste farbu",
       invalidContact: "Skontrolujte, prosím, kontaktné údaje",
@@ -2589,6 +2608,8 @@ export const pergContent = {
       material: "Wählen Sie die Dacheindeckung des Unterstands.",
       stineni: "Wählen Sie die gewünschte Beschattung (oder „Keine“).",
       upevneni: "Wählen Sie mindestens eine Befestigungsart für die Pergola.",
+      rozmery: "Bitte ergänzen Sie die Maße — {product}.",
+      ledPocet: "Geben Sie die Anzahl der LED-Leuchten an.",
       barva: "Wählen Sie die Farbe der Pergola.",
       invalidBarva: "Sie haben keine Farbe angegeben",
       invalidContact: "Bitte überprüfen Sie Ihre Kontaktdaten",
@@ -2643,6 +2664,7 @@ export const pergStepTypContent = {
     ledDesc: "LED osvětlení se montuje přímo do lamel — pergola se dá používat i po setmění.",
     ledLabel: "LED světla",
     ledHint: "Integrované osvětlení lamel bioklimatické pergoly.",
+    ledCountLabel: "Počet kusů",
   },
   sk: {
     title1Pre: "Zvoľte ",
@@ -2653,6 +2675,7 @@ export const pergStepTypContent = {
     ledDesc: "LED osvetlenie sa montuje priamo do lamiel — pergolu tak využijete aj po zotmení.",
     ledLabel: "LED svetlá",
     ledHint: "Integrované osvetlenie lamiel bioklimatickej pergoly.",
+    ledCountLabel: "Počet kusov",
   },
   de: {
     title1Pre: "Wählen Sie den ",
@@ -2663,6 +2686,7 @@ export const pergStepTypContent = {
     ledDesc: "Die LED-Beleuchtung wird direkt in die Lamellen eingebaut — die Pergola lässt sich auch nach Einbruch der Dunkelheit nutzen.",
     ledLabel: "LED-Leuchten",
     ledHint: "Integrierte Lamellenbeleuchtung der bioklimatischen Pergola.",
+    ledCountLabel: "Stückzahl",
   },
 }
 
@@ -2882,6 +2906,9 @@ export type PergMailContent = {
   led: string
   ledYes: string
   ledNo: string
+  /** Řádek s počtem kusů LED světel a jeho jednotka. */
+  ledCount: string
+  pieces: string
   autoGenerated: string
 }
 
@@ -2979,6 +3006,8 @@ export const pergMailContent: Record<Lang, PergMailContent> = {
     led: "LED světla",
     ledYes: "Ano",
     ledNo: "Ne",
+    ledCount: "Počet LED světel",
+    pieces: "ks",
     autoGenerated: "Tento e-mail byl automaticky vygenerován.",
   },
   sk: {
@@ -3002,6 +3031,8 @@ export const pergMailContent: Record<Lang, PergMailContent> = {
     led: "LED svetlá",
     ledYes: "Áno",
     ledNo: "Nie",
+    ledCount: "Počet LED svetiel",
+    pieces: "ks",
     autoGenerated: "Tento e-mail bol automaticky vygenerovaný.",
   },
   de: {
@@ -3025,6 +3056,8 @@ export const pergMailContent: Record<Lang, PergMailContent> = {
     led: "LED-Leuchten",
     ledYes: "Ja",
     ledNo: "Nein",
+    ledCount: "Anzahl LED-Leuchten",
+    pieces: "Stk.",
     autoGenerated: "Diese E-Mail wurde automatisch generiert.",
   },
 }

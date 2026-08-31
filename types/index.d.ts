@@ -125,7 +125,7 @@ export interface ProductPhotosDoc {
 
 /** Kategorie na stránce /realizace. `brany` a `branky` ze Sanity spadají do jedné
  * záložky „Brány a branky", ostatní kategorie mapují 1:1. */
-export type RealizaceCat = "ploty" | "brany" | "pergoly" | "zabradli";
+export type RealizaceCat = "ploty" | "brany" | "branky" | "pergoly" | "zabradli";
 
 /** Jedna záložka na /realizace — fotky slepené ze všech `productPhotos` dokumentů
  * dané kategorie, každá s `motiv` pro boční filtr v lightboxu. */

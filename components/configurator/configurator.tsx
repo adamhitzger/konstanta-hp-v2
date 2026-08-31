@@ -7,6 +7,7 @@ import { AnimatePresence } from "framer-motion"
 import { Loader2, MoveRight, MoveLeft } from "lucide-react"
 import toast from "react-hot-toast"
 import { sendGTMEvent } from "@next/third-parties/google"
+import { sendKonfStep, sendUserDataToGTM } from "@/lib/gtm"
 import { confSchema, type ConfiguratorType } from "@/lib/schemas"
 import { gateProducts } from "@/lib/konf-content"
 import { sendConf } from "@/lib/actions"
@@ -26,6 +27,10 @@ import { StepKontakt } from "./step-kontakt"
 import { konfContent, gateLabels, stepBrankaContent, stepDilceContent, type Lang } from "@/lib/translations"
 
 const LAST_STEP = konfContent.cs.steps.length - 1
+
+/** Názvy kroků do GTM — vždy česky, ať se události netříští podle `?lang=`. */
+const GTM_FORM = "Oplocení" as const
+const GTM_STEPS = konfContent.cs.steps
 
 type SizeRow = { vyska?: number; delka?: number; pocet?: number }
 
@@ -151,6 +156,7 @@ export function Configurator({
       toast.error(problem)
       return
     }
+    sendKonfStep(GTM_FORM, step, GTM_STEPS[step])
     setDirection(1)
     setStep((prev) => Math.min(LAST_STEP, prev + 1))
     scrollToTop()
@@ -170,6 +176,15 @@ export function Configurator({
         return
       }
       toast.success(res.message)
+      sendUserDataToGTM({
+        email: data.email,
+        phone: data.phoneNumber,
+        fullName: data.fullname,
+        city: data.obec,
+        zip: data.zip,
+        state: lang,
+      })
+      sendKonfStep(GTM_FORM, LAST_STEP, GTM_STEPS[LAST_STEP])
       sendGTMEvent({
         event: "generate_lead",
         form_type: "kalkulace",

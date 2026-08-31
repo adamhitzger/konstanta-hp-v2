@@ -65,6 +65,22 @@ const numberFromInput = z.preprocess(
 );
 
 
+/**
+ * Nepovinné číslo z `<input type="number">` registrovaného s `valueAsNumber` —
+ * prázdné pole přijde jako `NaN`, což by `z.number().optional()` samo neustálo.
+ */
+const optionalNumberFromInput = z.preprocess(
+  val => {
+    if (typeof val === "number") return Number.isNaN(val) ? undefined : val;
+    if (typeof val === "string" && val.trim() !== "") {
+      const n = Number(val);
+      if (!isNaN(n)) return n;
+    }
+    return undefined;
+  },
+  z.number().optional()
+);
+
 // rozměry objektu, který je optional, ale fieldy uvnitř jsou povinné
 const rozmeryObjekt = z.object({
   sirka: numberFromInput,
@@ -84,6 +100,8 @@ export const pergolaSchema = z.object({
   stineni: z.string().optional(),
   /** LED osvětlení lamel — volitelný doplněk, nabízí se jen u bioklimatické pergoly. */
   ledSvetla: z.boolean().optional(),
+  /** Počet kusů LED světel; dává smysl jen se zaškrtnutým `ledSvetla`. */
+  ledPocet: optionalNumberFromInput,
   barva: z.string(),
   a: z.boolean(),
   b: z.boolean(),

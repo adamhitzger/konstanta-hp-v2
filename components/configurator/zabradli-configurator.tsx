@@ -20,8 +20,13 @@ import { StepKontakt } from "./step-kontakt"
 import { zabradliConfContent, type Lang } from "@/lib/translations"
 import { sendZabradliConf } from "@/lib/actions"
 import { sendGTMEvent } from "@next/third-parties/google"
+import { sendKonfStep, sendUserDataToGTM } from "@/lib/gtm"
 
 const LAST_STEP = zabradliConfContent.cs.steps.length - 1
+
+/** Názvy kroků do GTM — vždy česky, ať se události netříští podle `?lang=`. */
+const GTM_FORM = "Zábradlí" as const
+const GTM_STEPS = zabradliConfContent.cs.steps
 
 // Pořadí musí odpovídat `zabradliConfContent.<lang>.steps` (Zábradlí, Motiv, Kontakt).
 const stepIcons = [RailingIcon, PanelMotifIcon, ContactIcon]
@@ -117,6 +122,7 @@ export function ZabradliConfigurator({
       toast.error(problem)
       return
     }
+    sendKonfStep(GTM_FORM, step, GTM_STEPS[step])
     setDirection(1)
     setStep((prev) => Math.min(LAST_STEP, prev + 1))
     scrollToTop()
@@ -136,6 +142,15 @@ export function ZabradliConfigurator({
         return
       }
       toast.success(res.message)
+      sendUserDataToGTM({
+        email: data.email,
+        phone: data.phoneNumber,
+        fullName: data.fullname,
+        city: data.obec,
+        zip: data.zip,
+        state: lang,
+      })
+      sendKonfStep(GTM_FORM, LAST_STEP, GTM_STEPS[LAST_STEP])
       sendGTMEvent({
         event: "generate_lead",
         form_type: "kalkulace",

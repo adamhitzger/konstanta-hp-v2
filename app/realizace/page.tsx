@@ -33,7 +33,7 @@ export default async function RealizacePage({
   const lang = getLang(langParam)
   const t = realizacePageContent[lang] ?? realizacePageContent.cs
   const groups = buildRealizace(photoDocs)
-  /** `?filter=ploty|brany|pergoly|zabradli` předvybere záložku. Neznámá hodnota se ignoruje. */
+  /** `?filter=ploty|brany|branky|pergoly|zabradli` předvybere záložku. Neznámá hodnota se ignoruje. */
   const initialCat = REALIZACE_CATS.find((c) => c === filter) as RealizaceCat | undefined
 
   return (

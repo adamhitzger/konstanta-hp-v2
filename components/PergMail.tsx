@@ -134,7 +134,12 @@ export const PergMail = (data: PergolaConfType, photos: ConfPhotos, lang: Lang =
           )}
           {/* LED se nabízí jen u bioklimatické pergoly — u ostatních typů řádek vynecháme. */}
           {data.pergola === "bioklimaticka" && (
-            <DataRow label={p.led} value={data.ledSvetla ? p.ledYes : p.ledNo} />
+            <>
+              <DataRow label={p.led} value={data.ledSvetla ? p.ledYes : p.ledNo} />
+              {data.ledSvetla && Number(data.ledPocet) > 0 && (
+                <DataRow label={p.ledCount} value={`${data.ledPocet} ${p.pieces}`} />
+              )}
+            </>
           )}
           <DataRow label={p.color} value={label(colors, data.barva)} />
         </Section>

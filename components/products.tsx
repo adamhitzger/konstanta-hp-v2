@@ -2,15 +2,15 @@ import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 import { Reveal, AnimatedText } from "@/components/reveal"
 import { productsContent, withLang, type Lang } from "@/lib/translations"
-
+import Link from "next/link"
 const images = ["/produkt-plot.png", "/produkt-brana.png", "/produkt-branka.png", "/produkt-pergola.png"]
 const codes = ["HP-01", "HP-02", "HP-03", "HP-04"]
-/** Pořadí sedí s `productsContent.items`: plot, brána, branka, pergola. Brány a branky
- * sdílí jednu záložku galerie, proto dvakrát `filter=brany`. */
+/** Pořadí sedí s `productsContent.items`: plot, brána, branka, pergola — každý
+ * produkt míří na svou vlastní záložku galerie. */
 const hrefs = [
   "/realizace?filter=ploty",
   "/realizace?filter=brany",
-  "/realizace?filter=brany",
+  "/realizace?filter=branky",
   "/realizace?filter=pergoly",
 ]
 
@@ -40,11 +40,13 @@ export function Products({ lang = "cs" }: { lang?: Lang }) {
         className="grid gap-3 sm:grid-cols-2 lg:grid-cols-12"
       >
         {products.map((p, i) => (
-          <article
-            data-card
-            key={p.title}
+          <Link
+          href={withLang(p.href, lang)}
+          key={p.title}
+          data-card
             className={`group aspect-[4/3] sm:aspect-auto sm:min-h-80 ${colSpans[i]}`}
           >
+          
             {/* Double-bezel: outer shell */}
             <div className="h-full rounded-2xl border border-brand/40 bg-muted p-[5px] transition-colors duration-300 group-hover:border-brand">
               {/* Inner core */}
@@ -69,16 +71,16 @@ export function Products({ lang = "cs" }: { lang?: Lang }) {
                       </span>
                     ))}
                   </div>
-                  <a
-                    href={withLang(p.href, lang)}
+                  <span
+                    
                     className="mt-4 inline-flex items-center gap-2 font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-background/70 transition-all duration-300 group-hover:gap-3 group-hover:text-brand"
                   >
                     {t.cta} <ArrowRight className="h-3 w-3 text-brand" />
-                  </a>
+                  </span>
                 </div>
               </div>
             </div>
-          </article>
+          </Link>
         ))}
       </Reveal>
     </section>

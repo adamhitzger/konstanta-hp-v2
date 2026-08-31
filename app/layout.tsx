@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Barlow, Barlow_Condensed, JetBrains_Mono } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
 import './globals.css'
+import { GoogleTagManager } from '@next/third-parties/google'
 
 const barlow = Barlow({
   variable: '--font-barlow',
@@ -104,7 +105,7 @@ export default function RootLayout({
             },
           }}
         />
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        <GoogleTagManager gtmId={process.env.GTM_ID!}/>
       </body>
     </html>
   )

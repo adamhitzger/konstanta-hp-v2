@@ -8,6 +8,8 @@ import type { PergolaConfType } from "@/lib/schemas"
 import type { ConfPhotoItem, ConfPhotosWithMotiv, ConfProductInfo, ProductInfo } from "@/types"
 import { pergolaTypeOptions } from "@/lib/perg-content"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { CheckboxCard } from "./form-controls"
 import { PhotoLightbox, PhotoThumbs } from "./photo-lightbox"
@@ -151,8 +153,12 @@ export function PergStepTyp({
   // LED se montuje do lamel, takže dává smysl jen u bioklimatické pergoly — u ostatních
   // typů se sekce neukazuje a případná dřívější volba se ruší, ať se nepošle v poptávce.
   const isBioklimaticka = pergola === "bioklimaticka"
+  const ledSvetla = watch("ledSvetla")
   useEffect(() => {
-    if (!isBioklimaticka) setValue("ledSvetla", false)
+    if (!isBioklimaticka) {
+      setValue("ledSvetla", false)
+      setValue("ledPocet", undefined)
+    }
   }, [isBioklimaticka, setValue])
 
   return (
@@ -172,7 +178,12 @@ export function PergStepTyp({
             active={pergola === opt.value}
             galleryPhotos={photos[opt.photosKey]}
             info={info[opt.photosKey]}
-            onSelect={() => setValue("pergola", opt.value)}
+            onSelect={() => {
+              setValue("pergola", opt.value)
+              // U typů bez doplňků není v kartě co vyplňovat, takže výběr rovnou
+              // posune na další krok; bioklimatická čeká na volbu LED.
+              if (opt.value !== "bioklimaticka") onNext?.()
+            }}
             extras={
               opt.value === "bioklimaticka" ? (
                 <>
@@ -187,6 +198,18 @@ export function PergStepTyp({
                     desc={t.ledHint}
                     {...register("ledSvetla")}
                   />
+                  {ledSvetla ? (
+                    <div className="flex max-w-[12rem] flex-col gap-1.5">
+                      <Label htmlFor="perg-led-pocet">{t.ledCountLabel}</Label>
+                      <Input
+                        id="perg-led-pocet"
+                        type="number"
+                        min={1}
+                        className="border-brand/20 bg-white text-foreground"
+                        {...register("ledPocet", { valueAsNumber: true })}
+                      />
+                    </div>
+                  ) : null}
                   {onNext ? (
                     <Button type="button" size="lg" className="self-end" onClick={onNext}>
                       {st.continueStep}

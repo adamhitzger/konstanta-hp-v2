@@ -4,6 +4,7 @@ import { useActionState, useEffect, useRef, useState } from "react"
 import { CheckCircle2, Loader2, Paperclip, X } from "lucide-react"
 import toast from "react-hot-toast"
 import { sendGTMEvent } from "@next/third-parties/google"
+import { sendUserDataToGTM } from "@/lib/gtm"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { PhoneInput } from "@/components/ui/phone-input"
@@ -32,17 +33,30 @@ export function ZakladyForm({ lang = "cs" }: { lang?: Lang }) {
   const t = zakladyContent[lang] ?? zakladyContent.cs
   const [state, action, isPending] = useActionState(sendZaklady, initialState)
   const [files, setFiles] = useState<File[]>([])
+  /* Viz `contact.tsx` — hodnoty polí po nativním odeslání zmizí, `user_data` se
+     proto odchytí při submitu. `misto` je nejbližší ekvivalent města. */
+  const submitted = useRef<{ name: string; email: string; tel: string; misto: string } | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (!state.message) return
     if (state.success) {
       toast.success(state.message)
+      if (submitted.current) {
+        sendUserDataToGTM({
+          email: submitted.current.email,
+          phone: submitted.current.tel,
+          fullName: submitted.current.name,
+          city: submitted.current.misto,
+          zip: "",
+          state: lang,
+        })
+      }
       sendGTMEvent({ event: "generate_lead", form_type: "zaklady", inquired_product: "stavební příprava" })
     } else {
       toast.error(state.message)
     }
-  }, [state.success, state.message])
+  }, [state.success, state.message, lang])
 
   // Vstup je řízený stavem, ale odesílá se nativně — po každé změně ho srovnáme.
   function syncInput(next: File[]) {
@@ -64,7 +78,19 @@ export function ZakladyForm({ lang = "cs" }: { lang?: Lang }) {
   }
 
   return (
-    <form action={action} className="flex flex-col gap-6 rounded-3xl border border-border bg-background p-6 sm:p-8">
+    <form
+      action={action}
+      onSubmit={(e) => {
+        const fd = new FormData(e.currentTarget)
+        submitted.current = {
+          name: String(fd.get("name") ?? ""),
+          email: String(fd.get("email") ?? ""),
+          tel: String(fd.get("tel") ?? ""),
+          misto: String(fd.get("misto") ?? ""),
+        }
+      }}
+      className="flex flex-col gap-6 rounded-3xl border border-border bg-background p-6 sm:p-8"
+    >
       <input type="hidden" name="lang" value={lang} />
 
       <div className="flex flex-col gap-2">

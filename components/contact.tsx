@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useActionState, useEffect, useState } from "react"
+import { useActionState, useEffect, useRef, useState } from "react"
 import { Phone, Mail, CheckCircle2, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -12,6 +12,7 @@ import { Reveal, AnimatedText } from "@/components/reveal"
 import { ActionResponse, Contact as ContactType } from "@/types"
 import toast from 'react-hot-toast';
 import { sendGTMEvent } from "@next/third-parties/google";
+import { sendUserDataToGTM } from "@/lib/gtm"
 import { sendContact } from "@/lib/actions"
 import { contactContent, type Lang } from "@/lib/translations"
 
@@ -31,19 +32,33 @@ export function Contact({ lang = "cs" }: { lang?: Lang }) {
   const contactGroups = t.groups.map((g, i) => ({ title: g.title, ...contactPhones[i] }))
 
   const [state, action, isPending] = useActionState(sendContact, actionState)
+
+  /* Formulář se odesílá nativně přes `action`, takže po úspěchu už hodnoty polí nikde
+     nejsou — `user_data` pro rozšířené konverze se proto odchytí při odeslání. */
+  const submitted = useRef<{ name: string; email: string; tel: string } | null>(null)
     
     useEffect(() => {
         if (!state.success && state.message) {
             toast.error(state.message);
         }else if(state.success && state.message){
             toast.success(state.message);
+            if (submitted.current) {
+              sendUserDataToGTM({
+                email: submitted.current.email,
+                phone: submitted.current.tel,
+                fullName: submitted.current.name,
+                city: "",
+                zip: "",
+                state: lang,
+              })
+            }
             sendGTMEvent({
               event: 'generate_lead',
               form_type: 'kontakt',       // nebo "kontakt" / "poptávka"
               inquired_product: 'oplocení',  // nebo "oplocení"
             })
           }
-    }, [state.success, state.message]);
+    }, [state.success, state.message, lang]);
 
   return (
     <section id="kontakt" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
@@ -99,7 +114,18 @@ export function Contact({ lang = "cs" }: { lang?: Lang }) {
                 <p className="text-muted-foreground">{t.successText}</p>
               </div>
             ) : (
-              <form action={action} className="flex flex-col gap-5">
+              <form
+                action={action}
+                onSubmit={(e) => {
+                  const fd = new FormData(e.currentTarget)
+                  submitted.current = {
+                    name: String(fd.get("name") ?? ""),
+                    email: String(fd.get("email") ?? ""),
+                    tel: String(fd.get("tel") ?? ""),
+                  }
+                }}
+                className="flex flex-col gap-5"
+              >
                 <input type="hidden" name="lang" value={lang} />
                 <Reveal variant="right" childSelector="[data-f]" stagger={0.1} className="flex flex-col gap-5">
                   <div data-f className="grid gap-5 sm:grid-cols-2">
