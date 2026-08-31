@@ -143,3 +143,19 @@ export function MountIcon(props: IconProps) {
     </svg>
   )
 }
+
+/** Stínění — slunce nad markýzou se svěšenými screenovými roletami. */
+export function ShadeIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      {/* slunce nad stříškou */}
+      <circle cx="12" cy="4.6" r="2.1" />
+      <path d="M12 .8v.9M12 7.5v.9M8.3 2.5l.6.7M15.1 2.5l-.6.7" />
+      {/* markýza */}
+      <path d="M3 13.5 12 10l9 3.5" />
+      <path d="M3 13.5h18" />
+      {/* svěšené rolety */}
+      <path d="M6.5 13.5v6M12 13.5v7.5M17.5 13.5v6" />
+    </svg>
+  )
+}

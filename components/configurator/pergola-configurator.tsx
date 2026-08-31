@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState, useTransition } from "react"
+import { useMemo, useRef, useState, useTransition } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AnimatePresence } from "framer-motion"
@@ -14,18 +14,19 @@ import { Button } from "@/components/ui/button"
 import { KonfProgress } from "./konf-progress"
 import { KonfSuccess } from "./konf-success"
 import { KonfPending } from "./konf-pending"
-import { PergolaTypeIcon, MountIcon, PaintIcon, ContactIcon } from "./konf-icons"
+import { PergolaTypeIcon, MountIcon, ShadeIcon, PaintIcon, ContactIcon } from "./konf-icons"
 import { Slide } from "./slide"
 import { PergStepTyp } from "./perg-step-typ"
 import { PergStepUpevneni } from "./perg-step-upevneni"
+import { PergStepStineni } from "./perg-step-stineni"
 import { PergStepBarva } from "./perg-step-barva"
 import { PergStepKontakt } from "./perg-step-kontakt"
 import { pergContent, type Lang } from "@/lib/translations"
 
 const LAST_STEP = pergContent.cs.steps.length - 1
 
-// Pořadí musí odpovídat `pergContent.<lang>.steps` (Typ a stínění, Upevnění, Barva, Kontakt).
-const stepIcons = [PergolaTypeIcon, MountIcon, PaintIcon, ContactIcon]
+// Pořadí musí odpovídat `pergContent.<lang>.steps` (Typ, Upevnění, Stínění, Barva, Kontakt).
+const stepIcons = [PergolaTypeIcon, MountIcon, ShadeIcon, PaintIcon, ContactIcon]
 
 const emptyPhotos: ConfPhotosWithMotiv = {
   jednokridla: [],
@@ -70,7 +71,14 @@ export function PergolaConfigurator({
     mode: "all",
     defaultValues: { a: false, b: false, c: false, d: false },
   })
-  const { handleSubmit, reset, getValues } = methods
+  const { handleSubmit, reset, getValues, watch } = methods
+
+  // Přístřešek nemá stínění, ale střešní krytinu — 3. krok se podle typu jen přejmenuje.
+  const pergolaTyp = watch("pergola")
+  const steps = useMemo(
+    () => t.steps.map((label, i) => (i === 2 && pergolaTyp === "pristresek" ? t.stepRoof : label)),
+    [t, pergolaTyp],
+  )
 
   const scrollToTop = () => {
     setTimeout(() => topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 80)
@@ -81,11 +89,6 @@ export function PergolaConfigurator({
     switch (currentStep) {
       case 0: {
         if (!values.pergola) return t.validation.pergola
-        if (values.pergola === "pristresek") {
-          if (!values.material) return t.validation.material
-        } else if (!values.stineni) {
-          return t.validation.stineni
-        }
         return null
       }
       case 1: {
@@ -93,6 +96,15 @@ export function PergolaConfigurator({
         return null
       }
       case 2: {
+        // U přístřešku je z tohoto kroku „Střešní krytina" — stínění se tam neřeší.
+        if (values.pergola === "pristresek") {
+          if (!values.material) return t.validation.material
+        } else if (!values.stineni) {
+          return t.validation.stineni
+        }
+        return null
+      }
+      case 3: {
         if (!values.barva) return t.validation.barva
         return null
       }
@@ -177,7 +189,7 @@ export function PergolaConfigurator({
 
       {/* Bez `gap` a bez paddingu na wrapperu — viz komentář v `configurator.tsx`. */}
       <div ref={topRef} className="scroll-mt-24 rounded-3xl border border-border bg-card sm:grid sm:grid-cols-[240px_1fr] lg:grid-cols-[280px_1fr]">
-        <KonfProgress step={step} steps={t.steps} icons={stepIcons} lang={lang} />
+        <KonfProgress step={step} steps={steps} icons={stepIcons} lang={lang} />
 
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onValid, onInvalid)} className="flex min-w-0 flex-col gap-10 p-5 sm:p-8">
@@ -185,7 +197,7 @@ export function PergolaConfigurator({
               <AnimatePresence mode="wait" custom={direction} initial={false}>
                 {step === 0 && (
                   <Slide key="typ" direction={direction}>
-                    <PergStepTyp photos={photos} info={info} lang={lang} />
+                    <PergStepTyp photos={photos} info={info} onNext={goNext} lang={lang} />
                   </Slide>
                 )}
                 {step === 1 && (
@@ -194,11 +206,16 @@ export function PergolaConfigurator({
                   </Slide>
                 )}
                 {step === 2 && (
+                  <Slide key="stineni" direction={direction}>
+                    <PergStepStineni lang={lang} />
+                  </Slide>
+                )}
+                {step === 3 && (
                   <Slide key="barva" direction={direction}>
                     <PergStepBarva onNext={goNext} lang={lang} />
                   </Slide>
                 )}
-                {step === 3 && (
+                {step === 4 && (
                   <Slide key="kontakt" direction={direction}>
                     <PergStepKontakt lang={lang} />
                   </Slide>

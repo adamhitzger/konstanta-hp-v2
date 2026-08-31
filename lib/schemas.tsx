@@ -82,6 +82,8 @@ export const pergolaSchema = z.object({
   kRohu: z.boolean().optional(),
   rozmeryPkRohu: rozmeryObjekt,
   stineni: z.string().optional(),
+  /** LED osvětlení lamel — volitelný doplněk, nabízí se jen u bioklimatické pergoly. */
+  ledSvetla: z.boolean().optional(),
   barva: z.string(),
   a: z.boolean(),
   b: z.boolean(),

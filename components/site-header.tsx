@@ -6,7 +6,7 @@ import Link from "next/link"
 import { Phone, Mail, ChevronDown, X } from "lucide-react"
 import { getNavItems, hasChildren, HEADER_OFFSET, type NavLeaf } from "@/components/nav/nav-data"
 import { LangSwitcher } from "@/components/nav/lang-switcher"
-import { FixedIcons } from "@/components/fixed-icons"
+import { CalcCtaButton, FixedIcons } from "@/components/fixed-icons"
 import { navContent, withLang, type Lang } from "@/lib/translations"
 
 type LenisLike = {
@@ -307,9 +307,11 @@ export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
         </div>
 
         {/* ---- Mobile controls ---- */}
-        {/* Poptávka je i tady na plovoucí liště (`FixedIcons`), v hlavičce zbyl jen
-            přepínač jazyka a hamburger — na úzkém displeji se tlačítko o místo prát nemusí. */}
-        <div className="flex items-center gap-3 xl:hidden">
+        {/* Pod `xl` se svislý pruh „Kalkulace zdarma" schová (ležel by přes obsah),
+            takže hlavní CTA sedí přímo tady mezi logem a hamburgerem. `min-w-0`
+            s `truncate` na tlačítku, aby na nejužších displejích lištu nerozstřelilo. */}
+        <div className="flex min-w-0 items-center gap-2 xl:hidden">
+          <CalcCtaButton lang={lang} className="min-w-0 truncate" />
           <button
             ref={hamburgerRef}
             type="button"

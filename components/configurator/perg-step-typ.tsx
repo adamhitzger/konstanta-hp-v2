@@ -1,17 +1,18 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState, type ReactNode } from "react"
 import Image from "next/image"
-import { Check, ThumbsUp } from "lucide-react"
+import { Check, MoveRight, ThumbsUp } from "lucide-react"
 import { useFormContext } from "react-hook-form"
 import type { PergolaConfType } from "@/lib/schemas"
 import type { ConfPhotoItem, ConfPhotosWithMotiv, ConfProductInfo, ProductInfo } from "@/types"
-import { pergolaTypeOptions, stineniOptions, stranyOptions, strechaMaterialOptions } from "@/lib/perg-content"
+import { pergolaTypeOptions } from "@/lib/perg-content"
+import { Button } from "@/components/ui/button"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { CheckboxCard } from "./form-controls"
 import { PhotoLightbox, PhotoThumbs } from "./photo-lightbox"
 import { ProductInfoLink } from "./product-info-dialog"
-import { CheckboxCard } from "./form-controls"
-import { pergolaTypeLabels, stineniLabels, stranyLabels, strechaMaterialLabels, pergStepTypContent, photoGalleryContent, productSelectContent, type Lang } from "@/lib/translations"
+import { pergolaTypeLabels, pergStepTypContent, photoGalleryContent, productSelectContent, type Lang } from "@/lib/translations"
 import { StepTitle } from "./step-title"
 import { cn } from "@/lib/utils"
 
@@ -33,6 +34,7 @@ function PergolaTypeTile({
   galleryPhotos,
   info,
   onSelect,
+  extras,
   lang = "cs",
 }: {
   value: string
@@ -42,6 +44,8 @@ function PergolaTypeTile({
   galleryPhotos?: ConfPhotoItem[]
   info?: ProductInfo
   onSelect: () => void
+  /** Doplňky, které se po výběru rozbalí ve spodní oranžové části karty (u bioklimatické LED světla). */
+  extras?: ReactNode
   lang?: Lang
 }) {
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -54,10 +58,12 @@ function PergolaTypeTile({
       onClick={onSelect}
       className={cn(
         // Shodné s `ProductSection`: karta zůstává bílá, výběr nese jen oranžový rámeček.
-        "flex cursor-pointer flex-col rounded-2xl border-2 bg-card p-5 text-left transition-colors",
+        // Padding drží vnitřní obal, ne karta — spodní blok doplňků tak jde přes celou šířku.
+        "flex cursor-pointer flex-col overflow-hidden rounded-2xl border-2 bg-card text-left transition-colors",
         active ? "border-brand" : "border-border",
       )}
     >
+      <div className="flex flex-1 flex-col p-5">
       {/* Stejná skladba jako produktová karta v `product-section.tsx`: model a fotky
           nahoře roztažené přes `flex-1`, dole název a tlačítko výběru — dlaždice v řadě
           tak končí ve stejné rovině i s různým počtem fotek realizací. */}
@@ -105,8 +111,20 @@ function PergolaTypeTile({
         </span>
       </div>
 
-      {photos.length > 0 ? (
-        <PhotoLightbox photos={photos} title={label} open={lightboxOpen} onOpenChange={setLightboxOpen} lang={lang} />
+        {photos.length > 0 ? (
+          <PhotoLightbox photos={photos} title={label} open={lightboxOpen} onOpenChange={setLightboxOpen} lang={lang} />
+        ) : null}
+      </div>
+
+      {/* Oranžově podbarvená patka zvolené karty — stejná jako rozměry u karet upevnění.
+          `stopPropagation`, aby klik na zaškrtávátko nebo tlačítko nespustil `onSelect` karty. */}
+      {active && extras ? (
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="flex cursor-default flex-col gap-4 border-t border-brand/25 bg-brand/25 p-5"
+        >
+          {extras}
+        </div>
       ) : null}
     </div>
   )
@@ -115,24 +133,27 @@ function PergolaTypeTile({
 export function PergStepTyp({
   photos,
   info = {},
+  onNext,
   lang = "cs",
 }: {
   photos: ConfPhotosWithMotiv
   info?: ConfProductInfo
+  /** Zkratka na další krok přímo z rozbalené karty — viz `product-section.tsx`. */
+  onNext?: () => void
   lang?: Lang
 }) {
   const { watch, setValue, register } = useFormContext<PergolaConfType>()
   const pergola = watch("pergola")
-  const stineni = watch("stineni")
-  const material = watch("material")
   const t = pergStepTypContent[lang] ?? pergStepTypContent.cs
   const typeT = pergolaTypeLabels[lang] ?? pergolaTypeLabels.cs
-  const stineniT = stineniLabels[lang] ?? stineniLabels.cs
-  const materialT = strechaMaterialLabels[lang] ?? strechaMaterialLabels.cs
-  const stranyT = stranyLabels[lang] ?? stranyLabels.cs
+  const st = productSelectContent[lang] ?? productSelectContent.cs
 
-  const isPristresek = pergola === "pristresek"
-  const isZimniZahrada = pergola === "zimni_zahrada"
+  // LED se montuje do lamel, takže dává smysl jen u bioklimatické pergoly — u ostatních
+  // typů se sekce neukazuje a případná dřívější volba se ruší, ať se nepošle v poptávce.
+  const isBioklimaticka = pergola === "bioklimaticka"
+  useEffect(() => {
+    if (!isBioklimaticka) setValue("ledSvetla", false)
+  }, [isBioklimaticka, setValue])
 
   return (
     <div className="flex flex-col gap-8">
@@ -152,72 +173,33 @@ export function PergStepTyp({
             galleryPhotos={photos[opt.photosKey]}
             info={info[opt.photosKey]}
             onSelect={() => setValue("pergola", opt.value)}
+            extras={
+              opt.value === "bioklimaticka" ? (
+                <>
+                  <div>
+                    <h3 className="font-heading text-lg font-bold">{t.ledTitle}</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">{t.ledDesc}</p>
+                  </div>
+                  <CheckboxCard
+                    id="perg-led"
+                    className="border-brand/20 bg-white"
+                    label={t.ledLabel}
+                    desc={t.ledHint}
+                    {...register("ledSvetla")}
+                  />
+                  {onNext ? (
+                    <Button type="button" size="lg" className="self-end" onClick={onNext}>
+                      {st.continueStep}
+                      <MoveRight />
+                    </Button>
+                  ) : null}
+                </>
+              ) : undefined
+            }
             lang={lang}
           />
         ))}
       </RadioGroup>
-
-      {isPristresek ? (
-        <div>
-          <h2 className="font-heading text-xl font-bold">{t.roofTitle}</h2>
-          <p className="mt-1 mb-3 text-muted-foreground">{t.roofDesc}</p>
-          <RadioGroup value={material ?? ""} onValueChange={(v) => setValue("material", v as string)} className="grid grid-cols-2 gap-4 sm:max-w-md">
-            {strechaMaterialOptions.map((opt) => (
-              <label
-                key={opt.value}
-                className={cn("flex cursor-pointer flex-col items-center gap-2 rounded-2xl border-2 bg-card p-4 text-center transition-colors hover:border-brand/40", material === opt.value ? "border-brand" : "border-border")}
-              >
-                <Image src={opt.image} alt={materialT[opt.value] ?? opt.label} width={160} height={160} className="aspect-square w-full max-w-[140px] rounded-xl bg-background object-contain p-3" />
-                <span className="flex items-center gap-1.5 text-sm font-semibold">
-                  <RadioGroupItem value={opt.value} />
-                  {materialT[opt.value] ?? opt.label}
-                </span>
-              </label>
-            ))}
-          </RadioGroup>
-        </div>
-      ) : (
-        <>
-          <div>
-            <StepTitle pre={t.shadeTitlePre} accent={t.shadeTitleAccent} post={t.shadeTitlePost} className="text-xl sm:text-xl" />
-            <p className="mt-1 mb-3 text-muted-foreground">{t.shadeDesc}</p>
-            <RadioGroup value={stineni ?? ""} onValueChange={(v) => setValue("stineni", v as string)} className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-              {stineniOptions
-                .filter((o) => !o.onlyNonZimniZahrada || !isZimniZahrada)
-                .map((opt) => (
-                  <label
-                    key={opt.value}
-                    className={cn("flex cursor-pointer flex-col items-center gap-2 rounded-2xl border-2 bg-card p-4 text-center transition-colors hover:border-brand/40", stineni === opt.value ? "border-brand" : "border-border")}
-                  >
-                    {opt.image ? (
-                      <Image src={opt.image} alt={stineniT[opt.value] ?? opt.label} width={220} height={220} className="aspect-square w-full max-w-[220px] rounded-xl bg-background object-contain p-3" />
-                    ) : (
-                      <span className="flex aspect-square w-full max-w-[220px] items-center justify-center rounded-xl border border-dashed border-border text-xs text-muted-foreground">
-                        {t.noShade}
-                      </span>
-                    )}
-                    <span className="flex items-center gap-1.5 text-sm font-semibold">
-                      <RadioGroupItem value={opt.value} />
-                      {stineniT[opt.value] ?? opt.label}
-                    </span>
-                  </label>
-                ))}
-            </RadioGroup>
-          </div>
-
-          <div>
-            <h2 className="font-heading text-xl font-bold">{t.sidesTitle}</h2>
-            <p className="mt-1 mb-3 text-muted-foreground">{t.sidesDesc}</p>
-            {/* Karty, ne drobné inline zaškrtávátko — strany stínění jsou plnohodnotná
-                volba kroku a mají vypadat jako ostatní výběry v konfigurátoru. */}
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {stranyOptions.map((s) => (
-                <CheckboxCard key={s.name} id={`perg-strana-${s.name}`} label={stranyT[s.name] ?? s.label} {...register(s.name)} />
-              ))}
-            </div>
-          </div>
-        </>
-      )}
     </div>
   )
 }

@@ -7,10 +7,30 @@ import { fixedIconsContent, withLang, type Lang } from "@/lib/translations"
 const PHONE = "+420 770 169 411"
 
 /**
+ * Tlačítko „Kalkulace zdarma" do mobilní hlavičky.
+ *
+ * Svislý pruh vpravo (viz `FixedIcons`) se na úzkém displeji nezobrazuje — ležel by
+ * přes obsah stránky — a tenhle odkaz ho tam nahrazuje mezi logem a hamburgerem.
+ * Bydlí ve stejném souboru jako pruh, aby cíl i popisek zůstaly na jednom místě.
+ */
+export function CalcCtaButton({ lang = "cs", className }: { lang?: Lang; className?: string }) {
+  const t = fixedIconsContent[lang] ?? fixedIconsContent.cs
+
+  return (
+    <Link
+      href={withLang("/konf", lang)}
+      className={`flex h-10 items-center justify-center rounded-lg bg-brand px-3 font-mono text-[10px] font-semibold tracking-[0.06em] whitespace-nowrap text-brand-foreground uppercase transition-colors duration-300 hover:bg-foreground hover:text-background focus-visible:outline-none motion-reduce:transition-none ${className ?? ""}`}
+    >
+      {t.calc}
+    </Link>
+  )
+}
+
+/**
  * Plovoucí lišta poptávky — přebírá roli CTA „Poptat řešení", které v hlavičce
  * ubíralo místo logu a menu (předloha: `FixedIcons` ze starého projektu `konstantahp`).
  *
- *  - vlevo úzké ikony (telefon, e-mail), které po najetí vyjedou i s popiskem,
+ *  - vlevo úzké oranžové ikony (telefon, e-mail), které po najetí vyjedou i s popiskem,
  *  - vpravo svislý pruh „Kalkulace zdarma" otočený o 90° — hlavní konverzní odkaz,
  *    proto je jediný a text u něj nese celý pruh, ne ikona.
  *
@@ -38,7 +58,7 @@ export function FixedIcons({ lang = "cs" }: { lang?: Lang }) {
             /* `w-11 → hover:w-56`: v klidu je vidět jen ikona, popisek se vysune až
                po najetí. Šířka se animuje na kontejneru, text uvnitř je `whitespace-nowrap`,
                aby se během přechodu nelámal do dvou řádků. */
-            className="group flex h-11 w-11 items-center overflow-hidden rounded-r-xl bg-foreground text-background transition-[width,background-color] duration-500 ease-in-out hover:w-56 hover:bg-brand hover:text-brand-foreground focus-visible:w-56 focus-visible:outline-none motion-reduce:transition-none"
+            className="group flex h-11 w-11 items-center overflow-hidden rounded-r-xl bg-brand text-brand-foreground transition-[width,background-color] duration-500 ease-in-out hover:w-56 hover:bg-foreground hover:text-background focus-visible:w-56 focus-visible:outline-none motion-reduce:transition-none"
           >
             <span className="flex h-11 w-11 shrink-0 items-center justify-center">
               <Icon className="h-4 w-4" />
@@ -51,11 +71,11 @@ export function FixedIcons({ lang = "cs" }: { lang?: Lang }) {
       </div>
 
       {/* ---- Pravý pruh: kalkulace zdarma ---- */}
-      {/* Na rozdíl od levého sloupce svítí i na mobilu — po odebrání CTA z hlavičky
-          je to na úzkém displeji jediný stále viditelný odkaz na poptávku. */}
+      {/* Skrytý pod `xl` — tam, kde hlavička přepíná na hamburger, se stejný odkaz
+          vysází jako `CalcCtaButton` mezi logo a hamburger (viz `SiteHeader`). */}
       <Link
         href={withLang("/konf", lang)}
-        className="group fixed top-1/2 right-0 z-40 flex h-60 w-11 -translate-y-1/2 items-center justify-center rounded-l-xl bg-foreground text-background transition-colors duration-300 hover:bg-brand hover:text-brand-foreground focus-visible:outline-none motion-reduce:transition-none"
+        className="group fixed top-1/2 right-0 z-40 hidden h-60 w-11 -translate-y-1/2 items-center justify-center rounded-l-xl bg-brand text-brand-foreground transition-colors duration-300 hover:bg-foreground hover:text-background focus-visible:outline-none motion-reduce:transition-none xl:flex"
       >
         {/* Rotace textu, ne celého pruhu — pruh tak drží svou šířku i poloměr rohů. */}
         <span className="rotate-90 font-mono text-[12px] font-semibold tracking-[0.16em] whitespace-nowrap uppercase">
