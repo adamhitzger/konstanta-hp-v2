@@ -45,7 +45,7 @@ export const gateProducts: GateProductConfig[] = [
   {
     id: "dvoukridla",
     label: "Otočná brána dvoukřídlá",
-    image: "/modely/lamark/dvoukridla.webp",
+    image: "/modely/brany/dvoukridla.webp",
     enabledField: "dvoukridla",
     countField: "celkem2K",
     arrayField: "rozmery2KBran",
@@ -74,7 +74,7 @@ export const gateProducts: GateProductConfig[] = [
   {
     id: "posuvna",
     label: "Brána posuvná po kolejnici",
-    image: "/modely/lamark/posuvna.webp",
+    image: "/modely/brany/posuvna.webp",
     enabledField: "posuvna",
     countField: "celkemP",
     arrayField: "rozmeryPBran",
