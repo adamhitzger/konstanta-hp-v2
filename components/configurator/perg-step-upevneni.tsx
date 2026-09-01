@@ -15,8 +15,10 @@ import { cn } from "@/lib/utils"
 /**
  * Karta způsobu upevnění pergoly. Vizuálně i strukturou kopíruje `ProductSection`
  * z konfigurátoru oplocení (bílá karta s oranžovým rámečkem při výběru, oranžově
- * podbarvená spodní část s rozměry), jen místo počtu sad rozměrů drží jedno
- * zaškrtnutí — způsobů upevnění se dá zvolit víc, ale každý jen jednou.
+ * podbarvená spodní část s rozměry).
+ *
+ * Upevnění je výlučné — jedna pergola stojí buď samostatně, nebo u stěny, nebo
+ * v rohu. Karty jsou proto zaškrtávátka jen vizuálně; výběr jedné odznačí ostatní.
  */
 function MountOption({
   field,
@@ -34,6 +36,20 @@ function MountOption({
   const { register, watch, setValue } = useFormContext<PergolaConfType>()
   const checked = Boolean(watch(field))
   const st = productSelectContent[lang] ?? productSelectContent.cs
+
+  /**
+   * Přepnutí výběru. Rozměry odznačeného upevnění se musí zahodit — `shouldUnregister`
+   * je `false`, takže by v hodnotách formuláře zůstaly i po odškrtnutí a při novém
+   * zaškrtnutí by se vynořila stará čísla. Do e-mailu se sice nedostanou (`PergMail`
+   * si hlídá i příznak), ale jedou v příloze `data.json` a mate obsluhu.
+   */
+  const select = (next: boolean) => {
+    for (const opt of mountOptions) {
+      const isThis = opt.field === field
+      setValue(opt.field, isThis ? next : false)
+      if (!isThis || !next) setValue(opt.rozmeryField, undefined)
+    }
+  }
 
   return (
     <div
@@ -76,7 +92,7 @@ function MountOption({
               type="checkbox"
               className="sr-only"
               checked={checked}
-              onChange={(e) => setValue(field, e.target.checked)}
+              onChange={(e) => select(e.target.checked)}
             />
             {checked ? <ThumbsUp className="size-4 shrink-0 text-white" /> : null}
             {checked ? st.selected : st.select}

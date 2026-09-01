@@ -1082,19 +1082,25 @@ const ws = wb.addWorksheet(ti.sheetName);
 
 if(!data.brana){
   // `id` odpovídá klíčům v `gateLabels` — název řádku se z nich přeloží.
+  // `enabled` je zaškrtnutí karty produktu. Bez něj by se do nabídky naceňovaly
+  // i rozměry brány, kterou zákazník mezitím odebral: odškrtnutí sice pole rozměrů
+  // maže (`ProductSection.setCount(0)`), ale `shouldUnregister` je `false`, takže na
+  // tom stojí jediný `setValue`. Cena zákazníkovi odejde e-mailem, tak ji radši
+  // vážeme na příznak, ne jen na to, že v poli něco zbylo.
   const brany = [
-    { id: "dvoukridla", data: data.rozmery2KBran },
-    { id: "jednokridla", data: data.rozmeryKBran },
-    { id: "posuvna", data: data.rozmeryPBran },
-    { id: "samonosna", data: data.rozmerySBran },
-    { id: "telSam", data: data.rozmeryTSBran },
-    { id: "telPoj", data: data.rozmeryTPBran },
-    { id: "atypicka", data: data.rozmeryABran },
-    { id: "sekcni", data: data.rozmerySekBran },
-    { id: "skladaci", data: data.rozmerySklBran },
+    { id: "dvoukridla", enabled: data.dvoukridla, data: data.rozmery2KBran },
+    { id: "jednokridla", enabled: data.jednokridla, data: data.rozmeryKBran },
+    { id: "posuvna", enabled: data.posuvna, data: data.rozmeryPBran },
+    { id: "samonosna", enabled: data.samonosna, data: data.rozmerySBran },
+    { id: "telSam", enabled: data.telSam, data: data.rozmeryTSBran },
+    { id: "telPoj", enabled: data.telPoj, data: data.rozmeryTPBran },
+    { id: "atypicka", enabled: data.atypicka, data: data.rozmeryABran },
+    { id: "sekcni", enabled: data.sekcni, data: data.rozmerySekBran },
+    { id: "skladaci", enabled: data.skladaci, data: data.rozmerySklBran },
   ];
 
   brany.forEach((b) => {
+    if (!b.enabled) return;
     const result = calculateBrana(b.id, lang, sazbaDph, ws, b.data);
     celkem += result.bezDPH;
     rows+=(result.html);

@@ -100,20 +100,9 @@ export const pergolaSchema = z.object({
   kRohu: z.boolean().optional(),
   rozmeryPkRohu: rozmeryObjekt,
   stineni: z.string().optional(),
-  /** LED osvětlení lamel — volitelný doplněk, nabízí se jen u bioklimatické pergoly. */
   ledSvetla: z.boolean().optional(),
-  /** Počet kusů LED světel; dává smysl jen se zaškrtnutým `ledSvetla`. */
   ledPocet: optionalNumberFromInput,
   barva: z.string(),
-  /**
-   * Strany pergoly k zastínění (A–D) — čte je `PergMail` do rekapitulace v e-mailu
-   * a popisky k nim jsou v `stranyLabels` / `sidesDesc`. Zatím je ale žádný krok
-   * konfigurátoru nenastavuje, takže drží jen na `defaultValues` v
-   * pergola-configurator.tsx. Bez `optional()` by smazání toho jednoho řádku
-   * defaultů shodilo odesílání pergol úplně stejně tiše jako kdysi `kovani`.
-   * `optional()` (ne `nullish()`) stačí — nejsou registrované přes `register()`,
-   * takže z nich nikdy nepřijde `null`, jen `false` nebo `undefined`.
-   */
   a: z.boolean().optional(),
   b: z.boolean().optional(),
   c: z.boolean().optional(),
@@ -153,8 +142,6 @@ const branaRozmery = z.object({
     pocet: z.number().optional(),
     pohon: z.boolean().optional(),
     tahoma: z.boolean().optional(),
-    // Výztužná tyč křídla — nabízí se jen u křídlových bran (dvoukřídlá, jednokřídlá),
-    // u posuvných a teleskopických nemá konstrukčně smysl.
     tyc: z.boolean().optional(),
 })
 
