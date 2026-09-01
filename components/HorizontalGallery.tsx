@@ -204,7 +204,7 @@ export default function HorizontalGallery({ lang = "cs" }: { lang?: Lang }) {
 
         {/* ---- CTA dole – konstantní přes všechny slidy ---- */}
         <div
-          className="absolute inset-x-0 z-20 flex justify-center px-6"
+          className="md:hidden absolute inset-x-0 z-20 flex justify-center px-6"
           style={{ bottom: '6vh' }}
         >
           <a

@@ -17,6 +17,7 @@ import PergMail from "@/components/PergMail";
 import ZabMail from "@/components/ZabMail";
 import ZakladyMail from "@/components/ZakladyMail";
 import os from 'os';
+import { randomUUID } from 'crypto';
 import  fs  from 'fs';
 import { ConfPhotos } from "@/types";
 import { CONF_IMGS_QUERY, PERG_IMGS_QUERY, ZAB_IMGS_QUERY } from "@/sanity/lib/queries";
@@ -1155,9 +1156,13 @@ if(data.dilce && data.rozmeryDilcu  && data.rozmeryDilcu.length > 0){
  })
  const fullHtml = htmlToPdf(data.fullname,data.email, data.phoneNumber, data.address, data.obec,photo1, photo2, photo3, rows, sazbaDph,data.message, data.company, lang)
  const tmpDir = os.tmpdir();
- const filePath = path.join(tmpDir, "kalkulace.xlsx");
- const pdfFile = path.join(tmpDir, "kalkulace.pdf");
- const jsonPath = path.join(tmpDir, "data.json");
+ // Jména musí být unikátní na volání: warm Vercel instance zvládne dvě poptávky
+ // naráz a na pevném `kalkulace.xlsx` si navzájem přepíšou (nebo smažou) přílohy.
+ // Zákazníkovi pak dorazí cizí kalkulace, nebo příloha chybí úplně.
+ const tmpId = randomUUID();
+ const filePath = path.join(tmpDir, `kalkulace-${tmpId}.xlsx`);
+ const pdfFile = path.join(tmpDir, `kalkulace-${tmpId}.pdf`);
+ const jsonPath = path.join(tmpDir, `data-${tmpId}.json`);
   ws.eachRow((row) => {
     const cell = row.getCell(1); // První sloupec (index 1)
     cell.fill = {
@@ -1178,22 +1183,23 @@ if(data.dilce && data.rozmeryDilcu  && data.rozmeryDilcu.length > 0){
     console.log("✅ Excel vytvořen jako kalkulace.xlsx");
   });
 
-  await fs.writeFile(
-    jsonPath,
-    JSON.stringify(data, null, 2),
-    (err) => {
-  if (err) {
-    console.error('Error writing Data.json:', err);
-    return;
+  // Callbackové `fs.*` se nedají awaitovat — `await fs.writeFile(..., cb)` čeká na
+  // `undefined` a jede dál, takže na pomalejším disku (Vercel /tmp) mohl nodemailer
+  // sáhnout na ještě nenapsaný soubor. Promise API se čeká doopravdy.
+  await fs.promises.writeFile(jsonPath, JSON.stringify(data, null, 2))
+
+  // Když se PDF nevyrobí (na Vercelu např. nedostupný chromium-pack), nabídka
+  // odejde bez něj — přílohu s neexistující cestou by nodemailer stejně shodil.
+  let pdfOk = true
+  try {
+    await generatePdf(fullHtml, pdfFile)
+    console.log("PDF vytvořeno!")
+  } catch (error) {
+    pdfOk = false
+    console.error("Nepodařilo se vygenerovat PDF nabídky:", error)
   }
-  console.log('Data.json written successfully!');
-}
-  )
 
-   await generatePdf(fullHtml, pdfFile).then(() => console.log("PDF vytvořeno!"))
-
-  .catch(console.error);
-  return {filePath, pdfFile, jsonPath}
+  return { filePath, pdfFile: pdfOk ? pdfFile : null, jsonPath }
 }
 
 export async function getWorkByCat(filter: string){
@@ -1442,8 +1448,21 @@ export async function sendConf(
 
       const data = validatedData.data;
       const isCompany = data.company && data.company.length>0 ? true : false
-      const filePath2 = await createXlsx(data, isCompany,photos.branka[0], photos.dvoukridla[0], photos.ploty[0], lang
-        )
+      // Ilustrační fotky z `confPhotos` nemusí být vyplněné — prázdné pole vrací GROQ
+      // jako null a chybějící dokument jako undefined, takže přímé `photos.branka[0]`
+      // shodí celou akci na `Cannot read properties of undefined (reading '0')`.
+      // Do nabídky se fotka prostě nedá (`htmlToPdf` si prázdné odfiltruje).
+      const brankaFoto = photos?.branka?.[0] ?? ""
+      const branaFoto = photos?.dvoukridla?.[0] ?? ""
+      const plotFoto = photos?.ploty?.[0] ?? ""
+      if (!brankaFoto || !branaFoto || !plotFoto) {
+        console.warn("CONF_IMGS_QUERY nevrátil všechny ilustrační fotky:", {
+          branka: photos?.branka?.length ?? 0,
+          dvoukridla: photos?.dvoukridla?.length ?? 0,
+          ploty: photos?.ploty?.length ?? 0,
+        })
+      }
+      const filePath2 = await createXlsx(data, isCompany, brankaFoto, branaFoto, plotFoto, lang)
 if (!filePath2) {
   console.error("Chyba: createXlsx nevrátil platnou cestu k souboru.");
   return {
@@ -1500,10 +1519,13 @@ const html = await render(ConfMail({userName: data.fullname,
             filename: "kalkulace.xlsx",
             path: filePath2.filePath
           },
-          {
-            filename: "kalkulace.pdf",
-            path: filePath2.pdfFile
-          },
+          // `pdfFile` je null, když se PDF nevygenerovalo — příloha se pak vynechá.
+          ...(filePath2.pdfFile
+            ? [{
+                filename: "kalkulace.pdf",
+                path: filePath2.pdfFile
+              }]
+            : []),
           {
             filename: "data.json",
             path: filePath2.jsonPath
@@ -1522,20 +1544,18 @@ const html = await render(ConfMail({userName: data.fullname,
       //mailOptions.attachments?.push({filename: "kalkulace.xlsx",path: filePath2})
 
       const sendMail = await transporter.sendMail(mailOptions);
-      await fs.unlink(filePath2.filePath, (err) => {
-      if (err) throw err;
-        console.log('xlsx was deleted');
-      })
-
-      await fs.unlink(filePath2.pdfFile, (err) => {
-      if (err) throw err;
-        console.log('pdf was deleted');
-      })
-
-      await fs.unlink(filePath2.jsonPath, (err) => {
-      if (err) throw err;
-        console.log('json was deleted');
-      })
+      // Původní `fs.unlink(path, cb)` s `throw err` uvnitř callbacku házelo mimo
+      // try/catch — na Vercelu to shodilo celou funkci místo vrácení chyby.
+      // Úklid /tmp je best-effort, případný neúspěch jen zalogujeme.
+      await Promise.all(
+        [filePath2.filePath, filePath2.pdfFile, filePath2.jsonPath]
+          .filter((p): p is string => Boolean(p))
+          .map((p) =>
+            fs.promises.unlink(p).catch((err) => {
+              console.error(`Nepodařilo se smazat dočasný soubor ${p}:`, err)
+            }),
+          ),
+      )
       console.log(sendMail.messageId)
       console.log(sendMail.response)
 

@@ -32,6 +32,11 @@ const MAX_FILES = 5
 export function ZakladyForm({ lang = "cs" }: { lang?: Lang }) {
   const t = zakladyContent[lang] ?? zakladyContent.cs
   const [state, action, isPending] = useActionState(sendZaklady, initialState)
+  /* Server action vrací u neúspěchu `errors` i `inputs` — chyby vypisujeme u polí
+     (jinak zákazník vidí jen obecný toast a neví, co opravit) a hodnoty vracíme
+     zpátky do inputů, protože nativní submit jinak formulář vyprázdní. */
+  const fieldError = (field: keyof ZakladyType) => state.errors?.[field]?.[0]
+  const prev = state.inputs
   const [files, setFiles] = useState<File[]>([])
   /* Viz `contact.tsx` — hodnoty polí po nativním odeslání zmizí, `user_data` se
      proto odchytí při submitu. `misto` je nejbližší ekvivalent města. */
@@ -104,22 +109,26 @@ export function ZakladyForm({ lang = "cs" }: { lang?: Lang }) {
         <div data-f className="grid gap-5 sm:grid-cols-2">
           <div className="flex flex-col gap-2">
             <Label htmlFor="zaklady-name">{t.labels.name}</Label>
-            <Input id="zaklady-name" name="name" required placeholder={t.placeholders.name} />
+            <Input id="zaklady-name" name="name" required minLength={3} defaultValue={prev?.name} placeholder={t.placeholders.name} />
+            {fieldError("name") ? <p className="text-sm text-destructive">{fieldError("name")}</p> : null}
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="zaklady-phone">{t.labels.phone}</Label>
-            <PhoneInput id="zaklady-phone" name="tel" required placeholder={t.placeholders.phone} />
+            <PhoneInput id="zaklady-phone" name="tel" required defaultValue={prev?.tel} placeholder={t.placeholders.phone} />
+            {fieldError("tel") ? <p className="text-sm text-destructive">{fieldError("tel")}</p> : null}
           </div>
         </div>
 
         <div data-f className="grid gap-5 sm:grid-cols-2">
           <div className="flex flex-col gap-2">
             <Label htmlFor="zaklady-email">{t.labels.email}</Label>
-            <Input id="zaklady-email" name="email" type="email" required placeholder={t.placeholders.email} />
+            <Input id="zaklady-email" name="email" type="email" required defaultValue={prev?.email} placeholder={t.placeholders.email} />
+            {fieldError("email") ? <p className="text-sm text-destructive">{fieldError("email")}</p> : null}
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="zaklady-misto">{t.labels.misto}</Label>
-            <Input id="zaklady-misto" name="misto" required placeholder={t.placeholders.misto} />
+            <Input id="zaklady-misto" name="misto" required minLength={2} defaultValue={prev?.misto} placeholder={t.placeholders.misto} />
+            {fieldError("misto") ? <p className="text-sm text-destructive">{fieldError("misto")}</p> : null}
           </div>
         </div>
 
@@ -137,18 +146,31 @@ export function ZakladyForm({ lang = "cs" }: { lang?: Lang }) {
                 value={s.id}
                 label={s.label}
                 desc={s.desc}
+                defaultChecked={prev?.sluzby?.some((v) => v === s.id)}
               />
             ))}
           </div>
           {/* Jediné pole formuláře, které neumí nativní `required` — chybu tedy vypisujeme. */}
-          {state.errors?.sluzby ? (
-            <p className="text-sm text-destructive">{state.errors.sluzby[0]}</p>
+          {fieldError("sluzby") ? (
+            <p className="text-sm text-destructive">{fieldError("sluzby")}</p>
           ) : null}
         </fieldset>
 
         <div data-f className="flex flex-col gap-2">
           <Label htmlFor="zaklady-msg">{t.labels.message}</Label>
-          <Textarea id="zaklady-msg" name="msg" rows={6} required placeholder={t.placeholders.message} />
+          {/* `minLength`/`maxLength` musí sedět se `zakladySchema.msg` — bez nich projde
+              nativní validací i „Test" a formulář se odmítne až na serveru. */}
+          <Textarea
+            id="zaklady-msg"
+            name="msg"
+            rows={6}
+            required
+            minLength={10}
+            maxLength={2000}
+            defaultValue={prev?.msg}
+            placeholder={t.placeholders.message}
+          />
+          {fieldError("msg") ? <p className="text-sm text-destructive">{fieldError("msg")}</p> : null}
         </div>
 
         <div data-f className="flex flex-col gap-3">
