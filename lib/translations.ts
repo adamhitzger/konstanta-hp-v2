@@ -695,30 +695,29 @@ export const realizacePageContent = {
 // TESTIMONIALS (testimonials.tsx) — jména necháváme, překládá se jen text
 // ---------------------------------------------------------------------------
 
+// Recenze samotné chodí ze Sanity (`REVIEWS_QUERY` → `buildReviews`), tady zůstávají
+// jen texty okolo. Fotka u recenze je záběr realizace daného zákazníka, ne portrét.
 export const testimonialsContent = {
   cs: {
     heading: "Hodnocení od našich klientů",
-    reviews: [
-      { name: "Petr Novák", place: "Brno", text: "Naprostá spokojenost. Plot i brána vypadají skvěle a montáž proběhla rychle a čistě. Doporučuji.", project: "Hliníkový plot" },
-      { name: "Jana Dvořáková", place: "Praha", text: "Profesionální přístup od zaměření až po montáž. Konečně plot, o který se nemusíme starat.", project: "Plot s posuvnou bránou" },
-      { name: "Martin Svoboda", place: "Olomouc", text: "Skvělá komunikace a férová cena. Pergola s lamelami předčila naše očekávání.", project: "Bioklimatická pergola" },
-    ],
+    photoAlt: (name: string) => `Realizace pro zákazníka ${name}`,
+    ratingAlt: (rating: number) => `Hodnoceno ${rating} z 5 hvězdiček`,
+    sourceLink: "Zobrazit na Google",
+    sourceAlt: (name: string) => `Zobrazit hodnocení od ${name} na Google`,
   },
   sk: {
     heading: "Hodnotenia od našich klientov",
-    reviews: [
-      { name: "Petr Novák", place: "Brno", text: "Absolútna spokojnosť. Plot aj brána vyzerajú skvele a montáž prebehla rýchlo a čisto. Odporúčam.", project: "Hliníkový plot" },
-      { name: "Jana Dvořáková", place: "Praha", text: "Profesionálny prístup od zamerania až po montáž. Konečne plot, o ktorý sa nemusíme starať.", project: "Plot s posuvnou bránou" },
-      { name: "Martin Svoboda", place: "Olomouc", text: "Skvelá komunikácia a férová cena. Pergola s lamelami prekonala naše očakávania.", project: "Bioklimatická pergola" },
-    ],
+    photoAlt: (name: string) => `Realizácia pre zákazníka ${name}`,
+    ratingAlt: (rating: number) => `Hodnotené ${rating} z 5 hviezdičiek`,
+    sourceLink: "Zobraziť na Google",
+    sourceAlt: (name: string) => `Zobraziť hodnotenie od ${name} na Google`,
   },
   de: {
     heading: "Bewertungen unserer Kunden",
-    reviews: [
-      { name: "Petr Novák", place: "Brünn", text: "Absolut zufrieden. Zaun und Tor sehen großartig aus, die Montage verlief schnell und sauber. Empfehlenswert.", project: "Aluminiumzaun" },
-      { name: "Jana Dvořáková", place: "Prag", text: "Professionelles Vorgehen vom Aufmaß bis zur Montage. Endlich ein Zaun, um den wir uns nicht kümmern müssen.", project: "Zaun mit Schiebetor" },
-      { name: "Martin Svoboda", place: "Olmütz", text: "Großartige Kommunikation und ein fairer Preis. Die Lamellenpergola hat unsere Erwartungen übertroffen.", project: "Bioklimatische Pergola" },
-    ],
+    photoAlt: (name: string) => `Projekt für Kunde ${name}`,
+    ratingAlt: (rating: number) => `Mit ${rating} von 5 Sternen bewertet`,
+    sourceLink: "Auf Google ansehen",
+    sourceAlt: (name: string) => `Bewertung von ${name} auf Google ansehen`,
   },
 }
 

@@ -13,16 +13,17 @@ import { SiteFooter } from "@/components/site-footer"
 import HorizontalGallery from "@/components/HorizontalGallery"
 import { getLang } from "@/lib/translations"
 import { sanityFetch } from "@/sanity/lib/client"
-import { IG_FEED, REALIZACE_BANNERS_QUERY } from "@/sanity/lib/queries"
+import { IG_FEED, REALIZACE_BANNERS_QUERY, REVIEWS_QUERY } from "@/sanity/lib/queries"
 import { buildRealizaceTeaser } from "@/lib/realizace"
-import type { IgPost } from "@/types"
+import { buildReviews } from "@/lib/reviews"
+import type { IgPost, ReviewDoc } from "@/types"
 
 export default async function Page({
   searchParams,
 }: {
   searchParams: Promise<{ lang?: string }>
 }) {
-  const [{ lang: langParam }, igPosts, realizaceDocs] = await Promise.all([
+  const [{ lang: langParam }, igPosts, realizaceDocs, reviewDocs] = await Promise.all([
     searchParams,
     sanityFetch<IgPost[] | null>({ query: IG_FEED }).catch((error) => {
       console.error("Nepodařilo se načíst Instagram feed ze Sanity:", error)
@@ -34,9 +35,14 @@ export default async function Page({
       console.error("Nepodařilo se načíst úvodní fotky realizací ze Sanity:", error)
       return null
     }),
+    sanityFetch<ReviewDoc[] | null>({ query: REVIEWS_QUERY }).catch((error) => {
+      console.error("Nepodařilo se načíst recenze ze Sanity:", error)
+      return null
+    }),
   ])
   const lang = getLang(langParam)
   const realizace = buildRealizaceTeaser(realizaceDocs)
+  const reviews = buildReviews(reviewDocs, lang)
 
   return (
     <SmoothScroll lang={lang}>
@@ -49,8 +55,7 @@ export default async function Page({
           <Products lang={lang} />
           <Process lang={lang} />
           <WhyUs lang={lang} />
-          <Realizace items={realizace} lang={lang} />
-          <Testimonials lang={lang} />
+          <Testimonials reviews={reviews} lang={lang} />
           <Social posts={igPosts ?? []} lang={lang} />
           <Contact lang={lang} />
         </main>

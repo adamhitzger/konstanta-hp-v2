@@ -229,3 +229,32 @@ export interface Sections {
   ploty: string;
   pergoly: string;
 }
+
+/** Raw dokument `reviews` ze Studia, jak ho vrací `REVIEWS_QUERY`. Všechno je
+ * volitelné — rozdělaná recenze se dá ve Studiu uložit i bez textu a jména. */
+export interface ReviewDoc {
+  _id: string;
+  author_name?: string;
+  author_url?: string;
+  /** Hodnocení česky. */
+  text?: string;
+  /** Hodnocení slovensky. */
+  skText?: string;
+  /** Hodnocení německy. */
+  njText?: string;
+  rating?: number;
+  image?: string;
+}
+
+/** Recenze připravená k vykreslení — text už vybraný podle jazyka stránky. */
+export interface Review {
+  /** `_id` dokumentu, aby marquee měla stabilní klíče i po přeskládání ve Studiu. */
+  id: string;
+  name: string;
+  text: string;
+  /** 1–5, kreslí se z něj hvězdičky. */
+  rating: number;
+  image?: string;
+  /** Odkaz na hodnocení na Googlu (`author_url`). */
+  url?: string;
+}

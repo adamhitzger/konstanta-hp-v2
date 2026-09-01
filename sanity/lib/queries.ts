@@ -272,7 +272,10 @@ export const CERTIFICATES_QUERY = groq`*[_type == "certificate" && defined(cert.
   "size": cert.asset->size
 }`
 
-export const REVIEWS_QUERY = groq`*[_type == "reviews"]{
+// Nejnovější recenze první. Bez `order()` je pořadí dané `_id`, takže nově přidané
+// hodnocení by skončilo někde uprostřed marquee.
+export const REVIEWS_QUERY = groq`*[_type == "reviews"] | order(_createdAt desc){
+    _id,
     author_name,
     author_url,
     text,
