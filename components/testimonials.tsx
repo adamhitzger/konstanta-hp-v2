@@ -35,40 +35,54 @@ function ReviewCard({
   t: (typeof testimonialsContent)["cs"]
   clone?: boolean
 }) {
-  return (
-    <figure className="flex w-72 shrink-0 flex-col overflow-hidden rounded-3xl border border-border bg-card">
+  const card = (
+    <figure className="flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-colors duration-300 group-hover/card:border-brand/50">
       <div className="relative aspect-[4/3] overflow-hidden">
         <Image
           src={r.image || "/placeholder.svg"}
           alt={t.photoAlt(r.name)}
           fill
           sizes="288px"
-          className="object-cover"
+          className="object-cover transition-transform duration-500 group-hover/card:scale-105"
         />
       </div>
       <blockquote className="flex flex-1 flex-col gap-4 p-6">
         <Stars rating={r.rating} label={t.ratingAlt(r.rating)} />
         {/* Recenze z Googlu jsou různě dlouhé — bez ořezu by nejdelší z nich natáhla
             výšku všech karet v pásu a u těch krátkých by zůstalo prázdné místo.
-            Celé znění si zákazník otevře odkazem pod podpisem. */}
+            Celé znění si zákazník otevře prokliknutím karty. */}
         <p className="line-clamp-4 text-base leading-relaxed text-pretty text-foreground/65">„{r.text}"</p>
         <figcaption className="mt-auto">
           <p className="font-heading font-bold">{r.name}</p>
           {r.url ? (
-            <a
-              href={r.url}
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-              tabIndex={clone ? -1 : undefined}
-              aria-label={t.sourceAlt(r.name)}
-              className="text-base text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
-            >
+            // Odkaz je celá karta (viz níž), tohle je jen její vizuální výzva k akci.
+            <span className="text-base text-muted-foreground underline-offset-4 transition-colors group-hover/card:text-foreground group-hover/card:underline">
               {t.sourceLink}
-            </a>
+            </span>
           ) : null}
         </figcaption>
       </blockquote>
     </figure>
+  )
+
+  // Recenze bez `author_url` zůstane obyčejnou kartou — odkaz nikam by byl horší
+  // než žádný.
+  if (!r.url) return <div className="w-72 shrink-0">{card}</div>
+
+  return (
+    <a
+      href={r.url}
+      target="_blank"
+      rel="noopener noreferrer nofollow"
+      tabIndex={clone ? -1 : undefined}
+      /* Odkazem je celá karta, jejíž obsah (figure + blockquote) Chrome do názvu
+         odkazu nesloží — bez labelu by čtečka hlásila jen „odkaz". Obsah karty
+         zůstává v accessibility stromu, label ho nepřebíjí. */
+      aria-label={t.sourceAlt(r.name)}
+      className="group/card block w-72 shrink-0"
+    >
+      {card}
+    </a>
   )
 }
 

@@ -108,10 +108,18 @@ async function getChromiumPath(): Promise<string> {
 
   if (!downloadPromise) {
     const chromium = (await import("@sparticuz/chromium-min")).default;
-    downloadPromise = chromium.executablePath(CHROMIUM_PACK_URL).then((p) => {
-      cachedExecutablePath = p;
-      return p;
-    });
+    downloadPromise = chromium
+      .executablePath(CHROMIUM_PACK_URL)
+      .then((p) => {
+        cachedExecutablePath = p;
+        return p;
+      })
+      .catch((error) => {
+        // Bez tohohle by se neúspěšné stažení zacyklilo: `downloadPromise` by
+        // zůstala navždy zamítnutá a instance funkce by už PDF nikdy nevyrobila.
+        downloadPromise = null;
+        throw error;
+      });
   }
 
   return downloadPromise;
@@ -130,12 +138,20 @@ export async function generatePdf(html: string, outputPath: string) {
       const chromium = (await import("@sparticuz/chromium-min")).default;
       puppeteer = await import("puppeteer-core");
 
+      // Nabídka nepotřebuje WebGL a SwiftShader stojí ve funkci stovky MB paměti.
+      // Musí se nastavit před přečtením `chromium.args` — ovlivňuje výsledné flagy.
+      chromium.setGraphicsMode = false;
+
       const executablePath = await getChromiumPath();
 
+      // Binárka z `chromium-min` je `headless_shell`. `headless: true` jí posílá
+      // `--headless=new`, který neumí — prohlížeč sice naběhne, ale spadne během
+      // tisku. Sparticuz proto předepisuje `headless: "shell"` i v `defaultArgs`.
       launchOptions = {
-        ...launchOptions,
-        args: chromium.args,
+        args: await puppeteer.defaultArgs({ args: chromium.args, headless: "shell" }),
+        defaultViewport: { width: 1240, height: 1754, deviceScaleFactor: 1 },
         executablePath,
+        headless: "shell",
       };
     } else {
       puppeteer = await import("puppeteer");
@@ -144,19 +160,26 @@ export async function generatePdf(html: string, outputPath: string) {
     browser = await puppeteer.launch(launchOptions);
     const page = await browser.newPage();
 
-    await page.setContent(html, {
-      waitUntil: "load",
-    });
+    // Když se ilustrační fotky nestihnou stáhnout, vytiskneme nabídku i tak —
+    // text a ceny jsou důležitější. Obsah je v tu chvíli už nastavený, čekalo se
+    // jen na `load`.
+    await page
+      .setContent(html, { waitUntil: "load", timeout: 20_000 })
+      .catch((error: unknown) => {
+        console.warn("PDF: obsah se nenačetl do 20 s, tiskne se bez čekání:", error);
+      });
 
-    const pdf = await page.pdf({
+    await page.pdf({
       path: outputPath,
       format: "A4",
       printBackground: true,
       preferCSSPageSize: true,
+      timeout: 60_000,
     });
-
   } finally {
-    if (browser) await browser.close();
+    // Po pádu rendereru je target zavřený a `close()` hodí vlastní chybu, která
+    // by přebila tu původní.
+    if (browser) await browser.close().catch(() => {});
   }
 }
 
@@ -233,6 +256,23 @@ function buildProductRowsString( item: string, mnozstvi: string): string {
 }
 
 /**
+ * Fotky do nabídky se zmenšují přes Sanity image CDN. V PDF mají 38 mm na výšku,
+ * ale ze Studia chodí originály (6000 × 3376 px, přes 4 MB) a Chromium si každý
+ * rozbalí do bitmapy kolem 80 MB. Na Vercelu, kde `chromium.args` obsahuje
+ * `--single-process`, to shodí renderer i s prohlížečem a `page.pdf()` skončí na
+ * `Protocol error (Page.printToPDF): Target closed`.
+ * `fit=max` (ne `crop`) drží původní poměr stran — ořez si dělá CSS přes
+ * `object-fit: cover`, takže se výřez oproti dosavadním nabídkám nemění, jen
+ * rozlišení. 900 px na šířku vychází v tisku na ~390 dpi.
+ */
+const PDF_IMG = "w=900&h=1400&fit=max&auto=format";
+
+const pdfPhoto = (url: string): string =>
+  url.includes("cdn.sanity.io")
+    ? `${url}${url.includes("?") ? "&" : "?"}${PDF_IMG}`
+    : url;
+
+/**
  * Sestaví HTML cenové nabídky pro `generatePdf` (Puppeteer → A4 PDF).
  *
  * Stránkování si dokument řídí sám: obsah je v `#src` jako seznam bloků a skript
@@ -285,7 +325,7 @@ function htmlToPdf(
   const cisloNabidky = `CN-${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}`;
   const platnostDo = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
 
-  const photos = [photo1, photo2, photo3].filter(Boolean);
+  const photos = [photo1, photo2, photo3].filter(Boolean).map(pdfPhoto);
 
   // Ikony sítí — stejné cesty jako `components/social-icons.tsx`, aby PDF a web
   // ukazovaly stejný tvar. Čtverec drží barvu sítě, glyf je bílý.
