@@ -49,8 +49,9 @@ function ReviewCard({
       <blockquote className="flex flex-1 flex-col gap-4 p-6">
         <Stars rating={r.rating} label={t.ratingAlt(r.rating)} />
         {/* Recenze z Googlu jsou různě dlouhé — bez ořezu by nejdelší z nich natáhla
-            výšku všech karet v pásu. */}
-        <p className="line-clamp-6 text-base leading-relaxed text-pretty text-foreground/65">„{r.text}"</p>
+            výšku všech karet v pásu a u těch krátkých by zůstalo prázdné místo.
+            Celé znění si zákazník otevře odkazem pod podpisem. */}
+        <p className="line-clamp-4 text-base leading-relaxed text-pretty text-foreground/65">„{r.text}"</p>
         <figcaption className="mt-auto">
           <p className="font-heading font-bold">{r.name}</p>
           {r.url ? (

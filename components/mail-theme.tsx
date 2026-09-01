@@ -54,7 +54,7 @@ export const mailFonts = {
 } as const
 
 /** Odkud se tahají obrázky do e-mailu. Musí to být veřejná absolutní URL. */
-export const MAIL_ASSET_BASE = "https://konstantahp.cz"
+export const MAIL_ASSET_BASE = "https://konstanta-hp-v2.vercel.app"
 export const MAIL_LOGO_LIGHT = `${MAIL_ASSET_BASE}/email/logo-konstanta-light.png`
 
 const CARD_WIDTH = 600
