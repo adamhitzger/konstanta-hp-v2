@@ -32,6 +32,11 @@ export function Contact({ lang = "cs" }: { lang?: Lang }) {
   const contactGroups = t.groups.map((g, i) => ({ title: g.title, ...contactPhones[i] }))
 
   const [state, action, isPending] = useActionState(sendContact, actionState)
+  /* `sendContact` vrací u neúspěchu `errors` i `inputs`. Bez nich zákazník viděl jen
+     obecný toast, nevěděl, které pole je špatně, a nativní odeslání mu formulář
+     navíc vyprázdnilo — musel psát všechno znovu. */
+  const fieldError = (field: keyof ContactType) => state.errors?.[field]?.[0]
+  const prev = state.inputs
 
   /* Formulář se odesílá nativně přes `action`, takže po úspěchu už hodnoty polí nikde
      nejsou — `user_data` pro rozšířené konverze se proto odchytí při odeslání. */
@@ -131,26 +136,43 @@ export function Contact({ lang = "cs" }: { lang?: Lang }) {
                   <div data-f className="grid gap-5 sm:grid-cols-2">
                     <div className="flex flex-col gap-2">
                       <Label htmlFor="name">{t.labels.name}</Label>
-                      <Input id="name" name="name" required placeholder={t.placeholders.name} />
+                      <Input id="name" name="name" required minLength={3} defaultValue={prev?.name} placeholder={t.placeholders.name} />
+                      {fieldError("name") ? <p className="text-sm text-destructive">{fieldError("name")}</p> : null}
                     </div>
                     <div className="flex flex-col gap-2">
                       <Label htmlFor="phone">{t.labels.phone}</Label>
-                      <PhoneInput id="phone" name="tel" required placeholder={t.placeholders.phone} />
+                      <PhoneInput id="phone" name="tel" required defaultValue={prev?.tel} placeholder={t.placeholders.phone} />
+                      {fieldError("tel") ? <p className="text-sm text-destructive">{fieldError("tel")}</p> : null}
                     </div>
                   </div>
                    <div data-f className="grid gap-5 sm:grid-cols-2">
                   <div data-f className="flex flex-col gap-2">
                     <Label htmlFor="email">{t.labels.email}</Label>
-                    <Input id="email" name="email" type="email" required placeholder={t.placeholders.email} />
+                    <Input id="email" name="email" type="email" required defaultValue={prev?.email} placeholder={t.placeholders.email} />
+                    {fieldError("email") ? <p className="text-sm text-destructive">{fieldError("email")}</p> : null}
                   </div>
                   <div data-f className="flex flex-col gap-2">
                     <Label htmlFor="company">{t.labels.company}</Label>
-                    <Input id="company" name="company" type="company" required placeholder={t.placeholders.company} />
+                    {/* Nepovinné: `contactSchema.company` je `optional()`. S `required`
+                        se soukromá osoba bez firmy nedostala přes nativní validaci
+                        a formulář jí vůbec nešlo odeslat. `type="company"` navíc
+                        není platný typ inputu. */}
+                    <Input id="company" name="company" defaultValue={prev?.company} placeholder={t.placeholders.company} />
                   </div>
                   </div>
                   <div data-f className="flex flex-col gap-2">
                     <Label htmlFor="message">{t.labels.message}</Label>
-                    <Textarea id="message" rows={4} name="msg" placeholder={t.placeholders.message} />
+                    {/* `maxLength` musí sedět s `contactSchema.msg` — bez něj zákazník
+                        napsal delší zprávu a server ji odmítl až po odeslání. */}
+                    <Textarea
+                      id="message"
+                      rows={4}
+                      name="msg"
+                      maxLength={2000}
+                      defaultValue={prev?.msg}
+                      placeholder={t.placeholders.message}
+                    />
+                    {fieldError("msg") ? <p className="text-sm text-destructive">{fieldError("msg")}</p> : null}
                   </div>
                   <Button data-f type="submit" size="lg" className="font-semibold transition-transform hover:scale-[1.02]">
                     {!isPending ? <>{t.submit}</> : <Loader2 className="animate-spin"/>}

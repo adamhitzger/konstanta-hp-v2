@@ -961,8 +961,12 @@ const KOVANI_CENIK: Record<string, number> = {
   "madlo-1250": 5000,
 };
 
-/** Neznámé/nevyplněné kování spadne zpět na původní nerez kliky za 1 500 Kč. */
-const kovaniPolozka = (lang: Lang, kovani?: string) => {
+/**
+ * Neznámé/nevyplněné kování spadne zpět na původní nerez kliky za 1 500 Kč.
+ * `null` je legitimní vstup — tak posílá react-hook-form radio skupinu, ze které
+ * uživatel nic nevybral (viz `optionalRadio` v lib/schemas.tsx).
+ */
+const kovaniPolozka = (lang: Lang, kovani?: string | null) => {
   const ti = quoteItemsContent[lang] ?? quoteItemsContent.cs;
   const key = kovani ?? "";
   return key in KOVANI_CENIK

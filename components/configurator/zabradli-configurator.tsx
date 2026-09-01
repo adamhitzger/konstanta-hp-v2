@@ -171,11 +171,23 @@ export function ZabradliConfigurator({
   }
 
   const onInvalid = (errors: Record<string, { message?: string } | undefined>) => {
-    if (errors.zabradliMaterial) toast.error(t.validation.material)
-    if (errors.zabradliSklo) toast.error(t.validation.sklo)
-    if (errors.zabradliMotiv) toast.error(t.validation.motiv)
+    let shown = false
+    const show = (msg: string) => {
+      toast.error(msg)
+      shown = true
+    }
+    if (errors.zabradliMaterial) show(t.validation.material)
+    if (errors.zabradliSklo) show(t.validation.sklo)
+    if (errors.zabradliMotiv) show(t.validation.motiv)
     if (errors.fullname || errors.email || errors.phoneNumber || errors.zip || errors.address || errors.obec) {
-      toast.error(t.validation.invalidContact)
+      show(t.validation.invalidContact)
+    }
+    // Pojistka proti „kliknu na Odeslat a nic se neděje": chyba, na kterou tu není
+    // vlastní hláška (typicky uvnitř pole produktů, např. `rozmeryBranek.0.kovani`),
+    // by jinak formulář tiše zamítla bez jediné zpětné vazby.
+    if (!shown) {
+      console.error("Konfigurátor: neošetřená chyba validace", errors)
+      toast.error(t.validation.invalidOther)
     }
   }
 

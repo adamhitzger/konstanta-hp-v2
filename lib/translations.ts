@@ -1850,6 +1850,8 @@ export const konfContent = {
       invalidBarva: "Nezadali jste barvu oplocení",
       invalidMotiv: "Nevybrali jste motiv oplocení",
       invalidContact: "Zkontrolujte prosím kontaktní údaje",
+      /** Záchranná hláška pro chyby validace, na které tu není vlastní text. */
+      invalidOther: "Formulář se nepodařilo odeslat, zkontrolujte prosím vyplněné údaje",
     },
   },
   sk: {
@@ -1870,6 +1872,7 @@ export const konfContent = {
       invalidBarva: "Nezadali ste farbu oplotenia",
       invalidMotiv: "Nevybrali ste motív oplotenia",
       invalidContact: "Skontrolujte, prosím, kontaktné údaje",
+      invalidOther: "Formulár sa nepodarilo odoslať, skontrolujte, prosím, vyplnené údaje",
     },
   },
   de: {
@@ -1890,6 +1893,7 @@ export const konfContent = {
       invalidBarva: "Sie haben keine Zaunfarbe angegeben",
       invalidMotiv: "Sie haben kein Zaunmotiv ausgewählt",
       invalidContact: "Bitte überprüfen Sie Ihre Kontaktdaten",
+      invalidOther: "Das Formular konnte nicht gesendet werden, bitte überprüfen Sie Ihre Angaben",
     },
   },
 }
@@ -2410,6 +2414,8 @@ export const zabradliConfContent = {
       sklo: "Vyberte odstín skla.",
       motiv: "Vyberte motiv výplně zábradlí.",
       invalidContact: "Zkontrolujte prosím kontaktní údaje",
+      /** Záchranná hláška pro chyby validace, na které tu není vlastní text. */
+      invalidOther: "Formulář se nepodařilo odeslat, zkontrolujte prosím vyplněné údaje",
     },
   },
   sk: {
@@ -2439,6 +2445,7 @@ export const zabradliConfContent = {
       sklo: "Vyberte odtieň skla.",
       motiv: "Vyberte motív výplne zábradlia.",
       invalidContact: "Skontrolujte, prosím, kontaktné údaje",
+      invalidOther: "Formulár sa nepodarilo odoslať, skontrolujte, prosím, vyplnené údaje",
     },
   },
   de: {
@@ -2468,6 +2475,7 @@ export const zabradliConfContent = {
       sklo: "Wählen Sie den Glaston.",
       motiv: "Wählen Sie das Motiv der Geländerfüllung.",
       invalidContact: "Bitte überprüfen Sie Ihre Kontaktdaten",
+      invalidOther: "Das Formular konnte nicht gesendet werden, bitte überprüfen Sie Ihre Angaben",
     },
   },
 }
@@ -2572,6 +2580,8 @@ export const pergContent = {
       barva: "Vyberte barvu pergoly.",
       invalidBarva: "Nezadali jste barvu",
       invalidContact: "Zkontrolujte prosím kontaktní údaje",
+      /** Záchranná hláška pro chyby validace, na které tu není vlastní text. */
+      invalidOther: "Formulář se nepodařilo odeslat, zkontrolujte prosím vyplněné údaje",
     },
   },
   sk: {
@@ -2592,6 +2602,7 @@ export const pergContent = {
       barva: "Vyberte farbu pergoly.",
       invalidBarva: "Nezadali ste farbu",
       invalidContact: "Skontrolujte, prosím, kontaktné údaje",
+      invalidOther: "Formulár sa nepodarilo odoslať, skontrolujte, prosím, vyplnené údaje",
     },
   },
   de: {
@@ -2612,6 +2623,7 @@ export const pergContent = {
       barva: "Wählen Sie die Farbe der Pergola.",
       invalidBarva: "Sie haben keine Farbe angegeben",
       invalidContact: "Bitte überprüfen Sie Ihre Kontaktdaten",
+      invalidOther: "Das Formular konnte nicht gesendet werden, bitte überprüfen Sie Ihre Angaben",
     },
   },
 }

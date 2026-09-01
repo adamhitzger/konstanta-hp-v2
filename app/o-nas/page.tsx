@@ -50,7 +50,7 @@ export default async function ONasPage({
           <SilaKonstanty lang={lang} />
           <CoOcenite lang={lang} />
           <ProcesFlow lang={lang} />
-          <Certifikaty items={certificates} lang={lang} />
+          {/*<Certifikaty items={certificates} lang={lang} />*/}
           <Faq lang={lang} />
           <ZaverCta lang={lang} />
         </main>

@@ -7,7 +7,9 @@ export const contactSchema = z.object({
     email: z.string().email(),
     tel: z.string().min(1,{message: "Pole je povinné"}).regex(phoneRegex, {message: "Zadali jste číslo ve špatném formátu"}),
     company: z.string().optional(),
-    msg: z.string().max(100, {message: "Zpráva je moc dlouhá"}),
+    // 2000 znaků, ne 100 — zpráva je hlavní obsah kontaktního formuláře a strop
+    // musí sedět s `maxLength` na textarea v components/contact.tsx.
+    msg: z.string().max(2000, {message: "Zpráva je moc dlouhá"}),
 })
 
 /**
@@ -103,10 +105,19 @@ export const pergolaSchema = z.object({
   /** Počet kusů LED světel; dává smysl jen se zaškrtnutým `ledSvetla`. */
   ledPocet: optionalNumberFromInput,
   barva: z.string(),
-  a: z.boolean(),
-  b: z.boolean(),
-  c: z.boolean(),
-  d: z.boolean(),
+  /**
+   * Strany pergoly k zastínění (A–D) — čte je `PergMail` do rekapitulace v e-mailu
+   * a popisky k nim jsou v `stranyLabels` / `sidesDesc`. Zatím je ale žádný krok
+   * konfigurátoru nenastavuje, takže drží jen na `defaultValues` v
+   * pergola-configurator.tsx. Bez `optional()` by smazání toho jednoho řádku
+   * defaultů shodilo odesílání pergol úplně stejně tiše jako kdysi `kovani`.
+   * `optional()` (ne `nullish()`) stačí — nejsou registrované přes `register()`,
+   * takže z nich nikdy nepřijde `null`, jen `false` nebo `undefined`.
+   */
+  a: z.boolean().optional(),
+  b: z.boolean().optional(),
+  c: z.boolean().optional(),
+  d: z.boolean().optional(),
   fullname: z.string()
       .min(6, { message: "Krátké jméno" })
       .max(40, { message: "Jméno je moc dlouhé" }),
@@ -125,6 +136,17 @@ export const pergolaSchema = z.object({
 });
 
 // Rozměry jednoho kusu brány/branky/dílce v rámci konfigurátoru oplocení.
+/**
+ * Radio skupina, ze které uživatel nic nevybral, přijde z react-hook-form jako
+ * `null`, ne `undefined` — a `z.string().optional()` ji odmítne jako `invalid_type`.
+ * Chyba pak sedí na `rozmeryBranek.0.kovani`, což žádný `onInvalid` nehlídal, takže
+ * tlačítko „Odeslat" jen tiše nic neudělalo.
+ *
+ * Schválně `nullish()` a ne `preprocess` — preprocess mění vstupní typ schématu na
+ * `unknown` a rozbije typování `zodResolver`u v `useForm`.
+ */
+const optionalRadio = z.string().nullish();
+
 const branaRozmery = z.object({
     delka: z.number().optional(),
     vyska: z.number().optional(),
@@ -175,7 +197,8 @@ export const confSchema = z.object({
         zvonek: z.boolean().optional(),
         // Kování branky — jedna volba z `brankaKovaniOptions` (kliky M&T nebo madlo
         // 300/225/1250 mm). Ukládá se jako string, aby šly volby přidávat bez migrace.
-        kovani: z.string().optional(),
+        // Nepovinné: `sendConf` si za nevyplněné dosadí `kovaniFallback`.
+        kovani: optionalRadio,
     }).array().optional(),
     celkemBranek: z.number().optional(),
     // Sloupky se v konfigurátoru neřeší — nabízejí se až při zaměření na místě.
@@ -239,8 +262,8 @@ export const zabradliSchema = z.object({
         pocet: z.number().optional(),
     }).array().optional(),
     zabradliMaterial: z.string().min(1, {message: "Vyberte výplň zábradlí"}),
-    zabradliSklo: z.string().optional(),
-    zabradliMotiv: z.string().optional(),
+    zabradliSklo: optionalRadio,
+    zabradliMotiv: optionalRadio,
     fullname: z.string()
         .min(6, {message: "Krátké jméno"})
         .max(40, {message: "Jméno je moc dlouhé"}),
