@@ -11,8 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Reveal, AnimatedText } from "@/components/reveal"
 import { ActionResponse, Contact as ContactType } from "@/types"
 import toast from 'react-hot-toast';
-import { sendGTMEvent } from "@next/third-parties/google";
-import { sendUserDataToGTM } from "@/lib/gtm"
+import { sendGenerateLead, sendUserDataToGTM } from "@/lib/gtm"
 import { sendContact } from "@/lib/actions"
 import { contactContent, type Lang } from "@/lib/translations"
 
@@ -57,11 +56,10 @@ export function Contact({ lang = "cs" }: { lang?: Lang }) {
                 state: lang,
               })
             }
-            sendGTMEvent({
-              event: 'generate_lead',
-              form_type: 'kontakt',       // nebo "kontakt" / "poptávka"
-              inquired_product: 'oplocení',  // nebo "oplocení"
-            })
+            /* Obecný kontakt se neváže na konkrétní produkt, `inquired_product`
+               se proto nepošle vůbec — dřív tu natvrdo sedělo „oplocení“ a kazilo
+               to statistiku poptávaných produktů. */
+            sendGenerateLead("kontakt")
           }
     }, [state.success, state.message, lang]);
 

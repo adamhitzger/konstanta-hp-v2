@@ -1,16 +1,19 @@
 'use client';
 
 import { useRef } from 'react';
+import Link from 'next/link';
+import { ArrowUpRight } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { galleryContent, heroContent, type Lang } from '@/lib/translations';
+import { galleryContent, heroContent, withLang, type Lang } from '@/lib/translations';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 type Slide = {
-  title: string; // velký nápis přes fotku
+  title: string; // velký nápis přes fotku (zároveň odkaz do galerie realizací)
   label: string; // alt text
+  href: string; // kam nadpis vede — záložka kategorie v /realizace
   imgMobile: string; // fotka na výšku (mobil)
   imgDesktop: string; // fotka na šířku (desktop – méně oříznutá)
   person: string; // průhledný cutout rodiny/páru
@@ -24,13 +27,27 @@ const slideImages = [
   { imgMobile: '/produkt-pergola.png', imgDesktop: '/gallery-pergola-wide.png', person: '/gallery-fam-4.png' },
 ];
 
+/* Pořadí sedí se `slideImages` i s `galleryContent.titles`: plot, brána, branka, pergola.
+   Nadpis je klikatelný schválně — kdo ví, co hledá, nemusí odscrollovat celou lištu. */
+const slideHrefs = [
+  '/realizace?filter=ploty',
+  '/realizace?filter=brany',
+  '/realizace?filter=branky',
+  '/realizace?filter=pergoly',
+];
+
 // O kolik px se prvek maximálně posune při parallaxu (speed × BASE).
 const PARALLAX_BASE = 80;
 
 export default function HorizontalGallery({ lang = "cs" }: { lang?: Lang }) {
   const t = galleryContent[lang] ?? galleryContent.cs
   const hero = heroContent[lang] ?? heroContent.cs
-  const slides: Slide[] = slideImages.map((img, i) => ({ ...img, title: t.titles[i], label: t.labels[i] }))
+  const slides: Slide[] = slideImages.map((img, i) => ({
+    ...img,
+    title: t.titles[i],
+    label: t.labels[i],
+    href: withLang(slideHrefs[i], lang),
+  }))
   const heroHighlights = hero.highlights
   const root = useRef<HTMLDivElement>(null);
 
@@ -138,7 +155,9 @@ export default function HorizontalGallery({ lang = "cs" }: { lang?: Lang }) {
                 }}
               />
 
-              {/* Velký název řady – zůstává za postavou (jako „popisek scény") */}
+              {/* Velký název řady – zůstává za postavou (jako „popisek scény").
+                  Je to odkaz do galerie realizací dané kategorie: postava i gradient mají
+                  `pointer-events-none`, takže se klik dostane až sem i přes z-[2]. */}
               <h2
                 className="relative z-[1] select-none text-center font-heading font-extrabold uppercase leading-none text-white"
                 style={{
@@ -148,7 +167,19 @@ export default function HorizontalGallery({ lang = "cs" }: { lang?: Lang }) {
                   textShadow: '0 12px 30px rgba(0,0,0,0.45)',
                 }}
               >
-                {s.title}
+                <Link
+                  href={s.href}
+                  aria-label={`${s.label} – ${t.slideCta}`}
+                  title={t.slideCta}
+                  className="group/title inline-flex items-start gap-[0.08em] decoration-[0.06em] transition-colors duration-300 hover:text-brand  focus-visible:text-brand focus-visible:outline-none motion-reduce:transition-none"
+                >
+                  {s.title}
+                  <ArrowUpRight
+                    aria-hidden
+                    className="mt-[0.12em] h-[0.34em] w-[0.34em] shrink-0 text-brand transition-transform duration-300 group-hover/title:translate-x-1 group-focus-visible/title:translate-x-1 motion-reduce:transition-none"
+                    strokeWidth={2.5}
+                  />
+                </Link>
               </h2>
 
               {/* Rodina „ve scéně" – vlastní pro každé pozadí, nohy dole */}

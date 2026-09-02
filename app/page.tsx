@@ -1,11 +1,9 @@
 import { SiteHeader } from "@/components/site-header"
 import { SmoothScroll } from "@/components/smooth-scroll"
-import { Hero } from "@/components/hero"
 import { Stats } from "@/components/stats"
 import { Products } from "@/components/products"
 import { Process } from "@/components/process"
 import { WhyUs } from "@/components/why-us"
-import { Realizace } from "@/components/realizace"
 import { Testimonials } from "@/components/testimonials"
 import { Social } from "@/components/social"
 import { Contact } from "@/components/contact"
@@ -41,7 +39,6 @@ export default async function Page({
     }),
   ])
   const lang = getLang(langParam)
-  const realizace = buildRealizaceTeaser(realizaceDocs)
   const reviews = buildReviews(reviewDocs, lang)
 
   return (

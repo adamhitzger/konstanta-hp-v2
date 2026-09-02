@@ -19,8 +19,7 @@ import { ZabStepMotiv } from "./zab-step-motiv"
 import { StepKontakt } from "./step-kontakt"
 import { zabradliConfContent, type Lang } from "@/lib/translations"
 import { sendZabradliConf } from "@/lib/actions"
-import { sendGTMEvent } from "@next/third-parties/google"
-import { sendKonfStep, sendUserDataToGTM } from "@/lib/gtm"
+import { sendGenerateLead, sendUserDataToGTM, useKonfSteps } from "@/lib/gtm"
 
 const LAST_STEP = zabradliConfContent.cs.steps.length - 1
 
@@ -116,13 +115,17 @@ export function ZabradliConfigurator({
     }
   }
 
+  /* Měření průchodu do GTM. Hook si drží nejvyšší odeslaný krok, takže návrat
+     zpět a opětovný postup vpřed událost nepošle podruhé. */
+  const { trackStep, resetSteps } = useKonfSteps(GTM_FORM, GTM_STEPS)
+
   const goNext = () => {
     const problem = checkStepRequirement(step)
     if (problem) {
       toast.error(problem)
       return
     }
-    sendKonfStep(GTM_FORM, step, GTM_STEPS[step])
+    trackStep(step)
     setDirection(1)
     setStep((prev) => Math.min(LAST_STEP, prev + 1))
     scrollToTop()
@@ -150,12 +153,8 @@ export function ZabradliConfigurator({
         zip: data.zip,
         state: lang,
       })
-      sendKonfStep(GTM_FORM, LAST_STEP, GTM_STEPS[LAST_STEP])
-      sendGTMEvent({
-        event: "generate_lead",
-        form_type: "kalkulace",
-        inquired_product: "zábradlí",
-      })
+      trackStep(LAST_STEP)
+      sendGenerateLead("kalkulace", "zábradlí")
       setSent(true)
       scrollToTop()
     })
@@ -164,6 +163,8 @@ export function ZabradliConfigurator({
   /** Návrat z potvrzení na prázdný formulář — „Odeslat další poptávku". */
   const startOver = () => {
     reset()
+    /* „Odeslat další poptávku" = nový průchod, ne návrat — kroky se měří znovu. */
+    resetSteps()
     setStep(0)
     setDirection(1)
     setSent(false)

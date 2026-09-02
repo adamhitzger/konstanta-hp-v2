@@ -6,8 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { AnimatePresence } from "framer-motion"
 import { Loader2, MoveRight, MoveLeft } from "lucide-react"
 import toast from "react-hot-toast"
-import { sendGTMEvent } from "@next/third-parties/google"
-import { sendKonfStep, sendUserDataToGTM } from "@/lib/gtm"
+import { sendGenerateLead, sendUserDataToGTM, useKonfSteps } from "@/lib/gtm"
 import { confSchema, type ConfiguratorType } from "@/lib/schemas"
 import { gateProducts } from "@/lib/konf-content"
 import { sendConf } from "@/lib/actions"
@@ -150,13 +149,17 @@ export function Configurator({
     }
   }
 
+  /* Měření průchodu do GTM. Hook si drží nejvyšší odeslaný krok, takže návrat
+     zpět a opětovný postup vpřed událost nepošle podruhé. */
+  const { trackStep, resetSteps } = useKonfSteps(GTM_FORM, GTM_STEPS)
+
   const goNext = () => {
     const problem = checkStepRequirement(step)
     if (problem) {
       toast.error(problem)
       return
     }
-    sendKonfStep(GTM_FORM, step, GTM_STEPS[step])
+    trackStep(step)
     setDirection(1)
     setStep((prev) => Math.min(LAST_STEP, prev + 1))
     scrollToTop()
@@ -184,12 +187,8 @@ export function Configurator({
         zip: data.zip,
         state: lang,
       })
-      sendKonfStep(GTM_FORM, LAST_STEP, GTM_STEPS[LAST_STEP])
-      sendGTMEvent({
-        event: "generate_lead",
-        form_type: "kalkulace",
-        inquired_product: "oplocení",
-      })
+      trackStep(LAST_STEP)
+      sendGenerateLead("kalkulace", "oplocení")
       setSent(true)
       scrollToTop()
     })
@@ -198,6 +197,8 @@ export function Configurator({
   /** Návrat z potvrzení na prázdný formulář — „Odeslat další poptávku". */
   const startOver = () => {
     reset()
+    /* „Odeslat další poptávku" = nový průchod, ne návrat — kroky se měří znovu. */
+    resetSteps()
     setStep(0)
     setDirection(1)
     setSent(false)

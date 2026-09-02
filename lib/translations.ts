@@ -360,18 +360,23 @@ export const galleryContent = {
     labels: ["Hliníkové ploty", "Hliníkové brány", "Hliníkové branky", "Hliníkové pergoly"],
     kicker: "Hliníkové oplocení na míru",
     cta: "Nezávazná kalkulace",
+    /* Popisek klikatelného nadpisu snímku — nadpis vede rovnou na svou kategorii
+       v galerii realizací, ať nikdo nemusí odscrollovat celou lištu. */
+    slideCta: "Prohlédnout realizace",
   },
   sk: {
     titles: ["PLOTY", "BRÁNY", "BRÁNKY", "PERGOLY"],
     labels: ["Hliníkové ploty", "Hliníkové brány", "Hliníkové bránky", "Hliníkové pergoly"],
     kicker: "Hliníkové oplotenie na mieru",
     cta: "Nezáväzná kalkulácia",
+    slideCta: "Prezrieť realizácie",
   },
   de: {
     titles: ["ZÄUNE", "TORE", "TÜREN", "PERGOLEN"],
     labels: ["Aluminiumzäune", "Aluminiumtore", "Aluminiumtüren", "Aluminiumpergolen"],
     kicker: "Maßgefertigte Aluminiumzäune",
     cta: "Unverbindliche Kalkulation",
+    slideCta: "Referenzen ansehen",
   },
 }
 
@@ -408,7 +413,10 @@ export const productsContent = {
   cs: {
     heading: "Kompletní hliníkové oplocení na míru",
     badge: "4 produktové řady",
+    /* Hlavní konverzní akce karty — vede do konfigurátoru, proto je vysázená jako tlačítko. */
     cta: "Poptat",
+    /* Sekundární akce — celá karta vede sem (galerie realizací dané kategorie). */
+    galleryCta: "Prohlédnout realizace",
     items: [
       { title: "Hliníkové ploty", tags: ["Bezúdržbové", "Moderní vzhled", "Odolnost"], text: "Moderní bezúdržbové oplocení, které ochrání vaše soukromí a dodá domu reprezentativní vzhled. Vlastní patentovaný systém profilů drží pevnost i odolnost bez další péče." },
       { title: "Brány", tags: ["Posuvné", "Křídlové", "S pohonem"], text: "Vjezdové brány navrhujeme přesně na míru vašemu plotu i stavební připravenosti. Posuvná i křídlová řešení s tichými prověřenými pohony na dálkové ovládání." },
@@ -420,6 +428,7 @@ export const productsContent = {
     heading: "Kompletné hliníkové oplotenie na mieru",
     badge: "4 produktové rady",
     cta: "Dopytovať",
+    galleryCta: "Prezrieť realizácie",
     items: [
       { title: "Hliníkové ploty", tags: ["Bezúdržbové", "Moderný vzhľad", "Odolnosť"], text: "Moderné bezúdržbové oplotenie, ktoré ochráni vaše súkromie a dodá domu reprezentatívny vzhľad. Vlastný patentovaný systém profilov drží pevnosť aj odolnosť bez ďalšej starostlivosti." },
       { title: "Brány", tags: ["Posuvné", "Krídlové", "S pohonom"], text: "Vjazdové brány navrhujeme presne na mieru vášmu plotu aj stavebnej pripravenosti. Posuvné aj krídlové riešenia s tichými overenými pohonmi na diaľkové ovládanie." },
@@ -431,6 +440,7 @@ export const productsContent = {
     heading: "Komplette Aluminiumzäune nach Maß",
     badge: "4 Produktreihen",
     cta: "Anfragen",
+    galleryCta: "Referenzen ansehen",
     items: [
       { title: "Aluminiumzäune", tags: ["Wartungsfrei", "Modernes Design", "Langlebig"], text: "Moderne, wartungsfreie Einfriedung, die Ihre Privatsphäre schützt und dem Haus ein repräsentatives Aussehen gibt. Unser patentiertes Profilsystem sichert Festigkeit und Widerstandsfähigkeit ganz ohne Pflege." },
       { title: "Tore", tags: ["Schiebetore", "Flügeltore", "Mit Antrieb"], text: "Einfahrtstore planen wir exakt nach Ihrem Zaun und der baulichen Vorbereitung. Schiebe- und Flügellösungen mit leisen, bewährten Antrieben und Fernbedienung." },

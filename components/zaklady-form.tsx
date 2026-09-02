@@ -3,8 +3,7 @@
 import { useActionState, useEffect, useRef, useState } from "react"
 import { CheckCircle2, Loader2, Paperclip, X } from "lucide-react"
 import toast from "react-hot-toast"
-import { sendGTMEvent } from "@next/third-parties/google"
-import { sendUserDataToGTM } from "@/lib/gtm"
+import { sendGenerateLead, sendUserDataToGTM } from "@/lib/gtm"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { PhoneInput } from "@/components/ui/phone-input"
@@ -57,7 +56,7 @@ export function ZakladyForm({ lang = "cs" }: { lang?: Lang }) {
           state: lang,
         })
       }
-      sendGTMEvent({ event: "generate_lead", form_type: "zaklady", inquired_product: "stavební příprava" })
+      sendGenerateLead("kalkulace", "stavební příprava")
     } else {
       toast.error(state.message)
     }
