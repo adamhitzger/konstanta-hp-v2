@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react"
 import { Reveal, AnimatedText } from "@/components/reveal"
 import { productsContent, withLang, type Lang } from "@/lib/translations"
 
-const images = ["/produkt-plot.png", "/produkt-brana.png", "/produkt-branka.png", "/produkt-pergola.png"]
+const images = ["/real/Plot2.jpg", "/real/brana2.png", "/real/Branka2.jpg", "/real/pergola-2.jpg"]
 const codes = ["HP-01", "HP-02", "HP-03", "HP-04"]
 /** Pořadí sedí s `productsContent.items`: plot, brána, branka, pergola — každý
  * produkt míří na svou vlastní záložku galerie. */

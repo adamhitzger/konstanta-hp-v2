@@ -21,10 +21,10 @@ type Slide = {
 
 // Obrázky vychází z produktových řad (viz components/products.tsx); texty z lib/translations.ts.
 const slideImages = [
-  { imgMobile: '/realizace-1.png', imgDesktop: '/gallery-ploty-wide.png', person: '/gallery-fam-1.png' },
-  { imgMobile: '/hero-plot-2.png', imgDesktop: '/gallery-brany-wide.png', person: '/gallery-fam-2.png' },
-  { imgMobile: '/produkt-branka.png', imgDesktop: '/gallery-branky-wide.png', person: '/gallery-fam-3.png' },
-  { imgMobile: '/produkt-pergola.png', imgDesktop: '/gallery-pergola-wide.png', person: '/gallery-fam-4.png' },
+  { imgMobile: '/real/mobil/oploceni.png', imgDesktop: '/real/oploceni.png', person: '/gallery-fam-1.png' },
+  { imgMobile: '/real/mobil/brana-sikma.jpg', imgDesktop: '/real/brana-sikma.jpg', person: '/gallery-fam-2.png' },
+  { imgMobile: '/real/Branka.jpg', imgDesktop: '/real/Branka.jpg', person: '/gallery-fam-3.png' },
+  { imgMobile: '/real/mobil/Pergola.jpg', imgDesktop: '/real/Pergola.jpg', person: '/gallery-fam-4.png' },
 ];
 
 /* Pořadí sedí se `slideImages` i s `galleryContent.titles`: plot, brána, branka, pergola.
@@ -159,7 +159,7 @@ export default function HorizontalGallery({ lang = "cs" }: { lang?: Lang }) {
                   Je to odkaz do galerie realizací dané kategorie: postava i gradient mají
                   `pointer-events-none`, takže se klik dostane až sem i přes z-[2]. */}
               <h2
-                className="relative z-[1] select-none text-center font-heading font-extrabold uppercase leading-none text-white"
+                className="relative z-1 select-none text-center font-heading font-extrabold uppercase leading-none text-white"
                 style={{
                   marginTop: '-14vh',
                   fontSize: 'clamp(3rem, 9vw, 8rem)',
