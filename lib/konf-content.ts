@@ -1,5 +1,5 @@
 import type { ConfiguratorType } from "@/lib/schemas"
-import type { ConfPhotos } from "@/types"
+import type { ConfPhotosWithMotiv } from "@/types"
 
 /**
  * Textový a datový obsah konfigurátoru oplocení. Držet odděleně od komponent,
@@ -30,8 +30,13 @@ export type GateProductConfig = {
   enabledField: GateFieldKey
   countField: GateFieldKey
   arrayField: GateFieldKey
-  /** Klíč v `ConfPhotos` (Sanity) se skutečnými fotkami realizací tohoto typu. */
-  photosKey: keyof ConfPhotos
+  /**
+   * Klíč galerie se skutečnými fotkami realizací tohoto typu. Váže se na
+   * `ConfPhotosWithMotiv` (fotky z `productPhotos`), ne na širší `ConfPhotos` —
+   * ten má navíc `zabradli`, které mezi bránami nic neindexuje a rozbíjelo
+   * `photos[gate.photosKey]` v kroku „Brána“.
+   */
+  photosKey: keyof ConfPhotosWithMotiv
   /**
    * Křídlová brána — jen u ní se v kroku „Brána“ nabízí výztužná tyč (`tyc`).
    * U posuvných, teleskopických a sekčních bran se křídlo nevyztužuje.

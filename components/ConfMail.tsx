@@ -4,6 +4,7 @@ import type { ConfPhotos } from "@/types"
 import { gateProducts } from "@/lib/konf-content"
 import {
   type Lang,
+  confMailContent,
   gateLabels,
   localeTags,
   mailContent,
@@ -72,6 +73,8 @@ export const ConfMail = ({
   lang = "cs",
 }: KonstantaHPEmailProps) => {
   const t = mailContent[lang] ?? mailContent.cs
+  // Úvodní odstavce má ConfMail vlastní — jako jediný mail posílá v příloze kalkulaci.
+  const c = confMailContent[lang] ?? confMailContent.cs
   const locale = localeTags[lang] ?? localeTags.cs
 
   /** Jen produkty, které zákazník opravdu zaškrtl a ke kterým je v Sanity fotka. */
@@ -91,8 +94,14 @@ export const ConfMail = ({
 
       <Section className="k-pad" style={mailStyles.body}>
         <Text style={mailStyles.lead}>{`${t.salutation} ${userName},`}</Text>
-        <Text style={mailStyles.text}>{t.intro}</Text>
-        <Text style={mailStyles.text}>{t.intro2}</Text>
+        <Text style={mailStyles.text}>{c.intro}</Text>
+        <Text style={mailStyles.text}>{c.intro2}</Text>
+        <Text style={mailStyles.text}>{c.intro3}</Text>
+        <Text style={mailStyles.text}>
+          {c.signoff}
+          <br />
+          {c.team}
+        </Text>
       </Section>
 
       {selected.length > 0 && (

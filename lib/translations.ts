@@ -1097,6 +1097,8 @@ export const faqContent = {
       { q: "Zvládnete i atypický nebo svažitý terén?", a: "Ano. Svažitý terén, omezený prostor i nestandardní požadavky jsou pro nás běžná práce – každý projekt řešíme individuálně a hledáme pro něj vlastní řešení." },
       { q: "Poradíte si se servisem po letech?", a: "Konstrukce navrhujeme jako rozebíratelné, takže je jde snadno opravit po částech. Nemusíte kvůli jednomu detailu měnit celý plot." },
       { q: "Z jakého materiálu ploty vyrábíte?", a: "Pracujeme s hliníkovými systémy od ověřeného španělského dodavatele a s vlastním patentovaným komorovým profilem. Levné kompromisy nepoužíváme." },
+      { q: "Vyrábíte také ploty z oceli?", a: "Ploty z oceli nevyrábíme. Naše společnost se specializuje výhradně na výrobu a montáž hliníkového bezúdržbového oplocení. Pro hliník jsme se rozhodli záměrně – na rozdíl od oceli totiž nikdy nerezne, nekoroduje a nevyžaduje žádné opakované nátěry ani údržbu. Investice do hliníkového plotu vám tak ušetří čas i peníze do budoucna, přičemž plot si zachová svůj luxusní a stálý vzhled po desítky let." },
+      { q: "Děláte ploty na klíč?", a: "Zajistíme pro vás kompletní realizaci oplocení. Postaráme se o vše od zaměření a zemních prací až po precizní montáž posledního dílce. S námi získáváte plot na klíč a stoprocentní klid během celé stavby." },
       { q: "Kde působíte?", a: "Realizujeme zakázky po celé České republice. Napište nám lokalitu a domluvíme se na termínu zaměření." },
     ],
   },
@@ -1110,6 +1112,8 @@ export const faqContent = {
       { q: "Zvládnete aj atypický alebo svahovitý terén?", a: "Áno. Svahovitý terén, obmedzený priestor aj neštandardné požiadavky sú pre nás bežná práca – každý projekt riešime individuálne a hľadáme preň vlastné riešenie." },
       { q: "Poradíte si so servisom aj po rokoch?", a: "Konštrukcie navrhujeme ako rozoberateľné, takže sa dajú jednoducho opraviť po častiach. Nemusíte kvôli jednému detailu meniť celý plot." },
       { q: "Z akého materiálu ploty vyrábiate?", a: "Pracujeme s hliníkovými systémami od overeného španielskeho dodávateľa a s vlastným patentovaným komorovým profilom. Lacné kompromisy nepoužívame." },
+      { q: "Vyrábiate aj ploty z ocele?", a: "Ploty z ocele nevyrábame. Naša spoločnosť sa špecializuje výhradne na výrobu a montáž hliníkového bezúdržbového oplotenia. Pre hliník sme sa rozhodli zámerne – na rozdiel od ocele totiž nikdy nehrdzavie, nekoroduje a nevyžaduje žiadne opakované nátery ani údržbu. Investícia do hliníkového plota vám tak ušetrí čas aj peniaze do budúcna, pričom plot si zachová svoj luxusný a stály vzhľad na desiatky rokov." },
+      { q: "Robíte ploty na kľúč?", a: "Zabezpečíme pre vás kompletnú realizáciu oplotenia. Postaráme sa o všetko od zamerania a zemných prác až po precíznu montáž posledného dielca. S nami získavate plot na kľúč a stopercentný pokoj počas celej stavby." },
       { q: "Kde pôsobíte?", a: "Realizujeme zákazky po celom Česku. Napíšte nám lokalitu a dohodneme sa na termíne zamerania." },
     ],
   },
@@ -1123,6 +1127,8 @@ export const faqContent = {
       { q: "Schaffen Sie auch untypisches oder abschüssiges Gelände?", a: "Ja. Hanglagen, begrenzter Platz und untypische Anforderungen sind für uns Alltag – jedes Projekt behandeln wir individuell und finden dafür eine eigene Lösung." },
       { q: "Kümmern Sie sich auch nach Jahren um den Service?", a: "Wir konzipieren die Konstruktionen zerlegbar, sodass sie sich leicht in Teilen reparieren lassen. Sie müssen wegen eines Details nicht den ganzen Zaun austauschen." },
       { q: "Aus welchem Material fertigen Sie die Zäune?", a: "Wir arbeiten mit Aluminiumsystemen eines bewährten spanischen Lieferanten und einem eigenen patentierten Kammerprofil. Auf billige Kompromisse verzichten wir." },
+      { q: "Fertigen Sie auch Zäune aus Stahl?", a: "Zäune aus Stahl fertigen wir nicht. Unser Unternehmen ist ausschließlich auf die Herstellung und Montage wartungsfreier Aluminiumzäune spezialisiert. Für Aluminium haben wir uns bewusst entschieden – anders als Stahl rostet es nie, korrodiert nicht und braucht weder wiederholte Anstriche noch Pflege. Die Investition in einen Aluminiumzaun spart Ihnen künftig Zeit und Geld, und der Zaun behält sein hochwertiges, gleichbleibendes Aussehen über Jahrzehnte." },
+      { q: "Bauen Sie Zäune schlüsselfertig?", a: "Wir übernehmen die komplette Realisierung Ihres Zauns. Wir kümmern uns um alles – vom Aufmaß über die Erdarbeiten bis zur präzisen Montage des letzten Elements. Bei uns bekommen Sie einen schlüsselfertigen Zaun und volle Ruhe während der gesamten Bauzeit." },
       { q: "Wo sind Sie tätig?", a: "Wir realisieren Aufträge in ganz Tschechien. Schreiben Sie uns Ihren Standort, und wir vereinbaren einen Termin für das Aufmaß." },
     ],
   },
@@ -2782,6 +2788,10 @@ export type MailChromeContent = {
   productsHeading: string
   /** Oslovení bez jména — komponenta skládá `${salutation} ${jméno},`. */
   salutation: string
+  /**
+   * Úvodní odstavce sdílené ZabMail a PergMail. ConfMail má vlastní znění
+   * v `confMailContent` — jako jediný posílá v příloze cenovou kalkulaci.
+   */
   intro: string
   intro2: string
   companyHeading: string
@@ -2813,7 +2823,7 @@ export const mailContent: Record<Lang, MailChromeContent> = {
     intro:
       "Děkujeme, že jste si vybrali Konstanta HP pro vytvoření vaší konfigurace! Jsme potěšeni, že vás můžeme přivítat mezi našimi váženými zákazníky. Vaše důvěra v naše produkty a služby pro nás znamená vše a zavazujeme se poskytnout vám zážitek nejvyšší kvality.",
     intro2:
-      "Vaše konfigurace byla přijata a je zpracovávána s maximální péčí. Cenovou kalkulaci naleznete v přiloženém souboru. Vážíme si vašeho zájmu a těšíme se na další spolupráci.",
+      "Vaše konfigurace byla přijata a je zpracovávána s maximální péčí. Vážíme si vašeho zájmu a těšíme se na další spolupráci.",
     companyHeading: "Informace o společnosti",
     country: "Česká republika",
     ico: "IČO",
@@ -2835,14 +2845,14 @@ export const mailContent: Record<Lang, MailChromeContent> = {
   sk: {
     preview: "Ďakujeme za vytvorenie konfigurácie s Konstanta HP",
     logoAlt: "Konstanta HP — hliníkové ploty",
-    eyebrow: "Nová poptávka z konfigurátora",
+    eyebrow: "Nový dopyt z konfigurátora",
     headline: "Konfigurácia oplotenia",
     productsHeading: "Vybrané produkty",
     salutation: "Vážený/á",
     intro:
       "Ďakujeme, že ste si vybrali Konstanta HP na vytvorenie vašej konfigurácie! Teší nás, že vás môžeme privítať medzi našimi váženými zákazníkmi. Vaša dôvera v naše produkty a služby pre nás znamená všetko a zaväzujeme sa poskytnúť vám zážitok najvyššej kvality.",
     intro2:
-      "Vaša konfigurácia bola prijatá a spracúva sa s maximálnou starostlivosťou. Cenovú kalkuláciu nájdete v priloženom súbore. Vážime si váš záujem a tešíme sa na ďalšiu spoluprácu.",
+      "Vaša konfigurácia bola prijatá a spracúva sa s maximálnou starostlivosťou. Vážime si váš záujem a tešíme sa na ďalšiu spoluprácu.",
     companyHeading: "Informácie o spoločnosti",
     country: "Česká republika",
     ico: "IČO",
@@ -2871,7 +2881,7 @@ export const mailContent: Record<Lang, MailChromeContent> = {
     intro:
       "vielen Dank, dass Sie sich für Konstanta HP entschieden haben! Wir freuen uns, Sie unter unseren geschätzten Kunden begrüßen zu dürfen. Ihr Vertrauen in unsere Produkte und Leistungen bedeutet uns alles und wir verpflichten uns, Ihnen ein Erlebnis von höchster Qualität zu bieten.",
     intro2:
-      "Ihre Konfiguration ist bei uns eingegangen und wird mit größter Sorgfalt bearbeitet. Die Preiskalkulation finden Sie in der angehängten Datei. Wir schätzen Ihr Interesse und freuen uns auf die weitere Zusammenarbeit.",
+      "Ihre Konfiguration ist bei uns eingegangen und wird mit größter Sorgfalt bearbeitet. Wir schätzen Ihr Interesse und freuen uns auf die weitere Zusammenarbeit.",
     companyHeading: "Angaben zum Unternehmen",
     country: "Tschechische Republik",
     ico: "Firmennummer",
@@ -2889,6 +2899,60 @@ export const mailContent: Record<Lang, MailChromeContent> = {
     support:
       "Wenn Sie Fragen oder Anmerkungen haben, wenden Sie sich bitte jederzeit an unseren Kundenservice. Wir sind gerne für Sie da!",
     rights: "Alle Rechte vorbehalten.",
+  },
+}
+
+/**
+ * Úvodní odstavce a podpis v ConfMail. Oproti sdílenému `mailContent.intro`
+ * mluví o cenové kalkulaci — přílohu (XLSX + PDF) posílá jedině `sendConf`,
+ * ostatní konfigurátory přikládají jen fotky od zákazníka.
+ */
+export type ConfMailContent = {
+  /** Navazuje na oslovení `${salutation} ${jméno},`, proto začíná malým písmenem. */
+  intro: string
+  /** Odstavec o přiložené kalkulaci — orientační, ne závazná nabídka. */
+  intro2: string
+  /** Avízo, že se zákazníkovi ozve obchodní zástupce. */
+  intro3: string
+  /** Rozloučení nad podpisem. */
+  signoff: string
+  /** Podpis odesílatele pod rozloučením. */
+  team: string
+  /** Předmět kopie, která jde zákazníkovi — interní kopie pro `nabidky@` má vlastní. */
+  subject: string
+}
+
+export const confMailContent: Record<Lang, ConfMailContent> = {
+  cs: {
+    intro: "děkujeme za využití našeho konfigurátoru. Vaše poptávka byla úspěšně přijata.",
+    intro2:
+      "Na základě zadaných údajů jsme pro vás připravili orientační cenovou kalkulaci, kterou naleznete v příloze tohoto e-mailu. Kalkulace slouží jako základní cenový návrh a neslouží jako závazná nabídka. Konečná cena se může lišit podle konkrétních požadavků, rozsahu realizace, zaměření stavby a dalších technických okolností.",
+    intro3:
+      "Pro upřesnění technických parametrů a rozsahu dodávky vás bude v nejbližší době kontaktovat náš obchodní zástupce.",
+    signoff: "S pozdravem",
+    team: "Tým Konstanta HP",
+    subject: "Potvrzení poptávky z konfigurátoru — Konstanta HP",
+  },
+  sk: {
+    intro: "ďakujeme za využitie nášho konfigurátora. Vaša požiadavka bola úspešne prijatá.",
+    intro2:
+      "Na základe zadaných údajov sme pre vás pripravili orientačnú cenovú kalkuláciu, ktorú nájdete v prílohe tohto e-mailu. Kalkulácia slúži ako základný cenový návrh a nie je záväznou ponukou. Konečná cena sa môže líšiť podľa konkrétnych požiadaviek, rozsahu realizácie, zamerania stavby a ďalších technických okolností.",
+    intro3:
+      "Na upresnenie technických parametrov a rozsahu dodávky vás v najbližšom čase bude kontaktovať náš obchodný zástupca.",
+    signoff: "S pozdravom",
+    team: "Tím Konstanta HP",
+    subject: "Potvrdenie dopytu z konfigurátora — Konstanta HP",
+  },
+  de: {
+    intro:
+      "vielen Dank, dass Sie unseren Konfigurator genutzt haben. Ihre Anfrage ist erfolgreich bei uns eingegangen.",
+    intro2:
+      "Auf Grundlage Ihrer Angaben haben wir für Sie eine orientierende Preiskalkulation vorbereitet, die Sie im Anhang dieser E-Mail finden. Die Kalkulation ist ein erster Preisvorschlag und stellt kein verbindliches Angebot dar. Der endgültige Preis kann sich je nach konkreten Anforderungen, Umfang der Realisierung, Aufmaß vor Ort und weiteren technischen Gegebenheiten unterscheiden.",
+    intro3:
+      "Zur Abstimmung der technischen Parameter und des Lieferumfangs wird sich in Kürze unser Vertriebsmitarbeiter bei Ihnen melden.",
+    signoff: "Mit freundlichen Grüßen",
+    team: "Ihr Team von Konstanta HP",
+    subject: "Bestätigung Ihrer Anfrage aus dem Konfigurator — Konstanta HP",
   },
 }
 
@@ -3368,6 +3432,8 @@ export type QuoteItemsContent = {
   pohonPosuvna: string
   /** Hydraulická brzda — přidává se k posuvným bránám ve svahu. */
   brzda: string
+  /** Kolejnice — účtuje se u pojezdových bran (atypická, teleskopická pojezdová, posuvná). */
+  kolejnice: string
   zastrc: string
   tahoma: string
   montazBrany: string
@@ -3396,6 +3462,7 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     pohonPosuvna:
       "Pohon posuvné brány ELIXO 500 3 S M io komfort set – pohon s řídicí jednotkou a rádiovým přijímačem, 1x Somfy Master Pro Bitech – bezpečnostní fotobuňky (1 pár) dosah 10 m, 2x Odblokovací klíč (použití při výpadku proudu)",
     brzda: "Hydraulická brzda pro posuvné brány ve svahu",
+    kolejnice: "Kolejnice pro posuvnou bránu",
     zastrc: "Zástrč brány",
     tahoma:
       "Somfy TaHoma switch je centrální jednotka pro chytrou domácnost, která umožňuje ovládat a automatizovat různá zařízení v domě, jako jsou rolety, žaluzie, brány, osvětlení, topení a další",
@@ -3427,6 +3494,7 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     pohonPosuvna:
       "Pohon posuvnej brány ELIXO 500 3 S M io komfort set – pohon s riadiacou jednotkou a rádiovým prijímačom, 1x Somfy Master Pro Bitech – bezpečnostné fotobunky (1 pár) dosah 10 m, 2x Odblokovací kľúč (použitie pri výpadku prúdu)",
     brzda: "Hydraulická brzda pre posuvné brány vo svahu",
+    kolejnice: "Koľajnica pre posuvnú bránu",
     zastrc: "Zástrč brány",
     tahoma:
       "Somfy TaHoma switch je centrálna jednotka pre inteligentnú domácnosť, ktorá umožňuje ovládať a automatizovať rôzne zariadenia v dome, ako sú rolety, žalúzie, brány, osvetlenie, kúrenie a ďalšie",
@@ -3458,6 +3526,7 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     pohonPosuvna:
       "Antrieb für Schiebetore ELIXO 500 3 S M io Komfort-Set – Antrieb mit Steuereinheit und Funkempfänger, 1x Somfy Master Pro Bitech – Sicherheitslichtschranke (1 Paar), Reichweite 10 m, 2x Entriegelungsschlüssel (bei Stromausfall)",
     brzda: "Hydraulische Bremse für Schiebetore in Hanglage",
+    kolejnice: "Laufschiene für das Schiebetor",
     zastrc: "Torriegel",
     tahoma:
       "Somfy TaHoma Switch ist die Zentraleinheit für das Smart Home und ermöglicht die Steuerung und Automatisierung verschiedener Geräte im Haus wie Rollläden, Jalousien, Tore, Beleuchtung, Heizung und weitere",

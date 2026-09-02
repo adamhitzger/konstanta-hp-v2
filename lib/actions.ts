@@ -24,6 +24,7 @@ import { CONF_IMGS_QUERY, PERG_IMGS_QUERY, ZAB_IMGS_QUERY } from "@/sanity/lib/q
 import {
   type Lang,
   colorLabels,
+  confMailContent,
   gateLabels,
   getLang,
   localeTags,
@@ -1027,8 +1028,8 @@ let bezDPH: number =0;
     const brzdaCena = (id === "atypicka") ? 8000 : 0
     const tycCena = r.tyc ? r.pocet * TYC_CENA : 0;
     const montazCena = r.pocet * 4500;
-    
-    bezDPH += zaklad+pohonCena+tahomaCena+tycCena+montazCena+brzdaCena
+    const kolejniceCena = (id === "atypicka" || id === "telPoj" || id === "posuvna") ? 5000 : 0
+    bezDPH += zaklad+pohonCena+tahomaCena+tycCena+montazCena+brzdaCena+kolejniceCena
     
     const headerRow = ws.addRow([ti.header.produkt, ti.header.mnozstvi, ti.header.bezDph, ti.header.dph, ti.header.sDph])
     ws.addRow([`${name}: ${r.delka}x${r.vyska} mm`,r.pocet,money(zaklad),money(zaklad*sazbaDph), money(zaklad*(1+sazbaDph)) ]);
@@ -1056,6 +1057,10 @@ let bezDPH: number =0;
     if(id === "atypicka"){
       ws.addRow([`${ti.brzda}:`, r.pocet, money(brzdaCena), money(brzdaCena*sazbaDph), money(brzdaCena*(1+sazbaDph))]);
       html +=(buildProductRows(money, `${ti.brzda}:`, r.pocet, brzdaCena, brzdaCena*sazbaDph, Number((brzdaCena*(1+sazbaDph)).toFixed(0))))
+    }
+    if(id === "atypicka" || id === "telPoj" || id === "posuvna"){ //Kolejnice
+      ws.addRow([`${ti.kolejnice}:`, r.pocet, money(kolejniceCena), money(kolejniceCena*sazbaDph), money(kolejniceCena*(1+sazbaDph))]);
+      html +=(buildProductRows(money, `${ti.kolejnice}:`, r.pocet, kolejniceCena, kolejniceCena*sazbaDph, Number((kolejniceCena*(1+sazbaDph)).toFixed(0))))
     }
     ws.addRow([`${ti.montazBrany}:`,1, money(montazCena), money(montazCena*sazbaDph), money(montazCena*(1+sazbaDph))]);
     html +=(buildProductRows(money, `${ti.montazBrany}:`,1, montazCena, montazCena*sazbaDph, Number((montazCena*(1+sazbaDph)).toFixed(0))))
@@ -1555,13 +1560,13 @@ if (data.file && data.file.length > 0) {
     }
   }
 }
-const html = await render(ConfMail({userName: data.fullname,
+      const html = await render(ConfMail({userName: data.fullname,
           userEmail: data.email, tel: data.phoneNumber, address: data.address, city: data.obec, msg: data.message,zip: data.zip,  company: data.company, photos: photos, data: data, lang}))
       const mailOptions: any //eslint-disable-line @typescript-eslint/no-explicit-any
       = {
         from: process.env.FROM_EMAIL,
      //to: "nabidky@konstantahp.cz",
-        to: [data.email, "nabidky@konstantahp.cz"],
+        to: "nabidky@konstantahp.cz",
         subject: `Nová poptávka z konfigurátoru - ${data.fullname}`,
         html,
         attachments: [
@@ -1582,6 +1587,26 @@ const html = await render(ConfMail({userName: data.fullname,
           },
         ]
       };
+
+      const mailOptions2: any //eslint-disable-line @typescript-eslint/no-explicit-any
+      = {
+        from: process.env.FROM_EMAIL,
+     //to: "nabidky@konstantahp.cz",
+        to: data.email,
+        // Zákaznická kopie mluví na zákazníka, ne na obchod — interní kopie
+        // do `nabidky@` si nechává původní „Nová poptávka…“.
+        subject: (confMailContent[lang] ?? confMailContent.cs).subject,
+        html,
+        attachments: [
+          // `pdfFile` je null, když se PDF nevygenerovalo — příloha se pak vynechá.
+          ...(filePath2.pdfFile
+            ? [{
+                filename: "kalkulace.pdf",
+                path: filePath2.pdfFile
+              }]
+            : []),
+        ]
+      };
       console.log(urls)
       if(urls.length > 0) {
         mailOptions.attachments = mailOptions.attachments ?? [];
@@ -1594,6 +1619,7 @@ const html = await render(ConfMail({userName: data.fullname,
       //mailOptions.attachments?.push({filename: "kalkulace.xlsx",path: filePath2})
 
       const sendMail = await transporter.sendMail(mailOptions);
+      const sendMailToClient = await transporter.sendMail(mailOptions2);
       // Původní `fs.unlink(path, cb)` s `throw err` uvnitř callbacku házelo mimo
       // try/catch — na Vercelu to shodilo celou funkci místo vrácení chyby.
       // Úklid /tmp je best-effort, případný neúspěch jen zalogujeme.
@@ -1609,7 +1635,7 @@ const html = await render(ConfMail({userName: data.fullname,
       console.log(sendMail.messageId)
       console.log(sendMail.response)
 
-      if(sendMail.accepted) {
+      if(sendMail.accepted && sendMailToClient.accepted) {
         revalidate = true;
 
         console.log("Odpoved z SMTP: ",sendMail.response)
