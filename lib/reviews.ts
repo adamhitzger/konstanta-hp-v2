@@ -17,8 +17,8 @@ const CARD_IMG = "?w=576&h=432&fit=crop&auto=format"
 
 /**
  * Recenze ze Studia → data pro `Testimonials`. Vypadnou rozdělané dokumenty
- * (bez textu nebo bez podpisu) — ve Studiu jde uložit i prázdná recenze a v marquee
- * by se pak točila prázdná karta.
+ * (bez textu nebo bez podpisu) — ve Studiu jde uložit i prázdná recenze a v pásu
+ * by se pak vykreslila prázdná karta.
  */
 export function buildReviews(docs: ReviewDoc[] | null | undefined, lang: Lang): Review[] {
   if (!docs) return []

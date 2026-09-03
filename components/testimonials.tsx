@@ -1,17 +1,7 @@
-import type { CSSProperties } from "react"
 import Image from "next/image"
 import { AnimatedText } from "@/components/reveal"
 import { testimonialsContent, type Lang } from "@/lib/translations"
 import type { Review } from "@/types"
-
-/**
- * Kolik karet musí být v jedné polovině pásu, aby na širokém monitoru nebyla
- * v marquee díra. Když je recenzí ve Studiu míň, seznam se zopakuje.
- */
-const MIN_CARDS = 8
-
-/** Sekund na jednu kartu — drží rychlost posuvu stejnou bez ohledu na počet recenzí. */
-const SECONDS_PER_CARD = 3.5
 
 function Stars({ rating, label }: { rating: number; label: string }) {
   return (
@@ -25,16 +15,7 @@ function Stars({ rating, label }: { rating: number; label: string }) {
   )
 }
 
-function ReviewCard({
-  r,
-  t,
-  /** Karta z klonované poloviny pásu — je `aria-hidden`, takže z ní nesmí jít tabovat. */
-  clone,
-}: {
-  r: Review
-  t: (typeof testimonialsContent)["cs"]
-  clone?: boolean
-}) {
+function ReviewCard({ r, t }: { r: Review; t: (typeof testimonialsContent)["cs"] }) {
   const card = (
     <figure className="flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-colors duration-300 group-hover/card:border-brand/50">
       <div className="relative aspect-[4/3] overflow-hidden">
@@ -74,7 +55,6 @@ function ReviewCard({
       href={r.url}
       target="_blank"
       rel="noopener noreferrer nofollow"
-      tabIndex={clone ? -1 : undefined}
       /* Odkazem je celá karta, jejíž obsah (figure + blockquote) Chrome do názvu
          odkazu nesloží — bez labelu by čtečka hlásila jen „odkaz". Obsah karty
          zůstává v accessibility stromu, label ho nepřebíjí. */
@@ -93,10 +73,8 @@ export function Testimonials({ reviews, lang = "cs" }: { reviews: Review[]; lang
   // samotný nadpis nad prázdným pásem vypadá jako rozbitá stránka.
   if (reviews.length === 0) return null
 
-  const strip = Array.from({ length: Math.ceil(MIN_CARDS / reviews.length) }, () => reviews).flat()
-
   return (
-    <section className="overflow-hidden py-20">
+    <section className="py-20">
       <div className="mx-auto mb-12 max-w-7xl px-4 sm:px-6 lg:px-8">
         <AnimatedText
           as="h2"
@@ -105,24 +83,17 @@ export function Testimonials({ reviews, lang = "cs" }: { reviews: Review[]; lang
         />
       </div>
 
-      {/* Marquee — two identical sets for seamless infinite loop */}
-      <div className="group [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-        <div
-          className="flex animate-[marquee_var(--marquee-duration)_linear_infinite] group-hover:[animation-play-state:paused]"
-          style={{ "--marquee-duration": `${strip.length * SECONDS_PER_CARD}s` } as CSSProperties}
-        >
-          {/* Set A */}
-          <div className="flex shrink-0 gap-6 pr-6">
-            {strip.map((r, i) => (
-              <ReviewCard key={`a-${r.id}-${i}`} r={r} t={t} />
-            ))}
-          </div>
-          {/* Set B — clone for seamless loop */}
-          <div className="flex shrink-0 gap-6 pr-6" aria-hidden>
-            {strip.map((r, i) => (
-              <ReviewCard key={`b-${r.id}-${i}`} r={r} t={t} clone />
-            ))}
-          </div>
+      {/* Pás recenzí se posouvá ručně, ne automatickým marquee: návštěvník si čte
+          vlastním tempem a nemusí trefovat kartu, která zrovna jede pryč. Posuvník
+          je vidět pořád (viz `.scrollbar-brand` v globals.css), aby bylo poznat,
+          že pás pokračuje i za okrajem. */}
+      <div className="scrollbar-brand overflow-x-auto pb-5">
+        {/* `w-max` = pás je široký přesně na součet karet, takže se scrolluje;
+            `mx-auto` ho vycentruje, když se recenze na širokou obrazovku vejdou. */}
+        <div className="mx-auto flex w-max gap-6 px-4 sm:px-6 lg:px-8">
+          {reviews.map((r, i) => (
+            <ReviewCard key={`${r.id}-${i}`} r={r} t={t} />
+          ))}
         </div>
       </div>
     </section>
