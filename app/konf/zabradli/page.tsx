@@ -28,6 +28,7 @@ export default async function KonfZabradliPage({
       return null
     }),
   ])
+  console.log(photoDocs)
   const lang = getLang(langParam)
   const photos = buildGalleryPhotos(photoDocs)
   const info = buildProductInfo(photoDocs, lang)
