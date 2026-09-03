@@ -24,7 +24,7 @@ const slideImages = [
   { imgMobile: '/real/mobil/oploceni.png', imgDesktop: '/real/oploceni.jpeg', person: '/gallery-fam-1.png' },
   { imgMobile: '/real/mobil/brana-sikma.jpg', imgDesktop: '/real/brana-sikma.jpg', person: '/gallery-fam-2.png' },
   { imgMobile: '/real/Branka.jpg', imgDesktop: '/real/Branka.jpg', person: '/gallery-fam-3.png' },
-  { imgMobile: '/real/mobil/Pergola.jpg', imgDesktop: '/real/Pergola.jpg', person: '/gallery-fam-4.png' },
+  { imgMobile: '/real/mobil/pergola.jpg', imgDesktop: '/real/Pergola.jpg', person: '/gallery-fam-4.png' },
 ];
 
 /* Pořadí sedí se `slideImages` i s `galleryContent.titles`: plot, brána, branka, pergola.
