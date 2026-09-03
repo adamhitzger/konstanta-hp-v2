@@ -54,8 +54,8 @@ export function ZabStepZabradli({
         title={zt.productTitle}
         image={zabradliImage}
         imageAlt={zt.productTitle}
-        galleryPhotos={photos?.ploty}
-        info={info.ploty}
+        galleryPhotos={photos?.zabradli}
+        info={info.zabradli}
         enabledField="zabradli"
         countField="celkemZabradli"
         arrayField="rozmeryZabradli"

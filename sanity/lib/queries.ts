@@ -187,7 +187,8 @@ export const PRODUCT_PHOTOS_QUERY = groq`*[_type == "productPhotos"]{
   "tycka": tycka[0..4].asset->url,
   "vlKom": vlKom[0..4].asset->url,
   "drevodekor": drevodekor[0..4].asset->url,
-  "tahokov": tahokov[0..4].asset->url
+  "tahokov": tahokov[0..4].asset->url,
+  "sklo": sklo[0..4].asset->url
 }`;
 
 /**

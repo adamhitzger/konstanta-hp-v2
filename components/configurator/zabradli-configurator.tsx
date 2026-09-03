@@ -46,6 +46,7 @@ const emptyPhotos: ConfPhotosWithMotiv = {
   pristresek: [],
   bioklimaticka: [],
   zahrada: [],
+  zabradli: [],
 }
 
 type SizeRow = { vyska?: number; delka?: number; pocet?: number }

@@ -56,6 +56,7 @@ const emptyPhotos: ConfPhotosWithMotiv = {
   pristresek: [],
   bioklimaticka: [],
   zahrada: [],
+  zabradli: [],
 }
 
 export function PergolaConfigurator({

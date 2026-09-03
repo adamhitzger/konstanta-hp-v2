@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react"
 import Image from "next/image"
+import { useSearchParams } from "next/navigation"
 import { Expand } from "lucide-react"
 import { Reveal } from "@/components/reveal"
 import { PhotoLightbox } from "@/components/configurator/photo-lightbox"
@@ -38,6 +39,24 @@ export function RealizaceGallery({
   const [activeMotiv, setActiveMotiv] = useState<string | null>(null)
   const [visible, setVisible] = useState(PAGE_SIZE)
   const [lightbox, setLightbox] = useState<number | null>(null)
+
+  /* Záložka musí jít i z URL, ne jen z prvního renderu: odkaz z menu na /realizace?filter=…
+     míří na tuhle už vykreslenou stránku, takže se komponenta nepřipojuje znovu a `initialCat`
+     (počáteční hodnota `useState`) by se ignorovalo — kliknutí na „Branky“ ze stránky bran
+     by nic neudělalo. `useSearchParams` chytá i shallow `replaceState` z `selectCat` níž,
+     takže vlastní přepnutí záložky se sem vrátí jako no-op. */
+  const urlFilter = useSearchParams().get("filter")
+  const urlCat = groups.find((g) => g.cat === urlFilter)?.cat ?? null
+  const [syncedCat, setSyncedCat] = useState(urlCat)
+  if (urlCat !== syncedCat) {
+    setSyncedCat(urlCat)
+    if (urlCat && urlCat !== activeCat) {
+      setActiveCat(urlCat)
+      setActiveMotiv(null)
+      setVisible(PAGE_SIZE)
+      setLightbox(null)
+    }
+  }
 
   const group = groups.find((g) => g.cat === activeCat) ?? groups[0]
 

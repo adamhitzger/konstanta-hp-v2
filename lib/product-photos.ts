@@ -31,6 +31,31 @@ export const PRODUCT_PHOTOS_NAME_MAP: Record<keyof ConfPhotosWithMotiv, string> 
   bioklimaticka: "Bioklimatické pergoly",
   zahrada: "Zimní zahrady",
   pristresek: "Přístřešky",
+  zabradli: "Zábradlí",
+}
+
+/**
+ * Názvy v Sanity jsou psané ručně, takže se v nich liší diakritika i mezery
+ * („Zabradlí“ vs. „Zábradlí“, „Šikmá brána “ s mezerou na konci). Párování proto
+ * jede přes normalizovaný tvar — bez diakritiky, malými písmeny, se sraženými
+ * mezerami — ať drobný překlep ve Studiu nesebere produktu celou galerii.
+ */
+function normalizeName(name: string): string {
+  return name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+/** `productPhotos` dokumenty naindexované podle normalizovaného `nameCs`. */
+function indexByName(docs: ProductPhotosDoc[] | null | undefined): Map<string, ProductPhotosDoc> {
+  const byName = new Map<string, ProductPhotosDoc>()
+  for (const doc of docs ?? []) {
+    if (doc.nameCs) byName.set(normalizeName(doc.nameCs), doc)
+  }
+  return byName
 }
 
 /** Klíč pole v `productPhotos` → id motivu, stejné jako `motivy`/`motivLabels`. */
@@ -46,6 +71,9 @@ const MOTIV_FIELD_TO_ID: Record<string, string> = {
   vlKom: "vlastní kombinace",
   drevodekor: "drevodekor",
   tahokov: "tahokov",
+  // Sklo je výplň zábradlí — v mřížce motivů oplocení se nikdy neobjeví, protože
+  // ostatní produkty pole `sklo` v Sanity vyplněné nemají.
+  sklo: "sklo",
 }
 
 function flattenDoc(doc: ProductPhotosDoc): ConfPhotoItem[] {
@@ -62,14 +90,11 @@ function flattenDoc(doc: ProductPhotosDoc): ConfPhotoItem[] {
  * jen se jinak plní `photos` prop.
  */
 export function buildGalleryPhotos(docs: ProductPhotosDoc[] | null | undefined): ConfPhotosWithMotiv {
-  const byName = new Map<string, ProductPhotosDoc>()
-  for (const doc of docs ?? []) {
-    if (doc.nameCs) byName.set(doc.nameCs.trim(), doc)
-  }
+  const byName = indexByName(docs)
 
   const result = {} as ConfPhotosWithMotiv
   for (const key of Object.keys(PRODUCT_PHOTOS_NAME_MAP) as (keyof ConfPhotosWithMotiv)[]) {
-    const doc = byName.get(PRODUCT_PHOTOS_NAME_MAP[key])
+    const doc = byName.get(normalizeName(PRODUCT_PHOTOS_NAME_MAP[key]))
     result[key] = doc ? flattenDoc(doc) : []
   }
   return result
@@ -104,14 +129,11 @@ export function buildProductInfo(
   docs: ProductPhotosDoc[] | null | undefined,
   lang: Lang,
 ): ConfProductInfo {
-  const byName = new Map<string, ProductPhotosDoc>()
-  for (const doc of docs ?? []) {
-    if (doc.nameCs) byName.set(doc.nameCs.trim(), doc)
-  }
+  const byName = indexByName(docs)
 
   const result: ConfProductInfo = {}
   for (const key of Object.keys(PRODUCT_PHOTOS_NAME_MAP) as (keyof ConfPhotosWithMotiv)[]) {
-    const doc = byName.get(PRODUCT_PHOTOS_NAME_MAP[key])
+    const doc = byName.get(normalizeName(PRODUCT_PHOTOS_NAME_MAP[key]))
     if (!doc) continue
 
     const popis = pickLocalized(doc.popisCs, doc.popisSk, doc.popisDe, lang)

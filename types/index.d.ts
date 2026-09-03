@@ -70,6 +70,7 @@ export interface ConfPhotosWithMotiv {
   pristresek: ConfPhotoItem[];
   bioklimaticka: ConfPhotoItem[];
   zahrada: ConfPhotoItem[];
+  zabradli: ConfPhotoItem[];
 }
 
 /** Jeden blok Portable Textu (pole `popisCs`/`popisSk`/`popisDe` v `productPhotos`).
