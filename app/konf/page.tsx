@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 const pickerHrefs = ["/konf/oploceni", "/konf/pergoly", "/konf/zabradli", "/konf/zaklady"]
 // TODO: zábradlí jede zatím na fotce plotů — až bude fotka realizace zábradlí, vyměnit.
-const pickerImages = ["/gallery-ploty-wide.png", "/gallery-pergola-wide.png", "/gallery-ploty-wide.png", "/proces-2.png"]
+const pickerImages = ["/real/Ploty3.png", "/real/pristresek.jpeg", "/real/zabradli.jpeg", "/proces-2.png"]
 
 export default async function KonfPickerPage({
   searchParams,

@@ -6,7 +6,6 @@ import { realizaceContent, realizacePageContent, withLang, type Lang } from "@/l
 import type { RealizaceTeaser } from "@/types"
 
 /** Když v Sanity ještě není nahraná úvodní fotka, sekce spadne na tyhle záběry. */
-const fallbackImages = ["/realizace-1.png", "/realizace-2.png", "/realizace-3.png"]
 
 /**
  * Upoutávka realizací na homepage. Fotky jsou reálné úvodní fotky (`photo`)
@@ -22,19 +21,12 @@ export function Realizace({ items = [], lang = "cs" }: { items?: RealizaceTeaser
   /* Každá dlaždice je jedna kategorie, takže vede rovnou na její záložku v galerii. */
   const cards =
     items.length > 0
-      ? items.map((it) => ({
+      && items.map((it) => ({
           key: it.cat,
           image: it.banner,
           title: rt.cats[it.cat].tab,
           text: rt.cats[it.cat].heading,
           href: withLang(`/realizace?filter=${it.cat}`, lang),
-        }))
-      : fallbackImages.map((image, i) => ({
-          key: `fallback-${i}`,
-          image,
-          title: rt.cats.ploty.tab,
-          text: rt.cats.ploty.heading,
-          href,
         }))
 
   return (
@@ -55,7 +47,7 @@ export function Realizace({ items = [], lang = "cs" }: { items?: RealizaceTeaser
         </Reveal>
 
         <Reveal variant="tilt" childSelector="[data-real]" className="grid gap-6 md:grid-cols-3">
-          {cards.map((c, i) => (
+          {cards && cards.map((c, i) => (
             <Parallax key={c.key} speed={[35, 70, 50][i % 3]}>
               <a data-real href={c.href} className="group relative block aspect-[3/4] overflow-hidden rounded-3xl">
                 <Image

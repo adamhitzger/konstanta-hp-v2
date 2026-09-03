@@ -155,6 +155,15 @@ export function PhotoThumbs({
  * Velký prosklouzávací náhled reálných fotek realizací — 3/4 šířky obrazovky,
  * místo drobných dlaždic vedle sebe. Pokud aspoň jedna fotka má v Sanity vyplněný
  * `motiv`, přidá se boční filtr motivů (vpravo se pak zobrazí jen fotky daného motivu).
+ *
+ * Celý dialog visí v obalu se `stopPropagation`. Dlaždice typu pergoly (viz
+ * `perg-step-typ.tsx`) je totiž celá klikatelná = výběr typu, a u typů bez doplňků
+ * výběr rovnou posouvá na další krok. Popup sice jde portálem do `body`, ale
+ * React bublá události po svém stromu, ne po DOM — klik na šipku galerie tak
+ * doputoval až na dlaždici a překlikl krok konfigurátoru. Obal musí být nad
+ * `<Dialog>`, ne až na `DialogContent`: jinak zůstane díra v ztmaveném pozadí,
+ * které je v portálu sourozencem popupu. `display: contents` drží obal mimo
+ * layout karty.
  */
 export function PhotoLightbox({
   photos,
@@ -221,6 +230,7 @@ export function PhotoLightbox({
   const hasMotivFilter = motivGroups.length > 0
 
   return (
+    <div className="contents" onClick={(e) => e.stopPropagation()}>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="flex h-[85dvh] w-full max-w-none flex-col gap-0 overflow-hidden p-0 sm:w-[75vw]" closeLabel={kt.close}>
         <DialogTitle className="sr-only">{title}</DialogTitle>
@@ -313,5 +323,6 @@ export function PhotoLightbox({
         </div>
       </DialogContent>
     </Dialog>
+    </div>
   )
 }

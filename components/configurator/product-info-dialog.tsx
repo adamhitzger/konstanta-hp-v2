@@ -93,14 +93,13 @@ export function ProductInfoLink({
         <ChevronDown className="size-3.5 shrink-0 transition-transform duration-200 group-hover:translate-y-0.5" />
       </button>
 
+      {/* Obal se `stopPropagation` nad celým dialogem — karta pergoly pod popupem je
+          klikatelná (= výběr typu) a React bublá i skrz portál. Na `DialogContent`
+          by guard nestačil: ztmavené pozadí je v portálu sourozencem popupu, takže
+          klik do něj by dlaždici pořád překlikl. */}
+      <div className="contents" onClick={(e) => e.stopPropagation()}>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent
-          className="max-w-4xl gap-5"
-          closeLabel={t.close}
-          /* Karta pergoly pod popupem je klikatelná (= výběr typu); bez tohohle
-             by klik uvnitř popupu probublal na dlaždici pod ním. */
-          onClick={(e) => e.stopPropagation()}
-        >
+        <DialogContent className="max-w-4xl gap-5" closeLabel={t.close}>
           <DialogTitle className="pr-8">{title}</DialogTitle>
 
           {info.photos.length > 0 ? (
@@ -123,6 +122,7 @@ export function ProductInfoLink({
           <PortableDescription blocks={info.popis} />
         </DialogContent>
       </Dialog>
+      </div>
     </>
   )
 }

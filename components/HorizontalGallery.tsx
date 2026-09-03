@@ -21,7 +21,7 @@ type Slide = {
 
 // Obrázky vychází z produktových řad (viz components/products.tsx); texty z lib/translations.ts.
 const slideImages = [
-  { imgMobile: '/real/mobil/oploceni.png', imgDesktop: '/real/oploceni.png', person: '/gallery-fam-1.png' },
+  { imgMobile: '/real/mobil/oploceni.png', imgDesktop: '/real/oploceni.jpeg', person: '/gallery-fam-1.png' },
   { imgMobile: '/real/mobil/brana-sikma.jpg', imgDesktop: '/real/brana-sikma.jpg', person: '/gallery-fam-2.png' },
   { imgMobile: '/real/Branka.jpg', imgDesktop: '/real/Branka.jpg', person: '/gallery-fam-3.png' },
   { imgMobile: '/real/mobil/Pergola.jpg', imgDesktop: '/real/Pergola.jpg', person: '/gallery-fam-4.png' },
@@ -182,15 +182,15 @@ export default function HorizontalGallery({ lang = "cs" }: { lang?: Lang }) {
                 </Link>
               </h2>
 
-              {/* Rodina „ve scéně" – vlastní pro každé pozadí, nohy dole */}
+              {/* Rodina „ve scéně" – vlastní pro každé pozadí, nohy dole 
               <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex items-end justify-center">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
+                eslint-disable-next-line @next/next/no-img-element 
                 <img
                   src={s.person}
                   alt=""
                   className="h-[60vh] w-auto max-w-none select-none object-contain object-bottom drop-shadow-[0_18px_30px_rgba(0,0,0,0.35)] sm:h-[62vh]"
                 />
-              </div>
+              </div>*/}
             </section>
           ))}
         </div>
