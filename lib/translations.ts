@@ -3489,7 +3489,7 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     sheetName: "Kalkulace",
     currency: "Kč",
     header: { produkt: "Produkt", mnozstvi: "Množství", bezDph: "Cena bez DPH", dph: "DPH", sDph: "Cena s DPH" },
-    pohonKridlova: "Pohon křídlové brány IXENGO L 24 V 3 S io komfort set",
+    pohonKridlova: "IXENGO io – pohon brány s řídicí jednotkou a rádiovým přijímačem, Somfy Master Pro Bitech – bezpečnostní fotobuňky (1 pár), Výstražný maják, Záložní zdroj pro nouzové otevření brány při výpadku elektrické energie, 2× ovladač (dálkový ovladač Somfy)",
     pohonPosuvna:
       "Pohon posuvné brány ELIXO 500 3 S M io komfort set – pohon s řídicí jednotkou a rádiovým přijímačem, 1x Somfy Master Pro Bitech – bezpečnostní fotobuňky (1 pár) dosah 10 m, 2x Odblokovací klíč (použití při výpadku proudu)",
     brzda: "Hydraulická brzda pro posuvné brány ve svahu",
@@ -3523,7 +3523,7 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     sheetName: "Kalkulácia",
     currency: "Kč",
     header: { produkt: "Produkt", mnozstvi: "Množstvo", bezDph: "Cena bez DPH", dph: "DPH", sDph: "Cena s DPH" },
-    pohonKridlova: "Pohon krídlovej brány IXENGO L 24 V 3 S io komfort set",
+    pohonKridlova: "IXENGO io – pohon brány s riadiacou jednotkou a rádiovým prijímačom, Somfy Master Pro Bitech – bezpečnostné fotobunky (1 pár), Výstražný maják, Záložný zdroj pre núdzové otvorenie brány pri výpadku elektrickej energie, 2× ovládač (diaľkový ovládač Somfy)",
     pohonPosuvna:
       "Pohon posuvnej brány ELIXO 500 3 S M io komfort set – pohon s riadiacou jednotkou a rádiovým prijímačom, 1x Somfy Master Pro Bitech – bezpečnostné fotobunky (1 pár) dosah 10 m, 2x Odblokovací kľúč (použitie pri výpadku prúdu)",
     brzda: "Hydraulická brzda pre posuvné brány vo svahu",
@@ -3557,7 +3557,7 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     sheetName: "Kalkulation",
     currency: "CZK",
     header: { produkt: "Produkt", mnozstvi: "Menge", bezDph: "Preis netto", dph: "MwSt.", sDph: "Preis brutto" },
-    pohonKridlova: "Antrieb für Drehflügeltore IXENGO L 24 V 3 S io Komfort-Set",
+    pohonKridlova: "IXENGO io – Torantrieb mit Steuereinheit und Funkempfänger, Somfy Master Pro Bitech – Sicherheitslichtschranken (1 Paar), Warnleuchte, Notstromversorgung für die Notöffnung des Tors bei Stromausfall, 2× Handsender (Somfy-Fernbedienung)",
     pohonPosuvna:
       "Antrieb für Schiebetore ELIXO 500 3 S M io Komfort-Set – Antrieb mit Steuereinheit und Funkempfänger, 1x Somfy Master Pro Bitech – Sicherheitslichtschranke (1 Paar), Reichweite 10 m, 2x Entriegelungsschlüssel (bei Stromausfall)",
     brzda: "Hydraulische Bremse für Schiebetore in Hanglage",

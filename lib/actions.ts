@@ -1185,6 +1185,7 @@ if(data.dilce && data.rozmeryDilcu  && data.rozmeryDilcu.length > 0){
  const motivy = motivLabels[lang] ?? motivLabels.cs;
  const barvaDilcuLabel = barvy[data.barva] ?? data.barva;
  const motivLabel = motivy[data.motiv] ?? data.motiv;
+ 
  celkem+= dopravaCena;
  ws.addRow([ti.barvaDilcu, barvaDilcuLabel]);
  ws.addRow([ti.motiv, motivLabel]);
@@ -1194,7 +1195,6 @@ if(data.dilce && data.rozmeryDilcu  && data.rozmeryDilcu.length > 0){
  rows+=(buildProductRowsString(ti.barvaDilcu, barvaDilcuLabel));
  rows+=(buildProductRowsString(ti.motiv, motivLabel));
  rows+=(buildProductRows(money, ti.doprava, " ", dopravaCena, (dopravaCena * sazbaDph), dopravaCena *(1+sazbaDph)))
-
  rows+=(buildProductRows(money, ti.celkem, " ", celkem, (celkem * sazbaDph), celkem *(1+sazbaDph)))
 
  ws.columns.forEach((col, index) => {
