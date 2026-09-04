@@ -1555,8 +1555,8 @@ if (data.file && data.file.length > 0) {
       const mailOptions: any //eslint-disable-line @typescript-eslint/no-explicit-any
       = {
         from: process.env.FROM_EMAIL,
-        //to: "nabidky@konstantahp.cz",
-        to: "adam.hitzger@icloud.com",
+        to: "nabidky@konstantahp.cz",
+        //to: "adam.hitzger@icloud.com",
         subject: `Nová poptávka z konfigurátoru - ${data.fullname}`,
         html,
         attachments: [
