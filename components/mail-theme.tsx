@@ -423,7 +423,7 @@ export const CompanyCard = ({ t }: { t: MailChromeContent }) => (
   <Section className="k-pad" style={{ ...mailStyles.sectionWrap, margin: "18px 0 0" }}>
     <Section style={mailStyles.companyCard}>
       <Heading as="h2" style={mailStyles.companyName}>
-        Konstanta HP
+        KONSTANTA - hliníkové ploty s.r.o.
       </Heading>
       <Text style={mailStyles.companyText}>
         Maleč 36, 582 76 Maleč
@@ -458,7 +458,7 @@ export const MailFooter = ({ t }: { t: MailChromeContent }) => (
     </Section>
     <Section className="k-pad" style={mailStyles.footerBar}>
       <Text style={mailStyles.footerSmall}>
-        {`© ${new Date().getFullYear()} Konstanta HP — ${t.rights}`}
+        {`© ${new Date().getFullYear()} KONSTANTA - hliníkové ploty s.r.o. — ${t.rights}`}
       </Text>
     </Section>
   </>

@@ -43,7 +43,7 @@ export function Story({ lang = "cs" }: { lang?: Lang }) {
         <Reveal variant="flip" className="relative">
           <Parallax speed={40}>
             <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-border">
-              <Image src="/team.png" alt="Tým Konstanta HP" fill className="object-cover" />
+              <Image src="/team.png" alt="Tým KONSTANTA - hliníkové ploty s.r.o." fill className="object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-foreground/40 to-transparent" />
               {/* corner ticks */}
               <span className="absolute left-4 top-4 h-6 w-6 border-l-2 border-t-2 border-brand" />

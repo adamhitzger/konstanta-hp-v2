@@ -142,7 +142,6 @@ const branaRozmery = z.object({
     pocet: z.number().optional(),
     pohon: z.boolean().optional(),
     tahoma: z.boolean().optional(),
-    tyc: z.boolean().optional(),
 })
 
 export const confSchema = z.object({

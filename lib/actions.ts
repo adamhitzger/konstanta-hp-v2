@@ -638,7 +638,7 @@ function htmlToPdf(
 <!-- Šablony záhlaví a zápatí — skript je klonuje na každý arch. -->
 <template id="tpl-head">
   <div class="head">
-    <img src="https://cdn.sanity.io/files/a3wdqcta/production/28aefe7de25e70f91a0f788514e80d75bfd41b40.svg" alt="Konstanta HP"/>
+    <img src="https://cdn.sanity.io/files/a3wdqcta/production/28aefe7de25e70f91a0f788514e80d75bfd41b40.svg" alt="KONSTANTA - hliníkové ploty s.r.o."/>
     <div class="head-right">
       <div class="head-title">${q.docTitle}</div>
       <div class="head-meta">${q.numberPrefix} <b>${cisloNabidky}</b> &nbsp;·&nbsp; ${dat(now)}</div>
@@ -650,7 +650,7 @@ function htmlToPdf(
 <template id="tpl-foot">
   <div class="foot">
     <div class="foot-left">
-      <div><b>Konstanta HP</b> &nbsp;·&nbsp; Maleč 36, 582 76 Maleč &nbsp;·&nbsp; IČO 21827150</div>
+      <div><b>KONSTANTA - hliníkové ploty s.r.o.</b> &nbsp;·&nbsp; Maleč 36, 582 76 Maleč &nbsp;·&nbsp; IČO 21827150</div>
       <div>+420 770 169 411 &nbsp;·&nbsp; <a href="mailto:info@konstantahp.cz">info@konstantahp.cz</a> &nbsp;·&nbsp; <a href="https://www.konstantahp.cz">konstantahp.cz</a></div>
     </div>
     <div class="foot-right">
@@ -676,7 +676,7 @@ function htmlToPdf(
       <div class="party">
         <div class="party-h">${q.supplier}</div>
         <div class="party-b">
-          <span class="nm">Konstanta HP</span>
+          <span class="nm">KONSTANTA - hliníkové ploty s.r.o.</span>
           Maleč 36, 582 76 Maleč<br>
           ${q.country}<br>
           <span class="k">${q.ico}</span> 21827150<br>
@@ -949,12 +949,10 @@ function htmlToPdf(
 }
 
 /**
- * Ceník doplňků přidaných do konfigurátoru (výztužná tyč křídla, kování branky).
+ * Ceník doplňků přidaných do konfigurátoru (kování branky).
  * Ceny jsou bez DPH za kus; drženy tady u sebe, ať jdou upravit na jednom místě.
  * Popisy k nim se berou z `quoteItemsContent`, aby šly přeložit bez zásahu do ceníku.
  */
-const TYC_CENA = 5000;
-
 const KOVANI_CENIK: Record<string, number> = {
   "kliky-mt": 8720,
   "madlo-300": 2000,
@@ -990,7 +988,6 @@ function calculateBrana(
     pocet?: number | undefined;
     pohon?: boolean | undefined;
     tahoma?: boolean | undefined;
-    tyc?: boolean | undefined;
 }[] | undefined,
 ): {bezDPH: number, html: String}{
 const ti = quoteItemsContent[lang] ?? quoteItemsContent.cs;
@@ -1023,13 +1020,14 @@ let bezDPH: number =0;
     }
     const plocha = (r.delka / 1000) * (r.vyska / 1000);
     const zaklad = ((plocha * vzor) * r.pocet);
-    const pohonCena = r.pohon ? (id === "dvoukridla" || id === "skladaci" ? 23000 : 15000) : 1500;
+    const pohonCena = r.pohon ? (id === "dvoukridla" || id === "skladaci" || id === "jednokridla" ? 23000 : 15000) : 0;
+    const zastrcCena = r.pohon ? 0 : (id === "jednokridla") ? 1500 : 3000
+    const kovaniCena = r.pohon ? 0 : (id === "dvoukridla" || id === "skladaci") ? 2000 : 0
     const tahomaCena = r.tahoma ? r.pocet *5000 : 0;
     const brzdaCena = (id === "atypicka") ? 8000 : 0
-    const tycCena = r.tyc ? r.pocet * TYC_CENA : 0;
-    const montazCena = r.pocet * 4500;
+    const montazCena = (id === "telPoj" || id === "telSam" || id === "sekcni" || id === "skladaci") ? r.pocet * 6000 : r.pocet * 4500;
     const kolejniceCena = (id === "atypicka" || id === "telPoj" || id === "posuvna") ? 5000 : 0
-    bezDPH += zaklad+pohonCena+tahomaCena+tycCena+montazCena+brzdaCena+kolejniceCena
+    bezDPH += zaklad+pohonCena+tahomaCena+montazCena+brzdaCena+kolejniceCena
     
     const headerRow = ws.addRow([ti.header.produkt, ti.header.mnozstvi, ti.header.bezDph, ti.header.dph, ti.header.sDph])
     ws.addRow([`${name}: ${r.delka}x${r.vyska} mm`,r.pocet,money(zaklad),money(zaklad*sazbaDph), money(zaklad*(1+sazbaDph)) ]);
@@ -1043,16 +1041,16 @@ let bezDPH: number =0;
       ws.addRow([`${pohonNazev}:`, 1,money(pohonCena), money(pohonCena*sazbaDph), money(pohonCena*(1+sazbaDph))]);
       html +=(buildProductRows(money, `${pohonNazev}:`, 1,pohonCena, pohonCena*sazbaDph, Number((pohonCena*(1+sazbaDph)).toFixed(0))))
       }else{
-        ws.addRow([`${ti.zastrc}:`, 1,money(pohonCena), money(pohonCena*sazbaDph), money(pohonCena*(1+sazbaDph))]);
-        html +=(buildProductRows(money, `${ti.zastrc}:`, 1,pohonCena, pohonCena*sazbaDph, Number((pohonCena*(1+sazbaDph)).toFixed(0))))
+        ws.addRow([`${ti.zastrc}:`, 1,money(zastrcCena), money(zastrcCena*sazbaDph), money(zastrcCena*(1+sazbaDph))]);
+        html +=(buildProductRows(money, `${ti.zastrc}:`, 1,zastrcCena, zastrcCena*sazbaDph, Number((zastrcCena*(1+sazbaDph)).toFixed(0))))
+        if(id !== "jednokridla"){
+            ws.addRow([`${ti.kovaniBrany}:`, 2,money(kovaniCena), money(kovaniCena*sazbaDph), money(kovaniCena*(1+sazbaDph))]);
+            html +=(buildProductRows(money, `${ti.kovaniBrany}:`, 2,kovaniCena, kovaniCena*sazbaDph, Number((kovaniCena*(1+sazbaDph)).toFixed(0))))        
+        }
       }
     if(r.tahoma) {
       ws.addRow([ti.tahoma,1,money(tahomaCena),money(tahomaCena*sazbaDph),money(tahomaCena*(1+sazbaDph))]);
       html +=(buildProductRows(money, ti.tahoma,1,tahomaCena,tahomaCena*sazbaDph,tahomaCena*(1+sazbaDph)))
-    }
-    if (r.tyc){
-      ws.addRow([ti.tyc, r.pocet, money(tycCena), money(tycCena*sazbaDph), money(tycCena*(1+sazbaDph))]);
-      html +=(buildProductRows(money, ti.tyc, r.pocet, tycCena, tycCena*sazbaDph, Number((tycCena*(1+sazbaDph)).toFixed(0))))
     }
     if(id === "atypicka"){
       ws.addRow([`${ti.brzda}:`, r.pocet, money(brzdaCena), money(brzdaCena*sazbaDph), money(brzdaCena*(1+sazbaDph))]);
@@ -1075,6 +1073,7 @@ let bezDPH: number =0;
 async function createXlsx(data: ConfiguratorType, isCompany: boolean,photo1:string,photo2:string,photo3:string, lang: Lang = "cs") {
 let celkem:number=0;
 let celkovyPocetDilcu: number =0;
+let dopravaCena: number = 5000;
 const sazbaDph = isCompany ? 0.21 : 0.12
 let rows = "";
 console.log(celkem)
@@ -1186,19 +1185,23 @@ if(data.dilce && data.rozmeryDilcu  && data.rozmeryDilcu.length > 0){
   rows += tableHrRow()
  }
 
-
+ 
  // Hodnoty z konfigurátoru chodí jako CS klíče — do nabídky se překládají stejnými
  // slovníky, jaké používá UI. Co ve slovníku není, projde beze změny.
  const barvy = colorLabels[lang] ?? colorLabels.cs;
  const motivy = motivLabels[lang] ?? motivLabels.cs;
  const barvaDilcuLabel = barvy[data.barva] ?? data.barva;
  const motivLabel = motivy[data.motiv] ?? data.motiv;
+ celkem+= dopravaCena;
  ws.addRow([ti.barvaDilcu, barvaDilcuLabel]);
  ws.addRow([ti.motiv, motivLabel]);
+ ws.addRow([ti.doprava, " ", money(dopravaCena), money(dopravaCena * sazbaDph), money(dopravaCena *(1+sazbaDph))])
  ws.addRow([ti.celkem, " ", money(celkem), money(celkem * sazbaDph), money(celkem *(1+sazbaDph))])
 
  rows+=(buildProductRowsString(ti.barvaDilcu, barvaDilcuLabel));
  rows+=(buildProductRowsString(ti.motiv, motivLabel));
+ rows+=(buildProductRows(money, ti.doprava, " ", dopravaCena, (dopravaCena * sazbaDph), dopravaCena *(1+sazbaDph)))
+
  rows+=(buildProductRows(money, ti.celkem, " ", celkem, (celkem * sazbaDph), celkem *(1+sazbaDph)))
 
  ws.columns.forEach((col, index) => {
@@ -1339,7 +1342,7 @@ if (data.file && data.file.length > 0) {
         const mailOptions: any//eslint-disable-line @typescript-eslint/no-explicit-any
          = {
           from: process.env.FROM_EMAIL,
-          to: [data.email, "nabidky@konstantahp.cz"],
+          to: "nabidky@konstantahp.cz",
           subject: `Nová poptávka z konfigurátoru zábradlí - ${data.fullname}`,
           html: await render(ZabMail(data, imgs, lang))
         }
@@ -1439,7 +1442,7 @@ if (data.file && data.file.length > 0) {
         const mailOptions: any//eslint-disable-line @typescript-eslint/no-explicit-any
          = {
           from: process.env.FROM_EMAIL,
-          to: [data.email, "nabidky@konstantahp.cz"],
+          to: "nabidky@konstantahp.cz",
           subject: `Nová poptávka z konfigurátoru - ${data.fullname}`,
           html: await render(PergMail(data, pergs, lang))
         }
@@ -1565,7 +1568,6 @@ if (data.file && data.file.length > 0) {
       const mailOptions: any //eslint-disable-line @typescript-eslint/no-explicit-any
       = {
         from: process.env.FROM_EMAIL,
-     //to: "nabidky@konstantahp.cz",
         to: "nabidky@konstantahp.cz",
         subject: `Nová poptávka z konfigurátoru - ${data.fullname}`,
         html,
@@ -1588,25 +1590,6 @@ if (data.file && data.file.length > 0) {
         ]
       };
 
-      const mailOptions2: any //eslint-disable-line @typescript-eslint/no-explicit-any
-      = {
-        from: process.env.FROM_EMAIL,
-     //to: "nabidky@konstantahp.cz",
-        to: data.email,
-        // Zákaznická kopie mluví na zákazníka, ne na obchod — interní kopie
-        // do `nabidky@` si nechává původní „Nová poptávka…“.
-        subject: (confMailContent[lang] ?? confMailContent.cs).subject,
-        html,
-        attachments: [
-          // `pdfFile` je null, když se PDF nevygenerovalo — příloha se pak vynechá.
-          ...(filePath2.pdfFile
-            ? [{
-                filename: "kalkulace.pdf",
-                path: filePath2.pdfFile
-              }]
-            : []),
-        ]
-      };
       console.log(urls)
       if(urls.length > 0) {
         mailOptions.attachments = mailOptions.attachments ?? [];
@@ -1615,14 +1598,8 @@ if (data.file && data.file.length > 0) {
         })
       }
 
-
-      //mailOptions.attachments?.push({filename: "kalkulace.xlsx",path: filePath2})
-
       const sendMail = await transporter.sendMail(mailOptions);
-      const sendMailToClient = await transporter.sendMail(mailOptions2);
-      // Původní `fs.unlink(path, cb)` s `throw err` uvnitř callbacku házelo mimo
-      // try/catch — na Vercelu to shodilo celou funkci místo vrácení chyby.
-      // Úklid /tmp je best-effort, případný neúspěch jen zalogujeme.
+      
       await Promise.all(
         [filePath2.filePath, filePath2.pdfFile, filePath2.jsonPath]
           .filter((p): p is string => Boolean(p))
@@ -1635,7 +1612,7 @@ if (data.file && data.file.length > 0) {
       console.log(sendMail.messageId)
       console.log(sendMail.response)
 
-      if(sendMail.accepted && sendMailToClient.accepted) {
+      if(sendMail.accepted) {
         revalidate = true;
 
         console.log("Odpoved z SMTP: ",sendMail.response)
@@ -1791,7 +1768,7 @@ export async function sendZaklady(
 
       const sendMail = await transporter.sendMail({
         from: process.env.FROM_EMAIL,
-        to: [data.email, "nabidky@konstantahp.cz"],
+        to: "nabidky@konstantahp.cz",
         subject: `Poptávka: stavební příprava a základy — ${data.misto}`,
         // Textová varianta zůstává kvůli klientům bez HTML a spam skóre.
         text: [

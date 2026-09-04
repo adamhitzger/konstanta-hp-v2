@@ -10,7 +10,7 @@ Czech homeowners (35–60) planning to enclose or upgrade their residential prop
 
 ## Product Purpose
 
-Konstanta HP manufactures and installs custom aluminum fencing, gates, wicket gates, and bioclimatic pergolas across the Czech Republic. They design, fabricate, and install — no subcontractors, full control of quality. Success means the visitor requests a free quote (Kalkulace zdarma) after the first scroll.
+KONSTANTA - hliníkové ploty s.r.o. manufactures and installs custom aluminum fencing, gates, wicket gates, and bioclimatic pergolas across the Czech Republic. They design, fabricate, and install — no subcontractors, full control of quality. Success means the visitor requests a free quote (Kalkulace zdarma) after the first scroll.
 
 ## Brand Personality
 

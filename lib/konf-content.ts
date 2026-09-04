@@ -37,11 +37,6 @@ export type GateProductConfig = {
    * `photos[gate.photosKey]` v kroku „Brána“.
    */
   photosKey: keyof ConfPhotosWithMotiv
-  /**
-   * Křídlová brána — jen u ní se v kroku „Brána“ nabízí výztužná tyč (`tyc`).
-   * U posuvných, teleskopických a sekčních bran se křídlo nevyztužuje.
-   */
-  kridlova?: true
 }
 
 // Devět typů vjezdových bran — přesně názvy polí ze stávajícího confSchema,
@@ -55,7 +50,6 @@ export const gateProducts: GateProductConfig[] = [
     countField: "celkem2K",
     arrayField: "rozmery2KBran",
     photosKey: "dvoukridla",
-    kridlova: true,
   },
   {
     id: "jednokridla",
@@ -65,7 +59,6 @@ export const gateProducts: GateProductConfig[] = [
     countField: "celkemK",
     arrayField: "rozmeryKBran",
     photosKey: "jednokridla",
-    kridlova: true,
   },
   {
     id: "samonosna",

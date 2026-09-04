@@ -216,8 +216,8 @@ export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
         {/* `justify-between` na liště rozdělí volné místo rovnoměrně mezi logo, menu
             a kontakty. Žádné `mr-auto` na logu — to by všechen volný prostor spolklo
             hned za logem a menu by se přilepilo ke kontaktům. */}
-        <Link href={withLang("/", lang)} className="flex shrink-0 items-center" aria-label="Konstanta HP">
-          <Image src="/logo-konstanta.svg" alt="Konstanta HP" width={350} height={124} priority className="h-16 w-auto md:h-24" />
+        <Link href={withLang("/", lang)} className="flex shrink-0 items-center" aria-label="KONSTANTA - hliníkové ploty s.r.o.">
+          <Image src="/logo-konstanta.svg" alt="KONSTANTA - hliníkové ploty s.r.o." width={350} height={124} priority className="h-16 w-auto md:h-24" />
         </Link>
 
         {/* ---- Desktop nav ---- */}

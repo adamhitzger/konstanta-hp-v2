@@ -39,8 +39,8 @@ export function SiteFooter({ lang = "cs" }: { lang?: Lang }) {
     <footer className="border-t border-border bg-background">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 lg:grid-cols-5 lg:px-8">
         <div className="flex flex-col gap-4 md:col-span-2 lg:col-span-1">
-          <a href={l("/")} className="flex items-center" aria-label="Konstanta HP">
-            <Image src="/logo-konstanta.svg" alt="Konstanta HP" width={240} height={64} className="h-14 w-auto" />
+          <a href={l("/")} className="flex items-center" aria-label="KONSTANTA - hliníkové ploty s.r.o.">
+            <Image src="/logo-konstanta.svg" alt="KONSTANTA - hliníkové ploty s.r.o." width={240} height={64} className="h-14 w-auto" />
           </a>
           <p className="max-w-sm text-base leading-relaxed text-muted-foreground">{t.tagline}</p>
           <div className="flex gap-3">
@@ -129,7 +129,7 @@ export function SiteFooter({ lang = "cs" }: { lang?: Lang }) {
 
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-6 text-sm text-muted-foreground sm:flex-row sm:px-6 lg:px-8">
-          <p>© {new Date().getFullYear()} Konstanta HP. {t.rights}</p>
+          <p>© {new Date().getFullYear()} KONSTANTA - hliníkové ploty s.r.o. {t.rights}</p>
           <p>{t.bottomTagline}</p>
         </div>
       </div>

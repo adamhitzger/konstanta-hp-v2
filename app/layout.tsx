@@ -27,7 +27,7 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Konstanta HP | Hliníkové ploty, brány, branky a pergoly na míru',
+  title: 'KONSTANTA - hliníkové ploty s.r.o. | Brány, branky a pergoly na míru',
   description:
     'Vyrábíme a montujeme moderní hliníkové ploty, brány, branky a pergoly na míru po celé ČR. Odborné zaměření a kalkulace zdarma.',
   generator: 'Next.js',

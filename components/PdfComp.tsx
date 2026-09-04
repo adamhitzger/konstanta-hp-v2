@@ -222,7 +222,7 @@ export function PdfDocument(props: {
           {/* PRAVÁ STRANA – DODAVATEL */}
           <View style={styles.colBox}>
             <Text style={styles.colTitle}>Informace o prodávajícím</Text>
-            <Text>Konstanta Hlíníkové ploty</Text>
+            <Text>KONSTANTA - hliníkové ploty s.r.o.</Text>
             <Text>Malec 36, 582 76,  Ceská republika</Text>
             <Text>ICO: 21827150</Text>
             <Text>Telefon: +420 770 169 411</Text>
@@ -255,7 +255,7 @@ export function PdfDocument(props: {
 
         {/* FOOTER */}
         <Text style={styles.footer}>
-          Konstanta HP • www.konstantahp.cz • Hliníkové oplecení a pergoly
+          KONSTANTA - hliníkové ploty s.r.o. • www.konstantahp.cz • Hliníkové oplocení a pergoly
         </Text>
 
        {/* PODMÍNKY */}

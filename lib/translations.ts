@@ -290,7 +290,7 @@ export const footerContent = {
 
 export const heroContent = {
   cs: {
-    metaLeft: "Konstanta HP · IČO 21827150 · CZ",
+    metaLeft: "KONSTANTA - hliníkové ploty s.r.o. · IČO 21827150 · CZ",
     metaRight: `Hliníkové oplocení na míru · Est. ${FOUNDED_YEAR}`,
     titleLines: ["Ploty,", "které", "vydrží."],
     subtitle:
@@ -312,7 +312,7 @@ export const heroContent = {
     ],
   },
   sk: {
-    metaLeft: "Konstanta HP · IČO 21827150 · CZ",
+    metaLeft: "KONSTANTA - hliníkové ploty s.r.o. · IČO 21827150 · CZ",
     metaRight: `Hliníkové oplotenie na mieru · Est. ${FOUNDED_YEAR}`,
     titleLines: ["Ploty,", "ktoré", "vydržia."],
     subtitle:
@@ -333,7 +333,7 @@ export const heroContent = {
     ],
   },
   de: {
-    metaLeft: "Konstanta HP · IČO 21827150 · CZ",
+    metaLeft: "KONSTANTA - hliníkové ploty s.r.o. · IČO 21827150 · CZ",
     metaRight: `Maßgefertigte Aluminiumzäune · Seit ${FOUNDED_YEAR}`,
     titleLines: ["Zäune,", "die", "halten."],
     subtitle:
@@ -495,7 +495,7 @@ export const whyUsContent = {
   cs: {
     heading: "Česká firma, která upřednostňuje kvalitu před kvantitou",
     paragraph:
-      "Jsme Konstanta HP – tým, který bere každou zakázku osobně. Veškeré produkty máme plně ve vlastní režii, a proto můžeme garantovat kvalitu i dlouhou životnost každého plotu.",
+      "Jsme KONSTANTA - hliníkové ploty s.r.o. – tým, který bere každou zakázku osobně. Veškeré produkty máme plně ve vlastní režii, a proto můžeme garantovat kvalitu i dlouhou životnost každého plotu.",
     reasons: [
       "Vyrábíme i montujeme vše ve vlastní režii",
       "Garance kvality a maximální spokojenosti",
@@ -508,7 +508,7 @@ export const whyUsContent = {
   sk: {
     heading: "Česká firma, ktorá uprednostňuje kvalitu pred kvantitou",
     paragraph:
-      "Sme Konstanta HP – tím, ktorý berie každú zákazku osobne. Všetky produkty máme plne vo vlastnej réžii, a preto môžeme garantovať kvalitu aj dlhú životnosť každého plota.",
+      "Sme KONSTANTA - hliníkové ploty s.r.o. – tím, ktorý berie každú zákazku osobne. Všetky produkty máme plne vo vlastnej réžii, a preto môžeme garantovať kvalitu aj dlhú životnosť každého plota.",
     reasons: [
       "Vyrábame aj montujeme všetko vo vlastnej réžii",
       "Garancia kvality a maximálnej spokojnosti",
@@ -521,7 +521,7 @@ export const whyUsContent = {
   de: {
     heading: "Ein tschechisches Unternehmen, das Qualität vor Quantität stellt",
     paragraph:
-      "Wir sind Konstanta HP – ein Team, dem jeder Auftrag persönlich am Herzen liegt. Alle Produkte fertigen wir vollständig in Eigenregie und garantieren so Qualität und lange Lebensdauer jedes Zauns.",
+      "Wir sind KONSTANTA - hliníkové ploty s.r.o. – ein Team, dem jeder Auftrag persönlich am Herzen liegt. Alle Produkte fertigen wir vollständig in Eigenregie und garantieren so Qualität und lange Lebensdauer jedes Zauns.",
     reasons: [
       "Wir fertigen und montieren alles in Eigenregie",
       "Garantierte Qualität und höchste Zufriedenheit",
@@ -741,7 +741,7 @@ export const socialContent = {
     subtitle: "Podívejte se na naše nejnovější realizace, novinky a inspiraci na hliníkové ploty, brány a pergoly.",
     emailLabel: "E-mail",
     igAriaPrefix: "Otevřít příspěvek na Instagramu:",
-    igPostAlt: "Příspěvek Konstanta HP na Instagramu",
+    igPostAlt: "Příspěvek KONSTANTA - hliníkové ploty s.r.o. na Instagramu",
     galleryAlts: [
       "Hliníkový plot s vodorovnými lamelami",
       "Posuvná hliníková brána",
@@ -759,7 +759,7 @@ export const socialContent = {
     subtitle: "Pozrite si naše najnovšie realizácie, novinky a inšpiráciu na hliníkové ploty, brány a pergoly.",
     emailLabel: "E-mail",
     igAriaPrefix: "Otvoriť príspevok na Instagrame:",
-    igPostAlt: "Príspevok Konstanta HP na Instagrame",
+    igPostAlt: "Príspevok KONSTANTA - hliníkové ploty s.r.o. na Instagrame",
     galleryAlts: [
       "Hliníkový plot s vodorovnými lamelami",
       "Posuvná hliníková brána",
@@ -778,7 +778,7 @@ export const socialContent = {
       "Entdecken Sie unsere neuesten Projekte, Neuigkeiten und Inspiration rund um Aluminiumzäune, Tore und Pergolen.",
     emailLabel: "E-Mail",
     igAriaPrefix: "Instagram-Beitrag öffnen:",
-    igPostAlt: "Instagram-Beitrag von Konstanta HP",
+    igPostAlt: "Instagram-Beitrag von KONSTANTA - hliníkové ploty s.r.o.",
     galleryAlts: [
       "Aluminiumzaun mit horizontalen Lamellen",
       "Aluminium-Schiebetor",
@@ -811,7 +811,7 @@ export const contactContent = {
     successTitle: "Děkujeme!",
     successText: "Vaši poptávku jsme přijali. Brzy se vám ozveme.",
     labels: { name: "Jméno a příjmení", phone: "Telefon", email: "E-mail", company: "Firma", message: "Co potřebujete?" },
-    placeholders: { name: "Jan Novák", phone: "+420 000 000 000", email: "jan@email.cz", company: "Konstanta HP s.r.o", message: "Mám zájem o plot a posuvnou bránu..." },
+    placeholders: { name: "Jan Novák", phone: "+420 000 000 000", email: "jan@email.cz", company: "Firma s.r.o.", message: "Mám zájem o plot a posuvnou bránu..." },
     submit: "Odeslat poptávku",
     consent: "Odesláním souhlasíte se zpracováním osobních údajů za účelem vyřízení poptávky.",
     mapTitle: "Mapa - KONSTANTA hliníkové ploty, Maleč 36",
@@ -829,7 +829,7 @@ export const contactContent = {
     successTitle: "Ďakujeme!",
     successText: "Váš dopyt sme prijali. Čoskoro sa vám ozveme.",
     labels: { name: "Meno a priezvisko", phone: "Telefón", email: "E-mail", company: "Firma", message: "Čo potrebujete?" },
-    placeholders: { name: "Ján Novák", phone: "+420 000 000 000", email: "jan@email.sk", company: "Konstanta HP s.r.o", message: "Mám záujem o plot a posuvnú bránu..." },
+    placeholders: { name: "Ján Novák", phone: "+420 000 000 000", email: "jan@email.sk", company: "Firma s.r.o.", message: "Mám záujem o plot a posuvnú bránu..." },
     submit: "Odoslať dopyt",
     consent: "Odoslaním súhlasíte so spracovaním osobných údajov na účely vybavenia dopytu.",
     mapTitle: "Mapa - KONSTANTA hliníkové ploty, Maleč 36",
@@ -848,7 +848,7 @@ export const contactContent = {
     successTitle: "Vielen Dank!",
     successText: "Ihre Anfrage ist bei uns eingegangen. Wir melden uns in Kürze bei Ihnen.",
     labels: { name: "Vor- und Nachname", phone: "Telefon", email: "E-Mail", company: "Firma", message: "Was benötigen Sie?" },
-    placeholders: { name: "Max Mustermann", phone: "+420 000 000 000", email: "max@email.de", company: "Konstanta HP s.r.o", message: "Ich interessiere mich für einen Zaun und ein Schiebetor..." },
+    placeholders: { name: "Max Mustermann", phone: "+420 000 000 000", email: "max@email.de", company: "Firma GmbH", message: "Ich interessiere mich für einen Zaun und ein Schiebetor..." },
     submit: "Anfrage senden",
     consent: "Mit dem Absenden stimmen Sie der Verarbeitung Ihrer personenbezogenen Daten zur Bearbeitung der Anfrage zu.",
     mapTitle: "Karte – KONSTANTA hliníkové ploty, Maleč 36",
@@ -1951,12 +1951,10 @@ export const gateLabels: Record<Lang, Record<string, string>> = {
   },
 }
 
-// `tyc` (výztužná tyč křídla) se přidává jen ke křídlovým bránám — viz `kridlova`
-// v `gateProducts` a `step-brana.tsx`.
-export const gateExtrasLabels: Record<Lang, { pohon: string; tahoma: string; tyc: string }> = {
-  cs: { pohon: "Automatický pohon", tahoma: "Tahoma Switch", tyc: "Tyč pro zpevnění křídla" },
-  sk: { pohon: "Automatický pohon", tahoma: "Tahoma Switch", tyc: "Tyč na spevnenie krídla" },
-  de: { pohon: "Automatischer Antrieb", tahoma: "Tahoma Switch", tyc: "Verstärkungsstange für Torflügel" },
+export const gateExtrasLabels: Record<Lang, { pohon: string; tahoma: string }> = {
+  cs: { pohon: "Automatický pohon", tahoma: "Tahoma Switch" },
+  sk: { pohon: "Automatický pohon", tahoma: "Tahoma Switch" },
+  de: { pohon: "Automatischer Antrieb", tahoma: "Tahoma Switch" },
 }
 
 export const brankaExtrasLabels: Record<Lang, { zamek: string; schranka: string; zvonek: string }> = {
@@ -2824,14 +2822,14 @@ export type MailChromeContent = {
 
 export const mailContent: Record<Lang, MailChromeContent> = {
   cs: {
-    preview: "Děkujeme za vytvoření konfigurace s Konstanta HP",
-    logoAlt: "Konstanta HP — hliníkové ploty",
+    preview: "Děkujeme za vytvoření konfigurace s KONSTANTA - hliníkové ploty s.r.o.",
+    logoAlt: "KONSTANTA - hliníkové ploty s.r.o.",
     eyebrow: "Nová poptávka z konfigurátoru",
     headline: "Konfigurace oplocení",
     productsHeading: "Vybrané produkty",
     salutation: "Vážený/á",
     intro:
-      "Děkujeme, že jste si vybrali Konstanta HP pro vytvoření vaší konfigurace! Jsme potěšeni, že vás můžeme přivítat mezi našimi váženými zákazníky. Vaše důvěra v naše produkty a služby pro nás znamená vše a zavazujeme se poskytnout vám zážitek nejvyšší kvality.",
+      "Děkujeme, že jste si vybrali KONSTANTA - hliníkové ploty s.r.o. pro vytvoření vaší konfigurace! Jsme potěšeni, že vás můžeme přivítat mezi našimi váženými zákazníky. Vaše důvěra v naše produkty a služby pro nás znamená vše a zavazujeme se poskytnout vám zážitek nejvyšší kvality.",
     intro2:
       "Vaše konfigurace byla přijata a je zpracovávána s maximální péčí. Vážíme si vašeho zájmu a těšíme se na další spolupráci.",
     companyHeading: "Informace o společnosti",
@@ -2853,14 +2851,14 @@ export const mailContent: Record<Lang, MailChromeContent> = {
     rights: "Všechna práva vyhrazena.",
   },
   sk: {
-    preview: "Ďakujeme za vytvorenie konfigurácie s Konstanta HP",
-    logoAlt: "Konstanta HP — hliníkové ploty",
+    preview: "Ďakujeme za vytvorenie konfigurácie s KONSTANTA - hliníkové ploty s.r.o.",
+    logoAlt: "KONSTANTA - hliníkové ploty s.r.o.",
     eyebrow: "Nový dopyt z konfigurátora",
     headline: "Konfigurácia oplotenia",
     productsHeading: "Vybrané produkty",
     salutation: "Vážený/á",
     intro:
-      "Ďakujeme, že ste si vybrali Konstanta HP na vytvorenie vašej konfigurácie! Teší nás, že vás môžeme privítať medzi našimi váženými zákazníkmi. Vaša dôvera v naše produkty a služby pre nás znamená všetko a zaväzujeme sa poskytnúť vám zážitok najvyššej kvality.",
+      "Ďakujeme, že ste si vybrali KONSTANTA - hliníkové ploty s.r.o. na vytvorenie vašej konfigurácie! Teší nás, že vás môžeme privítať medzi našimi váženými zákazníkmi. Vaša dôvera v naše produkty a služby pre nás znamená všetko a zaväzujeme sa poskytnúť vám zážitok najvyššej kvality.",
     intro2:
       "Vaša konfigurácia bola prijatá a spracúva sa s maximálnou starostlivosťou. Vážime si váš záujem a tešíme sa na ďalšiu spoluprácu.",
     companyHeading: "Informácie o spoločnosti",
@@ -2882,14 +2880,14 @@ export const mailContent: Record<Lang, MailChromeContent> = {
     rights: "Všetky práva vyhradené.",
   },
   de: {
-    preview: "Vielen Dank für Ihre Konfiguration bei Konstanta HP",
-    logoAlt: "Konstanta HP — Aluminiumzäune",
+    preview: "Vielen Dank für Ihre Konfiguration bei KONSTANTA - hliníkové ploty s.r.o.",
+    logoAlt: "KONSTANTA - hliníkové ploty s.r.o.",
     eyebrow: "Neue Anfrage aus dem Konfigurator",
     headline: "Zaunkonfiguration",
     productsHeading: "Ausgewählte Produkte",
     salutation: "Guten Tag",
     intro:
-      "vielen Dank, dass Sie sich für Konstanta HP entschieden haben! Wir freuen uns, Sie unter unseren geschätzten Kunden begrüßen zu dürfen. Ihr Vertrauen in unsere Produkte und Leistungen bedeutet uns alles und wir verpflichten uns, Ihnen ein Erlebnis von höchster Qualität zu bieten.",
+      "vielen Dank, dass Sie sich für KONSTANTA - hliníkové ploty s.r.o. entschieden haben! Wir freuen uns, Sie unter unseren geschätzten Kunden begrüßen zu dürfen. Ihr Vertrauen in unsere Produkte und Leistungen bedeutet uns alles und wir verpflichten uns, Ihnen ein Erlebnis von höchster Qualität zu bieten.",
     intro2:
       "Ihre Konfiguration ist bei uns eingegangen und wird mit größter Sorgfalt bearbeitet. Wir schätzen Ihr Interesse und freuen uns auf die weitere Zusammenarbeit.",
     companyHeading: "Angaben zum Unternehmen",
@@ -2940,8 +2938,8 @@ export const confMailContent: Record<Lang, ConfMailContent> = {
     intro3:
       "Pro upřesnění technických parametrů a rozsahu dodávky vás bude v nejbližší době kontaktovat náš obchodní zástupce.",
     signoff: "S pozdravem",
-    team: "Tým Konstanta HP",
-    subject: "Potvrzení poptávky z konfigurátoru — Konstanta HP",
+    team: "Tým KONSTANTA - hliníkové ploty s.r.o.",
+    subject: "Potvrzení poptávky z konfigurátoru — KONSTANTA - hliníkové ploty s.r.o.",
   },
   sk: {
     intro: "ďakujeme za využitie nášho konfigurátora. Vaša požiadavka bola úspešne prijatá.",
@@ -2950,8 +2948,8 @@ export const confMailContent: Record<Lang, ConfMailContent> = {
     intro3:
       "Na upresnenie technických parametrov a rozsahu dodávky vás v najbližšom čase bude kontaktovať náš obchodný zástupca.",
     signoff: "S pozdravom",
-    team: "Tím Konstanta HP",
-    subject: "Potvrdenie dopytu z konfigurátora — Konstanta HP",
+    team: "Tím KONSTANTA - hliníkové ploty s.r.o.",
+    subject: "Potvrdenie dopytu z konfigurátora — KONSTANTA - hliníkové ploty s.r.o.",
   },
   de: {
     intro:
@@ -2961,8 +2959,8 @@ export const confMailContent: Record<Lang, ConfMailContent> = {
     intro3:
       "Zur Abstimmung der technischen Parameter und des Lieferumfangs wird sich in Kürze unser Vertriebsmitarbeiter bei Ihnen melden.",
     signoff: "Mit freundlichen Grüßen",
-    team: "Ihr Team von Konstanta HP",
-    subject: "Bestätigung Ihrer Anfrage aus dem Konfigurator — Konstanta HP",
+    team: "Tým KONSTANTA - hliníkové ploty s.r.o.",
+    subject: "Bestätigung Ihrer Anfrage aus dem Konfigurator — KONSTANTA - hliníkové ploty s.r.o.",
   },
 }
 
@@ -3293,9 +3291,9 @@ export const quoteContent: Record<Lang, QuoteContent> = {
     termHeading: "Termín realizace",
     termBadge: "8–14 týdnů",
     termText:
-      "Realizace zakázky proběhne v rozmezí <strong>8–14 týdnů</strong> od podpisu smlouvy a uhrazení zálohy.",
+      "Realizace zakázky proběhne v rozmezí <strong>4–10 týdnů</strong> od podpisu smlouvy a uhrazení zálohy.",
     depositHeading: "Záloha",
-    depositBadge: "70 %",
+    depositBadge: "50 %",
     depositText:
       "Před zahájením realizace je požadována záloha ve výši <strong>70 % z celkové ceny zakázky</strong>. Doplatek bude uhrazen v den montáže po předání díla.",
     termsHeading: "Obchodní podmínky",
@@ -3346,9 +3344,9 @@ export const quoteContent: Record<Lang, QuoteContent> = {
     termHeading: "Termín realizácie",
     termBadge: "8–14 týždňov",
     termText:
-      "Realizácia zákazky prebehne v rozmedzí <strong>8–14 týždňov</strong> od podpisu zmluvy a uhradenia zálohy.",
+      "Realizácia zákazky prebehne v rozmedzí <strong>4–10 týždňov</strong> od podpisu zmluvy a uhradenia zálohy.",
     depositHeading: "Záloha",
-    depositBadge: "70 %",
+    depositBadge: "50 %",
     depositText:
       "Pred začatím realizácie je požadovaná záloha vo výške <strong>70 % z celkovej ceny zákazky</strong>. Doplatok bude uhradený v deň montáže po odovzdaní diela.",
     termsHeading: "Obchodné podmienky",
@@ -3399,9 +3397,9 @@ export const quoteContent: Record<Lang, QuoteContent> = {
     termHeading: "Realisierungstermin",
     termBadge: "8–14 Wochen",
     termText:
-      "Die Ausführung des Auftrags erfolgt innerhalb von <strong>8–14 Wochen</strong> nach Vertragsunterzeichnung und Zahlung der Anzahlung.",
+      "Die Ausführung des Auftrags erfolgt innerhalb von <strong>4–10 Wochen</strong> nach Vertragsunterzeichnung und Zahlung der Anzahlung.",
     depositHeading: "Anzahlung",
-    depositBadge: "70 %",
+    depositBadge: "50 %",
     depositText:
       "Vor Beginn der Ausführung wird eine Anzahlung in Höhe von <strong>70 % des Gesamtauftragswerts</strong> verlangt. Die Restzahlung erfolgt am Montagetag nach Übergabe des Werks.",
     termsHeading: "Geschäftsbedingungen",
@@ -3435,7 +3433,6 @@ export type QuoteItemsContent = {
   sheetName: string
   currency: string
   header: { produkt: string; mnozstvi: string; bezDph: string; dph: string; sDph: string }
-  tyc: string
   /** Pohon křídlových bran (dvoukridla / skladaci) — Somfy Ixengo L. */
   pohonKridlova: string
   /** Pohon posuvných bran (zbytek variant) — Somfy Elixo 500. */
@@ -3445,6 +3442,8 @@ export type QuoteItemsContent = {
   /** Kolejnice — účtuje se u pojezdových bran (atypická, teleskopická pojezdová, posuvná). */
   kolejnice: string
   zastrc: string
+  /** Kování brány — účtuje se u ručně ovládaných bran s křídlem (2 ks). */
+  kovaniBrany: string
   tahoma: string
   montazBrany: string
   branka: string
@@ -3459,6 +3458,8 @@ export type QuoteItemsContent = {
   montazDilcu: string
   barvaDilcu: string
   motiv: string
+  /** Paušál za dopravu — přičítá se ke každé nabídce jednou. */
+  doprava: string
   celkem: string
 }
 
@@ -3467,13 +3468,13 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     sheetName: "Kalkulace",
     currency: "Kč",
     header: { produkt: "Produkt", mnozstvi: "Množství", bezDph: "Cena bez DPH", dph: "DPH", sDph: "Cena s DPH" },
-    tyc: "Tyč pro zpevnění křídla brány",
     pohonKridlova: "Pohon křídlové brány IXENGO L 24 V 3 S io komfort set",
     pohonPosuvna:
       "Pohon posuvné brány ELIXO 500 3 S M io komfort set – pohon s řídicí jednotkou a rádiovým přijímačem, 1x Somfy Master Pro Bitech – bezpečnostní fotobuňky (1 pár) dosah 10 m, 2x Odblokovací klíč (použití při výpadku proudu)",
     brzda: "Hydraulická brzda pro posuvné brány ve svahu",
     kolejnice: "Kolejnice pro posuvnou bránu",
     zastrc: "Zástrč brány",
+    kovaniBrany: "Kování brány",
     tahoma:
       "Somfy TaHoma switch je centrální jednotka pro chytrou domácnost, která umožňuje ovládat a automatizovat různá zařízení v domě, jako jsou rolety, žaluzie, brány, osvětlení, topení a další",
     montazBrany: "Montáž brány",
@@ -3493,19 +3494,20 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     montazDilcu: "Montáž dílců",
     barvaDilcu: "Barva dílců",
     motiv: "Motiv",
+    doprava: "Doprava",
     celkem: "Celkem:",
   },
   sk: {
     sheetName: "Kalkulácia",
     currency: "Kč",
     header: { produkt: "Produkt", mnozstvi: "Množstvo", bezDph: "Cena bez DPH", dph: "DPH", sDph: "Cena s DPH" },
-    tyc: "Tyč na spevnenie krídla brány",
     pohonKridlova: "Pohon krídlovej brány IXENGO L 24 V 3 S io komfort set",
     pohonPosuvna:
       "Pohon posuvnej brány ELIXO 500 3 S M io komfort set – pohon s riadiacou jednotkou a rádiovým prijímačom, 1x Somfy Master Pro Bitech – bezpečnostné fotobunky (1 pár) dosah 10 m, 2x Odblokovací kľúč (použitie pri výpadku prúdu)",
     brzda: "Hydraulická brzda pre posuvné brány vo svahu",
     kolejnice: "Koľajnica pre posuvnú bránu",
     zastrc: "Zástrč brány",
+    kovaniBrany: "Kovanie brány",
     tahoma:
       "Somfy TaHoma switch je centrálna jednotka pre inteligentnú domácnosť, ktorá umožňuje ovládať a automatizovať rôzne zariadenia v dome, ako sú rolety, žalúzie, brány, osvetlenie, kúrenie a ďalšie",
     montazBrany: "Montáž brány",
@@ -3525,19 +3527,20 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     montazDilcu: "Montáž dielcov",
     barvaDilcu: "Farba dielcov",
     motiv: "Motív",
+    doprava: "Doprava",
     celkem: "Spolu:",
   },
   de: {
     sheetName: "Kalkulation",
     currency: "CZK",
     header: { produkt: "Produkt", mnozstvi: "Menge", bezDph: "Preis netto", dph: "MwSt.", sDph: "Preis brutto" },
-    tyc: "Verstärkungsstange für den Torflügel",
     pohonKridlova: "Antrieb für Drehflügeltore IXENGO L 24 V 3 S io Komfort-Set",
     pohonPosuvna:
       "Antrieb für Schiebetore ELIXO 500 3 S M io Komfort-Set – Antrieb mit Steuereinheit und Funkempfänger, 1x Somfy Master Pro Bitech – Sicherheitslichtschranke (1 Paar), Reichweite 10 m, 2x Entriegelungsschlüssel (bei Stromausfall)",
     brzda: "Hydraulische Bremse für Schiebetore in Hanglage",
     kolejnice: "Laufschiene für das Schiebetor",
     zastrc: "Torriegel",
+    kovaniBrany: "Torbeschlag",
     tahoma:
       "Somfy TaHoma Switch ist die Zentraleinheit für das Smart Home und ermöglicht die Steuerung und Automatisierung verschiedener Geräte im Haus wie Rollläden, Jalousien, Tore, Beleuchtung, Heizung und weitere",
     montazBrany: "Montage des Tors",
@@ -3557,6 +3560,7 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     montazDilcu: "Montage der Zaunelemente",
     barvaDilcu: "Farbe der Elemente",
     motiv: "Motiv",
+    doprava: "Transport",
     celkem: "Gesamt:",
   },
 }
