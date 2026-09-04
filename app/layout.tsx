@@ -51,7 +51,7 @@ export default function RootLayout({
       lang="cs"
       className={`${barlow.variable} ${barlowCondensed.variable} ${jetbrainsMono.variable} bg-background`}
     >
-      <body className="font-sans antialiased overflow-x-clip">
+      <body className="font-sans antialiased overflow-x-hidden">
         {children}
         <Toaster
           position="top-center"
