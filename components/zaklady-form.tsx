@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label"
 import { CheckboxCard } from "@/components/configurator/form-controls"
 import { Reveal } from "@/components/reveal"
 import { sendZaklady } from "@/lib/actions"
-import { zakladyContent, type Lang } from "@/lib/translations"
+import { POPTAVKY_EMAIL, zakladyContent, type Lang } from "@/lib/translations"
 import type { ZakladyType } from "@/lib/schemas"
 import type { ActionResponse } from "@/types"
 
@@ -77,6 +77,19 @@ export function ZakladyForm({ lang = "cs" }: { lang?: Lang }) {
         <CheckCircle2 className="h-14 w-14 text-primary" />
         <h2 className="font-heading text-2xl font-bold">{t.successTitle}</h2>
         <p className="text-muted-foreground">{t.successText}</p>
+
+        {/* Web běží krátce, tak zákazníkovi rovnou dáme adresu, kam poptávky
+            padají — kdyby se odpověď někde ztratila, má se kam ozvat. */}
+        <p className="mt-2 max-w-xl rounded-2xl border border-border bg-muted/40 px-5 py-4 text-sm text-muted-foreground text-pretty">
+          {t.newSitePre}
+          <a
+            href={`mailto:${POPTAVKY_EMAIL}`}
+            className="font-medium text-foreground underline underline-offset-4 transition-colors hover:text-brand"
+          >
+            {POPTAVKY_EMAIL}
+          </a>
+          {t.newSitePost}
+        </p>
       </div>
     )
   }

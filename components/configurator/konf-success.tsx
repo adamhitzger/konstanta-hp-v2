@@ -4,7 +4,7 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { Check, MoveLeft } from "lucide-react"
 import { Button, buttonVariants } from "@/components/ui/button"
-import { konfSuccessContent, withLang, type Lang } from "@/lib/translations"
+import { POPTAVKY_EMAIL, konfSuccessContent, withLang, type Lang } from "@/lib/translations"
 
 /**
  * Potvrzení o přijetí poptávky — nahradí celou kartu konfigurátoru po úspěšném odeslání.
@@ -43,6 +43,19 @@ export function KonfSuccess({ lang = "cs", onReset }: { lang?: Lang; onReset?: (
         </h2>
         <p className="max-w-xl text-lg text-muted-foreground text-pretty">{t.desc}</p>
         <p className="max-w-xl text-sm text-muted-foreground/80 text-pretty">{t.note}</p>
+
+        {/* Web běží krátce, tak zákazníkovi rovnou dáme adresu, kam poptávky
+            padají — kdyby se odpověď někde ztratila, má se kam ozvat. */}
+        <p className="mt-2 max-w-xl rounded-2xl border border-border bg-muted/40 px-5 py-4 text-sm text-muted-foreground text-pretty">
+          {t.newSitePre}
+          <a
+            href={`mailto:${POPTAVKY_EMAIL}`}
+            className="font-medium text-foreground underline underline-offset-4 transition-colors hover:text-brand"
+          >
+            {POPTAVKY_EMAIL}
+          </a>
+          {t.newSitePost}
+        </p>
       </div>
 
       <div className="mt-2 flex flex-col items-center gap-3 sm:flex-row">

@@ -1703,6 +1703,8 @@ export const zakladyContent = {
     consent: "Odesláním souhlasíte se zpracováním osobních údajů pro účely vyřízení poptávky.",
     successTitle: "Poptávka odeslána",
     successText: "Ozveme se vám co nevidět a domluvíme termín zaměření.",
+    newSitePre: "Web máme spuštěný teprve necelý měsíc. Všechny poptávky z konfigurátoru chodí na ",
+    newSitePost: " — kdyby vám odpověď nedorazila, napište nám prosím rovnou na tuhle adresu.",
     backToPicker: "Zpět na výběr konfigurátoru",
   },
   sk: {
@@ -1749,6 +1751,8 @@ export const zakladyContent = {
     consent: "Odoslaním súhlasíte so spracovaním osobných údajov na účely vybavenia dopytu.",
     successTitle: "Dopyt odoslaný",
     successText: "Ozveme sa vám čoskoro a dohodneme termín zamerania.",
+    newSitePre: "Web máme spustený sotva mesiac. Všetky dopyty z konfigurátora chodia na ",
+    newSitePost: " — keby vám odpoveď nedorazila, napíšte nám prosím rovno na túto adresu.",
     backToPicker: "Späť na výber konfigurátora",
   },
   de: {
@@ -1795,6 +1799,8 @@ export const zakladyContent = {
     consent: "Mit dem Absenden stimmen Sie der Verarbeitung Ihrer personenbezogenen Daten zur Bearbeitung der Anfrage zu.",
     successTitle: "Anfrage gesendet",
     successText: "Wir melden uns in Kürze und vereinbaren einen Aufmaßtermin.",
+    newSitePre: "Unsere Website ist noch keinen Monat online. Alle Anfragen aus dem Konfigurator laufen unter ",
+    newSitePost: " ein — sollte unsere Antwort ausbleiben, schreiben Sie uns bitte direkt an diese Adresse.",
     backToPicker: "Zurück zur Konfiguratorauswahl",
   },
 }
@@ -2367,12 +2373,21 @@ export const konfPendingContent = {
   },
 }
 
+/**
+ * Adresa, na kterou `sendConf` / `sendPerg` / `sendZab` posílají poptávky
+ * (viz `to:` v lib/actions.ts). Drží se tady, ať ji potvrzovací obrazovky
+ * nemusí psát natvrdo každá zvlášť.
+ */
+export const POPTAVKY_EMAIL = "nabidky@konstantahp.cz"
+
 export const konfSuccessContent = {
   cs: {
     eyebrow: "Máme to",
     heading: "Poptávka byla úspěšně odeslána",
     desc: "Vaše poptávka dorazila našim specialistům. Projdou si zadání a ozvou se vám na uvedený e-mail nebo telefon — zpravidla do dvou pracovních dnů.",
     note: "Kopii poptávky jsme vám poslali na e-mail. Kdyby vás mezitím něco napadlo, stačí odpovědět na něj, nebo nám zavolat.",
+    newSitePre: "Web máme spuštěný teprve necelý měsíc. Všechny poptávky z konfigurátoru chodí na ",
+    newSitePost: " — kdyby vám odpověď nedorazila, napište nám prosím rovnou na tuhle adresu.",
     home: "Zpět na hlavní stránku",
     again: "Odeslat další poptávku",
   },
@@ -2381,6 +2396,8 @@ export const konfSuccessContent = {
     heading: "Dopyt bol úspešne odoslaný",
     desc: "Váš dopyt dorazil našim špecialistom. Prejdú si zadanie a ozvú sa vám na uvedený e-mail alebo telefón — spravidla do dvoch pracovných dní.",
     note: "Kópiu dopytu sme vám poslali na e-mail. Ak vás medzitým niečo napadne, stačí naň odpovedať, alebo nám zavolať.",
+    newSitePre: "Web máme spustený sotva mesiac. Všetky dopyty z konfigurátora chodia na ",
+    newSitePost: " — keby vám odpoveď nedorazila, napíšte nám prosím rovno na túto adresu.",
     home: "Späť na hlavnú stránku",
     again: "Odoslať ďalší dopyt",
   },
@@ -2389,6 +2406,8 @@ export const konfSuccessContent = {
     heading: "Die Anfrage wurde erfolgreich gesendet",
     desc: "Ihre Anfrage ist bei unseren Spezialisten eingegangen. Sie sehen sich Ihre Angaben an und melden sich per E-Mail oder Telefon — in der Regel innerhalb von zwei Werktagen.",
     note: "Eine Kopie der Anfrage haben wir Ihnen per E-Mail geschickt. Falls Ihnen noch etwas einfällt, antworten Sie einfach darauf oder rufen Sie uns an.",
+    newSitePre: "Unsere Website ist noch keinen Monat online. Alle Anfragen aus dem Konfigurator laufen unter ",
+    newSitePost: " ein — sollte unsere Antwort ausbleiben, schreiben Sie uns bitte direkt an diese Adresse.",
     home: "Zurück zur Startseite",
     again: "Weitere Anfrage senden",
   },
@@ -3441,6 +3460,8 @@ export type QuoteItemsContent = {
   brzda: string
   /** Kolejnice — účtuje se u pojezdových bran (atypická, teleskopická pojezdová, posuvná). */
   kolejnice: string
+  /** Dojezdový sloupek se zadlabávacím zámkem — posuvné a samonosné brány. */
+  dojezdSloupek: string
   zastrc: string
   /** Kování brány — účtuje se u ručně ovládaných bran s křídlem (2 ks). */
   kovaniBrany: string
@@ -3473,6 +3494,7 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
       "Pohon posuvné brány ELIXO 500 3 S M io komfort set – pohon s řídicí jednotkou a rádiovým přijímačem, 1x Somfy Master Pro Bitech – bezpečnostní fotobuňky (1 pár) dosah 10 m, 2x Odblokovací klíč (použití při výpadku proudu)",
     brzda: "Hydraulická brzda pro posuvné brány ve svahu",
     kolejnice: "Kolejnice pro posuvnou bránu",
+    dojezdSloupek: "Dojezdový sloupek + zadlabávací zámek",
     zastrc: "Zástrč brány",
     kovaniBrany: "Kování brány",
     tahoma:
@@ -3506,6 +3528,7 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
       "Pohon posuvnej brány ELIXO 500 3 S M io komfort set – pohon s riadiacou jednotkou a rádiovým prijímačom, 1x Somfy Master Pro Bitech – bezpečnostné fotobunky (1 pár) dosah 10 m, 2x Odblokovací kľúč (použitie pri výpadku prúdu)",
     brzda: "Hydraulická brzda pre posuvné brány vo svahu",
     kolejnice: "Koľajnica pre posuvnú bránu",
+    dojezdSloupek: "Dojazdový stĺpik + zadlabávací zámok",
     zastrc: "Zástrč brány",
     kovaniBrany: "Kovanie brány",
     tahoma:
@@ -3539,6 +3562,7 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
       "Antrieb für Schiebetore ELIXO 500 3 S M io Komfort-Set – Antrieb mit Steuereinheit und Funkempfänger, 1x Somfy Master Pro Bitech – Sicherheitslichtschranke (1 Paar), Reichweite 10 m, 2x Entriegelungsschlüssel (bei Stromausfall)",
     brzda: "Hydraulische Bremse für Schiebetore in Hanglage",
     kolejnice: "Laufschiene für das Schiebetor",
+    dojezdSloupek: "Endpfosten + Einsteckschloss",
     zastrc: "Torriegel",
     kovaniBrany: "Torbeschlag",
     tahoma:
