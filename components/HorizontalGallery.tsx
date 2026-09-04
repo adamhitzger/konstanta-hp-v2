@@ -21,7 +21,7 @@ type Slide = {
 
 // Obrázky vychází z produktových řad (viz components/products.tsx); texty z lib/translations.ts.
 const slideImages = [
-  { imgMobile: '/real/mobil/oploceni.png', imgDesktop: '/real/oploceni.jpeg', person: '/gallery-fam-1.png' },
+  { imgMobile: '/real/oploceni.png', imgDesktop: '/real/oploceni.jpeg', person: '/gallery-fam-1.png' },
   { imgMobile: '/real/mobil/brana-sikma.jpg', imgDesktop: '/real/brana-sikma.jpg', person: '/gallery-fam-2.png' },
   { imgMobile: '/real/Branka.jpg', imgDesktop: '/real/Branka.jpg', person: '/gallery-fam-3.png' },
   { imgMobile: '/real/pergola.jpg', imgDesktop: '/real/pergola.jpg', person: '/gallery-fam-4.png' },
