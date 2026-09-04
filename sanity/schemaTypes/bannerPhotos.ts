@@ -15,8 +15,14 @@ export const bannerPhotosType = defineType({
                     {type: "image",
                     name: "photo",
                     options: {
-    hotspot: true
-  },
+                            hotspot: true
+                        },
+                    },
+                    {type: "image",
+                    name: "mobilePhoto",
+                    options: {
+                            hotspot: true
+                        },
                     },
                     {type: "string",
                         name: "alt"

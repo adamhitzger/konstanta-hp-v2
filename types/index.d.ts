@@ -259,3 +259,35 @@ export interface Review {
   /** Odkaz na hodnocení na Googlu (`author_url`). */
   url?: string;
 }
+
+/** Jedna položka pole `photos` z dokumentu `bannerPhotos` (BANNER_PHOTOS query).
+ * `src` je záběr na šířku (desktop), `mobileSrc` verze na výšku; `cjText`/`skText`/`deText`
+ * je velký nápis přes fotku, `alt` slouží jako záložní popisek. */
+export interface BannerPhotoDoc {
+  src?: string;
+  mobileSrc?: string;
+  alt?: string;
+  cjText?: string;
+  skText?: string;
+  deText?: string;
+}
+
+/** Odpověď BANNER_PHOTOS — jeden singleton dokument s polem snímků. */
+export interface BannerPhotosDoc {
+  photosUrl?: BannerPhotoDoc[] | null;
+}
+
+/** Snímek horizontální galerie na homepage, už přeložený a připravený k vykreslení
+ * (lib/banner-photos.ts → components/HorizontalGallery.tsx). */
+export interface GallerySlide {
+  /** Velký nápis přes fotku, zároveň odkaz do galerie realizací. */
+  title: string;
+  /** Alt text fotky. */
+  label: string;
+  /** Kam nadpis vede — záložka kategorie v /realizace. */
+  href: string;
+  /** Fotka na výšku (mobil). */
+  imgMobile: string;
+  /** Fotka na šířku (desktop – méně oříznutá). */
+  imgDesktop: string;
+}

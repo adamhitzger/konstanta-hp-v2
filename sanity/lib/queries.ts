@@ -8,9 +8,15 @@ export const IG_FEED = groq`*[_type == 'igFeed' && defined(img.asset)] | order(_
     "img":img.asset->url,
 }`
 
+/**
+ * Snímky horizontální galerie na homepage. `photo` je záběr na šířku (desktop),
+ * `mobilePhoto` verze na výšku — když ve Studiu chybí, `lib/banner-photos.ts`
+ * spadne zpět na desktopovou fotku.
+ */
 export const BANNER_PHOTOS = groq`*[_type == 'bannerPhotos'][0]{
     "photosUrl": photos[]{
         "src": photo.asset->url,
+        "mobileSrc": mobilePhoto.asset->url,
         alt,
         cjText,
         deText,

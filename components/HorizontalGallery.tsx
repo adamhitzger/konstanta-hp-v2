@@ -6,48 +6,28 @@ import { ArrowUpRight } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { galleryContent, heroContent, withLang, type Lang } from '@/lib/translations';
+import { galleryContent, heroContent, type Lang } from '@/lib/translations';
+import type { GallerySlide } from '@/types';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
-
-type Slide = {
-  title: string; // velký nápis přes fotku (zároveň odkaz do galerie realizací)
-  label: string; // alt text
-  href: string; // kam nadpis vede — záložka kategorie v /realizace
-  imgMobile: string; // fotka na výšku (mobil)
-  imgDesktop: string; // fotka na šířku (desktop – méně oříznutá)
-  person: string; // průhledný cutout rodiny/páru
-};
-
-// Obrázky vychází z produktových řad (viz components/products.tsx); texty z lib/translations.ts.
-const slideImages = [
-  { imgMobile: '/real/oploceni.png', imgDesktop: '/real/oploceni.jpeg', person: '/gallery-fam-1.png' },
-  { imgMobile: '/real/mobil/brana-sikma.jpg', imgDesktop: '/real/brana-sikma.jpg', person: '/gallery-fam-2.png' },
-  { imgMobile: '/real/Branka.jpg', imgDesktop: '/real/Branka.jpg', person: '/gallery-fam-3.png' },
-  { imgMobile: '/real/pergola.jpg', imgDesktop: '/real/pergola.jpg', person: '/gallery-fam-4.png' },
-];
-
-/* Pořadí sedí se `slideImages` i s `galleryContent.titles`: plot, brána, branka, pergola.
-   Nadpis je klikatelný schválně — kdo ví, co hledá, nemusí odscrollovat celou lištu. */
-const slideHrefs = [
-  '/realizace?filter=ploty',
-  '/realizace?filter=brany',
-  '/realizace?filter=branky',
-  '/realizace?filter=pergoly',
-];
 
 // O kolik px se prvek maximálně posune při parallaxu (speed × BASE).
 const PARALLAX_BASE = 80;
 
-export default function HorizontalGallery({ lang = "cs" }: { lang?: Lang }) {
+/**
+ * Snímky chodí ze Sanity (`bannerPhotos` → `lib/banner-photos.ts`), včetně
+ * nadpisu a mobilní varianty fotky. Nadpis je klikatelný schválně — kdo ví, co
+ * hledá, nemusí odscrollovat celou lištu.
+ */
+export default function HorizontalGallery({
+  slides,
+  lang = "cs",
+}: {
+  slides: GallerySlide[]
+  lang?: Lang
+}) {
   const t = galleryContent[lang] ?? galleryContent.cs
   const hero = heroContent[lang] ?? heroContent.cs
-  const slides: Slide[] = slideImages.map((img, i) => ({
-    ...img,
-    title: t.titles[i],
-    label: t.labels[i],
-    href: withLang(slideHrefs[i], lang),
-  }))
   const heroHighlights = hero.highlights
   const root = useRef<HTMLDivElement>(null);
 
@@ -76,7 +56,7 @@ export default function HorizontalGallery({ lang = "cs" }: { lang?: Lang }) {
         anticipatePin: 1,
         invalidateOnRefresh: true,
         snap: {
-          snapTo: 1 / (slides.length - 1),
+          snapTo: 1 / Math.max(1, slides.length - 1),
           duration: 0.2,
           ease: 'power1.inOut',
         },

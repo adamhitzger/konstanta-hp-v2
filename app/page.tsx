@@ -11,18 +11,23 @@ import { SiteFooter } from "@/components/site-footer"
 import HorizontalGallery from "@/components/HorizontalGallery"
 import { getLang } from "@/lib/translations"
 import { sanityFetch } from "@/sanity/lib/client"
-import { IG_FEED, REALIZACE_BANNERS_QUERY, REVIEWS_QUERY } from "@/sanity/lib/queries"
+import { BANNER_PHOTOS, IG_FEED, REALIZACE_BANNERS_QUERY, REVIEWS_QUERY } from "@/sanity/lib/queries"
 import { buildRealizaceTeaser } from "@/lib/realizace"
+import { buildGallerySlides } from "@/lib/banner-photos"
 import { buildReviews } from "@/lib/reviews"
-import type { IgPost, ReviewDoc } from "@/types"
+import type { BannerPhotosDoc, IgPost, ReviewDoc } from "@/types"
 
 export default async function Page({
   searchParams,
 }: {
   searchParams: Promise<{ lang?: string }>
 }) {
-  const [{ lang: langParam }, igPosts, realizaceDocs, reviewDocs] = await Promise.all([
+  const [{ lang: langParam }, bannerDoc, igPosts, realizaceDocs, reviewDocs] = await Promise.all([
     searchParams,
+    sanityFetch<BannerPhotosDoc | null>({ query: BANNER_PHOTOS }).catch((error) => {
+      console.error("Nepodařilo se načíst fotky hlavní sekce ze Sanity:", error)
+      return null
+    }),
     sanityFetch<IgPost[] | null>({ query: IG_FEED }).catch((error) => {
       console.error("Nepodařilo se načíst Instagram feed ze Sanity:", error)
       return null
@@ -40,13 +45,14 @@ export default async function Page({
   ])
   const lang = getLang(langParam)
   const reviews = buildReviews(reviewDocs, lang)
+  const gallerySlides = buildGallerySlides(bannerDoc?.photosUrl, lang)
 
   return (
     <SmoothScroll lang={lang}>
       <div className="flex min-h-screen flex-col">
         <SiteHeader lang={lang} />
         <main className="flex-1">
-          <HorizontalGallery lang={lang} />
+          <HorizontalGallery slides={gallerySlides} lang={lang} />
 
           <Stats lang={lang} />
           <Products lang={lang} />

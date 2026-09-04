@@ -273,19 +273,6 @@ const pdfPhoto = (url: string): string =>
     ? `${url}${url.includes("?") ? "&" : "?"}${PDF_IMG}`
     : url;
 
-/**
- * Sestaví HTML cenové nabídky pro `generatePdf` (Puppeteer → A4 PDF).
- *
- * Stránkování si dokument řídí sám: obsah je v `#src` jako seznam bloků a skript
- * na konci `<body>` je přesype do pevně vysokých „archů“ (`.sheet`), z nichž každý
- * má vlastní záhlaví i zápatí. Tabulka položek se přitom láme po skupinách řádků
- * (brána + její příplatky drží pohromadě) a na každém archu dostane znovu hlavičku.
- * Proto se nikde nepoužívá `page-break-inside` ani Puppeteer header/footerTemplate —
- * odkazy v zápatí by v templatu nebyly proklikatelné a nešlo by je obarvit.
- *
- * Vše, co skript měří, má pevnou výšku (fotky, logo), takže se layout nemění podle
- * toho, jestli se obrázky stihly načíst dřív než se skript rozběhne.
- */
 function htmlToPdf(
   userName: string,
   userEmail: string,
