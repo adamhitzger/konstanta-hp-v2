@@ -3289,7 +3289,7 @@ export const quoteContent: Record<Lang, QuoteContent> = {
     specsHeading: "Specifikace",
     noteHeading: "Poznámka zákazníka",
     termHeading: "Termín realizace",
-    termBadge: "8–14 týdnů",
+    termBadge: "4–10 týdnů",
     termText:
       "Realizace zakázky proběhne v rozmezí <strong>4–10 týdnů</strong> od podpisu smlouvy a uhrazení zálohy.",
     depositHeading: "Záloha",
@@ -3342,7 +3342,7 @@ export const quoteContent: Record<Lang, QuoteContent> = {
     specsHeading: "Špecifikácia",
     noteHeading: "Poznámka zákazníka",
     termHeading: "Termín realizácie",
-    termBadge: "8–14 týždňov",
+    termBadge: "4–10 týždňov",
     termText:
       "Realizácia zákazky prebehne v rozmedzí <strong>4–10 týždňov</strong> od podpisu zmluvy a uhradenia zálohy.",
     depositHeading: "Záloha",
@@ -3395,7 +3395,7 @@ export const quoteContent: Record<Lang, QuoteContent> = {
     specsHeading: "Spezifikation",
     noteHeading: "Anmerkung des Kunden",
     termHeading: "Realisierungstermin",
-    termBadge: "8–14 Wochen",
+    termBadge: "4–10 Wochen",
     termText:
       "Die Ausführung des Auftrags erfolgt innerhalb von <strong>4–10 Wochen</strong> nach Vertragsunterzeichnung und Zahlung der Anzahlung.",
     depositHeading: "Anzahlung",
