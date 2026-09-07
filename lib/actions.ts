@@ -20,6 +20,7 @@ import os from 'os';
 import { randomUUID } from 'crypto';
 import  fs  from 'fs';
 import { ConfPhotos } from "@/types";
+import { withZakladniKovani } from "@/lib/konf-content";
 import { CONF_IMGS_QUERY, PERG_IMGS_QUERY, ZAB_IMGS_QUERY } from "@/sanity/lib/queries";
 import {
   type Lang,
@@ -1496,7 +1497,8 @@ export async function sendConf(
     } else {
       const photos = await sanityFetch<ConfPhotos>({query: CONF_IMGS_QUERY})
 
-      const data = validatedData.data;
+      // Kování branky konfigurátor nenabízí — do dat i do nabídky jde vždy základní.
+      const data = withZakladniKovani(validatedData.data);
       const isCompany = data.company && data.company.length>0 ? true : false
       // Ilustrační fotky z `confPhotos` nemusí být vyplněné — prázdné pole vrací GROQ
       // jako null a chybějící dokument jako undefined, takže přímé `photos.branka[0]`

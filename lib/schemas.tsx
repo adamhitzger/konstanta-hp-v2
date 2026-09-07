@@ -181,8 +181,12 @@ export const confSchema = z.object({
         zamek: z.boolean().optional(),
         schranka: z.boolean().optional(),
         zvonek: z.boolean().optional(),
-        // Kování branky se nevybírá — do nabídky jde vždy základní nerez kování
-        // (`kovaniFallback` v `sendConf`), aby si zákazník nemohl zvolit nic navíc.
+        // Kování branky se v konfigurátoru nevybírá — v nabídce je vždy základní nerez
+        // kování. Pole tu ale zůstává ve stejném tvaru jako v khp-app-pdf-sale, kde je
+        // výběr zachovaný, takže obě aplikace posílají identický JSON. Hodnotu doplní
+        // `withZakladniKovani` při odeslání; `default()` tady být nemůže — rozešel by
+        // vstupní a výstupní typ schématu a rozbil typování `useForm<ConfiguratorType>`.
+        kovani: optionalRadio,
     }).array().optional(),
     celkemBranek: z.number().optional(),
     // Sloupky se v konfigurátoru neřeší — nabízejí se až při zaměření na místě.

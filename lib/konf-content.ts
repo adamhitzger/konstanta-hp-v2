@@ -125,6 +125,25 @@ export const gateProducts: GateProductConfig[] = [
   },
 ]
 
+/**
+ * Kování branky se v konfigurátoru nevybírá — zákazník dostane vždy základní nerez
+ * kování. Klíč ale zůstává v datech (`rozmeryBranek[i].kovani`), aby odesílaný JSON
+ * i schéma seděly s khp-app-pdf-sale, kde je výběr kování zachovaný. Tam neznámý
+ * klíč spadne na `kovaniFallback`, což je právě tohle základní kování.
+ */
+export const brankaKovaniZakladni = "zakladni"
+
+/**
+ * Doplní do každé sady rozměrů branky základní kování. Konfigurátor ho nenabízí jako
+ * volbu, ale klíč musí v odesílaném JSONu zůstat vyplněný, aby data seděla se schématem
+ * khp-app-pdf-sale. Případnou dřívější hodnotu přepisuje — jiné kování se odsud posílat
+ * nemá.
+ */
+export const withZakladniKovani = <T extends { rozmeryBranek?: { kovani?: string | null }[] }>(data: T): T =>
+  data.rozmeryBranek
+    ? { ...data, rozmeryBranek: data.rozmeryBranek.map((r) => ({ ...r, kovani: brankaKovaniZakladni })) }
+    : data
+
 /** Model plotového dílce v kroku „Dílce". */
 export const dilceImage = "/modely/dilce/hlinikove.webp"
 

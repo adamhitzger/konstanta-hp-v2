@@ -8,7 +8,7 @@ import { Loader2, MoveRight, MoveLeft } from "lucide-react"
 import toast from "react-hot-toast"
 import { sendGenerateLead, sendUserDataToGTM, useKonfSteps } from "@/lib/gtm"
 import { confSchema, type ConfiguratorType } from "@/lib/schemas"
-import { gateProducts } from "@/lib/konf-content"
+import { gateProducts, withZakladniKovani } from "@/lib/konf-content"
 import { sendConf } from "@/lib/actions"
 import type { ConfPhotosWithMotiv, ConfProductInfo } from "@/types"
 import { Button } from "@/components/ui/button"
@@ -174,7 +174,8 @@ export function Configurator({
 
   const onValid = (data: ConfiguratorType) => {
     startTransition(async () => {
-      const res = await sendConf(data, lang)
+      // Kování branky se nevybírá, ale do odesílaných dat patří — základní nerez.
+      const res = await sendConf(withZakladniKovani(data), lang)
       if (!res.success) {
         toast.error(res.message)
         return
