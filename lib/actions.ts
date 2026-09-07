@@ -739,6 +739,20 @@ function htmlToPdf(
   </section>
 
   <section class="block">
+    <h2>${q.termsHeading}</h2>
+    <div class="terms">
+      <div>
+        <h3>${q.termsPersonal}</h3>
+        <ul>
+          ${q.termsPersonalItems.map((i) => `<li>${i}</li>`).join("")}
+        </ul>
+        <p>${q.termsPersonalNote}</p>
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="block">
     <p class="disclaimer">
       ${q.disclaimer} ${q.validUntil} ${dat(platnostDo)}.
     </p>
