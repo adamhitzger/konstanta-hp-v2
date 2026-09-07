@@ -3314,7 +3314,7 @@ export const quoteContent: Record<Lang, QuoteContent> = {
     depositHeading: "Záloha",
     depositBadge: "50 %",
     depositText:
-      "Před zahájením realizace je požadována záloha ve výši <strong>70 % z celkové ceny zakázky</strong>. Doplatek bude uhrazen v den montáže po předání díla.",
+      "Před zahájením realizace je požadována záloha ve výši <strong>50 % z celkové ceny zakázky</strong>. Doplatek bude uhrazen v den montáže po předání díla.",
     termsHeading: "Obchodní podmínky",
     termsPersonal: "Fyzické osoby",
     termsPersonalItems: [
@@ -3367,7 +3367,7 @@ export const quoteContent: Record<Lang, QuoteContent> = {
     depositHeading: "Záloha",
     depositBadge: "50 %",
     depositText:
-      "Pred začatím realizácie je požadovaná záloha vo výške <strong>70 % z celkovej ceny zákazky</strong>. Doplatok bude uhradený v deň montáže po odovzdaní diela.",
+      "Pred začatím realizácie je požadovaná záloha vo výške <strong>50 % z celkovej ceny zákazky</strong>. Doplatok bude uhradený v deň montáže po odovzdaní diela.",
     termsHeading: "Obchodné podmienky",
     termsPersonal: "Fyzické osoby",
     termsPersonalItems: [
@@ -3420,7 +3420,7 @@ export const quoteContent: Record<Lang, QuoteContent> = {
     depositHeading: "Anzahlung",
     depositBadge: "50 %",
     depositText:
-      "Vor Beginn der Ausführung wird eine Anzahlung in Höhe von <strong>70 % des Gesamtauftragswerts</strong> verlangt. Die Restzahlung erfolgt am Montagetag nach Übergabe des Werks.",
+      "Vor Beginn der Ausführung wird eine Anzahlung in Höhe von <strong>50 % des Gesamtauftragswerts</strong> verlangt. Die Restzahlung erfolgt am Montagetag nach Übergabe des Werks.",
     termsHeading: "Geschäftsbedingungen",
     termsPersonal: "Privatpersonen",
     termsPersonalItems: [

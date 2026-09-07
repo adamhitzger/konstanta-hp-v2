@@ -49,7 +49,7 @@ export default async function Page({
 
   return (
     <SmoothScroll lang={lang}>
-      <div className="flex min-h-screen flex-col">
+      <div className="flex min-h-screen flex-col overflow-x-hidden">
         <SiteHeader lang={lang} />
         <main className="flex-1">
           <HorizontalGallery slides={gallerySlides} lang={lang} />

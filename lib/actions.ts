@@ -739,26 +739,6 @@ function htmlToPdf(
   </section>
 
   <section class="block">
-    <h2>${q.termsHeading}</h2>
-    <div class="terms">
-      <div>
-        <h3>${q.termsPersonal}</h3>
-        <ul>
-          ${q.termsPersonalItems.map((i) => `<li>${i}</li>`).join("")}
-        </ul>
-        <p>${q.termsPersonalNote}</p>
-      </div>
-      <div>
-        <h3>${q.termsCompany}</h3>
-        <ul>
-          ${q.termsCompanyItems.map((i) => `<li>${i}</li>`).join("")}
-        </ul>
-        <p>${q.termsCompanyNote}</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="block">
     <p class="disclaimer">
       ${q.disclaimer} ${q.validUntil} ${dat(platnostDo)}.
     </p>
@@ -1009,6 +989,7 @@ let bezDPH: number =0;
     const zaklad = ((plocha * vzor) * r.pocet);
     const pohonCena = r.pohon ? (id === "dvoukridla" || id === "skladaci" || id === "jednokridla" ? 23000 : 15000) : 0;
     const zastrcCena = r.pohon ? 0 : (id === "jednokridla") ? 1500 : 3000
+    const zastrcMn = r.pohon ? 0 : (id === "jednokridla") ? 1 : 2
     const kovaniCena = r.pohon ? 0 : (id === "dvoukridla" || id === "skladaci") ? 2000 : 0
     const tahomaCena = r.tahoma ? r.pocet *5000 : 0;
     const brzdaCena = (id === "atypicka") ? 8000 : 0
@@ -1029,12 +1010,11 @@ let bezDPH: number =0;
       ws.addRow([`${pohonNazev}:`, 1,money(pohonCena), money(pohonCena*sazbaDph), money(pohonCena*(1+sazbaDph))]);
       html +=(buildProductRows(money, `${pohonNazev}:`, 1,pohonCena, pohonCena*sazbaDph, Number((pohonCena*(1+sazbaDph)).toFixed(0))))
       }else{
-        ws.addRow([`${ti.zastrc}:`, 1,money(zastrcCena), money(zastrcCena*sazbaDph), money(zastrcCena*(1+sazbaDph))]);
-        html +=(buildProductRows(money, `${ti.zastrc}:`, 1,zastrcCena, zastrcCena*sazbaDph, Number((zastrcCena*(1+sazbaDph)).toFixed(0))))
-        if(id !== "jednokridla"){
-            ws.addRow([`${ti.kovaniBrany}:`, 2,money(kovaniCena), money(kovaniCena*sazbaDph), money(kovaniCena*(1+sazbaDph))]);
-            html +=(buildProductRows(money, `${ti.kovaniBrany}:`, 2,kovaniCena, kovaniCena*sazbaDph, Number((kovaniCena*(1+sazbaDph)).toFixed(0))))        
-        }
+        ws.addRow([`${ti.zastrc}:`, zastrcMn,money(zastrcCena), money(zastrcCena*sazbaDph), money(zastrcCena*(1+sazbaDph))]);
+        html +=(buildProductRows(money, `${ti.zastrc}:`, zastrcMn,zastrcCena, zastrcCena*sazbaDph, Number((zastrcCena*(1+sazbaDph)).toFixed(0))))
+
+        ws.addRow([`${ti.kovaniBrany}:`, 1,money(kovaniCena), money(kovaniCena*sazbaDph), money(kovaniCena*(1+sazbaDph))]);
+        html +=(buildProductRows(money, `${ti.kovaniBrany}:`, 1,kovaniCena, kovaniCena*sazbaDph, Number((kovaniCena*(1+sazbaDph)).toFixed(0))))        
       }
     if(r.tahoma) {
       ws.addRow([ti.tahoma,1,money(tahomaCena),money(tahomaCena*sazbaDph),money(tahomaCena*(1+sazbaDph))]);
