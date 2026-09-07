@@ -218,7 +218,7 @@ export function Configurator({
       show(t.validation.invalidContact)
     }
     // Pojistka proti „kliknu na Odeslat a nic se neděje": chyba, na kterou tu není
-    // vlastní hláška (typicky uvnitř pole produktů, např. `rozmeryBranek.0.kovani`),
+    // vlastní hláška (typicky uvnitř pole produktů, např. `rozmeryBranek.0.vyska`),
     // by jinak formulář tiše zamítla bez jediné zpětné vazby.
     if (!shown) {
       console.error("Konfigurátor: neošetřená chyba validace", errors)

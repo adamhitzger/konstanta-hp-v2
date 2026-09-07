@@ -1969,40 +1969,6 @@ export const brankaExtrasLabels: Record<Lang, { zamek: string; schranka: string;
   de: { zamek: "Elektroschloss", schranka: "Integrierter Briefkasten", zvonek: "Video-Türklingel" },
 }
 
-/**
- * Kování branky. `title` je popisek skupiny, `options` jsou klíčované hodnotami
- * z `brankaKovaniOptions` — vybrat lze vždy jen jednu (radio).
- */
-export const brankaKovaniLabels: Record<Lang, { title: string; options: Record<string, string> }> = {
-  cs: {
-    title: "Kování",
-    options: {
-      "kliky-mt": "Kliky M&T",
-      "madlo-300": "Madlo 300 mm",
-      "madlo-225": "Madlo 225 mm",
-      "madlo-1250": "Madlo 1250 mm",
-    },
-  },
-  sk: {
-    title: "Kovanie",
-    options: {
-      "kliky-mt": "Kľučky M&T",
-      "madlo-300": "Madlo 300 mm",
-      "madlo-225": "Madlo 225 mm",
-      "madlo-1250": "Madlo 1250 mm",
-    },
-  },
-  de: {
-    title: "Beschlag",
-    options: {
-      "kliky-mt": "Drückergarnitur M&T",
-      "madlo-300": "Stoßgriff 300 mm",
-      "madlo-225": "Stoßgriff 225 mm",
-      "madlo-1250": "Stoßgriff 1250 mm",
-    },
-  },
-}
-
 // barvy — sdílený slovník napříč konfigurátory, klíčovaný podle CS názvu (kanonický klíč)
 export const colorLabels: Record<Lang, Record<string, string>> = {
   cs: {
@@ -3471,8 +3437,7 @@ export type QuoteItemsContent = {
   zamek: string
   schranka: string
   zvonek: string
-  /** Klíče odpovídají `brankaKovaniOptions`; `fallback` pro nevyplněnou volbu. */
-  kovani: Record<string, string>
+  /** Základní nerez kování branky — jiné se v konfigurátoru nenabízí. */
   kovaniFallback: string
   montazBranky: string
   dilce: string
@@ -3504,12 +3469,6 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     zamek: "El. zámek napětí 9 – 12 V AC/DC, s posuvnou zarážkou a mechanickým odblokováním",
     schranka: "Poštovní schránka zapuštěná do lamely",
     zvonek: "Domovní videotelefon Somfy V500 PRO io",
-    kovani: {
-      "kliky-mt": "Kování branky nerez — kliky M&T (klika/klika – koule/klika)",
-      "madlo-300": "Kování branky nerez — madlo 300 mm",
-      "madlo-225": "Kování branky nerez — madlo 225 mm",
-      "madlo-1250": "Kování branky nerez — madlo 1250 mm",
-    },
     kovaniFallback: "Kování branky nerez (klika/klika – koule/klika)",
     montazBranky: "Montáž branky",
     dilce: "Plotové dílce",
@@ -3538,12 +3497,6 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     zamek: "El. zámok napätie 9 – 12 V AC/DC, s posuvnou zarážkou a mechanickým odblokovaním",
     schranka: "Poštová schránka zapustená do lamely",
     zvonek: "Domový videotelefón Somfy V500 PRO io",
-    kovani: {
-      "kliky-mt": "Kovanie bránky nerez — kľučky M&T (kľučka/kľučka – guľa/kľučka)",
-      "madlo-300": "Kovanie bránky nerez — madlo 300 mm",
-      "madlo-225": "Kovanie bránky nerez — madlo 225 mm",
-      "madlo-1250": "Kovanie bránky nerez — madlo 1250 mm",
-    },
     kovaniFallback: "Kovanie bránky nerez (kľučka/kľučka – guľa/kľučka)",
     montazBranky: "Montáž bránky",
     dilce: "Plotové dielce",
@@ -3572,12 +3525,6 @@ export const quoteItemsContent: Record<Lang, QuoteItemsContent> = {
     zamek: "Elektroschloss 9 – 12 V AC/DC, mit Schiebefalle und mechanischer Entriegelung",
     schranka: "In die Lamelle eingelassener Briefkasten",
     zvonek: "Video-Türsprechanlage Somfy V500 PRO io",
-    kovani: {
-      "kliky-mt": "Beschlag Gartentür Edelstahl — Drückergarnitur M&T (Drücker/Drücker – Knauf/Drücker)",
-      "madlo-300": "Beschlag Gartentür Edelstahl — Stoßgriff 300 mm",
-      "madlo-225": "Beschlag Gartentür Edelstahl — Stoßgriff 225 mm",
-      "madlo-1250": "Beschlag Gartentür Edelstahl — Stoßgriff 1250 mm",
-    },
     kovaniFallback: "Beschlag Gartentür Edelstahl (Drücker/Drücker – Knauf/Drücker)",
     montazBranky: "Montage der Gartentür",
     dilce: "Zaunelemente",

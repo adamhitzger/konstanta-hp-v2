@@ -125,18 +125,6 @@ export const gateProducts: GateProductConfig[] = [
   },
 ]
 
-/**
- * Kování branky — vzájemně se vylučující volby, v konfigurátoru se proto vykreslují
- * jako radio, ne jako checkboxy. Hodnota se ukládá do `rozmeryBranek[i].kovani`.
- * `madlo` je držadlo v dané délce v mm.
- */
-export const brankaKovaniOptions = [
-  { value: "kliky-mt", label: "Kliky M&T" },
-  { value: "madlo-300", label: "Madlo 300 mm" },
-  { value: "madlo-225", label: "Madlo 225 mm" },
-  { value: "madlo-1250", label: "Madlo 1250 mm" },
-] as const
-
 /** Model plotového dílce v kroku „Dílce". */
 export const dilceImage = "/modely/dilce/hlinikove.webp"
 

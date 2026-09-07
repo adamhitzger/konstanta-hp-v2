@@ -128,8 +128,8 @@ export const pergolaSchema = z.object({
 /**
  * Radio skupina, ze které uživatel nic nevybral, přijde z react-hook-form jako
  * `null`, ne `undefined` — a `z.string().optional()` ji odmítne jako `invalid_type`.
- * Chyba pak sedí na `rozmeryBranek.0.kovani`, což žádný `onInvalid` nehlídal, takže
- * tlačítko „Odeslat" jen tiše nic neudělalo.
+ * Chyba pak sedí uvnitř formuláře (např. na `zabradliSklo`), což žádný `onInvalid`
+ * nehlídal, takže tlačítko „Odeslat" jen tiše nic neudělalo.
  *
  * Schválně `nullish()` a ne `preprocess` — preprocess mění vstupní typ schématu na
  * `unknown` a rozbije typování `zodResolver`u v `useForm`.
@@ -181,10 +181,8 @@ export const confSchema = z.object({
         zamek: z.boolean().optional(),
         schranka: z.boolean().optional(),
         zvonek: z.boolean().optional(),
-        // Kování branky — jedna volba z `brankaKovaniOptions` (kliky M&T nebo madlo
-        // 300/225/1250 mm). Ukládá se jako string, aby šly volby přidávat bez migrace.
-        // Nepovinné: `sendConf` si za nevyplněné dosadí `kovaniFallback`.
-        kovani: optionalRadio,
+        // Kování branky se nevybírá — do nabídky jde vždy základní nerez kování
+        // (`kovaniFallback` v `sendConf`), aby si zákazník nemohl zvolit nic navíc.
     }).array().optional(),
     celkemBranek: z.number().optional(),
     // Sloupky se v konfigurátoru neřeší — nabízejí se až při zaměření na místě.

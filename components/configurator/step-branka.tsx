@@ -5,8 +5,7 @@ import type { ConfiguratorType } from "@/lib/schemas"
 import type { ConfPhotosWithMotiv, ConfProductInfo } from "@/types"
 import { DeclineCard } from "./form-controls"
 import { ProductSection } from "./product-section"
-import { brankaKovaniOptions } from "@/lib/konf-content"
-import { brankaExtrasLabels, brankaKovaniLabels, stepBrankaContent, type Lang } from "@/lib/translations"
+import { brankaExtrasLabels, stepBrankaContent, type Lang } from "@/lib/translations"
 import { StepTitle } from "./step-title"
 
 export function StepBranka({ onNext, onBack, photos, info = {}, lang = "cs" }: { onNext: () => void; onBack?: () => void; photos: ConfPhotosWithMotiv; info?: ConfProductInfo; lang?: Lang }) {
@@ -18,15 +17,6 @@ export function StepBranka({ onNext, onBack, photos, info = {}, lang = "cs" }: {
     { name: "zamek", label: extrasT.zamek },
     { name: "schranka", label: extrasT.schranka },
     { name: "zvonek", label: extrasT.zvonek },
-  ]
-  // Kování je „vyber jedno“ — kliky, nebo madlo v jedné ze tří délek.
-  const kovaniT = brankaKovaniLabels[lang] ?? brankaKovaniLabels.cs
-  const brankaKovani = [
-    {
-      name: "kovani",
-      title: kovaniT.title,
-      options: brankaKovaniOptions.map((o) => ({ value: o.value, label: kovaniT.options[o.value] ?? o.label })),
-    },
   ]
 
   return (
@@ -57,7 +47,6 @@ export function StepBranka({ onNext, onBack, photos, info = {}, lang = "cs" }: {
         countField="celkemBranek"
         arrayField="rozmeryBranek"
         extraToggles={brankaExtras}
-        extraRadios={brankaKovani}
         dimensionLabels={t.dimensionLabels}
         onNext={onNext}
         onBack={onBack}
