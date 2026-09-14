@@ -120,7 +120,7 @@ export function ColorSwatchGroup({
             />
             <span className="flex items-center gap-1.5 text-xs font-medium">
               <RadioGroupItem value={c.value ?? c.color.toLowerCase()} />
-              {c.value ?? c.color.toLowerCase()}
+              
               {c.color}
             </span>
           </label>
