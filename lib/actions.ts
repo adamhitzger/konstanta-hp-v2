@@ -945,6 +945,8 @@ function calculateBrana(
   lang: Lang,
   sazbaDph: number,
   ws:exceljs.Worksheet,
+  barva: string,
+  motiv: string,
   brana?: {
     delka?: number | undefined;
     vyska?: number | undefined;
@@ -981,8 +983,26 @@ let bezDPH: number =0;
         vzor = 8000;
         break;
     }
+
     const plocha = (r.delka / 1000) * (r.vyska / 1000);
-    const zaklad = ((plocha * vzor) * r.pocet);
+    
+    let zaklad = ((plocha * vzor) * r.pocet);
+
+    if(barva === "dřevěný dekor"){
+      zaklad *= 1.50
+    }
+
+    switch(motiv){
+      case "kapka-mini":
+      case "tahokov":
+        zaklad += plocha * 3000;
+        break;
+      case "tycka":
+      case "vlastní kombinace":
+        zaklad += plocha * 2000;
+        break;
+    }
+
     const pohonCena = r.pohon ? (id === "dvoukridla" || id === "skladaci" || id === "jednokridla" ? 23000 : 15000) : 0;
     //zastrc u kridlovych ano, u posuvnych ne
     let zastrcCena = 0;
@@ -1014,7 +1034,7 @@ let bezDPH: number =0;
     const brzdaCena = (id === "atypicka") ? 8000 : 0
     const montazCena = (id === "telPoj" || id === "telSam" || id === "sekcni" || id === "skladaci") ? r.pocet * 6000 : r.pocet * 4500;
     const kolejniceCena = (id === "atypicka" || id === "telPoj" || id === "posuvna" || id === "sekcni") ? 5000 : 0
-    const zadlabavaciZamekCena = ((id === "samonosna" && !r.pohon) || id === "posuvna" || id === "atypicka") ? 3480 : 0
+    const zadlabavaciZamekCena = ((id === "samonosna" || id === "posuvna" || id === "atypicka") && !r.pohon ) ? 3480 : 0
     bezDPH += zaklad+pohonCena+tahomaCena+montazCena+brzdaCena+kolejniceCena+zadlabavaciZamekCena
     
     const headerRow = ws.addRow([ti.header.produkt, ti.header.mnozstvi, ti.header.bezDph, ti.header.dph, ti.header.sDph])
@@ -1049,7 +1069,7 @@ let bezDPH: number =0;
       ws.addRow([`${ti.kolejnice}:`, r.pocet, money(kolejniceCena), money(kolejniceCena*sazbaDph), money(kolejniceCena*(1+sazbaDph))]);
       html +=(buildProductRows(money, `${ti.kolejnice}:`, r.pocet, kolejniceCena, kolejniceCena*sazbaDph, Number((kolejniceCena*(1+sazbaDph)).toFixed(0))))
     }
-    if(((id === "samonosna" && !r.pohon) || id === "posuvna")){
+    if(((id === "samonosna" || id === "posuvna" || id === "atypicka") && !r.pohon )){
       ws.addRow([`${ti.dojezdSloupek}:`, r.pocet, money(zadlabavaciZamekCena), money(zadlabavaciZamekCena*sazbaDph), money(zadlabavaciZamekCena*(1+sazbaDph))]);
       html +=(buildProductRows(money, `${ti.dojezdSloupek}:`, r.pocet, zadlabavaciZamekCena, zadlabavaciZamekCena*sazbaDph, Number((zadlabavaciZamekCena*(1+sazbaDph)).toFixed(0))))
  
@@ -1079,12 +1099,7 @@ const wb = new exceljs.Workbook();
 const ws = wb.addWorksheet(ti.sheetName);
 
 if(!data.brana){
-  // `id` odpovídá klíčům v `gateLabels` — název řádku se z nich přeloží.
-  // `enabled` je zaškrtnutí karty produktu. Bez něj by se do nabídky naceňovaly
-  // i rozměry brány, kterou zákazník mezitím odebral: odškrtnutí sice pole rozměrů
-  // maže (`ProductSection.setCount(0)`), ale `shouldUnregister` je `false`, takže na
-  // tom stojí jediný `setValue`. Cena zákazníkovi odejde e-mailem, tak ji radši
-  // vážeme na příznak, ne jen na to, že v poli něco zbylo.
+  
   const brany = [
     { id: "dvoukridla", enabled: data.dvoukridla, data: data.rozmery2KBran },
     { id: "jednokridla", enabled: data.jednokridla, data: data.rozmeryKBran },
@@ -1099,7 +1114,7 @@ if(!data.brana){
 
   brany.forEach((b) => {
     if (!b.enabled) return;
-    const result = calculateBrana(b.id, lang, sazbaDph, ws, b.data);
+    const result = calculateBrana(b.id, lang, sazbaDph, ws, data.barva, data.motiv, b.data);
     celkem += result.bezDPH;
     rows+=(result.html);
   });
@@ -1146,7 +1161,7 @@ if(data.dilce && data.rozmeryDilcu  && data.rozmeryDilcu.length > 0){
       let vzor = 0;
       switch (data.motiv) {
         case "o-standart":
-          case "planka-60":
+        case "planka-60":
         case "plaka-90":
         case "planka-120":
         case "planka-150":     
