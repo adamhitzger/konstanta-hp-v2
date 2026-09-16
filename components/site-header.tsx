@@ -307,9 +307,10 @@ export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
         </div>
 
         {/* ---- Mobile controls ---- */}
-        {/* Pod `xl` se svislý pruh „Kalkulace zdarma" schová (ležel by přes obsah),
-            takže hlavní CTA sedí přímo tady mezi logem a hamburgerem. `min-w-0`
-            s `truncate` na tlačítku, aby na nejužších displejích lištu nerozstřelilo. */}
+        {/* Na mobilu (pod `md`) se svislý pruh „Kalkulace zdarma" schová (ležel by přes
+            obsah), takže hlavní CTA sedí přímo tady mezi logem a hamburgerem; od `md`
+            se tlačítko samo skryje (viz `CalcCtaButton`). `min-w-0` s `truncate`
+            na tlačítku, aby na nejužších displejích lištu nerozstřelilo. */}
         <div className="flex min-w-0 items-center gap-2 xl:hidden">
           <CalcCtaButton lang={lang} className="min-w-0 truncate" />
           <button

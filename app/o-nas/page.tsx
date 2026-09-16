@@ -8,14 +8,9 @@ import { Story } from "@/components/o-nas/story"
 import { SilaKonstanty } from "@/components/o-nas/sila-konstanty"
 import { CoOcenite } from "@/components/o-nas/co-ocenite"
 import { ProcesFlow } from "@/components/o-nas/proces-flow"
-import { Certifikaty } from "@/components/o-nas/certifikaty"
 import { Faq } from "@/components/o-nas/faq"
 import { ZaverCta } from "@/components/o-nas/zaver-cta"
 import { getLang } from "@/lib/translations"
-import { sanityFetch } from "@/sanity/lib/client"
-import { CERTIFICATES_QUERY } from "@/sanity/lib/queries"
-import { buildCertificates } from "@/lib/certificates"
-import type { CertificateDoc } from "@/types"
 
 export const metadata: Metadata = {
   title: "O nás | KONSTANTA – hliníkové ploty, brány a pergoly",
@@ -29,15 +24,8 @@ export default async function ONasPage({
 }: {
   searchParams: Promise<{ lang?: string }>
 }) {
-  const [{ lang: langParam }, certDocs] = await Promise.all([
-    searchParams,
-    sanityFetch<CertificateDoc[] | null>({ query: CERTIFICATES_QUERY }).catch((error) => {
-      console.error("Nepodařilo se načíst certifikáty ze Sanity:", error)
-      return null
-    }),
-  ])
+  const { lang: langParam } = await searchParams
   const lang = getLang(langParam)
-  const certificates = buildCertificates(certDocs, lang)
 
   return (
     <SmoothScroll lang={lang}>
@@ -50,7 +38,6 @@ export default async function ONasPage({
           <SilaKonstanty lang={lang} />
           <CoOcenite lang={lang} />
           <ProcesFlow lang={lang} />
-          {/*<Certifikaty items={certificates} lang={lang} />*/}
           <Faq lang={lang} />
           <ZaverCta lang={lang} />
         </main>

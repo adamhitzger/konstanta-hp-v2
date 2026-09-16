@@ -29,8 +29,7 @@ export function getNavItems(lang: Lang): NavTop[] {
         { ...t.jsmeKonstantaChildren[1], href: l("/o-nas#sila-konstanty"), type: "anchor" },
         { ...t.jsmeKonstantaChildren[2], href: l("/o-nas#co-ocenite"), type: "anchor" },
         { ...t.jsmeKonstantaChildren[3], href: l("/o-nas#jak-to-probiha"), type: "anchor" },
-        { ...t.jsmeKonstantaChildren[4], href: l("/o-nas#certifikaty"), type: "anchor" },
-        { ...t.jsmeKonstantaChildren[5], href: l("/o-nas#faq"), type: "anchor" },
+        { ...t.jsmeKonstantaChildren[4], href: l("/o-nas#faq"), type: "anchor" },
       ],
     },
     {

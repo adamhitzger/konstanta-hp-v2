@@ -149,31 +149,6 @@ export interface RealizaceTeaser {
   banner: string;
 }
 
-/** Jeden dokument `certificate` ze Sanity (CERTIFICATES_QUERY). `url` míří rovnou
- * na soubor v Sanity CDN, `fileName` je záložní název, když není vyplněný `titleCs`. */
-export interface CertificateDoc {
-  _id: string;
-  titleCs?: string;
-  titleSk?: string;
-  titleDe?: string;
-  noteCs?: string;
-  noteSk?: string;
-  noteDe?: string;
-  url?: string;
-  fileName?: string;
-  ext?: string;
-  size?: number;
-}
-
-/** Certifikát už přeložený a připravený k vykreslení (lib/certificates.ts). */
-export interface CertificateItem {
-  id: string;
-  title: string;
-  note: string;
-  url: string;
-  ext: string;
-}
-
 export interface ProductPhoto {
   banner: string;
   nameCs: string;
@@ -248,6 +223,26 @@ export interface ReviewDoc {
 }
 
 /** Recenze připravená k vykreslení — text už vybraný podle jazyka stránky. */
+/** Jeden dokument `customer` ze Sanity (CUSTOMERS_QUERY). */
+export interface CustomerDoc {
+  _id: string;
+  name?: string;
+  url?: string;
+  logo?: string;
+  width?: number;
+  height?: number;
+}
+
+/** Logo zákazníka připravené pro `<Customers />` (lib/customers.ts). */
+export interface CustomerLogo {
+  id: string;
+  name: string;
+  url?: string;
+  logo: string;
+  width: number;
+  height: number;
+}
+
 export interface Review {
   /** `_id` dokumentu, aby marquee měla stabilní klíče i po přeskládání ve Studiu. */
   id: string;

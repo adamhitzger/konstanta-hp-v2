@@ -87,7 +87,6 @@ export const navContent: Record<Lang, NavContent> = {
       { label: "Síla Konstanty", desc: "10 pilířů naší práce" },
       { label: "Co oceníte", desc: "Nejdůležitější v kostce" },
       { label: "Jak to u nás probíhá", desc: "Postup od zaměření po montáž" },
-      { label: "Certifikáty a patenty", desc: "Patent, materiály, ocenění" },
       { label: "FAQ", desc: "Časté dotazy a odpovědi" },
     ],
     coNabizime: "Co nabízíme",
@@ -117,7 +116,6 @@ export const navContent: Record<Lang, NavContent> = {
       { label: "Sila Konstanty", desc: "10 pilierov našej práce" },
       { label: "Čo oceníte", desc: "Najdôležitejšie v skratke" },
       { label: "Ako to u nás prebieha", desc: "Postup od zamerania po montáž" },
-      { label: "Certifikáty a patenty", desc: "Patent, materiály, ocenenia" },
       { label: "FAQ", desc: "Časté otázky a odpovede" },
     ],
     coNabizime: "Čo ponúkame",
@@ -147,7 +145,6 @@ export const navContent: Record<Lang, NavContent> = {
       { label: "Die Stärke von Konstanta", desc: "10 Grundsätze unserer Arbeit" },
       { label: "Das schätzen Sie", desc: "Das Wichtigste auf einen Blick" },
       { label: "Ablauf bei uns", desc: "Vom Aufmaß bis zur Montage" },
-      { label: "Zertifikate und Patente", desc: "Patent, Materialien, Auszeichnungen" },
       { label: "FAQ", desc: "Häufige Fragen und Antworten" },
     ],
     coNabizime: "Unser Angebot",
@@ -212,7 +209,6 @@ export const footerContent = {
       "Síla Konstanty",
       "Co oceníte",
       "Jak to u nás probíhá",
-      "Certifikáty a patenty",
       "FAQ",
       "Realizace",
       "Pro firmy",
@@ -239,7 +235,6 @@ export const footerContent = {
       "Sila Konstanty",
       "Čo oceníte",
       "Ako to u nás prebieha",
-      "Certifikáty a patenty",
       "FAQ",
       "Realizácie",
       "Pre firmy",
@@ -267,7 +262,6 @@ export const footerContent = {
       "Die Stärke von Konstanta",
       "Das schätzen Sie",
       "Ablauf bei uns",
-      "Zertifikate und Patente",
       "FAQ",
       "Referenzen",
       "Für Firmen",
@@ -732,6 +726,28 @@ export const testimonialsContent = {
 }
 
 // ---------------------------------------------------------------------------
+// CUSTOMERS (customers.tsx)
+// ---------------------------------------------------------------------------
+
+export const customersContent = {
+  cs: {
+    heading: "Zákazníci, se kterými spolupracujeme",
+    listLabel: "Loga zákazníků",
+    linkAlt: (name: string) => `Přejít na web zákazníka ${name}`,
+  },
+  sk: {
+    heading: "Zákazníci, s ktorými spolupracujeme",
+    listLabel: "Logá zákazníkov",
+    linkAlt: (name: string) => `Prejsť na web zákazníka ${name}`,
+  },
+  de: {
+    heading: "Kunden, mit denen wir zusammenarbeiten",
+    listLabel: "Kundenlogos",
+    linkAlt: (name: string) => `Zur Website des Kunden ${name}`,
+  },
+}
+
+// ---------------------------------------------------------------------------
 // SOCIAL (social.tsx)
 // ---------------------------------------------------------------------------
 
@@ -941,9 +957,9 @@ export const storyContent = {
 }
 
 export const sectionNavContent = {
-  cs: { links: ["Jsme Konstanta", "Síla Konstanty", "Co oceníte", "Jak to probíhá", "Certifikáty", "FAQ"] },
-  sk: { links: ["Sme Konstanta", "Sila Konstanty", "Čo oceníte", "Ako to prebieha", "Certifikáty", "FAQ"] },
-  de: { links: ["Wir sind Konstanta", "Die Stärke von Konstanta", "Das schätzen Sie", "Wie es abläuft", "Zertifikate", "FAQ"] },
+  cs: { links: ["Jsme Konstanta", "Síla Konstanty", "Co oceníte", "Jak to probíhá", "FAQ"] },
+  sk: { links: ["Sme Konstanta", "Sila Konstanty", "Čo oceníte", "Ako to prebieha", "FAQ"] },
+  de: { links: ["Wir sind Konstanta", "Die Stärke von Konstanta", "Das schätzen Sie", "Wie es abläuft", "FAQ"] },
 }
 
 export const silaKonstantyContent = {
@@ -1069,30 +1085,6 @@ export const procesFlowContent = {
       { title: "Montage innerhalb von 24 Stunden", text: "Unser eingespieltes Team montiert die meisten Aufträge an einem Tag, sauber und präzise." },
       { title: "Fertig und Service", text: "Wir übergeben das fertige Werk und stehen auch nach Jahren zur Verfügung." },
     ],
-  },
-}
-
-export const certifikatyContent = {
-  cs: {
-    kicker: "Certifikáty a patenty",
-    heading: "Kvalitu máme podloženou úředně",
-    intro: "Certifikáty, patenty a doklady k materiálům, se kterými pracujeme. Vše ke stažení, bez hvězdiček.",
-    download: "Stáhnout",
-    empty: "Doklady právě doplňujeme. Napište si o ně a pošleme vám je.",
-  },
-  sk: {
-    kicker: "Certifikáty a patenty",
-    heading: "Kvalitu máme podloženú úradne",
-    intro: "Certifikáty, patenty a doklady k materiálom, s ktorými pracujeme. Všetko na stiahnutie, bez hviezdičiek.",
-    download: "Stiahnuť",
-    empty: "Doklady práve dopĺňame. Napíšte si o ne a pošleme vám ich.",
-  },
-  de: {
-    kicker: "Zertifikate und Patente",
-    heading: "Unsere Qualität ist amtlich belegt",
-    intro: "Zertifikate, Patente und Nachweise zu den Materialien, mit denen wir arbeiten. Alles zum Download, ohne Kleingedrucktes.",
-    download: "Herunterladen",
-    empty: "Die Unterlagen ergänzen wir gerade. Schreiben Sie uns, wir senden sie Ihnen zu.",
   },
 }
 

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { sectionNavContent, type Lang } from "@/lib/translations"
 
-const linkIds = ["jsme-konstanta", "sila-konstanty", "co-ocenite", "jak-to-probiha", "certifikaty", "faq"]
+const linkIds = ["jsme-konstanta", "sila-konstanty", "co-ocenite", "jak-to-probiha", "faq"]
 
 /**
  * Sticky in-page anchor nav under the main header. Smooth scroll is handled

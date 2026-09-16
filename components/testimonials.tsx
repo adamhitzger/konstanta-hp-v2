@@ -1,6 +1,10 @@
+"use client"
+
+import { useRef } from "react"
 import Image from "next/image"
 import { AnimatedText } from "@/components/reveal"
 import { testimonialsContent, type Lang } from "@/lib/translations"
+import { useAutoScrollLoop } from "@/lib/use-auto-scroll-loop"
 import type { Review } from "@/types"
 
 function Stars({ rating, label }: { rating: number; label: string }) {
@@ -15,7 +19,8 @@ function Stars({ rating, label }: { rating: number; label: string }) {
   )
 }
 
-function ReviewCard({ r, t }: { r: Review; t: (typeof testimonialsContent)["cs"] }) {
+/* `tabbable=false` u dalších kopií pásu: karta je klikací, ale tabulátor ji přeskočí. */
+function ReviewCard({ r, t, tabbable = true }: { r: Review; t: (typeof testimonialsContent)["cs"]; tabbable?: boolean }) {
   const card = (
     <figure className="flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-colors duration-300 group-hover/card:border-brand/50">
       <div className="relative aspect-[4/3] overflow-hidden">
@@ -24,6 +29,7 @@ function ReviewCard({ r, t }: { r: Review; t: (typeof testimonialsContent)["cs"]
           alt={t.photoAlt(r.name)}
           fill
           sizes="288px"
+          draggable={false}
           className="object-cover transition-transform duration-500 group-hover/card:scale-105"
         />
       </div>
@@ -59,6 +65,8 @@ function ReviewCard({ r, t }: { r: Review; t: (typeof testimonialsContent)["cs"]
          odkazu nesloží — bez labelu by čtečka hlásila jen „odkaz". Obsah karty
          zůstává v accessibility stromu, label ho nepřebíjí. */
       aria-label={t.sourceAlt(r.name)}
+      draggable={false}
+      tabIndex={tabbable ? undefined : -1}
       className="group/card block w-72 shrink-0"
     >
       {card}
@@ -68,6 +76,9 @@ function ReviewCard({ r, t }: { r: Review; t: (typeof testimonialsContent)["cs"]
 
 export function Testimonials({ reviews, lang = "cs" }: { reviews: Review[]; lang?: Lang }) {
   const t = testimonialsContent[lang] ?? testimonialsContent.cs
+  const scrollerRef = useRef<HTMLDivElement>(null)
+  const firstCopyRef = useRef<HTMLDivElement>(null)
+  const copies = useAutoScrollLoop(scrollerRef, firstCopyRef, reviews.length > 0)
 
   // Bez recenzí (prázdné Studio nebo spadlý fetch) sekci vůbec nevykreslujeme —
   // samotný nadpis nad prázdným pásem vypadá jako rozbitá stránka.
@@ -83,16 +94,33 @@ export function Testimonials({ reviews, lang = "cs" }: { reviews: Review[]; lang
         />
       </div>
 
-      {/* Pás recenzí se posouvá ručně, ne automatickým marquee: návštěvník si čte
-          vlastním tempem a nemusí trefovat kartu, která zrovna jede pryč. Posuvník
-          je vidět pořád (viz `.scrollbar-brand` v globals.css), aby bylo poznat,
-          že pás pokračuje i za okrajem. */}
-      <div className="scrollbar-brand overflow-x-auto pb-5">
-        {/* `w-max` = pás je široký přesně na součet karet, takže se scrolluje;
-            `mx-auto` ho vycentruje, když se recenze na širokou obrazovku vejdou. */}
-        <div className="mx-auto flex w-max gap-6 px-4 sm:px-6 lg:px-8">
-          {reviews.map((r, i) => (
-            <ReviewCard key={`${r.id}-${i}`} r={r} t={t} />
+      {/* Pás recenzí sám pomalu jede (viz `useAutoScrollLoop`), ale je to obyčejný
+          `overflow-x-auto` kontejner: návštěvník si ho posune kolečkem, prstem
+          i tahem myší, pás se zastaví a po chvíli zase naváže. Posuvník je schovaný —
+          při přeskoku smyčky by poskakoval; že pás pokračuje, ukazují vymaskované
+          okraje. `data-lenis-prevent-horizontal`: vodorovné gesto na trackpadu
+          nemá Lenis polykat jako svislý scroll stránky. */}
+      <div
+        ref={scrollerRef}
+        data-lenis-prevent-horizontal
+        aria-label={t.heading}
+        className="no-scrollbar cursor-grab select-none overflow-x-auto pb-2 active:cursor-grabbing [mask-image:linear-gradient(to_right,transparent,black_4%,black_96%,transparent)]"
+      >
+        <div className="flex w-max">
+          {Array.from({ length: copies }, (_, copy) => (
+            /* Další kopie jsou vizuální výplň smyčky — čtečka a tabulátor projdou
+               recenze jednou. Klikací zůstávají (bez `inert`): vidět je typicky
+               právě prostřední kopie. */
+            <div
+              key={copy}
+              ref={copy === 0 ? firstCopyRef : undefined}
+              className="flex gap-6 pr-6"
+              aria-hidden={copy > 0 ? true : undefined}
+            >
+              {reviews.map((r) => (
+                <ReviewCard key={`${copy}-${r.id}`} r={r} t={t} tabbable={copy === 0} />
+              ))}
+            </div>
           ))}
         </div>
       </div>

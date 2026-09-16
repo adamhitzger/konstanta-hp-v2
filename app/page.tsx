@@ -5,24 +5,26 @@ import { Products } from "@/components/products"
 import { Process } from "@/components/process"
 import { WhyUs } from "@/components/why-us"
 import { Testimonials } from "@/components/testimonials"
+import { Customers } from "@/components/customers"
 import { Social } from "@/components/social"
 import { Contact } from "@/components/contact"
 import { SiteFooter } from "@/components/site-footer"
 import HorizontalGallery from "@/components/HorizontalGallery"
 import { getLang } from "@/lib/translations"
 import { sanityFetch } from "@/sanity/lib/client"
-import { BANNER_PHOTOS, IG_FEED, REALIZACE_BANNERS_QUERY, REVIEWS_QUERY } from "@/sanity/lib/queries"
+import { BANNER_PHOTOS, CUSTOMERS_QUERY, IG_FEED, REALIZACE_BANNERS_QUERY, REVIEWS_QUERY } from "@/sanity/lib/queries"
 import { buildRealizaceTeaser } from "@/lib/realizace"
 import { buildGallerySlides } from "@/lib/banner-photos"
 import { buildReviews } from "@/lib/reviews"
-import type { BannerPhotosDoc, IgPost, ReviewDoc } from "@/types"
+import { buildCustomers } from "@/lib/customers"
+import type { BannerPhotosDoc, CustomerDoc, IgPost, ReviewDoc } from "@/types"
 
 export default async function Page({
   searchParams,
 }: {
   searchParams: Promise<{ lang?: string }>
 }) {
-  const [{ lang: langParam }, bannerDoc, igPosts, realizaceDocs, reviewDocs] = await Promise.all([
+  const [{ lang: langParam }, bannerDoc, igPosts, realizaceDocs, reviewDocs, customerDocs] = await Promise.all([
     searchParams,
     sanityFetch<BannerPhotosDoc | null>({ query: BANNER_PHOTOS }).catch((error) => {
       console.error("Nepodařilo se načíst fotky hlavní sekce ze Sanity:", error)
@@ -42,14 +44,21 @@ export default async function Page({
       console.error("Nepodařilo se načíst recenze ze Sanity:", error)
       return null
     }),
+    sanityFetch<CustomerDoc[] | null>({ query: CUSTOMERS_QUERY }).catch((error) => {
+      console.error("Nepodařilo se načíst loga zákazníků ze Sanity:", error)
+      return null
+    }),
   ])
   const lang = getLang(langParam)
   const reviews = buildReviews(reviewDocs, lang)
+  const customers = buildCustomers(customerDocs)
   const gallerySlides = buildGallerySlides(bannerDoc?.photosUrl, lang)
 
   return (
     <SmoothScroll lang={lang}>
-      <div className="flex min-h-screen flex-col overflow-x-hidden">
+      {/* Bez `overflow-x-hidden` — ten by z obalu udělal scroll kontejner a sticky
+          hlavička by odjela s obsahem. Vodorovný přetok ořezává už `<body>`. */}
+      <div className="flex min-h-screen flex-col">
         <SiteHeader lang={lang} />
         <main className="flex-1">
           <HorizontalGallery slides={gallerySlides} lang={lang} />
@@ -59,6 +68,7 @@ export default async function Page({
           <Process lang={lang} />
           <WhyUs lang={lang} />
           <Testimonials reviews={reviews} lang={lang} />
+          <Customers customers={customers} lang={lang} />
           <Social posts={igPosts ?? []} lang={lang} />
           <Contact lang={lang} />
         </main>

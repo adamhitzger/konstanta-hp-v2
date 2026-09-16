@@ -260,23 +260,17 @@ export const REALIZACE_BANNERS_QUERY = groq`*[_type == "productPhotos" && define
 }`;
 
 /**
- * Certifikáty a patenty pro /o-nas. `cert` je Sanity `file`, takže se rozbaluje
- * přes `cert.asset->` — z assetu potřebujeme URL ke stažení a `originalFilename`
- * jako záložní název, když v dokumentu není vyplněný `titleCs`.
- * `size` je v bajtech, převod na MB řeší frontend.
+ * Loga zákazníků/partnerů pro pás na homepage (`components/customers.tsx`).
+ * Rozměry loga se berou z metadat assetu, aby `<Image>` znal poměr stran —
+ * loga jsou různě široká a pás je sází na pevnou výšku.
  */
-export const CERTIFICATES_QUERY = groq`*[_type == "certificate" && defined(cert.asset)] | order(coalesce(poradi, 999) asc, _createdAt asc){
+export const CUSTOMERS_QUERY = groq`*[_type == "customer" && defined(logo.asset)] | order(coalesce(poradi, 999) asc, _createdAt asc){
   _id,
-  titleCs,
-  titleSk,
-  titleDe,
-  noteCs,
-  noteSk,
-  noteDe,
-  "url": cert.asset->url,
-  "fileName": cert.asset->originalFilename,
-  "ext": cert.asset->extension,
-  "size": cert.asset->size
+  name,
+  url,
+  "logo": logo.asset->url,
+  "width": logo.asset->metadata.dimensions.width,
+  "height": logo.asset->metadata.dimensions.height
 }`
 
 // Nejnovější recenze první. Bez `order()` je pořadí dané `_id`, takže nově přidané

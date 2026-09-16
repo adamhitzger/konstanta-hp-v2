@@ -19,7 +19,6 @@ const companyHrefs = [
   "/o-nas#sila-konstanty",
   "/o-nas#co-ocenite",
   "/o-nas#jak-to-probiha",
-  "/o-nas#certifikaty",
   "/o-nas#faq",
   "/realizace",
   "/#kontakt",

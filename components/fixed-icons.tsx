@@ -9,8 +9,9 @@ const PHONE = "+420 770 169 411"
 /**
  * Tlačítko „Kalkulace zdarma" do mobilní hlavičky.
  *
- * Svislý pruh vpravo (viz `FixedIcons`) se na úzkém displeji nezobrazuje — ležel by
+ * Svislý pruh vpravo (viz `FixedIcons`) se na mobilu (pod `md`) nezobrazuje — ležel by
  * přes obsah stránky — a tenhle odkaz ho tam nahrazuje mezi logem a hamburgerem.
+ * Od `md` výš pruh existuje, takže se tlačítko schová, aby CTA nebylo dvakrát.
  * Bydlí ve stejném souboru jako pruh, aby cíl i popisek zůstaly na jednom místě.
  */
 export function CalcCtaButton({ lang = "cs", className }: { lang?: Lang; className?: string }) {
@@ -19,7 +20,7 @@ export function CalcCtaButton({ lang = "cs", className }: { lang?: Lang; classNa
   return (
     <Link
       href={withLang("/konf", lang)}
-      className={`flex h-10 items-center justify-center rounded-lg bg-brand px-3 font-mono text-[10px] font-semibold tracking-[0.06em] whitespace-nowrap text-brand-foreground uppercase transition-colors duration-300 hover:bg-foreground hover:text-background focus-visible:outline-none motion-reduce:transition-none ${className ?? ""}`}
+      className={`flex h-10 items-center justify-center rounded-lg bg-brand px-3 md:hidden font-mono text-[10px] font-semibold tracking-[0.06em] whitespace-nowrap text-brand-foreground uppercase transition-colors duration-300 hover:bg-foreground hover:text-background focus-visible:outline-none motion-reduce:transition-none ${className ?? ""}`}
     >
       {t.calc}
     </Link>
@@ -71,11 +72,12 @@ export function FixedIcons({ lang = "cs" }: { lang?: Lang }) {
       </div>
 
       {/* ---- Pravý pruh: kalkulace zdarma ---- */}
-      {/* Skrytý pod `xl` — tam, kde hlavička přepíná na hamburger, se stejný odkaz
-          vysází jako `CalcCtaButton` mezi logo a hamburger (viz `SiteHeader`). */}
+      {/* Skrytý jen na mobilu (pod `md`, stejně jako levé ikony) — tam se stejný odkaz
+          vysází jako `CalcCtaButton` mezi logo a hamburger (viz `SiteHeader`).
+          Na tabletu i desktopu pruh zůstává. */}
       <Link
         href={withLang("/konf", lang)}
-        className="group fixed top-1/2 right-0 z-40 hidden h-60 w-11 -translate-y-1/2 items-center justify-center rounded-l-xl bg-brand text-brand-foreground transition-colors duration-300 hover:bg-foreground hover:text-background focus-visible:outline-none motion-reduce:transition-none xl:flex"
+        className="group fixed top-1/2 right-0 z-40 hidden h-60 w-11 -translate-y-1/2 items-center justify-center rounded-l-xl bg-brand text-brand-foreground transition-colors duration-300 hover:bg-foreground hover:text-background focus-visible:outline-none motion-reduce:transition-none md:flex"
       >
         {/* Rotace textu, ne celého pruhu — pruh tak drží svou šířku i poloměr rohů. */}
         <span className="rotate-90 font-mono text-[12px] font-semibold tracking-[0.16em] whitespace-nowrap uppercase">
