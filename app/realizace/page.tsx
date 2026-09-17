@@ -10,9 +10,11 @@ import { REALIZACE_QUERY } from "@/sanity/lib/queries"
 import { REALIZACE_CATS, buildRealizace } from "@/lib/realizace"
 import { getLang, realizacePageContent } from "@/lib/translations"
 import type { ProductPhotosDoc, RealizaceCat } from "@/types"
+import { JsonLd } from "@/components/json-ld"
+import { breadcrumbJsonLd } from "@/lib/json-ld"
 
 export const metadata: Metadata = {
-  title: "Realizace | KONSTANTA – hliníkové ploty, brány a pergoly",
+  title: "Realizace hliníkových plotů a bran – fotogalerie | KONSTANTA",
   description:
     "Fotogalerie dokončených realizací KONSTANTY – hliníkové ploty, brány a branky, bioklimatické pergoly a zábradlí. Prohlédněte si je podle motivu a výplně.",
   alternates: { canonical: "/realizace" },
@@ -37,22 +39,25 @@ export default async function RealizacePage({
   const initialCat = REALIZACE_CATS.find((c) => c === filter) as RealizaceCat | undefined
 
   return (
-    <SmoothScroll lang={lang}>
-      <div className="flex min-h-screen flex-col">
-        <SiteHeader lang={lang} />
-        <main className="flex-1">
-          <PageHero kicker={t.kicker} heading={t.heading} subtitle={t.subtitle} />
-          <RealizaceGallery groups={groups} initialCat={initialCat} lang={lang} />
-          <ClosingCta
-            heading={t.ctaHeading}
-            text={t.ctaText}
-            cta={t.cta}
-            ctaCall={t.ctaCall}
-            lang={lang}
-          />
-        </main>
-        <SiteFooter lang={lang} />
-      </div>
-    </SmoothScroll>
+    <>
+      <JsonLd data={breadcrumbJsonLd([{ name: "Realizace", path: "/realizace" }])} />
+      <SmoothScroll lang={lang}>
+        <div className="flex min-h-screen flex-col">
+          <SiteHeader lang={lang} />
+          <main className="flex-1">
+            <PageHero kicker={t.kicker} heading={t.heading} subtitle={t.subtitle} />
+            <RealizaceGallery groups={groups} initialCat={initialCat} lang={lang} />
+            <ClosingCta
+              heading={t.ctaHeading}
+              text={t.ctaText}
+              cta={t.cta}
+              ctaCall={t.ctaCall}
+              lang={lang}
+            />
+          </main>
+          <SiteFooter lang={lang} />
+        </div>
+      </SmoothScroll>
+    </>
   )
 }

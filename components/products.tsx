@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react"
 import { Reveal, AnimatedText } from "@/components/reveal"
 import { productsContent, withLang, type Lang } from "@/lib/translations"
 
-const images = ["/real/Plot2.jpg", "/real/brana2.png", "/real/Branka2.jpg", "/real/pergola-2.jpg"]
+const images = ["/real/Plot2.jpg", "/real/brana2.jpg", "/real/Branka2.jpg", "/real/pergola-2.jpg"]
 const codes = ["HP-01", "HP-02", "HP-03", "HP-04"]
 /** Pořadí sedí s `productsContent.items`: plot, brána, branka, pergola — každý
  * produkt míří na svou vlastní záložku galerie. */
@@ -62,6 +62,7 @@ export function Products({ lang = "cs" }: { lang?: Lang }) {
                   src={p.image || "/placeholder.svg"}
                   alt={p.title}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 640px"
                   className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                 />
 

@@ -8,9 +8,11 @@ import { PRODUCT_PHOTOS_QUERY } from "@/sanity/lib/queries"
 import type { ProductPhotosDoc } from "@/types"
 import { getLang } from "@/lib/translations"
 import { buildGalleryPhotos, buildProductInfo } from "@/lib/product-photos"
+import { JsonLd } from "@/components/json-ld"
+import { breadcrumbJsonLd } from "@/lib/json-ld"
 
 export const metadata: Metadata = {
-  title: "Konfigurátor zábradlí | KONSTANTA – hliníkové ploty, brány a pergoly",
+  title: "Hliníkové a skleněné zábradlí na míru – konfigurátor | KONSTANTA",
   description:
     "Nakonfigurujte si skleněné nebo hliníkové zábradlí k terase, balkonu i schodišti — rozměry, výplň, motiv — a vyžádejte si nezávaznou kalkulaci zdarma.",
   alternates: { canonical: "/konf/zabradli" },
@@ -33,14 +35,17 @@ export default async function KonfZabradliPage({
   const info = buildProductInfo(photoDocs, lang)
 
   return (
-    <SmoothScroll lang={lang}>
-      <div className="flex min-h-screen flex-col">
-        <SiteHeader lang={lang} />
-        <main className="flex-1">
-          <ZabradliConfigurator photos={photos} info={info} lang={lang} />
-        </main>
-        <SiteFooter lang={lang} />
-      </div>
-    </SmoothScroll>
+    <>
+      <JsonLd data={breadcrumbJsonLd([{ name: "Konfigurátor", path: "/konf" }, { name: "Zábradlí", path: "/konf/zabradli" }])} />
+      <SmoothScroll lang={lang}>
+        <div className="flex min-h-screen flex-col">
+          <SiteHeader lang={lang} />
+          <main className="flex-1">
+            <ZabradliConfigurator photos={photos} info={info} lang={lang} />
+          </main>
+          <SiteFooter lang={lang} />
+        </div>
+      </SmoothScroll>
+    </>
   )
 }

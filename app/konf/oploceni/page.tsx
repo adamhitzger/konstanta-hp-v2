@@ -8,9 +8,11 @@ import { PRODUCT_PHOTOS_QUERY } from "@/sanity/lib/queries"
 import type { ProductPhotosDoc } from "@/types"
 import { getLang } from "@/lib/translations"
 import { buildGalleryPhotos, buildProductInfo } from "@/lib/product-photos"
+import { JsonLd } from "@/components/json-ld"
+import { breadcrumbJsonLd } from "@/lib/json-ld"
 
 export const metadata: Metadata = {
-  title: "Konfigurátor oplocení | KONSTANTA – hliníkové ploty, brány a pergoly",
+  title: "Konfigurátor hliníkového plotu a brány – cena online | KONSTANTA",
   description:
     "Nakonfigurujte si bránu, branku, plotové dílce i motiv hliníkového oplocení na míru a vyžádejte si nezávaznou kalkulaci zdarma.",
   alternates: { canonical: "/konf/oploceni" },
@@ -33,14 +35,17 @@ export default async function KonfOploceniPage({
   const info = buildProductInfo(photoDocs, lang)
 
   return (
-    <SmoothScroll lang={lang}>
-      <div className="flex min-h-screen flex-col">
-        <SiteHeader lang={lang} />
-        <main className="flex-1">
-          <Configurator photos={photos} info={info} lang={lang} />
-        </main>
-        <SiteFooter lang={lang} />
-      </div>
-    </SmoothScroll>
+    <>
+      <JsonLd data={breadcrumbJsonLd([{ name: "Konfigurátor", path: "/konf" }, { name: "Oplocení", path: "/konf/oploceni" }])} />
+      <SmoothScroll lang={lang}>
+        <div className="flex min-h-screen flex-col">
+          <SiteHeader lang={lang} />
+          <main className="flex-1">
+            <Configurator photos={photos} info={info} lang={lang} />
+          </main>
+          <SiteFooter lang={lang} />
+        </div>
+      </SmoothScroll>
+    </>
   )
 }

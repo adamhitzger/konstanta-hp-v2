@@ -5,6 +5,8 @@ import { Toaster } from 'react-hot-toast'
 import './globals.css'
 import { GoogleTagManager } from '@next/third-parties/google'
 import { SITE_URL } from '@/lib/site'
+import { JsonLd } from '@/components/json-ld'
+import { localBusinessJsonLd } from '@/lib/json-ld'
 
 const barlow = Barlow({
   variable: '--font-barlow',
@@ -16,7 +18,8 @@ const barlow = Barlow({
 const barlowCondensed = Barlow_Condensed({
   variable: '--font-barlow-condensed',
   subsets: ['latin', 'latin-ext'],
-  weight: ['600', '700', '800'],
+  // 600 se nikde nepoužívá (font-heading jde jen v 700/800) — jeden soubor méně.
+  weight: ['700', '800'],
   display: 'swap',
 })
 
@@ -28,9 +31,9 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 const SITE_NAME = 'KONSTANTA - hliníkové ploty s.r.o.'
-const DEFAULT_TITLE = 'KONSTANTA - hliníkové ploty s.r.o. | Brány, branky a pergoly na míru'
+const DEFAULT_TITLE = 'Hliníkové ploty, brány a pergoly na míru | KONSTANTA'
 const DEFAULT_DESCRIPTION =
-  'Vyrábíme a montujeme moderní hliníkové ploty, brány, branky a pergoly na míru po celé ČR. Odborné zaměření a kalkulace zdarma.'
+  'Vyrábíme a montujeme hliníkové ploty, brány, branky a bioklimatické pergoly na míru. Výrobna na Vysočině, montáž po celé ČR. Zaměření a kalkulace zdarma.'
 
 /**
  * Výchozí metadata pro celý web. Stránky si přepisují `title`, `description`
@@ -46,21 +49,10 @@ export const metadata: Metadata = {
   title: DEFAULT_TITLE,
   description: DEFAULT_DESCRIPTION,
   applicationName: SITE_NAME,
-  keywords: [
-    'hliníkové ploty',
-    'hliníkové brány',
-    'hliníkové branky',
-    'bioklimatické pergoly',
-    'ploty na míru',
-    'posuvná brána',
-    'oplocení',
-    'KONSTANTA',
-  ],
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
   publisher: SITE_NAME,
   category: 'construction',
-  generator: 'Next.js',
   referrer: 'origin-when-cross-origin',
   formatDetection: {
     /* Telefony i e-mail jsou na webu jako explicitní odkazy — iOS nemá
@@ -139,6 +131,7 @@ export default function RootLayout({
       className={`${barlow.variable} ${barlowCondensed.variable} ${jetbrainsMono.variable} bg-background`}
     >
       <body className="font-sans antialiased overflow-x-hidden">
+        <JsonLd data={localBusinessJsonLd()} />
         {children}
         <Toaster
           position="top-center"

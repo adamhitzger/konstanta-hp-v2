@@ -25,6 +25,13 @@ const pages: { path: string; priority: number }[] = [
   { path: "/o-nas", priority: 0.6 },
 ]
 
+/**
+ * Google `changefreq`/`priority` prakticky ignoruje, `lastmod` používá — bere se
+ * čas buildu, protože obsah stránek se mění jen s deployem (Sanity data se
+ * do statických stránek propisují revalidací, ne novou URL).
+ */
+const lastModified = new Date()
+
 export default function sitemap(): MetadataRoute.Sitemap {
   return pages.map(({ path, priority }) => {
     const url = `${SITE_URL}${path}`
@@ -33,6 +40,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     )
     return {
       url,
+      lastModified,
       changeFrequency: "monthly",
       priority,
       alternates: { languages: { ...languages, "x-default": url } },

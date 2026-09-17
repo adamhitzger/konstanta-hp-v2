@@ -34,7 +34,7 @@ const TEXT_FIELD: Record<Lang, "cjText" | "skText" | "deText"> = {
  * prázdný dokument). Homepage tak nikdy nezůstane s prázdnou galerií.
  */
 const FALLBACK_IMAGES = [
-  { imgMobile: "/real/oploceni.png", imgDesktop: "/real/oploceni.jpeg" },
+  { imgMobile: "/real/oploceni.jpeg", imgDesktop: "/real/oploceni.jpeg" },
   { imgMobile: "/real/mobil/brana-sikma.jpg", imgDesktop: "/real/brana-sikma.jpg" },
   { imgMobile: "/real/Branka.jpg", imgDesktop: "/real/Branka.jpg" },
   { imgMobile: "/real/pergola.jpg", imgDesktop: "/real/pergola.jpg" },

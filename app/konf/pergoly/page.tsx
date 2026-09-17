@@ -8,9 +8,11 @@ import { PRODUCT_PHOTOS_QUERY } from "@/sanity/lib/queries"
 import type { ProductPhotosDoc } from "@/types"
 import { getLang } from "@/lib/translations"
 import { buildGalleryPhotos, buildProductInfo } from "@/lib/product-photos"
+import { JsonLd } from "@/components/json-ld"
+import { breadcrumbJsonLd } from "@/lib/json-ld"
 
 export const metadata: Metadata = {
-  title: "Konfigurátor pergol | KONSTANTA – hliníkové ploty, brány a pergoly",
+  title: "Bioklimatická pergola na míru – konfigurátor a cena | KONSTANTA",
   description:
     "Nakonfigurujte si bioklimatickou pergolu, zimní zahradu nebo přístřešek na míru a vyžádejte si nezávaznou kalkulaci zdarma.",
   alternates: { canonical: "/konf/pergoly" },
@@ -33,14 +35,17 @@ export default async function KonfPergolyPage({
   const info = buildProductInfo(photoDocs, lang)
 
   return (
-    <SmoothScroll lang={lang}>
-      <div className="flex min-h-screen flex-col">
-        <SiteHeader lang={lang} />
-        <main className="flex-1">
-          <PergolaConfigurator photos={photos} info={info} lang={lang} />
-        </main>
-        <SiteFooter lang={lang} />
-      </div>
-    </SmoothScroll>
+    <>
+      <JsonLd data={breadcrumbJsonLd([{ name: "Konfigurátor", path: "/konf" }, { name: "Pergoly", path: "/konf/pergoly" }])} />
+      <SmoothScroll lang={lang}>
+        <div className="flex min-h-screen flex-col">
+          <SiteHeader lang={lang} />
+          <main className="flex-1">
+            <PergolaConfigurator photos={photos} info={info} lang={lang} />
+          </main>
+          <SiteFooter lang={lang} />
+        </div>
+      </SmoothScroll>
+    </>
   )
 }

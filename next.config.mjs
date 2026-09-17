@@ -23,7 +23,11 @@ const nextConfig = {
         protocol: "https"
       }
     ],
-    unoptimized: true,
+    formats: ['image/avif', 'image/webp'],
+    // Fotky z realizací jsou v public/ do 2 000 px; optimalizátor z nich
+    // dělá AVIF/WebP ve správné šířce. Sanity si šířku hlídá přes ?w= v URL
+    // (viz lib/banner-photos.ts), tady se jen převede formát.
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
   },
 }
 

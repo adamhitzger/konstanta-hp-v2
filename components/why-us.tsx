@@ -13,7 +13,7 @@ export function WhyUs({ lang = "cs" }: { lang?: Lang }) {
         <Reveal variant="flip" className="relative">
           <Parallax speed={50}>
             <div className="relative aspect-[4/3] overflow-hidden rounded-3xl">
-              <Image src="/team.png" alt="Náš tým" fill className="object-cover" />
+              <Image src="/team.png" alt="Tým KONSTANTA při montáži hliníkového plotu" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
             </div>
           </Parallax>
         </Reveal>

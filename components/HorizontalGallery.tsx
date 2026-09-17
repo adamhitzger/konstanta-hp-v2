@@ -105,27 +105,29 @@ export default function HorizontalGallery({
       <div className="wrapper relative -mt-20 h-screen w-full overflow-hidden bg-foreground">
         {/* Horizontální lišta – šířka = počet snímků × 100vw */}
         <div className="track flex h-full will-change-transform">
-          {slides.map((s) => (
+          {slides.map((s, i) => (
             <section
               key={s.title}
               className="slide relative flex h-full w-screen shrink-0 items-center justify-center overflow-hidden"
             >
               {/* Pozadí – na mobilu na výšku, na desktopu na šířku.
-                  110 % / přesah 5 % = rezerva pro mouse-parallax bez odhalení krajů. */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                data-parallax="0.2"
-                src={s.imgMobile}
-                alt={s.label}
-                className="absolute -inset-[5%] h-[110%] w-[110%] max-w-none object-cover md:hidden"
-              />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                data-parallax="0.2"
-                src={s.imgDesktop}
-                alt={s.label}
-                className="absolute -inset-[5%] hidden h-[110%] w-[110%] max-w-none object-cover md:block"
-              />
+                  110 % / přesah 5 % = rezerva pro mouse-parallax bez odhalení krajů.
+                  <picture> místo dvou <img> schovaných přes CSS: prohlížeč stáhne
+                  jen variantu pro svou šířku, ne obě. První snímek je LCP, ostatní
+                  jsou vpravo mimo viewport a můžou se dotáhnout líně. */}
+              <picture>
+                <source media="(min-width: 768px)" srcSet={s.imgDesktop} />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  data-parallax="0.2"
+                  src={s.imgMobile}
+                  alt={s.label}
+                  loading={i === 0 ? "eager" : "lazy"}
+                  fetchPriority={i === 0 ? "high" : "auto"}
+                  decoding="async"
+                  className="absolute -inset-[5%] h-[110%] w-[110%] max-w-none object-cover"
+                />
+              </picture>
               {/* gradient pro čitelnost textu (tmavý nahoře i dole) */}
               <div
                 className="pointer-events-none absolute inset-0"

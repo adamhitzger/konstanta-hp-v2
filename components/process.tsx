@@ -7,7 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
 import { processContent, type Lang } from "@/lib/translations"
 
-const images = ["/proces-1.png", "/proces-2.png", "/proces-3.png", "/proces-4.png", "/proces-5.png"]
+const images = ["/proces-1.jpg", "/proces-2.jpg", "/proces-3.jpg", "/proces-4.jpg", "/proces-5.jpg"]
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
@@ -114,7 +114,13 @@ export function Process({ lang = "cs" }: { lang?: Lang }) {
                       data-image
                       className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-background/10 shadow-2xl"
                     >
-                      <Image src={s.image || "/placeholder.svg"} alt={s.title} fill className="object-cover" />
+                      <Image
+                        src={s.image || "/placeholder.svg"}
+                        alt={s.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className="object-cover"
+                      />
                     </div>
                   </div>
                 </div>

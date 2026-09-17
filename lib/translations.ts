@@ -489,7 +489,7 @@ export const whyUsContent = {
   cs: {
     heading: "Česká firma, která upřednostňuje kvalitu před kvantitou",
     paragraph:
-      "Jsme KONSTANTA - hliníkové ploty s.r.o. – tým, který bere každou zakázku osobně. Veškeré produkty máme plně ve vlastní režii, a proto můžeme garantovat kvalitu i dlouhou životnost každého plotu.",
+      "Jsme KONSTANTA - hliníkové ploty s.r.o. – tým, který bere každou zakázku osobně. Vyrábíme v Malči na Vysočině a montujeme po celé České republice. Veškeré produkty máme plně ve vlastní režii, a proto můžeme garantovat kvalitu i dlouhou životnost každého plotu.",
     reasons: [
       "Vyrábíme i montujeme vše ve vlastní režii",
       "Garance kvality a maximální spokojenosti",
@@ -502,7 +502,7 @@ export const whyUsContent = {
   sk: {
     heading: "Česká firma, ktorá uprednostňuje kvalitu pred kvantitou",
     paragraph:
-      "Sme KONSTANTA - hliníkové ploty s.r.o. – tím, ktorý berie každú zákazku osobne. Všetky produkty máme plne vo vlastnej réžii, a preto môžeme garantovať kvalitu aj dlhú životnosť každého plota.",
+      "Sme KONSTANTA - hliníkové ploty s.r.o. – tím, ktorý berie každú zákazku osobne. Vyrábame v Malči na Vysočine a montujeme po celej Českej republike. Všetky produkty máme plne vo vlastnej réžii, a preto môžeme garantovať kvalitu aj dlhú životnosť každého plota.",
     reasons: [
       "Vyrábame aj montujeme všetko vo vlastnej réžii",
       "Garancia kvality a maximálnej spokojnosti",
@@ -515,7 +515,7 @@ export const whyUsContent = {
   de: {
     heading: "Ein tschechisches Unternehmen, das Qualität vor Quantität stellt",
     paragraph:
-      "Wir sind KONSTANTA - hliníkové ploty s.r.o. – ein Team, dem jeder Auftrag persönlich am Herzen liegt. Alle Produkte fertigen wir vollständig in Eigenregie und garantieren so Qualität und lange Lebensdauer jedes Zauns.",
+      "Wir sind KONSTANTA - hliníkové ploty s.r.o. – ein Team, dem jeder Auftrag persönlich am Herzen liegt. Wir fertigen in Maleč in der Region Vysočina und montieren in ganz Tschechien. Alle Produkte fertigen wir vollständig in Eigenregie und garantieren so Qualität und lange Lebensdauer jedes Zauns.",
     reasons: [
       "Wir fertigen und montieren alles in Eigenregie",
       "Garantierte Qualität und höchste Zufriedenheit",

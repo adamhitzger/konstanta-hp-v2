@@ -11,9 +11,11 @@ import { ProcesFlow } from "@/components/o-nas/proces-flow"
 import { Faq } from "@/components/o-nas/faq"
 import { ZaverCta } from "@/components/o-nas/zaver-cta"
 import { getLang } from "@/lib/translations"
+import { JsonLd } from "@/components/json-ld"
+import { breadcrumbJsonLd, faqJsonLd } from "@/lib/json-ld"
 
 export const metadata: Metadata = {
-  title: "O nás | KONSTANTA – hliníkové ploty, brány a pergoly",
+  title: "O nás – výrobce hliníkových plotů z Vysočiny | KONSTANTA",
   description:
     "Jsme KONSTANTA – rodinná firma od roku 2022. Precizní hliníkové ploty, brány a pergoly s vlastním patentovaným komorovým systémem. Stovky realizací, montáž do 24 hodin.",
   alternates: { canonical: "/o-nas" },
@@ -28,21 +30,25 @@ export default async function ONasPage({
   const lang = getLang(langParam)
 
   return (
-    <SmoothScroll lang={lang}>
-      <div className="flex min-h-screen flex-col">
-        <SiteHeader lang={lang} />
-        <main className="flex-1">
-          <ProfileHero lang={lang} />
-          <SectionNav lang={lang} />
-          <Story lang={lang} />
-          <SilaKonstanty lang={lang} />
-          <CoOcenite lang={lang} />
-          <ProcesFlow lang={lang} />
-          <Faq lang={lang} />
-          <ZaverCta lang={lang} />
-        </main>
-        <SiteFooter lang={lang} />
-      </div>
-    </SmoothScroll>
+    <>
+      <JsonLd data={breadcrumbJsonLd([{ name: "O nás", path: "/o-nas" }])} />
+      <JsonLd data={faqJsonLd(lang)} />
+      <SmoothScroll lang={lang}>
+        <div className="flex min-h-screen flex-col">
+          <SiteHeader lang={lang} />
+          <main className="flex-1">
+            <ProfileHero lang={lang} />
+            <SectionNav lang={lang} />
+            <Story lang={lang} />
+            <SilaKonstanty lang={lang} />
+            <CoOcenite lang={lang} />
+            <ProcesFlow lang={lang} />
+            <Faq lang={lang} />
+            <ZaverCta lang={lang} />
+          </main>
+          <SiteFooter lang={lang} />
+        </div>
+      </SmoothScroll>
+    </>
   )
 }
