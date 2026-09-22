@@ -9,7 +9,7 @@ import { ClosingCta } from "@/components/subpages/closing-cta"
 import { Reveal, AnimatedText, Parallax } from "@/components/reveal"
 import { pripravneContent, getLang } from "@/lib/translations"
 import { JsonLd } from "@/components/json-ld"
-import { breadcrumbJsonLd } from "@/lib/json-ld"
+import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld"
 
 export const metadata: Metadata = {
   title: "Základy a podezdívka pod plot – přípravné práce | KONSTANTA",
@@ -29,6 +29,13 @@ export default async function PripravnePracePage({
 
   return (
     <>
+      <JsonLd
+        data={webPageJsonLd({
+          path: "/pripravne-prace",
+          name: metadata.title as string,
+          description: metadata.description as string,
+        })}
+      />
       <JsonLd data={breadcrumbJsonLd([{ name: "Přípravné práce", path: "/pripravne-prace" }])} />
       <SmoothScroll lang={lang}>
         <div className="flex min-h-screen flex-col">

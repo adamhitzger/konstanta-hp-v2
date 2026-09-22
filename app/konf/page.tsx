@@ -7,7 +7,7 @@ import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { getLang, konfPickerContent } from "@/lib/translations"
 import { JsonLd } from "@/components/json-ld"
-import { breadcrumbJsonLd } from "@/lib/json-ld"
+import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld"
 
 export const metadata: Metadata = {
   title: "Konfigurátor plotu, pergoly a zábradlí – kalkulace zdarma | KONSTANTA",
@@ -35,6 +35,13 @@ export default async function KonfPickerPage({
 
   return (
     <>
+      <JsonLd
+        data={webPageJsonLd({
+          path: "/konf",
+          name: metadata.title as string,
+          description: metadata.description as string,
+        })}
+      />
       <JsonLd data={breadcrumbJsonLd([{ name: "Konfigurátor", path: "/konf" }])} />
       <SmoothScroll lang={lang}>
         <div className="flex min-h-screen flex-col">

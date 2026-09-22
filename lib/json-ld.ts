@@ -94,3 +94,44 @@ export function breadcrumbJsonLd(items: { name: string; path: string }[]) {
     })),
   }
 }
+
+/** WebSite pro celý web — v `app/layout.tsx` vedle LocalBusiness. */
+export function websiteJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${SITE_URL}/#website`,
+    url: SITE_URL,
+    name: ORGANIZATION.name,
+    description:
+      "Hliníkové ploty, brány, branky a bioklimatické pergoly na míru. Výrobna na Vysočině, montáž po celé ČR.",
+    inLanguage: "cs",
+    publisher: { "@id": ORG_ID },
+    copyrightHolder: { "@id": ORG_ID },
+  }
+}
+
+/**
+ * WebPage konkrétní stránky. Drží stejný popis jako `metadata.description`,
+ * aby si strukturovaná data a náhled ve výsledcích neodporovaly.
+ */
+export function webPageJsonLd(p: {
+  path: string
+  name: string
+  description: string
+  type?: "WebPage" | "AboutPage" | "CollectionPage"
+}) {
+  const url = `${SITE_URL}${p.path}`
+  return {
+    "@context": "https://schema.org",
+    "@type": p.type ?? "WebPage",
+    "@id": `${url}#webpage`,
+    url,
+    name: p.name,
+    description: p.description,
+    inLanguage: "cs",
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+    about: { "@id": ORG_ID },
+    primaryImageOfPage: `${SITE_URL}/og-image.jpg`,
+  }
+}

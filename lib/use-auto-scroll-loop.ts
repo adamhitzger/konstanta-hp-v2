@@ -12,6 +12,13 @@ const DRAG_THRESHOLD_PX = 6
 const MIN_COPIES = 3
 
 /**
+ * Na serveru se vykreslí jedna kopie, další přidá až efekt po připojení.
+ * Kopie jsou jen vizuální výplň smyčky, ale v HTML nesou plnou váhu — u pásu
+ * recenzí to byly dvě třetiny všech obrázků a Tailwind tříd na stránce.
+ */
+const SSR_COPIES = 1
+
+/**
  * Samojedoucí vodorovný pás, který si návštěvník kdykoli posune sám.
  *
  * Kontejner je obyčejný `overflow-x-auto`, takže kolečko, prst i posuvník
@@ -33,7 +40,7 @@ export function useAutoScrollLoop(
   firstCopyRef: RefObject<HTMLElement | null>,
   enabled: boolean,
 ) {
-  const [copies, setCopies] = useState(MIN_COPIES)
+  const [copies, setCopies] = useState(SSR_COPIES)
 
   /* Kolik kopií je potřeba: za druhou kopií musí zbývat aspoň celý viewport,
      jinak pás narazí na konec dřív, než dojde na práh přeskoku. */

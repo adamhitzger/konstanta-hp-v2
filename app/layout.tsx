@@ -4,9 +4,9 @@ import { Barlow, Barlow_Condensed, JetBrains_Mono } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
 import './globals.css'
 import { GoogleTagManager } from '@next/third-parties/google'
-import { SITE_URL } from '@/lib/site'
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_NAME, SITE_URL } from '@/lib/site'
 import { JsonLd } from '@/components/json-ld'
-import { localBusinessJsonLd } from '@/lib/json-ld'
+import { localBusinessJsonLd, websiteJsonLd } from '@/lib/json-ld'
 
 const barlow = Barlow({
   variable: '--font-barlow',
@@ -30,11 +30,6 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 })
 
-const SITE_NAME = 'KONSTANTA - hliníkové ploty s.r.o.'
-const DEFAULT_TITLE = 'Hliníkové ploty, brány a pergoly na míru | KONSTANTA'
-const DEFAULT_DESCRIPTION =
-  'Vyrábíme a montujeme hliníkové ploty, brány, branky a bioklimatické pergoly na míru. Výrobna na Vysočině, montáž po celé ČR. Zaměření a kalkulace zdarma.'
-
 /**
  * Výchozí metadata pro celý web. Stránky si přepisují `title`, `description`
  * a `alternates.canonical`; `openGraph`/`twitter` se z layoutu dědí, takže sdílený
@@ -49,6 +44,18 @@ export const metadata: Metadata = {
   title: DEFAULT_TITLE,
   description: DEFAULT_DESCRIPTION,
   applicationName: SITE_NAME,
+  generator: 'Next.js',
+  keywords: [
+    'hliníkové ploty',
+    'hliníkové brány',
+    'hliníkové branky',
+    'bioklimatické pergoly',
+    'hliníkové zábradlí',
+    'plot na míru',
+    'oplocení pozemku',
+    'výroba a montáž plotů',
+  ],
+  manifest: '/manifest.webmanifest',
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
   publisher: SITE_NAME,
@@ -130,8 +137,15 @@ export default function RootLayout({
       lang="cs"
       className={`${barlow.variable} ${barlowCondensed.variable} ${jetbrainsMono.variable} bg-background`}
     >
+      <head>
+        {/* Fotky realizací, recenzí i Instagramu chodí ze Sanity CDN — spojení
+            otevřeme dřív, než na první z nich narazí parser. */}
+        <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://cdn.sanity.io" />
+      </head>
       <body className="font-sans antialiased overflow-x-hidden">
         <JsonLd data={localBusinessJsonLd()} />
+        <JsonLd data={websiteJsonLd()} />
         {children}
         <Toaster
           position="top-center"

@@ -12,7 +12,7 @@ import { Faq } from "@/components/o-nas/faq"
 import { ZaverCta } from "@/components/o-nas/zaver-cta"
 import { getLang } from "@/lib/translations"
 import { JsonLd } from "@/components/json-ld"
-import { breadcrumbJsonLd, faqJsonLd } from "@/lib/json-ld"
+import { breadcrumbJsonLd, faqJsonLd, webPageJsonLd } from "@/lib/json-ld"
 
 export const metadata: Metadata = {
   title: "O nás – výrobce hliníkových plotů z Vysočiny | KONSTANTA",
@@ -31,6 +31,14 @@ export default async function ONasPage({
 
   return (
     <>
+      <JsonLd
+        data={webPageJsonLd({
+          path: "/o-nas",
+          name: metadata.title as string,
+          description: metadata.description as string,
+          type: "AboutPage",
+        })}
+      />
       <JsonLd data={breadcrumbJsonLd([{ name: "O nás", path: "/o-nas" }])} />
       <JsonLd data={faqJsonLd(lang)} />
       <SmoothScroll lang={lang}>

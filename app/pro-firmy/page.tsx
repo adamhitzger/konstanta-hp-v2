@@ -8,7 +8,7 @@ import { ClosingCta } from "@/components/subpages/closing-cta"
 import { Reveal, AnimatedText } from "@/components/reveal"
 import { proFirmyContent, getLang } from "@/lib/translations"
 import { JsonLd } from "@/components/json-ld"
-import { breadcrumbJsonLd } from "@/lib/json-ld"
+import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld"
 
 export const metadata: Metadata = {
   title: "Hliníkové oplocení pro firmy a developery | KONSTANTA",
@@ -32,6 +32,13 @@ export default async function ProFirmyPage({
 
   return (
     <>
+      <JsonLd
+        data={webPageJsonLd({
+          path: "/pro-firmy",
+          name: metadata.title as string,
+          description: metadata.description as string,
+        })}
+      />
       <JsonLd data={breadcrumbJsonLd([{ name: "Pro firmy", path: "/pro-firmy" }])} />
       <SmoothScroll lang={lang}>
         <div className="flex min-h-screen flex-col">

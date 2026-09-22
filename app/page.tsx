@@ -18,6 +18,9 @@ import { buildGallerySlides } from "@/lib/banner-photos"
 import { buildReviews } from "@/lib/reviews"
 import { buildCustomers } from "@/lib/customers"
 import type { BannerPhotosDoc, CustomerDoc, IgPost, ReviewDoc } from "@/types"
+import { JsonLd } from "@/components/json-ld"
+import { webPageJsonLd } from "@/lib/json-ld"
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE } from "@/lib/site"
 
 export default async function Page({
   searchParams,
@@ -55,25 +58,34 @@ export default async function Page({
   const gallerySlides = buildGallerySlides(bannerDoc?.photosUrl, lang)
 
   return (
-    <SmoothScroll lang={lang}>
-      {/* Bez `overflow-x-hidden` — ten by z obalu udělal scroll kontejner a sticky
-          hlavička by odjela s obsahem. Vodorovný přetok ořezává už `<body>`. */}
-      <div className="flex min-h-screen flex-col">
-        <SiteHeader lang={lang} />
-        <main className="flex-1">
-          <HorizontalGallery slides={gallerySlides} lang={lang} />
+    <>
+      <JsonLd
+        data={webPageJsonLd({
+          path: "/",
+          name: DEFAULT_TITLE,
+          description: DEFAULT_DESCRIPTION,
+        })}
+      />
+      <SmoothScroll lang={lang}>
+        {/* Bez `overflow-x-hidden` — ten by z obalu udělal scroll kontejner a sticky
+            hlavička by odjela s obsahem. Vodorovný přetok ořezává už `<body>`. */}
+        <div className="flex min-h-screen flex-col">
+          <SiteHeader lang={lang} />
+          <main className="flex-1">
+            <HorizontalGallery slides={gallerySlides} lang={lang} />
 
-          <Stats lang={lang} />
-          <Products lang={lang} />
-          <Process lang={lang} />
-          <WhyUs lang={lang} />
-          <Testimonials reviews={reviews} lang={lang} />
-          <Customers customers={customers} lang={lang} />
-          <Social posts={igPosts ?? []} lang={lang} />
-          <Contact lang={lang} />
-        </main>
-        <SiteFooter lang={lang} />
-      </div>
-    </SmoothScroll>
+            <Stats lang={lang} />
+            <Products lang={lang} />
+            <Process lang={lang} />
+            <WhyUs lang={lang} />
+            <Testimonials reviews={reviews} lang={lang} />
+            <Customers customers={customers} lang={lang} />
+            <Social posts={igPosts ?? []} lang={lang} />
+            <Contact lang={lang} />
+          </main>
+          <SiteFooter lang={lang} />
+        </div>
+      </SmoothScroll>
+    </>
   )
 }

@@ -14,10 +14,10 @@ const SLIDE_HREFS = [
 ]
 
 /**
- * Fotky ze Studia jsou originály z foťáku (tady 2 000–5 900 px, jednotky MB) a
- * `next.config.mjs` má `images.unoptimized`, takže je nikdo cestou nezmenší.
- * Zmenšení proto řeší Sanity image CDN přímo v URL — snímky jsou pozadí přes
- * celou obrazovku, takže desktop dostává 2 400 px a mobil 1 200 px.
+ * Fotky ze Studia jsou originály z foťáku (tady 2 000–5 900 px, jednotky MB).
+ * Zmenšení řeší Sanity image CDN přímo v URL — snímky jsou pozadí přes celou
+ * obrazovku, takže desktop dostává 2 400 px a mobil 1 200 px, a optimalizátor
+ * Nextu už nesahá na originál.
  */
 const DESKTOP_IMG = "?w=2400&fit=max&auto=format"
 const MOBILE_IMG = "?w=1200&fit=max&auto=format"

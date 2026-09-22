@@ -20,7 +20,7 @@ import { Reveal } from "@/components/reveal"
 import { TiltCard } from "@/components/o-nas/tilt-card"
 import { chytraReseniContent, getLang } from "@/lib/translations"
 import { JsonLd } from "@/components/json-ld"
-import { breadcrumbJsonLd } from "@/lib/json-ld"
+import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld"
 
 export const metadata: Metadata = {
   title: "Chytré doplňky k plotu – elektrozámek, videotelefon, pohon brány | KONSTANTA",
@@ -47,6 +47,13 @@ export default async function ChytraReseniPage({
 
   return (
     <>
+      <JsonLd
+        data={webPageJsonLd({
+          path: "/chytra-reseni",
+          name: metadata.title as string,
+          description: metadata.description as string,
+        })}
+      />
       <JsonLd data={breadcrumbJsonLd([{ name: "Chytrá řešení", path: "/chytra-reseni" }])} />
       <SmoothScroll lang={lang}>
         <div className="flex min-h-screen flex-col">

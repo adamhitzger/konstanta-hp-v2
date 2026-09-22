@@ -11,7 +11,7 @@ import { REALIZACE_CATS, buildRealizace } from "@/lib/realizace"
 import { getLang, realizacePageContent } from "@/lib/translations"
 import type { ProductPhotosDoc, RealizaceCat } from "@/types"
 import { JsonLd } from "@/components/json-ld"
-import { breadcrumbJsonLd } from "@/lib/json-ld"
+import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld"
 
 export const metadata: Metadata = {
   title: "Realizace hliníkových plotů a bran – fotogalerie | KONSTANTA",
@@ -40,6 +40,14 @@ export default async function RealizacePage({
 
   return (
     <>
+      <JsonLd
+        data={webPageJsonLd({
+          path: "/realizace",
+          name: metadata.title as string,
+          description: metadata.description as string,
+          type: "CollectionPage",
+        })}
+      />
       <JsonLd data={breadcrumbJsonLd([{ name: "Realizace", path: "/realizace" }])} />
       <SmoothScroll lang={lang}>
         <div className="flex min-h-screen flex-col">

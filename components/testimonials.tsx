@@ -24,13 +24,17 @@ function ReviewCard({ r, t, tabbable = true }: { r: Review; t: (typeof testimoni
   const card = (
     <figure className="flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-colors duration-300 group-hover/card:border-brand/50">
       <div className="relative aspect-[4/3] overflow-hidden">
+        {/* Karta je vždy 288 px široká (`w-72`), takže pevné rozměry místo `fill`:
+            Next pak vypíše jen 1× a 2× variantu místo celého seznamu šířek.
+            Pás vykresluje recenze třikrát kvůli smyčce, tak se každý ušetřený
+            řádek `srcSet` násobí stovkou obrázků na stránce. */}
         <Image
           src={r.image || "/placeholder.svg"}
           alt={t.photoAlt(r.name)}
-          fill
-          sizes="288px"
+          width={288}
+          height={216}
           draggable={false}
-          className="object-cover transition-transform duration-500 group-hover/card:scale-105"
+          className="size-full object-cover transition-transform duration-500 group-hover/card:scale-105"
         />
       </div>
       <blockquote className="flex flex-1 flex-col gap-4 p-6">
