@@ -1035,7 +1035,13 @@ let bezDPH: number =0;
     const montazCena = (id === "telPoj" || id === "telSam" || id === "sekcni" || id === "skladaci") ? r.pocet * 6000 : r.pocet * 4500;
     const kolejniceCena = (id === "atypicka" || id === "telPoj" || id === "posuvna" || id === "sekcni") ? 5000 : 0
     const zadlabavaciZamekCena = ((id === "samonosna" || id === "posuvna" || id === "atypicka") && !r.pohon ) ? 3480 : 0
-    bezDPH += zaklad+pohonCena+tahomaCena+montazCena+brzdaCena+kolejniceCena+zadlabavaciZamekCena
+    /* Zástrč a kování brány se do součtu musí přičíst stejně jako ostatní příplatky.
+       Do 2026-09-25 v tomhle výčtu chyběly, přestože se oba vypisovaly do nabídky
+       jako řádek s cenou — součet tak byl o 2 000 Kč (kování) a 1 500 / 3 000 Kč
+       (zástrč u jedno- / dvoukřídlé a skládací) nižší, než kolik dávaly vypsané
+       položky. U bran s pohonem jsou obě nulové, tam se nic nemění.
+       `zastrcCena` je cena za celou sadu, ne za kus — `zastrcMn` stojí jen v množství. */
+    bezDPH += zaklad+pohonCena+tahomaCena+montazCena+brzdaCena+kolejniceCena+zadlabavaciZamekCena+zastrcCena+kovaniCena
     
     const headerRow = ws.addRow([ti.header.produkt, ti.header.mnozstvi, ti.header.bezDph, ti.header.dph, ti.header.sDph])
     ws.addRow([`${name}: ${r.delka}x${r.vyska} mm`,r.pocet,money(zaklad),money(zaklad*sazbaDph), money(zaklad*(1+sazbaDph)) ]);
