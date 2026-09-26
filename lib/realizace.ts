@@ -6,6 +6,16 @@ import type {
   RealizaceTeaser,
 } from "@/types"
 
+/**
+ * Alt text fotek realizací: „produkt - motiv - KonstantaHP".
+ * Produkt i motiv chodí v jazyce stránky (`realizacePageContent`, `motivLabels`),
+ * značka zůstává vždy stejná. Motiv vypadne, když ho fotka nemá — úvodní snímky
+ * kategorií jsou kurátorované záběry bez přiřazeného motivu.
+ */
+export function realizaceAlt(produkt: string, motiv?: string): string {
+  return [produkt, motiv, "KonstantaHP"].filter(Boolean).join(" - ")
+}
+
 /** Pořadí záložek na /realizace. Zároveň klíčuje texty v `realizaceContent`. */
 export const REALIZACE_CATS: RealizaceCat[] = ["ploty", "brany", "branky", "pergoly", "zabradli"]
 

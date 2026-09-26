@@ -7,6 +7,7 @@ import { Expand } from "lucide-react"
 import { Reveal } from "@/components/reveal"
 import { PhotoLightbox } from "@/components/configurator/photo-lightbox"
 import { motivLabels, realizacePageContent, type Lang } from "@/lib/translations"
+import { realizaceAlt } from "@/lib/realizace"
 import type { RealizaceCat, RealizaceGroup } from "@/types"
 import { cn } from "@/lib/utils"
 
@@ -80,7 +81,11 @@ export function RealizaceGallery({
    * `initialIndex` z gridu by pak ukazoval do jiného seznamu. Filtr motivů tady vlastní grid,
    * takže se lightboxu posílají fotky bez `motiv` a jeho vlastní sidebar se nezobrazí.
    */
-  const lightboxPhotos = useMemo(() => photos.map((p) => ({ url: p.url })), [photos])
+  const catTab = group ? t.cats[group.cat].tab : ""
+  const lightboxPhotos = useMemo(
+    () => photos.map((p) => ({ url: p.url, alt: realizaceAlt(catTab, p.motiv ? (ml[p.motiv] ?? p.motiv) : undefined) })),
+    [photos, catTab, ml],
+  )
 
   const selectCat = (cat: RealizaceCat) => {
     setActiveCat(cat)
@@ -213,7 +218,7 @@ export function RealizaceGallery({
               >
                 <Image
                   src={photo.url}
-                  alt={`${cat.heading} — ${photo.motiv ? (ml[photo.motiv] ?? photo.motiv) : cat.tab}`}
+                  alt={realizaceAlt(cat.tab, photo.motiv ? (ml[photo.motiv] ?? photo.motiv) : undefined)}
                   fill
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"

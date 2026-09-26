@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Reveal, SectionHeading, Parallax } from "@/components/reveal"
 import { realizaceContent, realizacePageContent, withLang, type Lang } from "@/lib/translations"
 import type { RealizaceTeaser } from "@/types"
+import { realizaceAlt } from "@/lib/realizace"
 
 /** Když v Sanity ještě není nahraná úvodní fotka, sekce spadne na tyhle záběry. */
 
@@ -52,7 +53,7 @@ export function Realizace({ items = [], lang = "cs" }: { items?: RealizaceTeaser
               <a data-real href={c.href} className="group relative block aspect-[3/4] overflow-hidden rounded-3xl">
                 <Image
                   src={c.image}
-                  alt={c.text}
+                  alt={realizaceAlt(c.title)}
                   fill
                   sizes="(min-width: 768px) 33vw, 100vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"

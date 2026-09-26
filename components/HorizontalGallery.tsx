@@ -98,6 +98,10 @@ export default function HorizontalGallery({
 
   return (
     <div ref={root} className="relative">
+      {/* Jediný `h1` stránky. Hero je vodorovná galerie čtyř rovnocenných snímků,
+          každý s vlastním `h2` (Ploty / Brány / …), takže grafický nadpis nad ně
+          nepatří — `sr-only` ho dá čtečkám a vyhledávačům, aniž by hnul designem. */}
+      <h1 className="sr-only">{t.h1}</h1>
       {/*
         -mt-20 vytáhne sekci pod sticky header (h-20), takže se pin chytne
         hned na začátku a stránka nepodjede o výšku headeru.

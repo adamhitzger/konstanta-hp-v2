@@ -7,7 +7,7 @@ Stav k 17. 9. 2026. Audit z 16. 9. je zapracovaný (obrázky, hero, JSON-LD, tit
 ## Rozhodnutí, která platí
 
 - **SK/DE beze změny** (16. 9.): `?lang=sk` / `?lang=de` dál vrací český `<title>`, `lang="cs"` a canonical na CS, zatímco sitemapa deklaruje hreflang — Google si to odporuje a SK/DE neindexuje. Je to vědomě odložené. Až se bude řešit: buď prefixy `/sk/…`, `/de/…` s vlastními metadaty a `alternates.languages`, nebo smazat `alternates.languages` ze `sitemap.ts` a dát `?lang=` `noindex` (jak je to u Aerorozvědky, `langRobots()` v `lib/seo.ts` tam).
-- **H1 homepage „Ploty, které vydrží."** — bez klíčového slova; buď „Hliníkové ploty, které vydrží.", nebo nechat a dát „hliníkové oplocení" do prvního `<h2>`. Čeká na klienta (je v briefu pro p. Líbala).
+- **H1 homepage** (23. 9.): homepage dlouho neměla `h1` vůbec — nadpis „Ploty, které vydrží." se nikde nevykresloval a hero galerie má čtyři rovnocenné `h2` (Ploty / Brány / …). Doplněn vizuálně skrytý `h1` (`sr-only`) v `components/HorizontalGallery.tsx`, text v `galleryContent[lang].h1` pro cs/sk/de. Znění „Hliníkové ploty, brány a pergoly na míru" je **pracovní** — finální formulace je v briefu pro p. Líbala a mění se na jednom místě v `lib/translations.ts`.
 
 ## Zbývá — mimo kód / od klienta
 

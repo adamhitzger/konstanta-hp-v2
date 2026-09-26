@@ -8,6 +8,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import type { ConfPhotoItem } from "@/types"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { konfCommonContent, motivLabels, photoGalleryContent, type Lang } from "@/lib/translations"
+import { realizaceAlt } from "@/lib/realizace"
 import { cn } from "@/lib/utils"
 
 function MotivChip({
@@ -37,6 +38,15 @@ function MotivChip({
       <span className={cn("shrink-0 font-mono text-xs tabular-nums", active ? "text-brand" : "text-muted-foreground")}>{count}</span>
     </button>
   )
+}
+
+/**
+ * Alt fotky v galerii. Volající může poslat hotový text v `photo.alt`
+ * (galerie realizací to dělá), jinak se složí z názvu produktu a motivu
+ * do stejného tvaru „produkt - motiv - KonstantaHP".
+ */
+function photoAlt(photo: ConfPhotoItem, title: string, ml: Record<string, string>): string {
+  return photo.alt ?? realizaceAlt(title, photo.motiv ? (ml[photo.motiv] ?? photo.motiv) : undefined)
 }
 
 /** Kolik náhledů se vejde pod model, než se zbytek schová za „+N" na poslední dlaždici. */
@@ -98,6 +108,7 @@ export function PhotoThumbs({
   lang?: Lang
 }) {
   const gt = photoGalleryContent[lang] ?? photoGalleryContent.cs
+  const ml = motivLabels[lang] ?? motivLabels.cs
   /** Která miniatura je pod kurzorem a kde ten kurzor je — pro plovoucí zvětšeninu. */
   const [preview, setPreview] = useState<{ index: number; x: number; y: number } | null>(null)
 
@@ -130,7 +141,7 @@ export function PhotoThumbs({
           className="group relative size-8 hover:scale-95 hover:rounded-xl shrink-0 overflow-hidden rounded-md border border-border bg-background transition-colors hover:border-brand sm:size-10"
           aria-label={`${label}: ${title}`}
         >
-          <Image src={photo.url} alt={`${title} — ${gt.realization} ${i + 1}`} fill sizes="56px" className="object-cover" unoptimized />
+          <Image src={photo.url} alt={photoAlt(photo, title, ml)} fill sizes="56px" className="object-cover" unoptimized />
           {i === shown.length - 1 && hidden > 0 ? (
             <span className="absolute inset-0 flex items-center justify-center bg-foreground/55 text-[10px] font-semibold text-background">
               +{hidden}
@@ -142,7 +153,7 @@ export function PhotoThumbs({
       {preview ? (
         <ThumbPreview
           url={shown[preview.index].url}
-          alt={`${title} — ${gt.realization} ${preview.index + 1}`}
+          alt={photoAlt(shown[preview.index], title, ml)}
           x={preview.x}
           y={preview.y}
         />
@@ -267,7 +278,7 @@ export function PhotoLightbox({
               >
                 <Image
                   src={filtered[index].url}
-                  alt={`${title} — ${gt.realization} ${index + 1}`}
+                  alt={photoAlt(filtered[index], title, t)}
                   fill
                   sizes="75vw"
                   className="object-contain"

@@ -353,6 +353,10 @@ export const galleryContent = {
     titles: ["PLOTY", "BRÁNY", "BRANKY", "PERGOLY"],
     labels: ["Hliníkové ploty", "Hliníkové brány", "Hliníkové branky", "Hliníkové pergoly"],
     kicker: "Hliníkové oplocení na míru",
+    /* Jediný `h1` homepage. Vizuálně skrytý (`sr-only`) — hero je galerie čtyř
+       rovnocenných snímků s vlastními `h2`, takže grafický nadpis nemá kam.
+       Pracovní znění; finální formulace je v briefu pro p. Líbala. */
+    h1: "Hliníkové ploty, brány a pergoly na míru",
     cta: "Nezávazná kalkulace",
     /* Popisek klikatelného nadpisu snímku — nadpis vede rovnou na svou kategorii
        v galerii realizací, ať nikdo nemusí odscrollovat celou lištu. */
@@ -362,6 +366,7 @@ export const galleryContent = {
     titles: ["PLOTY", "BRÁNY", "BRÁNKY", "PERGOLY"],
     labels: ["Hliníkové ploty", "Hliníkové brány", "Hliníkové bránky", "Hliníkové pergoly"],
     kicker: "Hliníkové oplotenie na mieru",
+    h1: "Hliníkové ploty, brány a pergoly na mieru",
     cta: "Nezáväzná kalkulácia",
     slideCta: "Prezrieť realizácie",
   },
@@ -369,6 +374,7 @@ export const galleryContent = {
     titles: ["ZÄUNE", "TORE", "TÜREN", "PERGOLEN"],
     labels: ["Aluminiumzäune", "Aluminiumtore", "Aluminiumtüren", "Aluminiumpergolen"],
     kicker: "Maßgefertigte Aluminiumzäune",
+    h1: "Maßgefertigte Aluminiumzäune, Tore und Pergolen",
     cta: "Unverbindliche Kalkulation",
     slideCta: "Referenzen ansehen",
   },

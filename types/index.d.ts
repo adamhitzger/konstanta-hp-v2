@@ -50,6 +50,8 @@ export interface ConfPhotos {
 export interface ConfPhotoItem {
   url: string;
   motiv?: string;
+  /** Hotový alt text (viz `realizaceAlt`). Bez něj si ho lightbox složí z `title` a motivu. */
+  alt?: string;
 }
 
 /** Fotky pro galerii v konfigurátoru, sestavené z `productPhotos` (lib/product-photos.ts)
