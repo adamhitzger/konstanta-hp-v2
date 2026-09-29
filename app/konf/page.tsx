@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { pageOpenGraph } from "@/lib/site"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
   title: "Konfigurátor plotu, pergoly a zábradlí – kalkulace zdarma | KONSTANTA",
   description: "Vyberte si, co chcete nakonfigurovat — hliníkové oplocení s bránou a brankou, nebo bioklimatickou pergolu — a vyžádejte si nezávaznou kalkulaci zdarma.",
   alternates: { canonical: "/konf" },
+  openGraph: pageOpenGraph("/konf"),
 }
 
 const pickerHrefs = ["/konf/oploceni", "/konf/pergoly", "/konf/zabradli", "/konf/zaklady"]

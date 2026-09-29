@@ -23,6 +23,7 @@ const pages: { path: string; priority: number }[] = [
   { path: "/pripravne-prace", priority: 0.7 },
   { path: "/pro-firmy", priority: 0.7 },
   { path: "/o-nas", priority: 0.6 },
+  { path: "/zpracovani-os-udaju", priority: 0.2 },
 ]
 
 /**

@@ -24,16 +24,16 @@ const nextConfig = {
       }
     ],
     formats: ['image/avif', 'image/webp'],
-    // Fotky z realizací jsou v public/ do 2 000 px; optimalizátor z nich
-    // dělá AVIF/WebP ve správné šířce. Sanity si šířku hlídá přes ?w= v URL
-    // (viz lib/banner-photos.ts), tady se jen převede formát.
-    //
-    // Každá šířka navíc = jedna položka v `srcSet` u každého <img>. Homepage
-    // vykresluje přes sto obrázků (marquee sekce prvky opakují), takže se
-    // seznam šířek drží co nejkratší: 750 a 1200 se od 828/1080 v praxi
-    // neliší a drobné šířky pod 64 px nepotřebuje žádný obrázek na webu.
     deviceSizes: [640, 828, 1080, 1920, 2048],
     imageSizes: [64, 128, 256, 384],
+  },
+  
+  async redirects() {
+    return [
+      { source: '/produkty', destination: '/konf', permanent: true },
+      { source: '/kontakt', destination: '/#kontakt', permanent: true },
+      { source: '/pergKonf', destination: '/konf/pergoly', permanent: true },
+    ]
   },
 }
 

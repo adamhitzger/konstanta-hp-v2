@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { pageOpenGraph } from "@/lib/site"
 import { SmoothScroll } from "@/components/smooth-scroll"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
   description:
     "Fotogalerie dokončených realizací KONSTANTY – hliníkové ploty, brány a branky, bioklimatické pergoly a zábradlí. Prohlédněte si je podle motivu a výplně.",
   alternates: { canonical: "/realizace" },
+  openGraph: pageOpenGraph("/realizace"),
 }
 
 export default async function RealizacePage({

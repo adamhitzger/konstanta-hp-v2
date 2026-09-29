@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { pageOpenGraph } from "@/lib/site"
 import { SmoothScroll } from "@/components/smooth-scroll"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
@@ -9,13 +10,14 @@ import type { ProductPhotosDoc } from "@/types"
 import { getLang } from "@/lib/translations"
 import { buildGalleryPhotos, buildProductInfo } from "@/lib/product-photos"
 import { JsonLd } from "@/components/json-ld"
-import { breadcrumbJsonLd } from "@/lib/json-ld"
+import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld"
 
 export const metadata: Metadata = {
   title: "Bioklimatická pergola na míru – konfigurátor a cena | KONSTANTA",
   description:
     "Nakonfigurujte si bioklimatickou pergolu, zimní zahradu nebo přístřešek na míru a vyžádejte si nezávaznou kalkulaci zdarma.",
   alternates: { canonical: "/konf/pergoly" },
+  openGraph: pageOpenGraph("/konf/pergoly"),
 }
 
 export default async function KonfPergolyPage({
@@ -36,6 +38,13 @@ export default async function KonfPergolyPage({
 
   return (
     <>
+      <JsonLd
+        data={webPageJsonLd({
+          path: "/konf/pergoly",
+          name: metadata.title as string,
+          description: metadata.description as string,
+        })}
+      />
       <JsonLd data={breadcrumbJsonLd([{ name: "Konfigurátor", path: "/konf" }, { name: "Pergoly", path: "/konf/pergoly" }])} />
       <SmoothScroll lang={lang}>
         <div className="flex min-h-screen flex-col">

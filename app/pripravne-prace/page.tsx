@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { pageOpenGraph } from "@/lib/site"
 import Image from "next/image"
 import { Check } from "lucide-react"
 import { SmoothScroll } from "@/components/smooth-scroll"
@@ -14,8 +15,9 @@ import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld"
 export const metadata: Metadata = {
   title: "Základy a podezdívka pod plot – přípravné práce | KONSTANTA",
   description:
-    "Výkopy, betonáž základů, podezdívky, elektro příprava pro pohony bran i odvoz zeminy. Kompletní stavební přípravu před montáží hliníkového oplocení zajistíme od A do Z.",
+    "Výkopy, betonáž základů, podezdívky, elektro příprava pro pohony bran i odvoz zeminy. Stavební přípravu před montáží hliníkového oplocení zajistíme celou.",
   alternates: { canonical: "/pripravne-prace" },
+  openGraph: pageOpenGraph("/pripravne-prace"),
 }
 
 export default async function PripravnePracePage({

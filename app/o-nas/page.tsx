@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { pageOpenGraph } from "@/lib/site"
 import { SmoothScroll } from "@/components/smooth-scroll"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
@@ -17,8 +18,9 @@ import { breadcrumbJsonLd, faqJsonLd, webPageJsonLd } from "@/lib/json-ld"
 export const metadata: Metadata = {
   title: "O nás – výrobce hliníkových plotů z Vysočiny | KONSTANTA",
   description:
-    "Jsme KONSTANTA – rodinná firma od roku 2022. Precizní hliníkové ploty, brány a pergoly s vlastním patentovaným komorovým systémem. Stovky realizací, montáž do 24 hodin.",
+    "KONSTANTA – rodinná firma od roku 2022. Hliníkové ploty, brány a pergoly s vlastním patentovaným komorovým systémem. Stovky realizací, montáž do 24 hodin.",
   alternates: { canonical: "/o-nas" },
+  openGraph: pageOpenGraph("/o-nas"),
 }
 
 export default async function ONasPage({

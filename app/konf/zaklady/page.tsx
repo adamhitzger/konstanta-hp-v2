@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { pageOpenGraph } from "@/lib/site"
 import Link from "next/link"
 import { ArrowLeft, ShieldCheck } from "lucide-react"
 import { SmoothScroll } from "@/components/smooth-scroll"
@@ -7,13 +8,14 @@ import { SiteFooter } from "@/components/site-footer"
 import { ZakladyForm } from "@/components/zaklady-form"
 import { getLang, withLang, zakladyContent } from "@/lib/translations"
 import { JsonLd } from "@/components/json-ld"
-import { breadcrumbJsonLd } from "@/lib/json-ld"
+import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld"
 
 export const metadata: Metadata = {
   title: "Základy pod plot – zaměření a nacenění stavební přípravy | KONSTANTA",
   description:
-    "Nemáte hotové základy ani podezdívku? Popište nám situaci, přiložte fotku nebo nákres — zaměříme, navrhneme stavební řešení a naceníme bez navýšení po dokončení.",
+    "Nemáte hotové základy ani podezdívku? Popište situaci, přiložte fotku nebo nákres — zaměříme, navrhneme řešení a naceníme bez navýšení po dokončení.",
   alternates: { canonical: "/konf/zaklady" },
+  openGraph: pageOpenGraph("/konf/zaklady"),
 }
 
 export default async function ZakladyPage({
@@ -27,6 +29,13 @@ export default async function ZakladyPage({
 
   return (
     <>
+      <JsonLd
+        data={webPageJsonLd({
+          path: "/konf/zaklady",
+          name: metadata.title as string,
+          description: metadata.description as string,
+        })}
+      />
       <JsonLd data={breadcrumbJsonLd([{ name: "Konfigurátor", path: "/konf" }, { name: "Základy a příprava", path: "/konf/zaklady" }])} />
       <SmoothScroll lang={lang}>
         <div className="flex min-h-screen flex-col">

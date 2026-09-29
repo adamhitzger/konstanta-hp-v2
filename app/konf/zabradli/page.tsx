@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { pageOpenGraph } from "@/lib/site"
 import { SmoothScroll } from "@/components/smooth-scroll"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
@@ -9,13 +10,14 @@ import type { ProductPhotosDoc } from "@/types"
 import { getLang } from "@/lib/translations"
 import { buildGalleryPhotos, buildProductInfo } from "@/lib/product-photos"
 import { JsonLd } from "@/components/json-ld"
-import { breadcrumbJsonLd } from "@/lib/json-ld"
+import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld"
 
 export const metadata: Metadata = {
   title: "Hliníkové a skleněné zábradlí na míru – konfigurátor | KONSTANTA",
   description:
     "Nakonfigurujte si skleněné nebo hliníkové zábradlí k terase, balkonu i schodišti — rozměry, výplň, motiv — a vyžádejte si nezávaznou kalkulaci zdarma.",
   alternates: { canonical: "/konf/zabradli" },
+  openGraph: pageOpenGraph("/konf/zabradli"),
 }
 
 export default async function KonfZabradliPage({
@@ -36,6 +38,13 @@ export default async function KonfZabradliPage({
 
   return (
     <>
+      <JsonLd
+        data={webPageJsonLd({
+          path: "/konf/zabradli",
+          name: metadata.title as string,
+          description: metadata.description as string,
+        })}
+      />
       <JsonLd data={breadcrumbJsonLd([{ name: "Konfigurátor", path: "/konf" }, { name: "Zábradlí", path: "/konf/zabradli" }])} />
       <SmoothScroll lang={lang}>
         <div className="flex min-h-screen flex-col">

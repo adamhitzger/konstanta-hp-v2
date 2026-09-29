@@ -20,7 +20,13 @@ import { buildCustomers } from "@/lib/customers"
 import type { BannerPhotosDoc, CustomerDoc, IgPost, ReviewDoc } from "@/types"
 import { JsonLd } from "@/components/json-ld"
 import { webPageJsonLd } from "@/lib/json-ld"
-import { DEFAULT_DESCRIPTION, DEFAULT_TITLE } from "@/lib/site"
+import type { Metadata } from "next"
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, pageOpenGraph } from "@/lib/site"
+
+/** Titulek, popis a canonical dědí z layoutu; tady jen `og:url`. */
+export const metadata: Metadata = {
+  openGraph: pageOpenGraph("/"),
+}
 
 export default async function Page({
   searchParams,
@@ -67,8 +73,6 @@ export default async function Page({
         })}
       />
       <SmoothScroll lang={lang}>
-        {/* Bez `overflow-x-hidden` — ten by z obalu udělal scroll kontejner a sticky
-            hlavička by odjela s obsahem. Vodorovný přetok ořezává už `<body>`. */}
         <div className="flex min-h-screen flex-col">
           <SiteHeader lang={lang} />
           <main className="flex-1">

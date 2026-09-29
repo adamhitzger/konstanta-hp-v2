@@ -14,6 +14,7 @@ import toast from 'react-hot-toast';
 import { sendGenerateLead, sendUserDataToGTM } from "@/lib/gtm"
 import { sendContact } from "@/lib/actions"
 import { contactContent, type Lang } from "@/lib/translations"
+import { PrivacyLink } from "@/components/privacy-link"
 
 const contactPhones = [
   { phone: { value: "+420 770 169 411", href: "tel:+420770169411" }, email: { value: "info@konstantahp.cz", href: "mailto:info@konstantahp.cz" } },
@@ -176,7 +177,7 @@ export function Contact({ lang = "cs" }: { lang?: Lang }) {
                     {!isPending ? <>{t.submit}</> : <Loader2 className="animate-spin"/>}
                   </Button>
                   <p data-f className="text-xs text-muted-foreground">
-                    {t.consent}
+                    {t.consent} <PrivacyLink lang={lang} />
                   </p>
                 </Reveal>
               </form>

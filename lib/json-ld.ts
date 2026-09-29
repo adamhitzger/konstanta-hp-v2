@@ -20,6 +20,9 @@ export const ORGANIZATION = {
   postalCode: "582 76",
   locality: "Maleč",
   region: "Kraj Vysočina",
+  /** Adresní bod Maleč 36 z OpenStreetMap. */
+  latitude: 49.7713,
+  longitude: 15.6762,
   sameAs: [
     "https://www.instagram.com/konstantaploty/",
     "https://www.facebook.com/Konstantahp.cz",
@@ -51,6 +54,12 @@ export function localBusinessJsonLd() {
       addressRegion: ORGANIZATION.region,
       addressCountry: "CZ",
     },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: ORGANIZATION.latitude,
+      longitude: ORGANIZATION.longitude,
+    },
+    hasMap: `https://www.google.com/maps/search/?api=1&query=${ORGANIZATION.latitude},${ORGANIZATION.longitude}`,
     areaServed: { "@type": "Country", name: "Česká republika" },
     sameAs: ORGANIZATION.sameAs,
     priceRange: "$$",

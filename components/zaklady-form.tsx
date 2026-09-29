@@ -15,6 +15,7 @@ import { sendZaklady } from "@/lib/actions"
 import { POPTAVKY_EMAIL, zakladyContent, type Lang } from "@/lib/translations"
 import type { ZakladyType } from "@/lib/schemas"
 import type { ActionResponse } from "@/types"
+import { PrivacyLink } from "@/components/privacy-link"
 
 const initialState: ActionResponse<ZakladyType> = { success: false, message: "" }
 
@@ -239,7 +240,7 @@ export function ZakladyForm({ lang = "cs" }: { lang?: Lang }) {
         </Button>
 
         <p data-f className="text-xs text-muted-foreground">
-          {t.consent}
+          {t.consent} <PrivacyLink lang={lang} />
         </p>
       </Reveal>
     </form>

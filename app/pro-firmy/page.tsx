@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { pageOpenGraph } from "@/lib/site"
 import { Check, Compass, Building2, Factory, Landmark, HardHat } from "lucide-react"
 import { SmoothScroll } from "@/components/smooth-scroll"
 import { SiteHeader } from "@/components/site-header"
@@ -13,8 +14,9 @@ import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld"
 export const metadata: Metadata = {
   title: "Hliníkové oplocení pro firmy a developery | KONSTANTA",
   description:
-    "Pro architekty, developery, průmyslové areály, obce a generální dodavatele. Konzultace už ve fázi návrhu, kompletní dodávka od výroby po montáž a spolehlivé subdodávky hliníkových profilů.",
+    "Hliníkové oplocení pro architekty, developery, průmyslové areály, obce a generální dodavatele. Konzultace už při návrhu, dodávka od výroby po montáž.",
   alternates: { canonical: "/pro-firmy" },
+  openGraph: pageOpenGraph("/pro-firmy"),
 }
 
 /** Pořadí odpovídá `proFirmyContent[lang].segments`. */

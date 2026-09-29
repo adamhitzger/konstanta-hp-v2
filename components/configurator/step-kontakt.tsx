@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { kontaktStepContent, type Lang } from "@/lib/translations"
 import { StepTitle } from "./step-title"
+import { PrivacyLink } from "@/components/privacy-link"
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null
@@ -76,7 +77,7 @@ export function StepKontakt({ lang = "cs" }: { lang?: Lang }) {
       </div>
 
       <p className="text-sm text-muted-foreground">
-        {t.consent}
+        {t.consent} <PrivacyLink lang={lang} />
       </p>
     </div>
   )

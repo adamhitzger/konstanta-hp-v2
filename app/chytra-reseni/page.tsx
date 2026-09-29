@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { pageOpenGraph } from "@/lib/site"
 import {
   Mailbox,
   KeyRound,
@@ -23,10 +24,11 @@ import { JsonLd } from "@/components/json-ld"
 import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/json-ld"
 
 export const metadata: Metadata = {
-  title: "Chytré doplňky k plotu – elektrozámek, videotelefon, pohon brány | KONSTANTA",
+  title: "Chytré doplňky k plotu – elektrozámek, pohon brány | KONSTANTA",
   description:
-    "Elektrozámek, videotelefon, kódová klávesnice, ovládání brány přes aplikaci TaHoma, integrovaná schránka i dvířka HUP. Chytré doplňky k hliníkovému oplocení od KONSTANTY.",
+    "Elektrozámek, videotelefon, kódová klávesnice, ovládání brány přes aplikaci TaHoma, integrovaná schránka i dvířka HUP k hliníkovému oplocení od KONSTANTY.",
   alternates: { canonical: "/chytra-reseni" },
+  openGraph: pageOpenGraph("/chytra-reseni"),
 }
 
 /** Pořadí odpovídá `chytraReseniContent[lang].items`. */

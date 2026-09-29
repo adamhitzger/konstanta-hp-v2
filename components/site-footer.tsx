@@ -1,5 +1,6 @@
 import Image from "next/image"
 import { Phone, Mail } from "lucide-react"
+import { PRIVACY_PATH, privacyContent } from "@/lib/privacy-content"
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from "@/components/social-icons"
 import { LangSwitcher } from "@/components/nav/lang-switcher"
 import { footerContent, withLang, type Lang } from "@/lib/translations"
@@ -128,7 +129,12 @@ export function SiteFooter({ lang = "cs" }: { lang?: Lang }) {
 
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-6 text-sm text-muted-foreground sm:flex-row sm:px-6 lg:px-8">
-          <p>© {new Date().getFullYear()} KONSTANTA - hliníkové ploty s.r.o. {t.rights}</p>
+          <p>
+            © {new Date().getFullYear()} KONSTANTA - hliníkové ploty s.r.o. {t.rights}{" "}
+            <a href={l(PRIVACY_PATH)} className="underline underline-offset-2 hover:text-foreground">
+              {privacyContent[lang].linkLabel}
+            </a>
+          </p>
           <p>{t.bottomTagline}</p>
         </div>
       </div>

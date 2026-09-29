@@ -4,7 +4,7 @@ import { Barlow, Barlow_Condensed, JetBrains_Mono } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
 import './globals.css'
 import { GoogleTagManager } from '@next/third-parties/google'
-import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_NAME, SITE_URL } from '@/lib/site'
+import { BASE_OPEN_GRAPH, BASE_TWITTER, DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_NAME, SITE_URL } from '@/lib/site'
 import { JsonLd } from '@/components/json-ld'
 import { localBusinessJsonLd, websiteJsonLd } from '@/lib/json-ld'
 
@@ -31,12 +31,12 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 /**
- * Výchozí metadata pro celý web. Stránky si přepisují `title`, `description`
- * a `alternates.canonical`; `openGraph`/`twitter` se z layoutu dědí, takže sdílený
- * odkaz na kteroukoli stránku dostane náhledový obrázek. Záměrně tu v nich není
- * `title`/`description`/`url` — Next je doplní z titulku a popisu konkrétní stránky,
- * kdežto hodnoty zapsané tady by se zdědily do všech podstránek a nabídka „O nás"
- * by se sdílela s titulkem homepage. Jazykové verze žijí na stejné URL s `?lang=`,
+ * Výchozí metadata pro celý web. Stránky si přepisují `title`, `description`,
+ * `alternates.canonical` a `openGraph` přes `pageOpenGraph(path)` (kvůli `og:url`;
+ * obrázek v něm zůstává). Záměrně tu v `openGraph` není `title`/`description`/`url`
+ * — Next je doplní z titulku a popisu konkrétní stránky, kdežto hodnoty zapsané
+ * tady by se zdědily do všech podstránek a nabídka „O nás" by se sdílela
+ * s titulkem homepage. Jazykové verze žijí na stejné URL s `?lang=`,
  * proto hreflang řeší jen sitemapa (viz `app/sitemap.ts`).
  */
 export const metadata: Metadata = {
@@ -71,30 +71,8 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
-  openGraph: {
-    type: 'website',
-    locale: 'cs_CZ',
-    alternateLocale: ['sk_SK', 'de_DE'],
-    siteName: SITE_NAME,
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Hliníková brána a plot KONSTANTA před moderním domem',
-        type: 'image/jpeg',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    images: [
-      {
-        url: '/og-image.jpg',
-        alt: 'Hliníková brána a plot KONSTANTA před moderním domem',
-      },
-    ],
-  },
+  openGraph: BASE_OPEN_GRAPH,
+  twitter: BASE_TWITTER,
   robots: {
     index: true,
     follow: true,
