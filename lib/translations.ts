@@ -2499,8 +2499,8 @@ export const kontaktStepContent = {
     zip: "PSČ*",
     zipPlaceholder: "PSČ",
     file: "Nahrajte soubor (fotky pozemku)",
-    message: "Zpráva",
-    messagePlaceholder: "Zadejte zprávu",
+    message: "Poznámka",
+    messagePlaceholder: "Upřesnění zakázky nebo dotaz",
     consent: "Odesláním souhlasíte se zpracováním osobních údajů za účelem vyřízení poptávky.",
   },
   sk: {
@@ -2523,8 +2523,8 @@ export const kontaktStepContent = {
     zip: "PSČ*",
     zipPlaceholder: "PSČ",
     file: "Nahrajte súbor (fotky pozemku)",
-    message: "Správa",
-    messagePlaceholder: "Zadajte správu",
+    message: "Poznámka",
+    messagePlaceholder: "Upresnenie zákazky alebo otázka",
     consent: "Odoslaním súhlasíte so spracovaním osobných údajov na účely vybavenia dopytu.",
   },
   de: {
@@ -2547,8 +2547,8 @@ export const kontaktStepContent = {
     zip: "PLZ*",
     zipPlaceholder: "PLZ",
     file: "Datei hochladen (Fotos des Grundstücks)",
-    message: "Nachricht",
-    messagePlaceholder: "Geben Sie Ihre Nachricht ein",
+    message: "Anmerkung",
+    messagePlaceholder: "Details zum Auftrag oder Frage",
     consent: "Mit dem Absenden stimmen Sie der Verarbeitung Ihrer personenbezogenen Daten zur Bearbeitung der Anfrage zu.",
   },
 }

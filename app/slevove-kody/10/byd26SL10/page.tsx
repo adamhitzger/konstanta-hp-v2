@@ -51,13 +51,13 @@ export default async function SlevaByd26Page({
       title: "Přes konfigurátor",
       text: (
         <>
-          Sestavte si svůj plot, bránu, branku nebo pergolu v našem konfigurátoru a do pole Poznámka na konci
+          Sestavte si svůj plot, bránu nebo branku v našem konfigurátoru oplocení a do pole Poznámka na konci
           formuláře napište: <strong className="font-mono text-foreground">{CODE}</strong>
         </>
       ),
-      cta: "Otevřít konfigurátor",
+      cta: "Konfigurátor oplocení",
       detail: null,
-      href: withLang("/konf", lang),
+      href: withLang("/konf/oploceni", lang),
     },
     {
       icon: Phone,

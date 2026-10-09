@@ -211,7 +211,7 @@ export function Contact({ lang = "cs" }: { lang?: Lang }) {
                 height="300"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="block w-full grayscale-[20%]"
+                className="block w-full grayscale-20"
                 allowFullScreen
               />
             </Reveal>
