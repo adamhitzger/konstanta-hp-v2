@@ -1672,6 +1672,9 @@ export async function sendContact(
         email: formData.get("email") as string,
         tel: formData.get("tel") as string,
         company: formData.get("company") as string,
+        address: formData.get("address") as string,
+        obec: formData.get("obec") as string,
+        zip: formData.get("zip") as string,
         msg: formData.get("msg") as string,
       };
 
@@ -1690,7 +1693,7 @@ export async function sendContact(
           to: ["nabidky@konstantahp.cz"],
           //to: "adam.hitzger@icloud.com",
           subject: "Nový kontakt",
-          text: `Celé jméno: ${data.name}, Email: ${data.email}, Tel. číslo: ${data.tel}, Firma: ${data.company}, Zpráva: ${data.msg}`,
+          text: `Celé jméno: ${data.name}, Email: ${data.email}, Tel. číslo: ${data.tel}, Adresa: ${data.address}, ${data.obec} - ${data.zip}, Firma: ${data.company}, Zpráva: ${data.msg}`,
         });
         if (!sendMail.accepted) {
           revalidate = false;

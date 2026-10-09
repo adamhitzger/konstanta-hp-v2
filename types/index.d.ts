@@ -12,6 +12,9 @@ export interface Contact {
       email: string;
       tel: string;
       company: string;
+      address: string;
+      obec: string;
+      zip: string;
       msg: string;
 
 }

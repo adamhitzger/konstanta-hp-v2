@@ -40,7 +40,7 @@ export function Contact({ lang = "cs" }: { lang?: Lang }) {
 
   /* Formulář se odesílá nativně přes `action`, takže po úspěchu už hodnoty polí nikde
      nejsou — `user_data` pro rozšířené konverze se proto odchytí při odeslání. */
-  const submitted = useRef<{ name: string; email: string; tel: string } | null>(null)
+  const submitted = useRef<{ name: string; email: string; tel: string; obec: string; zip: string } | null>(null)
     
     useEffect(() => {
         if (!state.success && state.message) {
@@ -52,8 +52,8 @@ export function Contact({ lang = "cs" }: { lang?: Lang }) {
                 email: submitted.current.email,
                 phone: submitted.current.tel,
                 fullName: submitted.current.name,
-                city: "",
-                zip: "",
+                city: submitted.current.obec,
+                zip: submitted.current.zip,
                 state: lang,
               })
             }
@@ -126,6 +126,8 @@ export function Contact({ lang = "cs" }: { lang?: Lang }) {
                     name: String(fd.get("name") ?? ""),
                     email: String(fd.get("email") ?? ""),
                     tel: String(fd.get("tel") ?? ""),
+                    obec: String(fd.get("obec") ?? ""),
+                    zip: String(fd.get("zip") ?? ""),
                   }
                 }}
                 className="flex flex-col gap-5"
@@ -158,6 +160,24 @@ export function Contact({ lang = "cs" }: { lang?: Lang }) {
                         není platný typ inputu. */}
                     <Input id="company" name="company" defaultValue={prev?.company} placeholder={t.placeholders.company} />
                   </div>
+                  </div>
+                  <div data-f className="flex flex-col gap-2">
+                    <Label htmlFor="address">{t.labels.address}</Label>
+                    <Input id="address" name="address" required autoComplete="street-address" defaultValue={prev?.address} placeholder={t.placeholders.address} />
+                    {fieldError("address") ? <p className="text-sm text-destructive">{fieldError("address")}</p> : null}
+                  </div>
+                  <div data-f className="grid gap-5 sm:grid-cols-[2fr_1fr]">
+                    <div className="flex flex-col gap-2">
+                      <Label htmlFor="obec">{t.labels.obec}</Label>
+                      <Input id="obec" name="obec" required autoComplete="address-level2" defaultValue={prev?.obec} placeholder={t.placeholders.obec} />
+                      {fieldError("obec") ? <p className="text-sm text-destructive">{fieldError("obec")}</p> : null}
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <Label htmlFor="zip">{t.labels.zip}</Label>
+                      {/* `maxLength` 6 = „580 01“ s mezerou, sedí s `pscRegex` v contactSchema. */}
+                      <Input id="zip" name="zip" required inputMode="numeric" maxLength={6} autoComplete="postal-code" defaultValue={prev?.zip} placeholder={t.placeholders.zip} />
+                      {fieldError("zip") ? <p className="text-sm text-destructive">{fieldError("zip")}</p> : null}
+                    </div>
                   </div>
                   <div data-f className="flex flex-col gap-2">
                     <Label htmlFor="message">{t.labels.message}</Label>

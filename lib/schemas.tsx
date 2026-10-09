@@ -7,8 +7,11 @@ export const contactSchema = z.object({
     email: z.string().email(),
     tel: z.string().min(1,{message: "Pole je povinné"}).regex(phoneRegex, {message: "Zadali jste číslo ve špatném formátu"}),
     company: z.string().optional(),
-    // 2000 znaků, ne 100 — zpráva je hlavní obsah kontaktního formuláře a strop
-    // musí sedět s `maxLength` na textarea v components/contact.tsx.
+    address: z.string().min(1, { message: "Adresa je povinná" }),
+    obec: z.string().min(1, { message: "Obec je povinná" }),
+    zip: z.string().regex(pscRegex, {
+            message: "Zadali jste PSČ v nesprávném formátu"
+    }).min(5,{message: "PSČ je povinné"}),
     msg: z.string().max(2000, {message: "Zpráva je moc dlouhá"}),
 })
 
