@@ -92,7 +92,11 @@ export default async function SlevaByd26Page({
               }}
             />
             <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-              <div className="relative aspect-[3/2] overflow-hidden rounded-3xl border border-background/15">
+              {/* Šířka omezená výškou viewportu (minus header h-20 a padding sekce), aby byla grafika vidět celá. */}
+              <div
+                className="relative mx-auto aspect-[3/2] overflow-hidden rounded-3xl border border-background/15"
+                style={{ maxWidth: "calc((100svh - 13rem) * 1.5)" }}
+              >
                 <Image
                   src="/slevove-kody/byd26sl10.jpg"
                   alt={`Sleva 10 % na zakázku, kód ${CODE}`}
@@ -117,7 +121,8 @@ export default async function SlevaByd26Page({
                 className="font-heading text-4xl font-extrabold uppercase leading-[0.98] tracking-tight text-balance sm:text-5xl"
               />
               <p className="max-w-2xl text-xl leading-relaxed text-muted-foreground text-pretty">
-                Jako poděkování za přečtení článku od nás získáváte slevu{" "}
+                Jako poděkování za přečtení článku od nás získáváte slevu
+                <br />
                 <strong className="text-foreground">10 % na celou zakázku</strong>.
               </p>
               <CopyCode code={CODE} />
