@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef } from "react"
-import Image from "next/image"
+import { SanityImage } from "@/components/sanity-image"
 import { AnimatedText } from "@/components/reveal"
 import { testimonialsContent, type Lang } from "@/lib/translations"
 import { useAutoScrollLoop } from "@/lib/use-auto-scroll-loop"
@@ -28,7 +28,7 @@ function ReviewCard({ r, t, tabbable = true }: { r: Review; t: (typeof testimoni
             Next pak vypíše jen 1× a 2× variantu místo celého seznamu šířek.
             Pás vykresluje recenze třikrát kvůli smyčce, tak se každý ušetřený
             řádek `srcSet` násobí stovkou obrázků na stránce. */}
-        <Image
+        <SanityImage
           src={r.image || "/placeholder.svg"}
           alt={t.photoAlt(r.name)}
           width={288}

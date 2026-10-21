@@ -27,7 +27,7 @@ export default async function KonfOploceniPage({
 }) {
   const [{ lang: langParam }, photoDocs] = await Promise.all([
     searchParams,
-    sanityFetch<ProductPhotosDoc[] | null>({ query: PRODUCT_PHOTOS_QUERY }).catch((error) => {
+    sanityFetch<ProductPhotosDoc[] | null>({ query: PRODUCT_PHOTOS_QUERY, tags: ["productPhotos"], tag: "konf.oploceni" }).catch((error) => {
       console.error("Nepodařilo se načíst fotky produktových variant ze Sanity:", error)
       return null
     }),

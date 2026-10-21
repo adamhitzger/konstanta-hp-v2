@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import Image from "next/image"
+import { SanityImage } from "@/components/sanity-image"
 import { useSearchParams } from "next/navigation"
 import { Expand } from "lucide-react"
 import { Reveal } from "@/components/reveal"
@@ -12,7 +12,7 @@ import type { RealizaceCat, RealizaceGroup } from "@/types"
 import { cn } from "@/lib/utils"
 
 /** Kolik fotek se ukáže po načtení; zbytek se dolistuje tlačítkem. */
-const PAGE_SIZE = 12
+const PAGE_SIZE = 20
 
 /**
  * Galerie realizací rozdělená do záložek (ploty / brány a branky / pergoly / zábradlí).
@@ -216,13 +216,12 @@ export function RealizaceGallery({
                 aria-label={`${t.openGallery}: ${cat.heading}`}
                 className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-muted"
               >
-                <Image
+                <SanityImage
                   src={photo.url}
                   alt={realizaceAlt(cat.tab, photo.motiv ? (ml[photo.motiv] ?? photo.motiv) : undefined)}
                   fill
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  unoptimized
                 />
                 <span className="absolute inset-0 bg-foreground/0 transition-colors duration-300 group-hover:bg-foreground/35" />
                 <span className="absolute right-3 bottom-3 flex size-9 items-center justify-center rounded-full bg-background/90 text-foreground opacity-0 transition-opacity duration-300 group-hover:opacity-100">

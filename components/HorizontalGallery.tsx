@@ -117,14 +117,17 @@ export default function HorizontalGallery({
               {/* Pozadí – na mobilu na výšku, na desktopu na šířku.
                   110 % / přesah 5 % = rezerva pro mouse-parallax bez odhalení krajů.
                   <picture> místo dvou <img> schovaných přes CSS: prohlížeč stáhne
-                  jen variantu pro svou šířku, ne obě. První snímek je LCP, ostatní
+                  jen variantu pro svou šířku, ne obě; `sizes="110vw"` kvůli přesahu
+                  pro parallax. První snímek je LCP, ostatní
                   jsou vpravo mimo viewport a můžou se dotáhnout líně. */}
               <picture>
-                <source media="(min-width: 768px)" srcSet={s.imgDesktop} />
+                <source media="(min-width: 768px)" srcSet={s.srcSetDesktop ?? s.imgDesktop} sizes="110vw" />
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   data-parallax="0.2"
                   src={s.imgMobile}
+                  srcSet={s.srcSetMobile}
+                  sizes="110vw"
                   alt={s.label}
                   loading={i === 0 ? "eager" : "lazy"}
                   fetchPriority={i === 0 ? "high" : "auto"}

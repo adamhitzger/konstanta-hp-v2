@@ -290,4 +290,7 @@ export interface GallerySlide {
   imgMobile: string;
   /** Fotka na šířku (desktop – méně oříznutá). */
   imgDesktop: string;
+  /** Šířkové varianty fotek ze Sanity; záložní fotky z `public/` je nemají. */
+  srcSetMobile?: string;
+  srcSetDesktop?: string;
 }

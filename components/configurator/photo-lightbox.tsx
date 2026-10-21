@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { createPortal } from "react-dom"
-import Image from "next/image"
+import { SanityImage } from "@/components/sanity-image"
 import { AnimatePresence, motion } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import type { ConfPhotoItem } from "@/types"
@@ -79,7 +79,7 @@ function ThumbPreview({ url, alt, x, y }: { url: string; alt: string; x: number;
       style={{ left, top, width: PREVIEW_W, height: PREVIEW_H }}
       className="pointer-events-none fixed z-60 overflow-hidden rounded-xl border border-border bg-background shadow-xl animate-in fade-in-0 zoom-in-95 duration-150"
     >
-      <Image src={url} alt={alt} fill sizes="388px" className="object-cover" unoptimized />
+      <SanityImage src={url} alt={alt} fill sizes="388px" className="object-cover" />
     </div>,
     document.body,
   )
@@ -141,7 +141,7 @@ export function PhotoThumbs({
           className="group relative size-8 hover:scale-95 hover:rounded-xl shrink-0 overflow-hidden rounded-md border border-border bg-background transition-colors hover:border-brand sm:size-10"
           aria-label={`${label}: ${title}`}
         >
-          <Image src={photo.url} alt={photoAlt(photo, title, ml)} fill sizes="56px" className="object-cover" unoptimized />
+          <SanityImage src={photo.url} alt={photoAlt(photo, title, ml)} fill sizes="56px" className="object-cover" />
           {i === shown.length - 1 && hidden > 0 ? (
             <span className="absolute inset-0 flex items-center justify-center bg-foreground/55 text-[10px] font-semibold text-background">
               +{hidden}
@@ -276,13 +276,12 @@ export function PhotoLightbox({
                 exit={{ x: `${-100 * direction}%`, opacity: 0, transition: { duration: 0.25, ease: [0.4, 0, 1, 1] } }}
                 className="absolute inset-0"
               >
-                <Image
+                <SanityImage
                   src={filtered[index].url}
                   alt={photoAlt(filtered[index], title, t)}
                   fill
                   sizes="75vw"
                   className="object-contain"
-                  unoptimized
                   priority
                 />
               </motion.div>

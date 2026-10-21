@@ -1,4 +1,4 @@
-import Image from "next/image"
+import { SanityImage } from "@/components/sanity-image"
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Reveal, SectionHeading, Parallax } from "@/components/reveal"
@@ -51,13 +51,12 @@ export function Realizace({ items = [], lang = "cs" }: { items?: RealizaceTeaser
           {cards && cards.map((c, i) => (
             <Parallax key={c.key} speed={[35, 70, 50][i % 3]}>
               <a data-real href={c.href} className="group relative block aspect-[3/4] overflow-hidden rounded-3xl">
-                <Image
+                <SanityImage
                   src={c.image}
                   alt={realizaceAlt(c.title)}
                   fill
                   sizes="(min-width: 768px) 33vw, 100vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  unoptimized
                 />
 
                 <div className="absolute left-4 top-4">

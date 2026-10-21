@@ -1,5 +1,6 @@
 import { galleryContent, withLang, type Lang } from "@/lib/translations"
 import type { BannerPhotoDoc, GallerySlide } from "@/types"
+import { sanityLoader, sanitySrcSet } from "@/lib/sanity-image"
 
 /**
  * Pořadí snímků ve Studiu drží pořadí záložek na /realizace: i-tý snímek vede
@@ -15,12 +16,13 @@ const SLIDE_HREFS = [
 
 /**
  * Fotky ze Studia jsou originály z foťáku (tady 2 000–5 900 px, jednotky MB).
- * Zmenšení řeší Sanity image CDN přímo v URL — snímky jsou pozadí přes celou
- * obrazovku, takže desktop dostává 2 400 px a mobil 1 200 px, a optimalizátor
- * Nextu už nesahá na originál.
+ * Zmenšení řeší Sanity image CDN přímo v URL. Snímky jsou pozadí přes celou
+ * obrazovku, ale ne každá obrazovka je 2 400 px široká — `srcSet` nechá prohlížeč
+ * vybrat nejmenší šířku, která pokryje viewport (× DPR). Největší šířka zůstává
+ * jako `src` pro prohlížeče bez `srcSet`.
  */
-const DESKTOP_IMG = "?w=2400&fit=max&auto=format"
-const MOBILE_IMG = "?w=1200&fit=max&auto=format"
+const DESKTOP_WIDTHS = [1280, 1920, 2400]
+const MOBILE_WIDTHS = [640, 828, 1200]
 
 /** Pole s nápisem přes fotku podle jazyka stránky. */
 const TEXT_FIELD: Record<Lang, "cjText" | "skText" | "deText"> = {
@@ -70,8 +72,10 @@ export function buildGallerySlides(
         // z `galleryContent` — `alt` slouží až snímkům nad rámec čtyř kategorií.
         label: t.labels[i] || photo.alt?.trim() || title,
         href: hrefFor(i, lang),
-        imgMobile: `${mobile}${MOBILE_IMG}`,
-        imgDesktop: `${desktop}${DESKTOP_IMG}`,
+        imgMobile: sanityLoader({ src: mobile, width: MOBILE_WIDTHS.at(-1)! }),
+        imgDesktop: sanityLoader({ src: desktop, width: DESKTOP_WIDTHS.at(-1)! }),
+        srcSetMobile: sanitySrcSet(mobile, MOBILE_WIDTHS),
+        srcSetDesktop: sanitySrcSet(desktop, DESKTOP_WIDTHS),
       },
     ]
   })

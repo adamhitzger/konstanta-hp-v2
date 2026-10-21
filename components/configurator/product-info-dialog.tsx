@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, type MouseEvent } from "react"
-import Image from "next/image"
+import { SanityImage } from "@/components/sanity-image"
 import { ChevronDown } from "lucide-react"
 import type { PortableBlock, ProductInfo } from "@/types"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
@@ -106,13 +106,12 @@ export function ProductInfoLink({
             <div className="grid grid-cols-3 gap-3">
               {info.photos.map((url, i) => (
                 <div key={url} className="relative aspect-[4/3]  overflow-hidden rounded-xl bg-background">
-                  <Image
+                  <SanityImage
                     src={url}
                     alt={`${title} — ${t.photosAlt} ${i + 1}`}
                     fill
                     sizes="(min-width: 640px) 18rem, 30vw"
                     className="object-cover "
-                    unoptimized
                   />
                 </div>
               ))}

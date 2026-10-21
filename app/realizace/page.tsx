@@ -29,7 +29,7 @@ export default async function RealizacePage({
 }) {
   const [{ lang: langParam, filter }, photoDocs] = await Promise.all([
     searchParams,
-    sanityFetch<ProductPhotosDoc[] | null>({ query: REALIZACE_QUERY }).catch((error) => {
+    sanityFetch<ProductPhotosDoc[] | null>({ query: REALIZACE_QUERY, tags: ["productPhotos"], tag: "realizace" }).catch((error) => {
       console.error("Nepodařilo se načíst fotky realizací ze Sanity:", error)
       return null
     }),

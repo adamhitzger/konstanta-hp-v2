@@ -1276,7 +1276,7 @@ if(data.dilce && data.rozmeryDilcu  && data.rozmeryDilcu.length > 0){
 
 export async function getWorkByCat(filter: string){
   try{
-    const result: ProductPhoto[] = await sanityFetch<ProductPhoto[]>({query: PRODUCT_PHOTOS_BY_CAT, params: {filter}})
+    const result: ProductPhoto[] = await sanityFetch<ProductPhoto[]>({query: PRODUCT_PHOTOS_BY_CAT, params: {filter}, tags: ["productPhotos"], tag: "actions.work-by-cat"})
     return result;
   }catch(error){
     console.error(error);
@@ -1286,8 +1286,8 @@ export async function getWorkByCat(filter: string){
 
 export async function getProducts(start: number, end: number){
   try{
-    const result: Produkty = await sanityFetch<Produkty>({query: PRODUCTS, params: {start, end}})
-    const count: number =await sanityFetch({query: COUNT_ALL_PRODUCTS})
+    const result: Produkty = await sanityFetch<Produkty>({query: PRODUCTS, params: {start, end}, tags: ["product"], tag: "actions.products"})
+    const count: number =await sanityFetch({query: COUNT_ALL_PRODUCTS, tags: ["product"], tag: "actions.products-count"})
 
     return { result, count };
   }catch(error){
@@ -1318,6 +1318,9 @@ export async function sendZabradliConf(
     } else {
       const data = validatedData.data;
       const urls: string[]= []
+      // Přílohy jdou do mailu přímo z bufferu — `path: url` by nutil nodemailer
+      // stahovat právě nahraný originál zpátky ze Sanity CDN (bandwidth kvóta).
+      const uploaded: Buffer[] = []
       console.log(data.file)
       console.log("Data File:", data.file);
   console.log("File Count:", data.file?.length);
@@ -1343,6 +1346,7 @@ if (data.file && data.file.length > 0) {
 
       if (uploadFile?.url) {
         urls.push(uploadFile.url);
+        uploaded.push(buffer);
         console.log("Uploaded URL:", uploadFile.url);
       } else {
         console.log("Upload failed for:", filename);
@@ -1352,7 +1356,7 @@ if (data.file && data.file.length > 0) {
     }
   }
 }
-      const imgs = await sanityFetch<ConfPhotos>({query: ZAB_IMGS_QUERY})
+      const imgs = await sanityFetch<ConfPhotos>({query: ZAB_IMGS_QUERY, tags: ["confPhotos"], tag: "mail.zabradli"})
         const mailOptions: any//eslint-disable-line @typescript-eslint/no-explicit-any
          = {
           from: process.env.FROM_EMAIL,
@@ -1363,8 +1367,8 @@ if (data.file && data.file.length > 0) {
         console.log(urls)
         if(urls.length > 0) {
           mailOptions.attachments = mailOptions.attachments ?? [];
-          urls.forEach((url:string,i:number) =>{
-            mailOptions.attachments?.push({filename: `obrazek-${i}.jpg`, path: url})
+          urls.forEach((_url:string,i:number) =>{
+            mailOptions.attachments?.push({filename: `obrazek-${i}.jpg`, content: uploaded[i]})
           })
         }
       const sendMail = await transporter.sendMail(mailOptions);
@@ -1418,6 +1422,9 @@ export async function sendPergConf(
     } else {
       const data = validatedData.data;
       const urls: string[]= []
+      // Přílohy jdou do mailu přímo z bufferu — `path: url` by nutil nodemailer
+      // stahovat právě nahraný originál zpátky ze Sanity CDN (bandwidth kvóta).
+      const uploaded: Buffer[] = []
       console.log(data.file)
       console.log("Data File:", data.file);
       console.log("File Count:", data.file?.length);
@@ -1443,6 +1450,7 @@ if (data.file && data.file.length > 0) {
 
       if (uploadFile?.url) {
         urls.push(uploadFile.url);
+        uploaded.push(buffer);
         console.log("Uploaded URL:", uploadFile.url);
       } else {
         console.log("Upload failed for:", filename);
@@ -1452,7 +1460,7 @@ if (data.file && data.file.length > 0) {
     }
   }
 }
-      const pergs = await sanityFetch<ConfPhotos>({query: PERG_IMGS_QUERY})
+      const pergs = await sanityFetch<ConfPhotos>({query: PERG_IMGS_QUERY, tags: ["confPhotos"], tag: "mail.pergola"})
         const mailOptions: any//eslint-disable-line @typescript-eslint/no-explicit-any
          = {
           from: process.env.FROM_EMAIL,
@@ -1463,8 +1471,8 @@ if (data.file && data.file.length > 0) {
         console.log(urls)
         if(urls.length > 0) {
           mailOptions.attachments = mailOptions.attachments ?? [];
-          urls.forEach((url:string,i:number) =>{
-            mailOptions.attachments?.push({filename: `obrazek-${i}.jpg`, path: url})
+          urls.forEach((_url:string,i:number) =>{
+            mailOptions.attachments?.push({filename: `obrazek-${i}.jpg`, content: uploaded[i]})
           })
         }
       const sendMail = await transporter.sendMail(mailOptions);
@@ -1516,7 +1524,7 @@ export async function sendConf(
         inputs: values,
       };
     } else {
-      const photos = await sanityFetch<ConfPhotos>({query: CONF_IMGS_QUERY})
+      const photos = await sanityFetch<ConfPhotos>({query: CONF_IMGS_QUERY, tags: ["confPhotos"], tag: "mail.konf"})
 
       // Kování branky konfigurátor nenabízí — do dat i do nabídky jde vždy základní.
       const data = withZakladniKovani(validatedData.data);
@@ -1545,6 +1553,9 @@ if (!filePath2) {
 }
       console.log(data.file?.[0])
       const urls: string[]= []
+      // Přílohy jdou do mailu přímo z bufferu — `path: url` by nutil nodemailer
+      // stahovat právě nahraný originál zpátky ze Sanity CDN (bandwidth kvóta).
+      const uploaded: Buffer[] = []
       console.log("Data File:", data.file);
 console.log("File Count:", data.file?.length);
 
@@ -1569,6 +1580,7 @@ if (data.file && data.file.length > 0) {
 
       if (uploadFile?.url) {
         urls.push(uploadFile.url);
+        uploaded.push(buffer);
         console.log("Uploaded URL:", uploadFile.url);
       } else {
         console.log("Upload failed for:", filename);
@@ -1609,8 +1621,8 @@ if (data.file && data.file.length > 0) {
       console.log(urls)
       if(urls.length > 0) {
         mailOptions.attachments = mailOptions.attachments ?? [];
-        urls.forEach((url:string,i:number) =>{
-          mailOptions.attachments?.push({filename: `obrazek-${i}.jpg`, path: url})
+        urls.forEach((_url:string,i:number) =>{
+          mailOptions.attachments?.push({filename: `obrazek-${i}.jpg`, content: uploaded[i]})
         })
       }
 

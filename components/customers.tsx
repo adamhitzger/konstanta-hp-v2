@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef } from "react"
-import Image from "next/image"
+import { SanityImage } from "@/components/sanity-image"
 import { AnimatedText } from "@/components/reveal"
 import { customersContent, type Lang } from "@/lib/translations"
 import { useAutoScrollLoop } from "@/lib/use-auto-scroll-loop"
@@ -13,7 +13,7 @@ function Logo({ c, t, tabbable = true }: { c: CustomerLogo; t: (typeof customers
      stran z metadat assetu. `draggable={false}`, aby tah myší posouval pás,
      ne „zvedal" obrázek. */
   const img = (
-    <Image
+    <SanityImage
       src={c.logo}
       alt={c.name}
       width={c.width}

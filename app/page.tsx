@@ -35,25 +35,27 @@ export default async function Page({
 }) {
   const [{ lang: langParam }, bannerDoc, igPosts, realizaceDocs, reviewDocs, customerDocs] = await Promise.all([
     searchParams,
-    sanityFetch<BannerPhotosDoc | null>({ query: BANNER_PHOTOS }).catch((error) => {
+    sanityFetch<BannerPhotosDoc | null>({ query: BANNER_PHOTOS, tags: ["bannerPhotos"], tag: "home.banner" }).catch((error) => {
       console.error("Nepodařilo se načíst fotky hlavní sekce ze Sanity:", error)
       return null
     }),
-    sanityFetch<IgPost[] | null>({ query: IG_FEED }).catch((error) => {
+    sanityFetch<IgPost[] | null>({ query: IG_FEED, tags: ["igFeed"], tag: "home.ig" }).catch((error) => {
       console.error("Nepodařilo se načíst Instagram feed ze Sanity:", error)
       return null
     }),
     sanityFetch<{ cat?: string; banner?: string }[] | null>({
       query: REALIZACE_BANNERS_QUERY,
+      tags: ["productPhotos"],
+      tag: "home.realizace",
     }).catch((error) => {
       console.error("Nepodařilo se načíst úvodní fotky realizací ze Sanity:", error)
       return null
     }),
-    sanityFetch<ReviewDoc[] | null>({ query: REVIEWS_QUERY }).catch((error) => {
+    sanityFetch<ReviewDoc[] | null>({ query: REVIEWS_QUERY, tags: ["reviews"], tag: "home.reviews" }).catch((error) => {
       console.error("Nepodařilo se načíst recenze ze Sanity:", error)
       return null
     }),
-    sanityFetch<CustomerDoc[] | null>({ query: CUSTOMERS_QUERY }).catch((error) => {
+    sanityFetch<CustomerDoc[] | null>({ query: CUSTOMERS_QUERY, tags: ["customer"], tag: "home.customers" }).catch((error) => {
       console.error("Nepodařilo se načíst loga zákazníků ze Sanity:", error)
       return null
     }),

@@ -1,5 +1,5 @@
 import { ArrowUpRight, Mail } from "lucide-react"
-import Image from "next/image"
+import { SanityImage } from "@/components/sanity-image"
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from "@/components/social-icons"
 import { Reveal, SectionHeading } from "@/components/reveal"
 import { socialContent, type Lang } from "@/lib/translations"
@@ -35,14 +35,12 @@ export function Social({ posts = [], lang = "cs" }: { posts?: IgPost[]; lang?: L
           src: p.img,
           href: p.url || igUrl,
           alt: t.igPostAlt,
-          fromSanity: true,
         }))
       : gallerySrcs.map((src, i) => ({
           key: src,
           src,
           href: igUrl,
           alt: t.galleryAlts[i],
-          fromSanity: false,
         }))
 
   return (
@@ -95,13 +93,12 @@ export function Social({ posts = [], lang = "cs" }: { posts?: IgPost[]; lang?: L
               aria-label={`${t.igAriaPrefix} ${img.alt}`}
               className="group relative aspect-square overflow-hidden rounded-xl"
             >
-              <Image
+              <SanityImage
                 src={img.src || "/placeholder.svg"}
                 alt={img.alt}
                 fill
                 sizes="(max-width: 768px) 33vw, 25vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-110"
-                unoptimized={img.fromSanity}
               />
               <div className="absolute inset-0 flex items-center justify-center bg-foreground/0 opacity-0 transition-all duration-300 group-hover:bg-foreground/40 group-hover:opacity-100">
                 <InstagramIcon className="h-8 w-8 text-background" />

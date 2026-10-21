@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from "react"
+import { sanityImg } from "@/lib/sanity-image"
 import {
   Body,
   Column,
@@ -413,7 +414,8 @@ export const DataRow = ({ label, value }: { label: string; value: ReactNode }) =
 export const PhotoCard = ({ src, caption, alt }: { src: string; caption: string; alt: string }) => (
   <>
     <div style={mailStyles.photoFrame}>
-      <Img src={src} width="518" alt={alt} style={mailStyles.photo} />
+      {/* 2× kvůli retině — jinak by každé otevření mailu stáhlo originál ze Sanity. */}
+      <Img src={sanityImg(src, 1036)} width="518" alt={alt} style={mailStyles.photo} />
     </div>
     <Text style={mailStyles.photoCaption}>{caption}</Text>
   </>

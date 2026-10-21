@@ -10,8 +10,8 @@ const TEXT_FIELD: Record<Lang, "text" | "skText" | "njText"> = {
 
 /**
  * Karta recenze je 288 px široká, ale ze Studia chodí originály (běžně přes 5 000 px
- * na šířku). Zmenšení řeší Sanity image CDN přímo v URL — 2× kvůli retině, takže
- * optimalizátor Nextu už dostane 576px předlohu a nemusí sahat na originál.
+ * na šířku). Zmenšení řeší Sanity image CDN přímo v URL — 2× kvůli retině. `<SanityImage>`
+ * pak `w`/`h` přepíše podle šířky ze srcSetu, ale poměr stran ořezu zůstane.
  */
 const CARD_IMG = "?w=576&h=432&fit=crop&auto=format"
 
