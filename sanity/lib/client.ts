@@ -43,7 +43,11 @@ export async function sanityFetch<QueryResponse>({
 }) {
   return client.fetch<QueryResponse>(query, params, {
     perspective: "published",
-    useCdn: true,
+    // Živé API, ne API CDN: ta drží odpovědi až 60 s, takže refetch hned po webhooku
+    // dostal ještě verzi před publikováním a cache si ji uložila na další hodinu.
+    // Návštěvníky obsluhuje data cache Nextu, na Sanity jde dotaz jen po webhooku
+    // nebo po REVALIDATE_FALLBACK.
+    useCdn: false,
     tag,
     next: { revalidate: REVALIDATE_FALLBACK, tags },
   });
