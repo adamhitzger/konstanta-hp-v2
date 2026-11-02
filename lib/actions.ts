@@ -1128,7 +1128,7 @@ if(!data.brana){
 if(data.branka && data.rozmeryBranek  && data.rozmeryBranek.length > 0){
   data.rozmeryBranek.forEach((r) => {
     if(r.delka && r.pocet && r.vyska){
-    const vzor = 8000;
+    const vzor = 12000;
     const plocha = (r.delka / 1000) * (r.vyska / 1000);
     const zaklad = (vzor * plocha) * r.pocet;
     const zamekCena = r.zamek ? 1500 : 0;
@@ -1185,6 +1185,7 @@ if(data.dilce && data.rozmeryDilcu  && data.rozmeryDilcu.length > 0){
           vzor = 5500;
           break;
     }
+    if(data.barva === "dřevěný dekor") vzor = 5000;
     celkovyPocetDilcu += r.pocet;
     const plocha = (r.delka / 1000) * (r.vyska / 1000);
     const zaklad = vzor * plocha * r.pocet;
