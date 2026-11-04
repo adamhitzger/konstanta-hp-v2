@@ -29,7 +29,8 @@ export function getNavItems(lang: Lang): NavTop[] {
         { ...t.jsmeKonstantaChildren[1], href: l("/o-nas#sila-konstanty"), type: "anchor" },
         { ...t.jsmeKonstantaChildren[2], href: l("/o-nas#co-ocenite"), type: "anchor" },
         { ...t.jsmeKonstantaChildren[3], href: l("/o-nas#jak-to-probiha"), type: "anchor" },
-        { ...t.jsmeKonstantaChildren[4], href: l("/o-nas#faq"), type: "anchor" },
+        { ...t.jsmeKonstantaChildren[4], href: l("/o-nas#financovani"), type: "anchor" },
+        { ...t.jsmeKonstantaChildren[5], href: l("/o-nas#faq"), type: "anchor" },
       ],
     },
     {
@@ -46,6 +47,7 @@ export function getNavItems(lang: Lang): NavTop[] {
     { label: t.realizace, href: l("/realizace"), type: "page" },
     { label: t.konfigurator, href: l("/konf"), type: "page" },
     { label: t.proFirmy, href: l("/pro-firmy"), type: "page" },
+    { label: t.financovani, href: l("/o-nas#financovani"), type: "anchor" },
     { label: t.kontakty, href: l("/#kontakt"), type: "anchor" },
   ]
 }

@@ -208,11 +208,11 @@ export function SiteHeader({ lang = "cs" }: { lang?: Lang }) {
     return () => drawer.removeEventListener("keydown", onKey)
   }, [mobileOpen])
 
-  const topLinkClass = "flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-foreground/45 transition-colors duration-200 hover:text-brand focus-visible:text-foreground focus-visible:outline-none"
+  const topLinkClass = "flex items-center gap-1.5 rounded-full px-2 py-1.5 2xl:px-3 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-foreground/45 transition-colors duration-200 hover:text-brand focus-visible:text-foreground focus-visible:outline-none"
 
   return (
     <header className="sticky top-0 z-50 w-full border-b-2 border-brand bg-background">
-      <div className="w-full flex flex-row justify-between items-center h-20  gap-4 px-4 sm:px-6 xl:gap-8 xl:px-8 2xl:gap-12">
+      <div className="w-full flex flex-row justify-between items-center h-20  gap-4 px-4 sm:px-6 xl:gap-5 xl:px-8 2xl:gap-12">
         {/* `justify-between` na liště rozdělí volné místo rovnoměrně mezi logo, menu
             a kontakty. Žádné `mr-auto` na logu — to by všechen volný prostor spolklo
             hned za logem a menu by se přilepilo ke kontaktům. */}

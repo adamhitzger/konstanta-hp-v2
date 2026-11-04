@@ -70,6 +70,7 @@ export type NavContent = {
   realizace: string
   konfigurator: string
   proFirmy: string
+  financovani: string
   kontakty: string
   cta: string
   ctaShort: string
@@ -87,6 +88,7 @@ export const navContent: Record<Lang, NavContent> = {
       { label: "Síla Konstanty", desc: "10 pilířů naší práce" },
       { label: "Co oceníte", desc: "Nejdůležitější v kostce" },
       { label: "Jak to u nás probíhá", desc: "Postup od zaměření po montáž" },
+      { label: "Financování", desc: "Splátky přes Broker Consulting" },
       { label: "FAQ", desc: "Časté dotazy a odpovědi" },
     ],
     coNabizime: "Co nabízíme",
@@ -101,6 +103,7 @@ export const navContent: Record<Lang, NavContent> = {
     realizace: "Realizace",
     konfigurator: "Konfigurátor",
     proFirmy: "Pro firmy",
+    financovani: "Financování",
     kontakty: "Kontakty",
     cta: "Poptat řešení",
     ctaShort: "Poptat",
@@ -116,6 +119,7 @@ export const navContent: Record<Lang, NavContent> = {
       { label: "Sila Konstanty", desc: "10 pilierov našej práce" },
       { label: "Čo oceníte", desc: "Najdôležitejšie v skratke" },
       { label: "Ako to u nás prebieha", desc: "Postup od zamerania po montáž" },
+      { label: "Financovanie", desc: "Splátky cez Broker Consulting" },
       { label: "FAQ", desc: "Časté otázky a odpovede" },
     ],
     coNabizime: "Čo ponúkame",
@@ -130,6 +134,7 @@ export const navContent: Record<Lang, NavContent> = {
     realizace: "Realizácie",
     konfigurator: "Konfigurátor",
     proFirmy: "Pre firmy",
+    financovani: "Financovanie",
     kontakty: "Kontakty",
     cta: "Dopytovať riešenie",
     ctaShort: "Dopytovať",
@@ -145,6 +150,7 @@ export const navContent: Record<Lang, NavContent> = {
       { label: "Die Stärke von Konstanta", desc: "10 Grundsätze unserer Arbeit" },
       { label: "Das schätzen Sie", desc: "Das Wichtigste auf einen Blick" },
       { label: "Ablauf bei uns", desc: "Vom Aufmaß bis zur Montage" },
+      { label: "Finanzierung", desc: "Ratenzahlung über Broker Consulting" },
       { label: "FAQ", desc: "Häufige Fragen und Antworten" },
     ],
     coNabizime: "Unser Angebot",
@@ -159,6 +165,7 @@ export const navContent: Record<Lang, NavContent> = {
     realizace: "Referenzen",
     konfigurator: "Konfigurator",
     proFirmy: "Für Firmen",
+    financovani: "Finanzierung",
     kontakty: "Kontakt",
     cta: "Angebot anfragen",
     ctaShort: "Anfragen",
