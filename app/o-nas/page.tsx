@@ -9,6 +9,7 @@ import { Story } from "@/components/o-nas/story"
 import { SilaKonstanty } from "@/components/o-nas/sila-konstanty"
 import { CoOcenite } from "@/components/o-nas/co-ocenite"
 import { ProcesFlow } from "@/components/o-nas/proces-flow"
+import { Financovani } from "@/components/o-nas/financovani"
 import { Faq } from "@/components/o-nas/faq"
 import { ZaverCta } from "@/components/o-nas/zaver-cta"
 import { getLang } from "@/lib/translations"
@@ -53,6 +54,7 @@ export default async function ONasPage({
             <SilaKonstanty lang={lang} />
             <CoOcenite lang={lang} />
             <ProcesFlow lang={lang} />
+            <Financovani lang={lang} />
             <Faq lang={lang} />
             <ZaverCta lang={lang} />
           </main>

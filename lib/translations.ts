@@ -963,9 +963,9 @@ export const storyContent = {
 }
 
 export const sectionNavContent = {
-  cs: { links: ["Jsme Konstanta", "Síla Konstanty", "Co oceníte", "Jak to probíhá", "FAQ"] },
-  sk: { links: ["Sme Konstanta", "Sila Konstanty", "Čo oceníte", "Ako to prebieha", "FAQ"] },
-  de: { links: ["Wir sind Konstanta", "Die Stärke von Konstanta", "Das schätzen Sie", "Wie es abläuft", "FAQ"] },
+  cs: { links: ["Jsme Konstanta", "Síla Konstanty", "Co oceníte", "Jak to probíhá", "Financování", "FAQ"] },
+  sk: { links: ["Sme Konstanta", "Sila Konstanty", "Čo oceníte", "Ako to prebieha", "Financovanie", "FAQ"] },
+  de: { links: ["Wir sind Konstanta", "Die Stärke von Konstanta", "Das schätzen Sie", "Wie es abläuft", "Finanzierung", "FAQ"] },
 }
 
 export const silaKonstantyContent = {
@@ -1091,6 +1091,45 @@ export const procesFlowContent = {
       { title: "Montage innerhalb von 24 Stunden", text: "Unser eingespieltes Team montiert die meisten Aufträge an einem Tag, sauber und präzise." },
       { title: "Fertig und Service", text: "Wir übergeben das fertige Werk und stehen auch nach Jahren zur Verfügung." },
     ],
+  },
+}
+
+export const financovaniContent = {
+  cs: {
+    kicker: "Financování",
+    heading: "Chcete realizovat nový plot, bránu nebo pergolu okamžitě a financování řešit postupně?",
+    lead: "Dopřejte si kvalitu bez kompromisů hned teď.",
+    paragraph:
+      "Financování zakázky si můžete snadno rozložit do výhodných měsíčních splátek díky spolupráci s naším partnerem Broker Consulting, a.s. Užijte si dokonalé soukromí a pohodlí již dnes a plaťte postupně, v naprostém klidu a podle vašich možností.",
+    partner: "Partner pro financování",
+    cta: "Více o možnostech financování",
+    imageAlt: "Pár plánuje rodinný rozpočet nad dokumenty a notebookem",
+    disclaimer:
+      "Financování neposkytuje ani nezprostředkovává společnost KONSTANTA – hliníkové ploty s.r.o. Poskytovatelem je Broker Consulting, a.s., IČ 25221736. Schválení financování a konkrétní podmínky závisí výhradně na individuálním posouzení žadatele ze strany partnera. Odesláním formuláře souhlasíte s předáním svých kontaktních údajů uvedenému partnerovi za účelem nabídky financování.",
+  },
+  sk: {
+    kicker: "Financovanie",
+    heading: "Chcete zrealizovať nový plot, bránu alebo pergolu hneď a financovanie riešiť postupne?",
+    lead: "Doprajte si kvalitu bez kompromisov už teraz.",
+    paragraph:
+      "Financovanie zákazky si môžete jednoducho rozložiť do výhodných mesačných splátok vďaka spolupráci s naším partnerom Broker Consulting, a.s. Užívajte si dokonalé súkromie a pohodlie už dnes a plaťte postupne, v úplnom pokoji a podľa vašich možností.",
+    partner: "Partner pre financovanie",
+    cta: "Viac o možnostiach financovania",
+    imageAlt: "Pár plánuje rodinný rozpočet nad dokumentmi a notebookom",
+    disclaimer:
+      "Financovanie neposkytuje ani nesprostredkúva spoločnosť KONSTANTA – hliníkové ploty s.r.o. Poskytovateľom je Broker Consulting, a.s., IČ 25221736. Schválenie financovania a konkrétne podmienky závisia výhradne od individuálneho posúdenia žiadateľa zo strany partnera. Odoslaním formulára súhlasíte s odovzdaním svojich kontaktných údajov uvedenému partnerovi za účelom ponuky financovania.",
+  },
+  de: {
+    kicker: "Finanzierung",
+    heading: "Neuer Zaun, neues Tor oder neue Pergola sofort – und die Finanzierung schrittweise?",
+    lead: "Gönnen Sie sich kompromisslose Qualität schon jetzt.",
+    paragraph:
+      "Dank der Zusammenarbeit mit unserem Partner Broker Consulting, a.s. können Sie die Finanzierung Ihres Auftrags bequem in günstige Monatsraten aufteilen. Genießen Sie perfekte Privatsphäre und Komfort schon heute und zahlen Sie schrittweise – in aller Ruhe und nach Ihren Möglichkeiten.",
+    partner: "Finanzierungspartner",
+    cta: "Mehr zu den Finanzierungsmöglichkeiten",
+    imageAlt: "Paar plant das Haushaltsbudget mit Unterlagen und Laptop",
+    disclaimer:
+      "Die Finanzierung wird von der KONSTANTA – hliníkové ploty s.r.o. weder angeboten noch vermittelt. Anbieter ist die Broker Consulting, a.s., ID-Nr. 25221736. Die Genehmigung der Finanzierung und die konkreten Bedingungen hängen ausschließlich von der individuellen Prüfung des Antragstellers durch den Partner ab. Mit dem Absenden des Formulars stimmen Sie der Weitergabe Ihrer Kontaktdaten an den genannten Partner zum Zweck eines Finanzierungsangebots zu.",
   },
 }
 
